@@ -11,7 +11,7 @@ Voice-in / text-out active-recall prototype for Knowunity. Next.js 16, React 19,
 - `docs/design-brief.md` § "Hard constraints" is fixed. Design inside it, never around it.
 - `docs/sprint-context.md` is the record of what's decided, what's open, and what's not being built. Check it before proposing any flow, screen, or XP change, and its § "Process notes" before trusting any Figma frame.
 - Every visual, spacing, type, and motion value comes from `docs/tokens.json` by token path. `docs/design-system.md` has the rules and the source-of-truth order; follow it, including its § "Never do this" in full.
-- Two tokens carry a live conflict flag in their own description — `typography.primitive.fontFamily.*` and `responsive.primitive.deviceWidth.mobile`. Read the flag before consuming either.
+- `typography.primitive.fontFamily.*` (Greed Standard, no substitute) and `responsive.primitive.deviceWidth.mobile` (390) were resolved 2026-09-16; each token's `$description` records the decision. Frame the prototype at 390.
 - Voice states follow `docs/voice-ux.md`. Idle / recording / processing / result must be unmistakable on every screen.
 - Knowie expressions come from `public/knowie/`. Pick one; do not draw or generate new ones.
 - Claims about the live app are grounded in `reference/screenshots/`. Cite the file number.

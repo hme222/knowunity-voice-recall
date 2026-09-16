@@ -8,8 +8,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* typography.primitive.fontFamily.default and .display both resolve to Greed Standard */
+  --font-sans: var(--font-greed);
+  --font-display: var(--font-greed);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +23,5 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
 }
