@@ -25,7 +25,6 @@ Next.js 16 · React 19 · Tailwind 4 · TypeScript. Design tokens via Style Dict
 | `style-dictionary.config.mjs` | How tokens become CSS |
 | `.storybook/` | Storybook config: loads `globals.css` + tokens, Greed font, dark only, 390 default viewport |
 | `src/stories/foundations/` | Foundations stories: Colors, Typography, Spacing, Radius, read from `tokens/tokens.json` + the generated CSS |
-| `src/stories/` | Storybook's example stories (Button, Header, Page) |
 | `reference/screenshots/` | Numbered captures of the live Knowunity app, in flow order |
 | `reference/*.mp4` | Screen recording of the beta flow (git-ignored) |
 | `public/knowie/` | Knowie mascot expression SVGs |
