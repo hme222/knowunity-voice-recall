@@ -1,0 +1,65 @@
+@AGENTS.md
+
+# Say It Back
+
+Voice-in / text-out active-recall prototype for Knowunity. Next.js 16, React 19, Tailwind 4, TypeScript.
+
+**Concept:** a conversational, not quiz-graded, recall check — a clean pass echoes the student's own transcript back as proof, a miss requeues later in the same session.
+
+## Hard rules
+
+- `docs/design-brief.md` § "Hard constraints" is fixed. Design inside it, never around it.
+- The recall is mocked. No speech-to-text, no audio, no model calls.
+- Knowie replies in text and never speaks.
+- Mobile only, 390px, dark mode only.
+- `docs/sprint-context.md` is the record of what's decided, what's open, and what's not being built. Check it before proposing any flow, screen, or XP change. Complete Flow beats Main flow v1.
+- Every visual, spacing, type, and motion value comes from `docs/tokens.json` by token path, semantic layer only. `docs/design-system.md` has the rules and the source-of-truth order; follow it.
+- Two tokens carry a live conflict flag in their own description — `typography.primitive.fontFamily.*` and `responsive.primitive.deviceWidth.mobile`. Read the flag before consuming either.
+- Voice states follow `docs/voice-ux.md`. Idle / recording / processing / result must be unmistakable on every screen, and not by color alone.
+- Sentence case on all student-facing text. Capitals for proper nouns only.
+- Knowie expressions come from `public/knowie/`. Pick one; do not draw or generate new ones.
+- Claims about the live app are grounded in `reference/screenshots/`. Cite the file number.
+- Skills route: `ux-designer` for flows, `ui-designer` for styling, `ux-motion` for animation, `interactive-prototype` for building screens. `ux-copywriter` is referenced by the skills but not installed — write copy against `docs/voice-ux.md` and `docs/design-system.md` § "Naming conventions".
+- Read `node_modules/next/dist/docs/` before writing Next.js code. See the block at the end of this file.
+- Ask before committing.
+
+## Never
+
+- Never give Knowie a voice, auto-endpoint recording, or branch into tutoring conversation.
+- Never trap the student. Every state has skip, text fallback, or exit.
+- Never invent a color, size, duration, or type value. Report the missing token and what it was for.
+- Never use `var(--token, fallback)`.
+- Never read a primitive token from a component or screen.
+- Never make a new component. Build from the ones in `docs/design-system.md` § "Which component to reach for"; if none fits, propose a name and stop.
+- Never bake a bottom sheet into a default-state screen. Sheets live on their own branch.
+- Never treat a screen's label or annotation as proof of its content. Check the frame.
+- Never build anything listed under `docs/sprint-context.md` § "Not building this sprint".
+- Never commit `reference/*.mp4`. Never touch `AGENTS.md`.
+
+## File map
+
+| File | Read when |
+|---|---|
+| `docs/design-brief.md` | Starting any design work. Problem, constraints, success metrics, open questions. |
+| `docs/sprint-context.md` | Before proposing a flow, screen, or XP change. Decided, open, out of scope, known Figma bugs. |
+| `docs/voice-ux.md` | Designing any idle / recording / processing / result / permission / fallback state. |
+| `docs/design-system.md` | Choosing a component, naming a token, or unsure whether to build something new. |
+| `docs/tokens.json` | You need an actual color, size, spacing, type, or motion value. Read the `$description` too. |
+| `reference/screenshots/01–31` | How the live beta's recall loop, hints, reveal, session end, and exit sheet actually look. |
+| `reference/screenshots/32–64` | Onboarding, study plan, revision reader, home composer, tools, profile. `52` is the mic-denied sheet. |
+| `reference/say-it-back-flow-screen-recording.mp4` | Motion and timing of the live beta flow. |
+| `public/knowie/*.svg` | Picking a Knowie expression: dazed, determined, excited, laughing. |
+| `src/app/layout.tsx`, `page.tsx`, `globals.css` | Editing the prototype shell. Still Next.js defaults; tokens are not wired in yet. |
+| `.claude/skills/*/SKILL.md` | Auto-loaded by trigger. Open `references/` inside a skill only when its SKILL.md points you there. |
+| `README.md` | Onboarding a human. Run commands and folder map. |
+| `package.json`, `next.config.ts`, `tsconfig.json`, `eslint.config.mjs`, `postcss.config.mjs`, `.gitignore` | Changing build, lint, TS, or ignore config. Otherwise leave alone. |
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
