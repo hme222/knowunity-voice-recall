@@ -17,8 +17,7 @@
 /.next/
 /out/
 
-# production
-/build
+# build/ holds generated design tokens (build/css/tokens.css) and is tracked on purpose.
 
 # misc
 .DS_Store

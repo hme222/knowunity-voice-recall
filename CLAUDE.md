@@ -10,7 +10,7 @@ Voice-in / text-out active-recall prototype for Knowunity. Next.js 16, React 19,
 
 - `docs/design-brief.md` § "Hard constraints" is fixed. Design inside it, never around it.
 - `docs/sprint-context.md` is the record of what's decided, what's open, and what's not being built. Check it before proposing any flow, screen, or XP change, and its § "Process notes" before trusting any Figma frame.
-- Every visual, spacing, type, and motion value comes from `docs/tokens.json` by token path. `docs/design-system.md` has the rules and the source-of-truth order; follow it, including its § "Never do this" in full.
+- Every visual, spacing, type, and motion value comes from `tokens/tokens.json` by token path. `docs/design-system.md` has the rules and the source-of-truth order; follow it, including its § "Never do this" in full.
 - `typography.primitive.fontFamily.*` (Greed Standard, no substitute) and `responsive.primitive.deviceWidth.mobile` (390) were resolved 2026-09-16; each token's `$description` records the decision. Frame the prototype at 390.
 - Voice states follow `docs/voice-ux.md`. Idle / recording / processing / result must be unmistakable on every screen.
 - Knowie expressions come from `public/knowie/`. Pick one; do not draw or generate new ones.
@@ -30,7 +30,7 @@ Voice-in / text-out active-recall prototype for Knowunity. Next.js 16, React 19,
 | `docs/sprint-context.md` | Before proposing a flow, screen, or XP change. Decided, open, out of scope, known Figma bugs. |
 | `docs/voice-ux.md` | Designing any idle / recording / processing / result / permission / fallback state. |
 | `docs/design-system.md` | Choosing a component, naming a token, or unsure whether to build something new. |
-| `docs/tokens.json` | You need an actual color, size, spacing, type, or motion value. Read the `$description` too. |
+| `tokens/tokens.json` | You need an actual color, size, spacing, type, or motion value. Read the `$description` too. |
 | `reference/screenshots/01–31` | How the live beta's recall loop, hints, reveal, session end, and exit sheet actually look. |
 | `reference/screenshots/32–64` | Onboarding, study plan, revision reader, home composer, tools, profile. `52` is the mic-denied sheet. |
 | `reference/say-it-back-flow-screen-recording.mp4` | Motion and timing of the live beta flow. |
