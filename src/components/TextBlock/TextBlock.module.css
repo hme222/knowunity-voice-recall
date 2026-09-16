@@ -3,6 +3,8 @@
 .root {
   display: flex;
   flex-direction: column;
+  width: fit-content; /* Figma: hugs content */
+  max-width: 100%;
 }
 .header,
 .caption {

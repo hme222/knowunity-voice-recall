@@ -36,19 +36,19 @@ export function ArrowLeftIcon({ className }: IconProps) {
   )
 }
 
-/** statChip XP bolt (13x14 artwork, 14 box). */
+/** statChip XP bolt. 14 artwork drawn inside the 16 icon box, as Figma sizes it. */
 export function XpIcon({ className }: IconProps) {
   return (
-    <svg className={className} viewBox="0 0 14 14" {...base}>
+    <svg className={className} viewBox="-1 -1 16 16" {...base}>
       <path d="M7.1 0.318237L0.5 8.31824H4.9L3.8 14.3182L11.5 5.31824H6L7.1 0.318237Z" fill="currentColor" stroke="currentColor" />
     </svg>
   )
 }
 
-/** statChip Score target (14 box). */
+/** statChip Score target. 14 artwork inside the 16 box. */
 export function ScoreIcon({ className }: IconProps) {
   return (
-    <svg className={className} viewBox="0 0 14 14" {...base}>
+    <svg className={className} viewBox="-1 -1 16 16" {...base}>
       <circle cx="7" cy="7" r="6.35" stroke="currentColor" strokeWidth="1.3" />
       <circle cx="7" cy="7" r="3.35" stroke="currentColor" strokeWidth="1.3" />
       <circle cx="7" cy="7" r="1.5" fill="currentColor" />
@@ -56,10 +56,10 @@ export function ScoreIcon({ className }: IconProps) {
   )
 }
 
-/** statChip Time stopwatch (14 box). */
+/** statChip Time stopwatch. 14 artwork inside the 16 box. */
 export function TimeIcon({ className }: IconProps) {
   return (
-    <svg className={className} viewBox="0 0 14 15" {...base}>
+    <svg className={className} viewBox="-1 -0.5 16 16" {...base}>
       <path d="M6.2002 4.01123C9.30481 4.01123 11.7498 6.36338 11.75 9.18018C11.75 11.9971 9.30491 14.3501 6.2002 14.3501C3.0955 14.3501 0.650391 11.9971 0.650391 9.18018C0.650553 6.36339 3.0956 4.01125 6.2002 4.01123Z" stroke="currentColor" strokeWidth="1.3" />
       <line y1="-0.65" x2="3.02294" y2="-0.65" transform="matrix(0.785602 0.618732 -0.666481 0.745522 6.20023 9.18042)" stroke="currentColor" strokeWidth="1.3" />
       <line y1="-0.65" x2="2.53235" y2="-0.65" transform="matrix(0.835674 0.549225 -0.597947 0.801535 1.03337 2.39087)" stroke="currentColor" strokeWidth="1.3" />

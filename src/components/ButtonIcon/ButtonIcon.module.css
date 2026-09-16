@@ -104,11 +104,14 @@
 .root[data-variant='Tertiary'] .content {
   padding-bottom: 0;
 }
-/* Overlay: low-contrast control over another surface. Figma has only S / Default. */
+/* Overlay: low-contrast control over another surface. Figma has only S / Default, with a 24 icon in the 32 pill. */
 .root[data-variant='Overlay'] .pill {
   background: var(--color-semantic-interactive-secondary);
   color: var(--color-semantic-text-secondary);
   --button-pressed-overlay: var(--color-semantic-interactive-pressed);
+}
+.root[data-variant='Overlay'][data-size='S'] .pill {
+  --button-icon: var(--size-primitive-icon-300);
 }
 
 /* Pressed overlay, never a fill swap. */

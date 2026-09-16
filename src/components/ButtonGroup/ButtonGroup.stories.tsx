@@ -13,7 +13,7 @@ const FIGMA_DESCRIPTION = `
 
 ---
 
-Built 2026-09-16. The group only lays out; the two children are real Button / ButtonIcon instances. Vertical = Primary over Secondary, both filling. Horizontal = Secondary ButtonIcon then a filling Primary Button, as in the Figma cells.
+Built 2026-09-16. The two children are real Button / ButtonIcon instances; the group applies Figma's "Fill container" overrides itself (both in Vertical, the second child in Horizontal). Figma's frame is a fixed 319 wide; here it fills its container.
 `
 
 const meta = {
@@ -32,13 +32,13 @@ const meta = {
     <ButtonGroup {...args}>
       {args.variant === 'Vertical' ? (
         <>
-          <Button CTA="Continue" variant="Primary" size={args.size} fullWidth />
-          <Button CTA="Not now" variant="Secondary" size={args.size} fullWidth />
+          <Button CTA="Continue" variant="Primary" size={args.size} />
+          <Button CTA="Not now" variant="Secondary" size={args.size} />
         </>
       ) : (
         <>
           <ButtonIcon label="Back" variant="Secondary" size={args.size} />
-          <Button CTA="Continue" variant="Primary" size={args.size} fullWidth />
+          <Button CTA="Continue" variant="Primary" size={args.size} />
         </>
       )}
     </ButtonGroup>

@@ -5,7 +5,10 @@
 
 .root {
   width: 100%;
-  background: linear-gradient(var(--color-semantic-background-page), transparent);
+  /* Figma stacks two identical top-to-bottom fades. */
+  background:
+    linear-gradient(var(--color-semantic-background-page), transparent),
+    linear-gradient(var(--color-semantic-background-page), transparent);
 }
 .bar {
   display: flex;
@@ -38,6 +41,9 @@
 .right {
   display: flex;
   align-items: center;
+}
+.root[data-variant='leftAnd2RightButtons'] .right {
+  padding-right: calc(var(--size-primitive-space-100) * 1px);
 }
 
 /* App Bar Button Icon: 48 hit area, 40 pill (no fill), 24 icon. */

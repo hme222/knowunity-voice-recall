@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { Chips } from '../Chips/Chips'
 import { SquareIcon } from '../icons'
 import styles from './Snackbar.module.css'
 
@@ -35,7 +36,8 @@ export function Snackbar({ Text: text, variant = 'Default', icon, chipText = '1/
             </button>
           )}
         </div>
-        <span className={styles.chip}>{chipText}</span>
+        {/* Figma: a chips S / active instance with its fill overridden per variant. */}
+        <Chips className={styles.chip} size="S" active Text={chipText} showLeftIcon={false} showRightIcon={false} tabIndex={-1} aria-hidden="true" />
       </div>
     </div>
   )

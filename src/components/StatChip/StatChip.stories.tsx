@@ -11,7 +11,7 @@ const FIGMA_DESCRIPTION = `
 
 ---
 
-Built 2026-09-16. Figma had this in Inter at 7.5px / 13px with no text styles; retyped there to Caption S Bold / Caption M Bold and its padding, gap and radius bound (\`space.300\` / \`space.200\`, \`space.100\`, \`radius.400\`). Labels are sentence case per design-system.md, where Figma's samples were SCORE / TIME. Icon box is \`icon.200\`; Figma drew them at 14.
+Built 2026-09-16. Figma had this in Inter at 7.5px / 13px with no text styles; retyped there to Caption S Bold / Caption M Bold and its padding, gap and radius bound (\`space.300\` / \`space.200\`, \`space.100\`, \`radius.400\`). Labels are Figma's text verbatim (XP / SCORE / TIME), matched on request; note design-system.md's sentence-case rule says otherwise. Icon artwork is drawn at 14 inside the \`icon.200\` box, as Figma sizes it.
 `
 
 const meta = {

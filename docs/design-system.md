@@ -1017,6 +1017,26 @@ the mic's Listening pulse and the progress bar's step transition on
 parameters exist with no token to name them: the pulse ring's start
 opacity and end scale in `MicButton.module.css`.
 
+Second comparison pass, same day, matched property-for-property:
+ButtonIcon Overlay S icon at `icon.300`; Chips Coral hides its right
+icon by default; StatChip label text as Figma's (`XP` / `SCORE` /
+`TIME`, which contradicts the sentence-case rule below and was matched
+on request) with the 14 artwork drawn inside the `icon.200` box;
+TextBlock and HintCard hug content; AppBar's two stacked fades and
+the 16 right edge on `leftAnd2RightButtons`; Snackbar's 28×48 icon
+container (`space.700` × `tapTarget`) and a real Chips instance for
+its tag; ButtonGroup applies Figma's fill overrides itself. Two more
+Figma-side defects fixed in Figma: the Idle mic frame bound
+`border/strong` directly, bypassing its own `component/micButton/idle/stroke`
+(now routed through it, and the token aliases `border.strong` in both
+places since that is what it always rendered); and the CouldntHear
+tag was a hand-built frame, now a `chips` Coral instance as its
+description says. Still not matched, and intentionally: fixed widths
+in Figma (`buttonGroup` 319, `statChip` 90, `progressIndicator` 350)
+fill their container here; `mascotSlot` shows `public/knowie/` SVGs
+rather than Figma's Homie pose instances; Overlay and Coral cells
+Figma never built are extrapolated from the same tokens.
+
 ---
 
 ## Naming conventions

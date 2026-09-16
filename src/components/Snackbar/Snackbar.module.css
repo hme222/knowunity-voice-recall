@@ -15,9 +15,16 @@
   background: var(--color-semantic-background-inverse);
   color: var(--color-semantic-text-inverse);
 }
+/* Icon Container: 28 wide (space.700) by a tap target tall in Figma, icon.300 inside. */
 .icon {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex: none;
+  width: calc(var(--size-primitive-space-700) * 1px);
+  height: calc(var(--spacing-semantic-tap-target) * 1px);
+}
+.icon > svg {
   width: calc(var(--size-primitive-icon-300) * 1px);
   height: calc(var(--size-primitive-icon-300) * 1px);
 }
@@ -53,29 +60,20 @@
   letter-spacing: calc(var(--typography-style-body-s-bold-letter-spacing) * 0.01em);
 }
 
-/* The chip: chips S shape, fill overridden per variant as the Figma instance does. */
+/* The chip is a Chips instance; the fill override per variant matches the Figma instance. */
 .chip {
-  display: inline-flex;
-  align-items: center;
   flex: none;
-  height: calc(var(--component-button-s-height) * 1px);
-  padding-inline: calc(var(--size-primitive-space-300) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
-  white-space: nowrap;
-  font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
-  letter-spacing: calc(var(--typography-style-caption-m-bold-letter-spacing) * 0.01em);
+  pointer-events: none;
 }
-.root[data-variant='Default'] .chip {
+.root[data-variant='Default'] .card .chip {
   background: var(--color-semantic-accent-blue-bold);
   color: var(--color-semantic-accent-blue-on-bold);
 }
-.root[data-variant='Success'] .chip {
+.root[data-variant='Success'] .card .chip {
   background: var(--color-semantic-feedback-success-bold);
   color: var(--color-semantic-feedback-success-on-bold);
 }
-.root[data-variant='Error'] .chip {
+.root[data-variant='Error'] .card .chip {
   background: var(--color-semantic-feedback-error-bold);
   color: var(--color-semantic-feedback-error-on-bold);
 }

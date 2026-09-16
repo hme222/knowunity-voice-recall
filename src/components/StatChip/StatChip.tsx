@@ -6,7 +6,8 @@ import styles from './StatChip.module.css'
 export const STAT_CHIP_STATS = ['XP', 'Score', 'Time'] as const
 export type StatChipStat = (typeof STAT_CHIP_STATS)[number]
 
-const LABELS: Record<StatChipStat, string> = { XP: 'XP', Score: 'Score', Time: 'Time' }
+// Figma's label text, verbatim. Full caps here conflicts with design-system.md's sentence-case rule; matched to Figma on request.
+const LABELS: Record<StatChipStat, string> = { XP: 'XP', Score: 'SCORE', Time: 'TIME' }
 const ICONS: Record<StatChipStat, (props: { className?: string }) => React.JSX.Element> = { XP: XpIcon, Score: ScoreIcon, Time: TimeIcon }
 
 export type StatChipProps = {

@@ -342,7 +342,7 @@
   --typography-style-caption-s-regular-font-size: var(--typography-primitive-font-size-2xs); /** Smallest caption, regular weight. Below the Platform Constraints' 11px caption minimum only if used at raw size; here it sits at 9px per the file's own token. */
   --typography-style-caption-s-regular-line-height: var(--typography-primitive-line-height-2xs); /** Smallest caption, regular weight. Below the Platform Constraints' 11px caption minimum only if used at raw size; here it sits at 9px per the file's own token. */
   --typography-style-caption-s-regular-letter-spacing: var(--typography-primitive-tracking-loose); /** Smallest caption, regular weight. Below the Platform Constraints' 11px caption minimum only if used at raw size; here it sits at 9px per the file's own token. */
-  --component-mic-button-idle-stroke: var(--color-semantic-border-default); /** Idle mic circle outline; a ghost-outline treatment. */
+  --component-mic-button-idle-stroke: var(--color-semantic-border-strong); /** Idle mic circle outline. border.strong: the Figma Idle frame had always rendered at this value, bound to border/strong directly; rebound through this token 2026-09-16 (the token had said border.default). */
   --component-mic-button-idle-glyph: var(--color-semantic-text-primary); /** Idle mic circle icon color. */
   --component-mic-button-listening-fill: var(--color-semantic-brand-bold); /** Listening mic circle fill; the pulsing ring on top is additive motion, not load-bearing, so it still reads with reduced motion on. */
   --component-mic-button-listening-glyph: var(--color-semantic-brand-on-bold); /** Listening mic circle icon color. */

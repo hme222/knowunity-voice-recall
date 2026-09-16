@@ -18,7 +18,7 @@ export type ChipsProps = {
   active?: boolean
   /** Figma `showLeftIcon` (default true). */
   showLeftIcon?: boolean
-  /** Figma `showRightIcon` (default true). */
+  /** Figma `showRightIcon` (default true; false on Coral, as in Figma). */
   showRightIcon?: boolean
   /** Left slot content; falls back to the `square` placeholder (`refresh` on Coral). */
   leftIcon?: ReactNode
@@ -32,7 +32,7 @@ export function Chips({
   color = 'Primary',
   active = false,
   showLeftIcon = true,
-  showRightIcon = true,
+  showRightIcon = color !== 'Coral', // the one Coral cell in Figma has its right iconSlot hidden
   leftIcon,
   rightIcon,
   className,

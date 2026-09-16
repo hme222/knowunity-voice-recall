@@ -3,6 +3,9 @@
 .root {
   display: flex;
   flex-direction: column;
+  width: fit-content; /* Figma: hugs content */
+  max-width: 100%;
+  box-sizing: border-box;
   gap: calc(var(--spacing-semantic-card-label-gap) * 1px);
   padding: calc(var(--spacing-semantic-card-padding) * 1px);
   border-radius: calc(var(--size-primitive-radius-200) * 1px);
