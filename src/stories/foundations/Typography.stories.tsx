@@ -7,7 +7,7 @@ import { resolveRaw, tokensUnder, type Token } from './tokens'
 // --typography-style-<name>-font-family / -font-weight / -font-size /
 // -line-height / -letter-spacing, which is what the sample below consumes.
 
-type Composite = { fontFamily: string; fontWeight: string; fontSize: string; lineHeight: string; letterSpacing: string }
+type Composite = { fontFamily: string; fontWeight: string; fontSize: string; lineHeight: string; letterSpacing: string; fontStretch?: string }
 
 const styles = tokensUnder('typography.style')
   .map((token) => {
@@ -26,6 +26,8 @@ const SAMPLE = 'The mitochondria is the powerhouse of the cell'
 
 function Sample({ token }: { token: Token }) {
   const v = token.cssVar
+  // Only styles that declare a width (Display L, Condensed) get font-stretch; the rest inherit the page's Standard.
+  const hasStretch = 'fontStretch' in (token.value as Composite)
   return (
     <p
       style={{
@@ -35,6 +37,7 @@ function Sample({ token }: { token: Token }) {
         fontSize: `calc(var(${v}-font-size) * 1px)`,
         lineHeight: `calc(var(${v}-line-height) * 1px)`,
         letterSpacing: `calc(var(${v}-letter-spacing) * 0.01em)`,
+        ...(hasStretch ? { fontStretch: `calc(var(${v}-font-stretch) * 1%)` } : {}),
         color: 'var(--color-semantic-text-primary)',
         overflowWrap: 'anywhere',
       }}

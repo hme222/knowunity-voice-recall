@@ -4,8 +4,8 @@
 import StyleDictionary from "style-dictionary";
 
 // tokens.json stores weights as words; CSS needs numbers.
-// Same mapping as the Greed files registered in src/app/layout.tsx.
-const FONT_WEIGHTS = { Regular: 400, SemiBold: 600, Bold: 700, Heavy: 800 };
+// Values are the Greed VF's own named instances (Heavy is wght 900).
+const FONT_WEIGHTS = { Regular: 400, SemiBold: 600, Bold: 700, Heavy: 900 };
 
 StyleDictionary.registerTransform({
   name: "fontWeight/knowunity",

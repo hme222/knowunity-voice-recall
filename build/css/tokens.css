@@ -122,12 +122,14 @@
   --typography-primitive-tracking-tight: -1; /** -1%. Display sizes and Headline L and above. */
   --typography-primitive-tracking-none: 0; /** 0%. Headline S only. */
   --typography-primitive-tracking-loose: 1; /** +1%. Headline XS and below, all Body, all Caption. */
-  --typography-primitive-font-family-display: 'Greed Standard-TRIAL'; /** Used for Display L only. RESOLVED 2026-09-16: Greed, no substitute. Since 2026-09-16 loaded as one variable file, Greed VF (wght 300-900, wdth 75-130), from src/app/fonts/ via next/font/local as --font-greed; the page pins wdth to 100 (Standard). Display L's 'Condensed Heavy' is wdth 75 / wght 900 on the same file, not applied yet. */
+  --typography-primitive-font-family-display: 'Greed Condensed-TRIAL'; /** Used for Display L only. Greed Condensed. Figma's Display L style binds here (rebound 2026-09-16; it had been on fontFamily.default). In code the family is the single Greed VF and Condensed is expressed as typography.primitive.fontWidth.condensed on the wdth axis; the name here mirrors Figma, it is not used as a CSS family. */
   --typography-primitive-font-family-default: 'Greed Standard-TRIAL'; /** Used for every text style except Display L. RESOLVED 2026-09-16: Greed, no substitute. Since 2026-09-16 loaded as one variable file, Greed VF (wght 300-900, wdth 75-130), from src/app/fonts/ via next/font/local as --font-greed; the page pins wdth to 100 (Standard). Overrides the Platform Constraints substitution rule on purpose. */
+  --typography-primitive-font-width-condensed: 75; /** 75%. Greed VF wdth axis, the Condensed cut. Display L only. Applied as font-stretch. */
+  --typography-primitive-font-width-standard: 100; /** 100%. Greed VF wdth axis, the Standard cut. The page default; every text style except Display L. */
   --typography-primitive-font-weight-regular: 400; /** Body copy and the Regular variants of Headline XS and XXS. */
   --typography-primitive-font-weight-semibold: 600; /** The Bold-labeled variants of Headline XS/XXS, Body and Caption. */
   --typography-primitive-font-weight-bold: 700; /** Display M and S, Headline XL through S. */
-  --typography-primitive-font-weight-heavy: 800; /** Display L only, paired with fontFamily.display. */
+  --typography-primitive-font-weight-heavy: 900; /** Display L only, paired with fontFamily.display. On the Greed VF this is wght 900 (the file's own 'Heavy' instance), not 800. */
   --motion-primitive-duration-150: 150; /** 150ms. Micro-feedback: button press, checkbox toggle, mic circle press-down. */
   --motion-primitive-duration-250: 250; /** 250ms. State transitions: idle to recording, processing to result. */
   --motion-primitive-duration-1100: 1100; /** 1100ms, loops. Mic-pulse timing, matched to iOS dictation / WhatsApp voice-note comparables. */
@@ -243,11 +245,12 @@
   --spacing-semantic-between-sections: var(--size-primitive-space-600); /** Vertical gap between major blocks on a screen, e.g. between the prompt bubble and the mic control. */
   --spacing-semantic-card-label-gap: var(--size-primitive-space-150); /** Vertical gap between a card's own label or title and its body text. chatBubble's title-to-body gap, hintCard's label-to-body gap. Not for gaps between separate blocks on a screen, that's betweenSections. */
   --component-mic-button-diameter: var(--size-primitive-illustration-1500); /** Mic circle diameter, the primary tap target in the recall loop. */
-  --typography-style-display-l-font-family: var(--typography-primitive-font-family-display); /** Largest display size, Condensed Heavy weight only. */
-  --typography-style-display-l-font-weight: var(--typography-primitive-font-weight-heavy); /** Largest display size, Condensed Heavy weight only. */
-  --typography-style-display-l-font-size: var(--typography-primitive-font-size-6xl); /** Largest display size, Condensed Heavy weight only. */
-  --typography-style-display-l-line-height: var(--typography-primitive-line-height-5xl); /** Largest display size, Condensed Heavy weight only. */
-  --typography-style-display-l-letter-spacing: var(--typography-primitive-tracking-tight); /** Largest display size, Condensed Heavy weight only. */
+  --typography-style-display-l-font-family: var(--typography-primitive-font-family-display); /** Largest display size, Condensed Heavy: fontFamily.display (Greed Condensed in Figma) with fontWidth.condensed (wdth 75) and fontWeight.heavy (900) on the VF in code. Applied 2026-09-16. */
+  --typography-style-display-l-font-weight: var(--typography-primitive-font-weight-heavy); /** Largest display size, Condensed Heavy: fontFamily.display (Greed Condensed in Figma) with fontWidth.condensed (wdth 75) and fontWeight.heavy (900) on the VF in code. Applied 2026-09-16. */
+  --typography-style-display-l-font-size: var(--typography-primitive-font-size-6xl); /** Largest display size, Condensed Heavy: fontFamily.display (Greed Condensed in Figma) with fontWidth.condensed (wdth 75) and fontWeight.heavy (900) on the VF in code. Applied 2026-09-16. */
+  --typography-style-display-l-line-height: var(--typography-primitive-line-height-5xl); /** Largest display size, Condensed Heavy: fontFamily.display (Greed Condensed in Figma) with fontWidth.condensed (wdth 75) and fontWeight.heavy (900) on the VF in code. Applied 2026-09-16. */
+  --typography-style-display-l-letter-spacing: var(--typography-primitive-tracking-tight); /** Largest display size, Condensed Heavy: fontFamily.display (Greed Condensed in Figma) with fontWidth.condensed (wdth 75) and fontWeight.heavy (900) on the VF in code. Applied 2026-09-16. */
+  --typography-style-display-l-font-stretch: var(--typography-primitive-font-width-condensed); /** Largest display size, Condensed Heavy: fontFamily.display (Greed Condensed in Figma) with fontWidth.condensed (wdth 75) and fontWeight.heavy (900) on the VF in code. Applied 2026-09-16. */
   --typography-style-display-m-font-family: var(--typography-primitive-font-family-default); /** Display size for hero numeric moments, e.g. session stats. */
   --typography-style-display-m-font-weight: var(--typography-primitive-font-weight-bold); /** Display size for hero numeric moments, e.g. session stats. */
   --typography-style-display-m-font-size: var(--typography-primitive-font-size-5xl); /** Display size for hero numeric moments, e.g. session stats. */
