@@ -1,5 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { LoadingIcon } from './LoadingIcon'
+import { SquareIcon } from './SquareIcon'
 import styles from './Button.module.css'
 
 // Mirrors the Figma component set `button` (9003:6667) on "🎨 Mascot & components".
@@ -26,13 +27,11 @@ export type ButtonProps = {
   showLeftIcon?: boolean
   /** Figma `showRightIcon`. */
   showRightIcon?: boolean
-  /** Content for the left icon slot when showLeftIcon is on. Falls back to Figma's empty-square placeholder. */
+  /** Content for the left icon slot when showLeftIcon is on. Falls back to Figma's `square` placeholder. */
   leftIcon?: ReactNode
-  /** Content for the right icon slot when showRightIcon is on. Falls back to Figma's empty-square placeholder. */
+  /** Content for the right icon slot when showRightIcon is on. Falls back to Figma's `square` placeholder. */
   rightIcon?: ReactNode
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'disabled'>
-
-const Placeholder = () => <span className={styles.placeholder} aria-hidden="true" />
 
 export function Button({
   CTA,
@@ -60,20 +59,23 @@ export function Button({
       data-state={state}
       disabled={inert}
       aria-busy={loading || undefined}
-      aria-label={loading ? CTA : undefined}
     >
       <span className={styles.pill}>
         {loading ? (
-          // Loading removes the label and shows the spinner in the centre icon container.
-          <span className={styles.icon}>
-            <LoadingIcon className={styles.spinner} />
-          </span>
-        ) : (
+          // Loading: the label layer stays but is hidden, the spinner takes the centre icon container.
           <>
-            {showLeftIcon && <span className={styles.icon}>{leftIcon ?? <Placeholder />}</span>}
-            <span className={styles.label}>{CTA}</span>
-            {showRightIcon && <span className={styles.icon}>{rightIcon ?? <Placeholder />}</span>}
+            <span className={styles.icon}>
+              <LoadingIcon className={styles.spinner} />
+            </span>
+            <span className={styles.hiddenLabel}>{CTA}</span>
           </>
+        ) : (
+          // Figma wraps icons + label in a frame with a small bottom padding, lifting them off centre.
+          <span className={styles.content}>
+            {showLeftIcon && <span className={styles.icon}>{leftIcon ?? <SquareIcon />}</span>}
+            <span className={styles.label}>{CTA}</span>
+            {showRightIcon && <span className={styles.icon}>{rightIcon ?? <SquareIcon />}</span>}
+          </span>
         )}
       </span>
     </button>

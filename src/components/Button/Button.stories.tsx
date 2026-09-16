@@ -72,10 +72,11 @@ export const Disabled: Story = {
 export const Loading: Story = {
   args: { state: 'Loading' },
   play: async ({ canvas }) => {
-    // Label is removed from layout but stays the accessible name; aria-busy marks the state.
+    // Label layer stays but is visually hidden (as in Figma) and remains the accessible name; aria-busy marks the state.
     const button = canvas.getByRole('button', { name: 'Continue' })
     await expect(button).toHaveAttribute('aria-busy', 'true')
-    await expect(button).not.toHaveTextContent('Continue')
+    const hidden = canvas.getByText('Continue').getBoundingClientRect()
+    await expect(hidden.width).toBeLessThanOrEqual(1)
   },
 }
 

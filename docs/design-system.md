@@ -934,9 +934,50 @@ came out of reading the real component:
    `tokens.json` per the source-of-truth order. Nothing in Figma
    changed.
 
-Not mirrored exactly: Tertiary's Pressed overlay sits on the label
-fill in Figma; in code it sits on the (invisible) pill area. Same
-visual weight, simpler to keep in one place.
+Matched to Figma property-for-property after a second comparison pass
+the same day: the label wrapper's bottom lift (2 on S/M, 4 on L, now
+`space.050`/`space.100` in code — unbound raw numbers in Figma),
+Tertiary's text-hugging pill on S/M and its radius on the outer
+frame, the Pressed overlay on the label only for Tertiary, the icon
+set's `square` glyph as the slot placeholder, and a hidden label layer
+in Loading. Two things Figma has no opinion on were filled from this
+doc rather than left raw: a `border.focus` ring at Stroke/Heavy Border
+on keyboard focus, and the press/spinner motion on `duration.fast` /
+`duration.ambient`.
+
+3. **Secondary's Pressed overlay was buried in Figma.** On all three
+   sizes of `button` and `buttonIcon`, `background/stacking` sat
+   *below* the opaque `background/surface` fill, so Pressed rendered
+   identical to Default — contradicting the component's own
+   description. Fill order swapped on those six variants; bindings
+   untouched.
+
+### Component audit, 2026-09-16: what's still unbound across both pages
+
+Same check the button got, run over all 16 components (153 variants)
+on "🎨 Mascot & components" and "Components". Colours are almost
+entirely clean: every fill and stroke is bound except two shapes inside
+`recallResult`'s CouldntHear tag. What isn't bound is *dimensions*:
+
+- **Fixed heights with no variable** on nearly everything: `appBar`
+  root 56 and its 48 icon buttons, `buttonIcon` pill 32/40/56 (same as
+  `button` was), `optionRow` rows at 56, `micButton` glyph 48,
+  `mascotSlot` 64/120/200, `chips` 20+, `snackbar` containers, every
+  icon container's height (widths bind to `Icon/*`, heights don't).
+- **Unbound padding and gaps**: `progressIndicator` (80 padding
+  values, 40 unbound radii of 12), `appBar` slot 10/10 with 10 gaps,
+  `buttonIcon` wrapper 2/4/10, the 4–5px gaps inside every `iconSlot`.
+- **`statChip` is the outlier**: Inter, not Greed, at 7.5px and 13px
+  with no text style and no bound size, plus unbound padding
+  (12/10), gap 4 and radius 14. The Fifth pass fixed its colours; its
+  type and dimensions were never bound.
+- `textBlock`, `chatBubble`, `hintCard` are fully bound. `iconSlot`'s
+  own sizes are unbound but it's scaffolding by its own admission.
+
+None of this was changed. Heights and the `statChip` type are token
+decisions, same shape as the button's: either bind to existing
+primitives where one genuinely fits, or add component tokens where
+the value has no other home.
 
 ---
 
