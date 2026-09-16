@@ -30,7 +30,7 @@ function Sample({ token }: { token: Token }) {
     <p
       style={{
         margin: 0,
-        fontFamily: `var(${v}-font-family)`,
+        // Family is inherited from the page root (Greed VF via --font-greed), never the token's string name.
         fontWeight: `var(${v}-font-weight)`,
         fontSize: `calc(var(${v}-font-size) * 1px)`,
         lineHeight: `calc(var(${v}-line-height) * 1px)`,

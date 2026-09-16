@@ -74,10 +74,13 @@ skimming.
    token in `tokens.json` now; still needs an actual answer for
    whichever screen puts these in proximity.
 4. **Resolved 2026-09-16: the prototype uses the real brand font.**
-   `fontFamily.display` and `fontFamily.default` both resolve to Greed
-   Standard, loaded from `src/app/fonts/` via `next/font/local` as
-   `--font-greed`. This overrides Platform Constraints' substitution
-   rule on purpose; no substitute font is wired anywhere.
+   `fontFamily.display` and `fontFamily.default` both resolve to Greed,
+   loaded as one variable file (Greed VF, `src/app/fonts/`) via
+   `next/font/local` as `--font-greed`, with the page pinned to the
+   Standard width (`font-stretch: 100%`; the file's own default is
+   Condensed). This overrides Platform Constraints' substitution rule
+   on purpose; no substitute font is wired anywhere. Never treat Greed
+   as an installed system font.
 5. **The scaffold component is already built for two device sizes**
    (`iPhone 13` at 390pt, and a larger `L - 17 Pro Max`), and both are
    in active use across Example Screens — this isn't hypothetical

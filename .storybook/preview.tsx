@@ -4,15 +4,15 @@ import { themes } from 'storybook/theming'
 import '../src/app/globals.css'
 import './preview.css'
 
-// Same font registration as src/app/layout.tsx, so stories render in Greed.
+// Same font registration as src/app/layout.tsx, so stories render in Greed VF.
 const greed = localFont({
   variable: '--font-greed',
-  src: [
-    { path: '../src/app/fonts/GreedStandard-TRIAL-Regular.otf', weight: '400', style: 'normal' },
-    { path: '../src/app/fonts/GreedStandard-TRIAL-SemiBold.otf', weight: '600', style: 'normal' },
-    { path: '../src/app/fonts/GreedStandard-TRIAL-Bold.otf', weight: '700', style: 'normal' },
-    { path: '../src/app/fonts/GreedStandard-TRIAL-Heavy.otf', weight: '800', style: 'normal' },
-  ],
+  src: '../src/app/fonts/GreedCollectionVF-TRIAL.ttf',
+  weight: '300 900',
+  style: 'normal',
+  declarations: [{ prop: 'font-stretch', value: '75% 130%' }],
+  display: 'swap',
+  fallback: ['system-ui', '-apple-system', 'Helvetica Neue', 'Arial', 'sans-serif'],
 })
 
 const preview: Preview = {

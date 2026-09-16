@@ -8,4 +8,5 @@ body {
   background: var(--color-semantic-background-page);
   color: var(--color-semantic-text-primary);
   font-family: var(--font-greed);
+  font-stretch: 100%; /* Greed VF wdth axis: Standard cut; the file defaults to 75 (Condensed) */
 }

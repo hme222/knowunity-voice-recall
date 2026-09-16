@@ -2,16 +2,17 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-// typography.primitive.fontFamily.default — Greed Standard, every text style except Display L.
-// Weights map to typography.primitive.fontWeight.{regular, semibold, bold, heavy}.
+// typography.primitive.fontFamily.default / .display — Greed VF, one variable file.
+// Axes in the file: wght 300–900, wdth 75 (Condensed) – 130 (Wide), slnt.
+// The file's default width is 75, so globals.css pins the page to font-stretch 100% (Standard).
 const greed = localFont({
   variable: "--font-greed",
-  src: [
-    { path: "./fonts/GreedStandard-TRIAL-Regular.otf", weight: "400", style: "normal" },
-    { path: "./fonts/GreedStandard-TRIAL-SemiBold.otf", weight: "600", style: "normal" },
-    { path: "./fonts/GreedStandard-TRIAL-Bold.otf", weight: "700", style: "normal" },
-    { path: "./fonts/GreedStandard-TRIAL-Heavy.otf", weight: "800", style: "normal" },
-  ],
+  src: "./fonts/GreedCollectionVF-TRIAL.ttf",
+  weight: "300 900",
+  style: "normal",
+  declarations: [{ prop: "font-stretch", value: "75% 130%" }],
+  display: "swap",
+  fallback: ["system-ui", "-apple-system", "Helvetica Neue", "Arial", "sans-serif"],
 });
 
 export const metadata: Metadata = {

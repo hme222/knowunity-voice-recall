@@ -122,8 +122,8 @@
   --typography-primitive-tracking-tight: -1; /** -1%. Display sizes and Headline L and above. */
   --typography-primitive-tracking-none: 0; /** 0%. Headline S only. */
   --typography-primitive-tracking-loose: 1; /** +1%. Headline XS and below, all Body, all Caption. */
-  --typography-primitive-font-family-display: 'Greed Standard-TRIAL'; /** Used for Display L only. RESOLVED 2026-09-16: Greed Standard is the prototype font, no substitute. Loaded from src/app/fonts/ via next/font/local as --font-greed; overrides the Platform Constraints substitution rule on purpose. */
-  --typography-primitive-font-family-default: 'Greed Standard-TRIAL'; /** Used for every text style except Display L. RESOLVED 2026-09-16: Greed Standard is the prototype font, no substitute. Loaded from src/app/fonts/ via next/font/local as --font-greed (400/600/700/800); overrides the Platform Constraints substitution rule on purpose. */
+  --typography-primitive-font-family-display: 'Greed Standard-TRIAL'; /** Used for Display L only. RESOLVED 2026-09-16: Greed, no substitute. Since 2026-09-16 loaded as one variable file, Greed VF (wght 300-900, wdth 75-130), from src/app/fonts/ via next/font/local as --font-greed; the page pins wdth to 100 (Standard). Display L's 'Condensed Heavy' is wdth 75 / wght 900 on the same file, not applied yet. */
+  --typography-primitive-font-family-default: 'Greed Standard-TRIAL'; /** Used for every text style except Display L. RESOLVED 2026-09-16: Greed, no substitute. Since 2026-09-16 loaded as one variable file, Greed VF (wght 300-900, wdth 75-130), from src/app/fonts/ via next/font/local as --font-greed; the page pins wdth to 100 (Standard). Overrides the Platform Constraints substitution rule on purpose. */
   --typography-primitive-font-weight-regular: 400; /** Body copy and the Regular variants of Headline XS and XXS. */
   --typography-primitive-font-weight-semibold: 600; /** The Bold-labeled variants of Headline XS/XXS, Body and Caption. */
   --typography-primitive-font-weight-bold: 700; /** Display M and S, Headline XL through S. */
