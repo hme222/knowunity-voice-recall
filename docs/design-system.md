@@ -82,9 +82,10 @@ skimming.
    (`iPhone 13` at 390pt, and a larger `L - 17 Pro Max`), and both are
    in active use across Example Screens — this isn't hypothetical
    future-proofing, someone already built screens at the larger size.
-   Platform Constraints says this feature targets 390px only. Worth
-   confirming on purpose whether that's still true, or whether the
-   larger size needs to be in scope for this sprint too.
+   Platform Constraints says this feature targets 390px only.
+   **Confirmed 2026-09-16: 390 only.** The `L - 17 Pro Max` size is
+   out of scope for this sprint; build and check every screen at
+   390.
 6. **Two different, unreconciled answers now exist for how voice input
    works, and four components have already been built against only
    one of them.** A component called `Chat Input` lives on `"🎨 Mascot
