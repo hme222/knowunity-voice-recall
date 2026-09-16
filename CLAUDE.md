@@ -13,7 +13,7 @@ Voice-in / text-out active-recall prototype for Knowunity. Next.js 16, React 19,
 - Knowie replies in text and never speaks.
 - Mobile only, 390px, dark mode only.
 - `docs/sprint-context.md` is the record of what's decided, what's open, and what's not being built. Check it before proposing any flow, screen, or XP change. Complete Flow beats Main flow v1.
-- Every visual, spacing, type, and motion value comes from `docs/tokens.json` by token path, semantic layer only. `docs/design-system.md` has the rules and the source-of-truth order; follow it.
+- Every visual, spacing, type, and motion value comes from `docs/tokens.json` by token path. `docs/design-system.md` has the rules and the source-of-truth order; follow it.
 - Two tokens carry a live conflict flag in their own description — `typography.primitive.fontFamily.*` and `responsive.primitive.deviceWidth.mobile`. Read the flag before consuming either.
 - Voice states follow `docs/voice-ux.md`. Idle / recording / processing / result must be unmistakable on every screen, and not by color alone.
 - Sentence case on all student-facing text. Capitals for proper nouns only.
@@ -25,16 +25,16 @@ Voice-in / text-out active-recall prototype for Knowunity. Next.js 16, React 19,
 
 ## Never
 
-- Never give Knowie a voice, auto-endpoint recording, or branch into tutoring conversation.
+- Never auto-endpoint recording or branch into tutoring conversation.
 - Never trap the student. Every state has skip, text fallback, or exit.
 - Never invent a color, size, duration, or type value. Report the missing token and what it was for.
 - Never use `var(--token, fallback)`.
 - Never read a primitive token from a component or screen.
 - Never make a new component. Build from the ones in `docs/design-system.md` § "Which component to reach for"; if none fits, propose a name and stop.
-- Never bake a bottom sheet into a default-state screen. Sheets live on their own branch.
+- Never bake a bottom sheet into a default-state screen.
 - Never treat a screen's label or annotation as proof of its content. Check the frame.
 - Never build anything listed under `docs/sprint-context.md` § "Not building this sprint".
-- Never commit `reference/*.mp4`. Never touch `AGENTS.md`.
+- Never touch `AGENTS.md`.
 
 ## File map
 
