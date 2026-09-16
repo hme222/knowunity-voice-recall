@@ -1,0 +1,73 @@
+/* textBlock — mirrors the Figma component set `textBlock` (9003:9039). */
+
+.root {
+  display: flex;
+  flex-direction: column;
+}
+.header,
+.caption {
+  margin: 0;
+}
+.header {
+  color: var(--color-semantic-text-primary);
+}
+.caption {
+  color: var(--color-semantic-text-secondary);
+}
+
+/* XL and L are centred display/headline with a Headline XS Regular caption, gap space.100. */
+.root[data-variant='XL'],
+.root[data-variant='L'] {
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  text-align: center;
+}
+.root[data-variant='XL'] .header {
+  font-weight: var(--typography-style-display-m-font-weight);
+  font-size: calc(var(--typography-style-display-m-font-size) * 1px);
+  line-height: calc(var(--typography-style-display-m-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-display-m-letter-spacing) * 0.01em);
+}
+.root[data-variant='L'] .header {
+  font-weight: var(--typography-style-headline-xl-font-weight);
+  font-size: calc(var(--typography-style-headline-xl-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-xl-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-headline-xl-letter-spacing) * 0.01em);
+}
+.root[data-variant='XL'] .caption,
+.root[data-variant='L'] .caption {
+  font-weight: var(--typography-style-headline-xs-regular-font-weight);
+  font-size: calc(var(--typography-style-headline-xs-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-xs-regular-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-headline-xs-regular-letter-spacing) * 0.01em);
+}
+
+/* M and S are left-aligned body titles with caption captions, gap space.050. */
+.root[data-variant='M'],
+.root[data-variant='S'] {
+  gap: calc(var(--size-primitive-space-050) * 1px);
+  text-align: left;
+}
+.root[data-variant='M'] .header {
+  font-weight: var(--typography-style-body-m-bold-font-weight);
+  font-size: calc(var(--typography-style-body-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-bold-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-body-m-bold-letter-spacing) * 0.01em);
+}
+.root[data-variant='M'] .caption {
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-caption-m-regular-letter-spacing) * 0.01em);
+}
+.root[data-variant='S'] .header {
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-body-s-bold-letter-spacing) * 0.01em);
+}
+.root[data-variant='S'] .caption {
+  font-weight: var(--typography-style-caption-s-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-s-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-s-regular-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-caption-s-regular-letter-spacing) * 0.01em);
+}

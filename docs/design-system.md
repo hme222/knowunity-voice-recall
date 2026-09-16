@@ -977,10 +977,45 @@ entirely clean: every fill and stroke is bound except two shapes inside
 - `textBlock`, `chatBubble`, `hintCard` are fully bound. `iconSlot`'s
   own sizes are unbound but it's scaffolding by its own admission.
 
-None of this was changed. Heights and the `statChip` type are token
-decisions, same shape as the button's: either bind to existing
-primitives where one genuinely fits, or add component tokens where
-the value has no other home.
+None of this was changed at audit time. Resolved the same day, below.
+
+### Every component built in code, 2026-09-16, and how the audit was resolved
+
+All 15 remaining components now exist under `src/components/`, each
+read from its Figma set's actual bindings, with props named as the
+Figma variants and the Figma description verbatim in its Storybook
+docs. `iconSlot` was not built: its own variants say IGNORE. The
+audit's unbound dimensions were resolved by the rule "reuse an
+existing token where value *and kind* match, add one only where
+nothing fits", and every binding was mirrored in Figma:
+
+- `buttonIcon` pills → `component.button.{s,m,l}.height`, both axes;
+  outer hit area → `spacing.semantic.tapTarget`. Its Secondary
+  Pressed overlay was buried like `button`'s and fixed the same way.
+- `chips` heights → `icon.250` (XXS), `icon.300` (XS),
+  `component.button.s/m.height` (S/M).
+- `mascotSlot` height → the same `illustration.*` token as its width.
+- `progressIndicator` track → `space.600` / `space.400` (the
+  thickness variant), radius → `radius.full`, inset → `space.050`.
+- `appBar` slot → `tapTarget` tall, padding `space.0`, gap `space.200`
+  (was 10/10/10, no visual change since the slot content is centred).
+- `micButton` glyph → new `component.micButton.glyph.size` (48).
+- `statChip` retyped from Inter 7.5/13 to Caption S Bold / Caption M
+  Bold; padding `space.300`/`space.200`, gap `space.100`, radius
+  `radius.400`; given a WHAT/WHEN/DON'T description. Labels are
+  sentence case in code per this doc, where Figma's samples read
+  SCORE / TIME.
+- `optionRow` 56 and `snackbar` 80 are content-derived; nothing added.
+- Two Figma variables the file references are not local:
+  `border/subtle` and `Padding/sm`. They resolve to the same values as
+  `border.default` and `space.200`, which code uses.
+
+Filled from this doc where Figma has no opinion: a `border.focus`
+ring on every tappable component, press feedback on `duration.fast`,
+the mic's Listening pulse and the progress bar's step transition on
+`duration.ambient` / `duration.standard`. Two literal motion
+parameters exist with no token to name them: the pulse ring's start
+opacity and end scale in `MicButton.module.css`.
 
 ---
 

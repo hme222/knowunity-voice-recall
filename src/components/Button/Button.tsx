@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
-import { LoadingIcon } from './LoadingIcon'
-import { SquareIcon } from './SquareIcon'
+import { LoadingIcon } from '../icons'
+import { SquareIcon } from '../icons'
 import styles from './Button.module.css'
 
 // Mirrors the Figma component set `button` (9003:6667) on "🎨 Mascot & components".
@@ -31,6 +31,8 @@ export type ButtonProps = {
   leftIcon?: ReactNode
   /** Content for the right icon slot when showRightIcon is on. Falls back to Figma's `square` placeholder. */
   rightIcon?: ReactNode
+  /** Figma sizing override "Fill container", as used inside buttonGroup. Not a Figma property. */
+  fullWidth?: boolean
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'disabled'>
 
 export function Button({
@@ -42,6 +44,7 @@ export function Button({
   showRightIcon = false,
   leftIcon,
   rightIcon,
+  fullWidth = false,
   className,
   type = 'button',
   ...rest
@@ -57,6 +60,7 @@ export function Button({
       data-variant={variant}
       data-size={size}
       data-state={state}
+      data-full-width={fullWidth || undefined}
       disabled={inert}
       aria-busy={loading || undefined}
     >

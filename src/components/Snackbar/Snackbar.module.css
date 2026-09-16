@@ -1,0 +1,81 @@
+/* snackbar — mirrors the Figma component set `snackbar` (9003:8995).
+   Figma's Padding/sm is not a local variable; it resolves to 8, space.200. */
+
+.root {
+  box-sizing: border-box;
+  width: 100%;
+  padding: calc(var(--size-primitive-space-200) * 1px);
+}
+.card {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-400) * 1px);
+  padding: calc(var(--size-primitive-space-200) * 1px) calc(var(--size-primitive-space-400) * 1px);
+  border-radius: calc(var(--size-primitive-radius-800) * 1px);
+  background: var(--color-semantic-background-inverse);
+  color: var(--color-semantic-text-inverse);
+}
+.icon {
+  display: inline-flex;
+  flex: none;
+  width: calc(var(--size-primitive-icon-300) * 1px);
+  height: calc(var(--size-primitive-icon-300) * 1px);
+}
+.container {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  min-height: calc(var(--spacing-semantic-tap-target) * 1px);
+  padding: calc(var(--size-primitive-space-100) * 1px) calc(var(--size-primitive-space-100) * 1px) calc(var(--size-primitive-space-100) * 1px) 0;
+  min-width: 0;
+}
+.label {
+  margin: 0;
+  font-weight: var(--typography-style-body-s-regular-font-weight);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-body-s-regular-letter-spacing) * 0.01em);
+}
+/* The hidden Button Container holds a Tertiary S button ("Check it"). */
+.action {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-body-s-bold-letter-spacing) * 0.01em);
+}
+
+/* The chip: chips S shape, fill overridden per variant as the Figma instance does. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  height: calc(var(--component-button-s-height) * 1px);
+  padding-inline: calc(var(--size-primitive-space-300) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  white-space: nowrap;
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-caption-m-bold-letter-spacing) * 0.01em);
+}
+.root[data-variant='Default'] .chip {
+  background: var(--color-semantic-accent-blue-bold);
+  color: var(--color-semantic-accent-blue-on-bold);
+}
+.root[data-variant='Success'] .chip {
+  background: var(--color-semantic-feedback-success-bold);
+  color: var(--color-semantic-feedback-success-on-bold);
+}
+.root[data-variant='Error'] .chip {
+  background: var(--color-semantic-feedback-error-bold);
+  color: var(--color-semantic-feedback-error-on-bold);
+}

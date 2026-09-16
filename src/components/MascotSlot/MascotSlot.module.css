@@ -1,0 +1,31 @@
+/* mascotSlot — mirrors the Figma component set `mascotSlot` (9003:8873).
+   Width was bound to illustration.*; height bound to the same token 2026-09-16. */
+
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: calc(var(--size-primitive-space-300) * 1px);
+}
+.root[data-size='XL'] {
+  width: calc(var(--size-primitive-illustration-800) * 1px);
+  height: calc(var(--size-primitive-illustration-800) * 1px);
+}
+.root[data-size='2XL'] {
+  width: calc(var(--size-primitive-illustration-1500) * 1px);
+  height: calc(var(--size-primitive-illustration-1500) * 1px);
+}
+.root[data-size='3XL'] {
+  width: calc(var(--size-primitive-illustration-2500) * 1px);
+  height: calc(var(--size-primitive-illustration-2500) * 1px);
+}
+.root[data-size='4XL'] {
+  width: calc(var(--size-primitive-illustration-4000) * 1px);
+  height: calc(var(--size-primitive-illustration-4000) * 1px);
+}
+.pose {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}

@@ -1,0 +1,28 @@
+/* buttonGroup — mirrors the Figma component set `buttonGroup` (9003:8455). */
+
+.root {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+.root[data-variant='Vertical'] {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Gaps straight from the variant bindings: Vertical M 0, Horizontal M space.100, both L space.200. */
+.root[data-variant='Vertical'][data-size='M'] {
+  gap: 0;
+}
+.root[data-variant='Horizontal'][data-size='M'] {
+  gap: calc(var(--size-primitive-space-100) * 1px);
+}
+.root[data-size='L'] {
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+/* In Horizontal the text button fills; the icon button hugs. */
+.root[data-variant='Horizontal'] > [data-full-width] {
+  flex: 1 1 auto;
+  width: auto;
+}

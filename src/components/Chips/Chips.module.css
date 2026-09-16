@@ -1,0 +1,92 @@
+/* chips — mirrors the Figma component set `chips` (9003:8679). */
+
+.root {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  margin: 0;
+  appearance: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  font: inherit;
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  background: var(--color-semantic-background-surface);
+  color: var(--color-semantic-text-primary);
+  white-space: nowrap;
+}
+.root:focus-visible {
+  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * 1px);
+}
+
+/* Sizes — height, padding, gap, icon box and label style from the variant bindings. */
+.root[data-size='XXS'] {
+  height: calc(var(--size-primitive-icon-250) * 1px);
+  min-width: calc(var(--size-primitive-icon-250) * 1px);
+  padding-inline: calc(var(--size-primitive-space-150) * 1px);
+  gap: calc(var(--size-primitive-space-050) * 1px);
+  --chip-icon: var(--size-primitive-icon-150);
+}
+.root[data-size='XS'] {
+  height: calc(var(--size-primitive-icon-300) * 1px);
+  min-width: calc(var(--size-primitive-icon-300) * 1px);
+  padding-inline: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  --chip-icon: var(--size-primitive-icon-150);
+}
+.root[data-size='S'] {
+  height: calc(var(--component-button-s-height) * 1px);
+  min-width: calc(var(--component-button-s-height) * 1px);
+  padding-inline: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  --chip-icon: var(--size-primitive-icon-200);
+}
+.root[data-size='M'] {
+  height: calc(var(--component-button-m-height) * 1px);
+  min-width: calc(var(--component-button-m-height) * 1px);
+  padding-inline: calc(var(--size-primitive-space-400) * 1px);
+  gap: calc(var(--size-primitive-space-150) * 1px);
+  --chip-icon: var(--size-primitive-icon-250);
+}
+
+.root[data-size='XXS'] .label,
+.root[data-size='XS'] .label {
+  font-weight: var(--typography-style-caption-s-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-s-bold-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-caption-s-bold-letter-spacing) * 0.01em);
+}
+.root[data-size='S'] .label {
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-caption-m-bold-letter-spacing) * 0.01em);
+}
+.root[data-size='M'] .label {
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-body-s-bold-letter-spacing) * 0.01em);
+}
+
+.icon {
+  display: inline-flex;
+  flex: none;
+  width: calc(var(--chip-icon) * 1px);
+  height: calc(var(--chip-icon) * 1px);
+}
+
+/* Colours. Inactive is background.surface + text.primary for every colour. */
+.root[data-active][data-color='Primary'] {
+  background: var(--color-semantic-interactive-primary);
+  color: var(--color-semantic-interactive-on-primary);
+}
+.root[data-active][data-color='pro'] {
+  background: var(--color-semantic-pro-bold);
+  color: var(--color-semantic-pro-on-bold);
+}
+.root[data-active][data-color='Coral'] {
+  background: var(--color-semantic-feedback-unclear-bold);
+  color: var(--color-semantic-feedback-unclear-on-bold);
+}

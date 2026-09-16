@@ -1,0 +1,27 @@
+/* chatBubble — mirrors the Figma component `chatBubble` (15651:10673). Fully bound. */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-semantic-card-label-gap) * 1px);
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  background: var(--color-semantic-background-surface);
+  color: var(--color-semantic-text-primary);
+}
+.title,
+.body {
+  margin: 0;
+}
+.title {
+  font-weight: var(--typography-style-headline-s-font-weight);
+  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-headline-s-letter-spacing) * 0.01em);
+}
+.body {
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-body-m-regular-letter-spacing) * 0.01em);
+}

@@ -1,0 +1,50 @@
+/* recallResult — mirrors the Figma component set `recallResult` (15657:10978). */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(var(--spacing-semantic-card-label-gap) * 1px);
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+}
+.root[data-state='Pass'] {
+  background: var(--color-semantic-feedback-success-subtle);
+  --result-title: var(--color-semantic-feedback-success-on-subtle);
+}
+.root[data-state='Miss'] {
+  background: var(--color-semantic-feedback-error-subtle);
+  --result-title: var(--color-semantic-feedback-error-on-subtle);
+}
+.root[data-state='CouldntHear'] {
+  background: var(--color-semantic-background-surface);
+  --result-title: var(--color-semantic-text-primary);
+}
+
+.title,
+.label,
+.body {
+  margin: 0;
+  align-self: stretch;
+}
+.title {
+  color: var(--result-title);
+  font-weight: var(--typography-style-headline-s-font-weight);
+  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-headline-s-letter-spacing) * 0.01em);
+}
+.label {
+  color: var(--color-semantic-text-tertiary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-caption-m-bold-letter-spacing) * 0.01em);
+}
+.body {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-body-m-regular-letter-spacing) * 0.01em);
+}

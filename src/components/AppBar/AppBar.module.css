@@ -1,0 +1,109 @@
+/* appBar — mirrors the Figma component set `appBar` (9003:8606).
+   56 tall = a tapTarget row plus space.200 below. Background is background.page fading
+   to transparent (Figma: two unbound linear gradients of that colour), for content
+   scrolling underneath. */
+
+.root {
+  width: 100%;
+  background: linear-gradient(var(--color-semantic-background-page), transparent);
+}
+.bar {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  padding: 0 calc(var(--size-primitive-space-400) * 1px) calc(var(--size-primitive-space-200) * 1px);
+}
+/* Edge padding follows what sits at each edge: an icon button gets space.100, text or nothing gets space.400. */
+.root:not([data-variant='default']) .bar {
+  padding-left: calc(var(--size-primitive-space-100) * 1px);
+}
+.root[data-variant='leftAndRightIconButton'] .bar,
+.root[data-variant='leftAndTwoRightIconButtons'] .bar {
+  padding-right: calc(var(--size-primitive-space-100) * 1px);
+}
+.root[data-variant='leftAnd2RightButtons'] .bar {
+  padding-right: calc(var(--size-primitive-space-300) * 1px);
+}
+
+/* The Slot: fills, centred, tapTarget tall. */
+.slot {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+  height: calc(var(--spacing-semantic-tap-target) * 1px);
+  min-width: 0;
+}
+.right {
+  display: flex;
+  align-items: center;
+}
+
+/* App Bar Button Icon: 48 hit area, 40 pill (no fill), 24 icon. */
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: calc(var(--spacing-semantic-tap-target) * 1px);
+  height: calc(var(--spacing-semantic-tap-target) * 1px);
+  padding: 0;
+  border: 0;
+  background: none;
+  appearance: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  color: var(--color-semantic-text-primary);
+}
+.iconPill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--component-button-m-height) * 1px);
+  height: calc(var(--component-button-m-height) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+}
+.iconPill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--color-semantic-interactive-pressed);
+  opacity: 0;
+  transition: opacity calc(var(--motion-semantic-duration-fast) * 1ms) var(--motion-semantic-easing-standard);
+}
+.iconButton:active .iconPill::after {
+  opacity: 1;
+}
+.icon {
+  display: inline-flex;
+  width: calc(var(--size-primitive-icon-300) * 1px);
+  height: calc(var(--size-primitive-icon-300) * 1px);
+}
+
+/* App Bar Button (text): Headline XXS Bold, tapTarget tall, space.300 lead-in. */
+.textButton {
+  display: inline-flex;
+  align-items: center;
+  height: calc(var(--spacing-semantic-tap-target) * 1px);
+  padding: 0 0 0 calc(var(--size-primitive-space-300) * 1px);
+  border: 0;
+  background: none;
+  appearance: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  color: var(--color-semantic-text-primary);
+  font: inherit;
+  font-weight: var(--typography-style-headline-xxs-bold-font-weight);
+  font-size: calc(var(--typography-style-headline-xxs-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-xxs-bold-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-headline-xxs-bold-letter-spacing) * 0.01em);
+}
+.iconButton:focus-visible,
+.textButton:focus-visible {
+  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+}

@@ -1,0 +1,28 @@
+/* hintCard — mirrors the Figma component `hintCard` (15651:10676). Fully bound. */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-semantic-card-label-gap) * 1px);
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  border-radius: calc(var(--size-primitive-radius-200) * 1px);
+  background: var(--color-semantic-background-surface);
+}
+.label,
+.body {
+  margin: 0;
+}
+.label {
+  color: var(--color-semantic-text-tertiary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-caption-m-bold-letter-spacing) * 0.01em);
+}
+.body {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-body-m-regular-letter-spacing) * 0.01em);
+}

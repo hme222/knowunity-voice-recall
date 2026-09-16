@@ -1,0 +1,50 @@
+/* statChip — mirrors the Figma component set `statChip` (15729:11868). */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  padding: calc(var(--size-primitive-space-300) * 1px) calc(var(--size-primitive-space-200) * 1px);
+  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  box-shadow: inset 0 0 0 calc(var(--size-primitive-stroke-border) * 1px) var(--stat-accent);
+  background: var(--stat-subtle);
+  color: var(--stat-accent);
+}
+.root[data-stat='XP'] {
+  --stat-accent: var(--color-semantic-accent-blue-bold);
+  --stat-subtle: var(--color-semantic-accent-blue-subtle);
+}
+.root[data-stat='Score'] {
+  --stat-accent: var(--color-semantic-accent-green-bold);
+  --stat-subtle: var(--color-semantic-accent-green-subtle);
+}
+.root[data-stat='Time'] {
+  --stat-accent: var(--color-semantic-accent-magenta-bold);
+  --stat-subtle: var(--color-semantic-accent-magenta-subtle);
+}
+
+.label {
+  font-weight: var(--typography-style-caption-s-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-s-bold-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-caption-s-bold-letter-spacing) * 0.01em);
+}
+.valueRow {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+}
+.icon {
+  display: inline-flex;
+  flex: none;
+  width: calc(var(--size-primitive-icon-200) * 1px);
+  height: calc(var(--size-primitive-icon-200) * 1px);
+}
+.value {
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-caption-m-bold-letter-spacing) * 0.01em);
+}

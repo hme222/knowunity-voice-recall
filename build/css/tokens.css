@@ -147,6 +147,7 @@
   --component-button-s-height: 32; /** Size S pill height. Inside a 48px tap target (spacing.semantic.tapTarget). */
   --component-button-m-height: 40; /** Size M pill height. Inside a 48px tap target (spacing.semantic.tapTarget). */
   --component-button-l-height: 56; /** Size L pill height. Taller than the tap target, so the pill is the hit area. */
+  --component-mic-button-glyph-size: 48; /** Mic glyph box inside the 120px circle. A literal, bound in Figma on every state's glyph frame; no primitive of the right kind is 48 (tapTarget is a hit-area rule, not an icon size). */
   --color-semantic-background-page: var(--color-primitive-navy-950); /** Root screen canvas. Use for every screen's base background; not for cards, sheets, or modals. */
   --color-semantic-background-surface: var(--color-primitive-navy-800); /** Elevated container fill. Use for cards, bottom sheets, modals, dropdown menus, chat bubbles, toasts. */
   --color-semantic-background-inverse: var(--color-primitive-violet-50); /** Light fill for dark surfaces. Confirmed live use is status bar icon glyphs only; other uses unconfirmed. */

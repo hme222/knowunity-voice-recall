@@ -1,0 +1,153 @@
+/* buttonIcon — mirrors the Figma component set `buttonIcon` (9003:8235).
+   Every value is a token from build/css/tokens.css. */
+
+.root {
+  /* Outer hit area: spacing.semantic.tapTarget both ways. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: calc(var(--spacing-semantic-tap-target) * 1px);
+  min-height: calc(var(--spacing-semantic-tap-target) * 1px);
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  appearance: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  color: var(--color-semantic-text-primary);
+}
+.root[data-state='Disabled'],
+.root[data-state='Loading'] {
+  cursor: default;
+}
+.root:focus-visible {
+  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+}
+.root[data-full-width] {
+  width: 100%;
+}
+.root[data-full-width] .pill {
+  width: 100%;
+}
+
+/* Square pill: width = height = component.button.<size>.height. */
+.pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.root[data-size='S'] .pill {
+  width: calc(var(--component-button-s-height) * 1px);
+  height: calc(var(--component-button-s-height) * 1px);
+  --button-icon: var(--size-primitive-icon-200);
+}
+.root[data-size='M'] .pill {
+  width: calc(var(--component-button-m-height) * 1px);
+  height: calc(var(--component-button-m-height) * 1px);
+  --button-icon: var(--size-primitive-icon-250);
+}
+.root[data-size='L'] .pill {
+  width: calc(var(--component-button-l-height) * 1px);
+  height: calc(var(--component-button-l-height) * 1px);
+  --button-icon: var(--size-primitive-icon-300);
+}
+
+/* Icon container lift, 2 on S/M and 4 on L, as in Figma. */
+.content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.root[data-size='S'] .content,
+.root[data-size='M'] .content {
+  padding-bottom: calc(var(--size-primitive-space-050) * 1px);
+}
+.root[data-size='L'] .content {
+  padding-bottom: calc(var(--size-primitive-space-100) * 1px);
+}
+.icon {
+  display: inline-flex;
+  flex: none;
+  width: calc(var(--button-icon) * 1px);
+  height: calc(var(--button-icon) * 1px);
+}
+
+/* Variants. Primary carries a border.default inside stroke that button does not. */
+.root[data-variant='Primary'] .pill {
+  background: var(--color-semantic-interactive-primary);
+  color: var(--color-semantic-interactive-on-primary);
+  box-shadow: inset 0 0 0 calc(var(--size-primitive-stroke-border) * 1px) var(--color-semantic-border-default);
+  --button-pressed-overlay: var(--color-semantic-interactive-pressed);
+}
+.root[data-variant='Secondary'] .pill {
+  background: var(--color-semantic-background-surface);
+  color: var(--color-semantic-text-primary);
+  --button-pressed-overlay: var(--color-semantic-background-stacking);
+}
+.root[data-variant='Tertiary'] {
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+}
+.root[data-variant='Tertiary'] .pill {
+  background: none;
+  color: var(--color-semantic-text-primary);
+  width: auto;
+  height: auto;
+  --button-pressed-overlay: var(--color-semantic-interactive-pressed);
+}
+.root[data-variant='Tertiary'] .content {
+  padding-bottom: 0;
+}
+/* Overlay: low-contrast control over another surface. Figma has only S / Default. */
+.root[data-variant='Overlay'] .pill {
+  background: var(--color-semantic-interactive-secondary);
+  color: var(--color-semantic-text-secondary);
+  --button-pressed-overlay: var(--color-semantic-interactive-pressed);
+}
+
+/* Pressed overlay, never a fill swap. */
+.pill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--button-pressed-overlay);
+  opacity: 0;
+  transition: opacity calc(var(--motion-semantic-duration-fast) * 1ms) var(--motion-semantic-easing-standard);
+  pointer-events: none;
+}
+.root[data-state='Pressed'] .pill::after,
+.root[data-state='Default']:active .pill::after {
+  opacity: 1;
+}
+
+/* Disabled: background.surface and text.disabled; the Primary stroke goes away. */
+.root[data-state='Disabled'] .pill {
+  color: var(--color-semantic-text-disabled);
+  box-shadow: none;
+}
+.root[data-state='Disabled'][data-variant='Primary'] .pill,
+.root[data-state='Disabled'][data-variant='Secondary'] .pill,
+.root[data-state='Disabled'][data-variant='Overlay'] .pill {
+  background: var(--color-semantic-background-surface);
+}
+
+.spinner {
+  animation: spin calc(var(--motion-semantic-duration-ambient) * 1ms) linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}

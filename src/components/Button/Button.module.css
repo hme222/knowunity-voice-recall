@@ -30,6 +30,14 @@
   border-radius: calc(var(--size-primitive-radius-full) * 1px);
 }
 
+/* Figma "Fill container" sizing override (buttonGroup). */
+.root[data-full-width] {
+  width: 100%;
+}
+.root[data-full-width] .pill {
+  width: 100%;
+}
+
 /* The visible pill. */
 .pill {
   position: relative;
