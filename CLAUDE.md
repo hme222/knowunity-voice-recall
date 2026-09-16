@@ -9,30 +9,16 @@ Voice-in / text-out active-recall prototype for Knowunity. Next.js 16, React 19,
 ## Hard rules
 
 - `docs/design-brief.md` § "Hard constraints" is fixed. Design inside it, never around it.
-- The recall is mocked. No speech-to-text, no audio, no model calls.
-- Knowie replies in text and never speaks.
-- Mobile only, 390px, dark mode only.
-- `docs/sprint-context.md` is the record of what's decided, what's open, and what's not being built. Check it before proposing any flow, screen, or XP change. Complete Flow beats Main flow v1.
-- Every visual, spacing, type, and motion value comes from `docs/tokens.json` by token path. `docs/design-system.md` has the rules and the source-of-truth order; follow it.
+- `docs/sprint-context.md` is the record of what's decided, what's open, and what's not being built. Check it before proposing any flow, screen, or XP change, and its § "Process notes" before trusting any Figma frame.
+- Every visual, spacing, type, and motion value comes from `docs/tokens.json` by token path. `docs/design-system.md` has the rules and the source-of-truth order; follow it, including its § "Never do this" in full.
 - Two tokens carry a live conflict flag in their own description — `typography.primitive.fontFamily.*` and `responsive.primitive.deviceWidth.mobile`. Read the flag before consuming either.
-- Voice states follow `docs/voice-ux.md`. Idle / recording / processing / result must be unmistakable on every screen, and not by color alone.
-- Sentence case on all student-facing text. Capitals for proper nouns only.
+- Voice states follow `docs/voice-ux.md`. Idle / recording / processing / result must be unmistakable on every screen.
 - Knowie expressions come from `public/knowie/`. Pick one; do not draw or generate new ones.
 - Claims about the live app are grounded in `reference/screenshots/`. Cite the file number.
 - Skills route: `ux-designer` for flows, `ui-designer` for styling, `ux-motion` for animation, `interactive-prototype` for building screens. `ux-copywriter` is referenced by the skills but not installed — write copy against `docs/voice-ux.md` and `docs/design-system.md` § "Naming conventions".
-- Read `node_modules/next/dist/docs/` before writing Next.js code. See the block at the end of this file.
-- Ask before committing.
 
 ## Never
 
-- Never auto-endpoint recording or branch into tutoring conversation.
-- Never trap the student. Every state has skip, text fallback, or exit.
-- Never invent a color, size, duration, or type value. Report the missing token and what it was for.
-- Never use `var(--token, fallback)`.
-- Never read a primitive token from a component or screen.
-- Never make a new component. Build from the ones in `docs/design-system.md` § "Which component to reach for"; if none fits, propose a name and stop.
-- Never bake a bottom sheet into a default-state screen.
-- Never treat a screen's label or annotation as proof of its content. Check the frame.
 - Never build anything listed under `docs/sprint-context.md` § "Not building this sprint".
 - Never touch `AGENTS.md`.
 
