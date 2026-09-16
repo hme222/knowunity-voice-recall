@@ -23,6 +23,12 @@ Voice-in / text-out active-recall prototype for Knowunity. Next.js 16, React 19,
 - Never build anything listed under `docs/sprint-context.md` § "Not building this sprint".
 - Never touch `AGENTS.md`.
 
+## Storybook
+
+When working on UI, use the storybook tools to read the component library before answering or writing anything. Never assume a component prop exists. Query the documentation, and use only props that are documented or shown in a story. If a prop isn't there, stop and ask me.
+
+The `storybook` MCP server is registered in `.mcp.json` and needs Storybook running (`npm run storybook`) to answer.
+
 ## File map
 
 | File | Read when |
