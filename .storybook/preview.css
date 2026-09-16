@@ -1,0 +1,11 @@
+/* Storybook canvas: dark only, using the same tokens the app does.
+   Overrides the Next.js starter `body` rule in src/app/globals.css. */
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-semantic-background-page);
+  color: var(--color-semantic-text-primary);
+  font-family: var(--font-greed);
+}

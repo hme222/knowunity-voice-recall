@@ -8,9 +8,11 @@ Voice-based active recall for Knowunity. After revising a section, a student exp
 npm install
 npm run dev      # http://localhost:3000
 npm run tokens   # rebuild build/css/tokens.css from tokens/tokens.json
+npm run storybook                    # http://localhost:6006, dark, 390px canvas
+npx vitest --project storybook run   # run every story as a test in headless Chromium
 ```
 
-Next.js 16 · React 19 · Tailwind 4 · TypeScript. Design tokens via Style Dictionary.
+Next.js 16 · React 19 · Tailwind 4 · TypeScript. Design tokens via Style Dictionary. Components via Storybook 10.
 
 ## Where things live
 
@@ -21,6 +23,8 @@ Next.js 16 · React 19 · Tailwind 4 · TypeScript. Design tokens via Style Dict
 | `tokens/` | Design tokens (DTCG JSON). `tokens.json` is the source; edit here, then `npm run tokens` |
 | `build/css/tokens.css` | Generated CSS variables. Tracked in git, never edited by hand |
 | `style-dictionary.config.mjs` | How tokens become CSS |
+| `.storybook/` | Storybook config: loads `globals.css` + tokens, Greed font, dark only, 390 default viewport |
+| `src/stories/` | Stories. `DesignTokens` is the semantic colour swatch page; the rest are Storybook's examples |
 | `reference/screenshots/` | Numbered captures of the live Knowunity app, in flow order |
 | `reference/*.mp4` | Screen recording of the beta flow (git-ignored) |
 | `public/knowie/` | Knowie mascot expression SVGs |
