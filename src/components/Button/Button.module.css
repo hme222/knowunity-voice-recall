@@ -1,0 +1,151 @@
+/* button — mirrors the Figma component set `button` (9003:6667).
+   Every value is a token from build/css/tokens.css. No raw px, no hex, no fallbacks. */
+
+.root {
+  /* Outer hit area: transparent, min-height spacing.semantic.tapTarget on every size. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(var(--spacing-semantic-tap-target) * 1px);
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  appearance: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  font: inherit; /* family comes from the page root (typography.primitive.fontFamily.default via --font-greed) */
+  color: var(--color-semantic-text-primary);
+}
+
+.root[data-state='Disabled'],
+.root[data-state='Loading'] {
+  cursor: default;
+}
+
+/* The visible pill. */
+.pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  overflow: hidden;
+}
+
+/* Sizes — padding, gap, icon box and pill height, straight from the variant bindings. */
+.root[data-size='S'] .pill {
+  height: calc(var(--component-button-s-height) * 1px);
+  padding-inline: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-150) * 1px);
+  --button-icon: var(--size-primitive-icon-200);
+}
+.root[data-size='M'] .pill {
+  height: calc(var(--component-button-m-height) * 1px);
+  padding-inline: calc(var(--size-primitive-space-400) * 1px);
+  gap: calc(var(--size-primitive-space-150) * 1px);
+  --button-icon: var(--size-primitive-icon-250);
+}
+.root[data-size='L'] .pill {
+  height: calc(var(--component-button-l-height) * 1px);
+  padding-inline: calc(var(--size-primitive-space-600) * 1px);
+  gap: calc(var(--size-primitive-space-200) * 1px);
+  --button-icon: var(--size-primitive-icon-300);
+}
+
+/* Label — typography.style.bodySBold for S and M, headlineS for L. */
+.label {
+  white-space: nowrap;
+}
+.root[data-size='S'] .label,
+.root[data-size='M'] .label {
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-body-s-bold-letter-spacing) * 0.01em);
+}
+.root[data-size='L'] .label {
+  font-weight: var(--typography-style-headline-s-font-weight);
+  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-headline-s-letter-spacing) * 0.01em);
+}
+
+/* Icon containers (left, right, and the centre one Loading uses). */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: calc(var(--button-icon) * 1px);
+  height: calc(var(--button-icon) * 1px);
+}
+.icon > svg {
+  width: 100%;
+  height: 100%;
+}
+/* Figma's default iconSlot content is an empty square; shown when no icon is passed. */
+.placeholder {
+  width: calc(var(--size-primitive-icon-200) * 1px);
+  height: calc(var(--size-primitive-icon-200) * 1px);
+  border: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid currentColor;
+  border-radius: calc(var(--size-primitive-radius-100) * 1px);
+}
+
+/* Variants — fill and label colour. */
+.root[data-variant='Primary'] .pill {
+  background: var(--color-semantic-interactive-primary);
+  color: var(--color-semantic-interactive-on-primary);
+  --button-pressed-overlay: var(--color-semantic-interactive-pressed);
+}
+.root[data-variant='Secondary'] .pill {
+  background: var(--color-semantic-background-surface);
+  color: var(--color-semantic-text-primary);
+  --button-pressed-overlay: var(--color-semantic-background-stacking);
+}
+.root[data-variant='Tertiary'] .pill {
+  background: none;
+  color: var(--color-semantic-text-primary);
+  padding-inline: 0;
+  --button-pressed-overlay: var(--color-semantic-interactive-pressed);
+}
+
+/* Pressed — an overlay on top of the fill, never a fill swap (per the Figma description). */
+.pill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--button-pressed-overlay);
+  opacity: 0;
+  transition: opacity calc(var(--motion-semantic-duration-fast) * 1ms) var(--motion-semantic-easing-standard);
+  pointer-events: none;
+}
+.root[data-state='Pressed'] .pill::after,
+.root[data-state='Default']:active .pill::after {
+  opacity: 1;
+}
+
+/* Disabled — background.surface fill and text.disabled, on every variant. Not interactive.disabled. */
+.root[data-state='Disabled'] .pill {
+  color: var(--color-semantic-text-disabled);
+}
+.root[data-state='Disabled'][data-variant='Primary'] .pill,
+.root[data-state='Disabled'][data-variant='Secondary'] .pill {
+  background: var(--color-semantic-background-surface);
+}
+
+/* Loading — label removed, spinner in the centre icon container. Colour is the label colour of the variant. */
+.spinner {
+  animation: spin calc(var(--motion-semantic-duration-ambient) * 1ms) linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}

@@ -908,6 +908,36 @@ hardcoded value that happens to match the right token is the hardest
 version of this class of bug to catch, since nothing about the
 rendered result looks wrong.
 
+### `button` built in code, 2026-09-16, and two things it surfaced
+
+`src/components/Button/` is the first React component, built from the
+Figma set's actual bindings (36 variants read directly, not from this
+doc). Props are the Figma names and options unchanged: `variant`,
+`size`, `state`, `showLeftIcon`, `showRightIcon`, `CTA`. Stories under
+`Components/Button` carry the Figma description verbatim. Two gaps
+came out of reading the real component:
+
+1. **Heights were unbound numbers in Figma.** The pill's 32/40/56 and
+   the 48 outer hit area had no variable behind them on any of the 36
+   variants. Now they do, in both places: `component.button.{s,m,l}.height`
+   and `spacing.semantic.tapTarget` exist in `tokens.json` and as Figma
+   variables, and every variant's outer `minHeight` (all 36) and pill
+   `height` (the 24 Primary/Secondary ones; Tertiary's pill hugs its
+   text) bind to them. This earns the `component.button` namespace
+   under the `component` group's own rule: the bindings genuinely
+   route through it.
+2. **`tokens.json` was wrong about `interactive.onPrimary` and
+   `text.inverse`.** Both said `homie.inkwell`; Figma has both aliased
+   to `navy.950`, and the button's Primary label rendered navy in
+   Figma all along. The inkwell version failed contrast on
+   `interactive.primary` (3.1:1); navy.950 is 16.6:1. Corrected in
+   `tokens.json` per the source-of-truth order. Nothing in Figma
+   changed.
+
+Not mirrored exactly: Tertiary's Pressed overlay sits on the label
+fill in Figma; in code it sits on the (invisible) pill area. Same
+visual weight, simpler to keep in one place.
+
 ---
 
 ## Naming conventions

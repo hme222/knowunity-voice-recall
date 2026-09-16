@@ -141,6 +141,10 @@
   --responsive-primitive-device-desktop: desktop; /** device at the desktop breakpoint. Part of a 3-mode collection (Desktop/Mobile/Tablet); DTCG has no native mode support so each mode is a sibling token. */
   --responsive-primitive-device-mobile: mobile; /** device at the mobile breakpoint. Part of a 3-mode collection (Desktop/Mobile/Tablet); DTCG has no native mode support so each mode is a sibling token. */
   --responsive-primitive-device-tablet: tablet; /** device at the tablet breakpoint. Part of a 3-mode collection (Desktop/Mobile/Tablet); DTCG has no native mode support so each mode is a sibling token. */
+  --spacing-semantic-tap-target: 48; /** Minimum height of any tappable control's hit area, 48px. A literal, not a spacing step: it is the touch-target floor, not a layout rhythm value. button's outer frame binds its min-height here on every size; the visible pill inside can be shorter (see component.button). */
+  --component-button-s-height: 32; /** Size S pill height. Inside a 48px tap target (spacing.semantic.tapTarget). */
+  --component-button-m-height: 40; /** Size M pill height. Inside a 48px tap target (spacing.semantic.tapTarget). */
+  --component-button-l-height: 56; /** Size L pill height. Taller than the tap target, so the pill is the hit area. */
   --color-semantic-background-page: var(--color-primitive-navy-950); /** Root screen canvas. Use for every screen's base background; not for cards, sheets, or modals. */
   --color-semantic-background-surface: var(--color-primitive-navy-800); /** Elevated container fill. Use for cards, bottom sheets, modals, dropdown menus, chat bubbles, toasts. */
   --color-semantic-background-inverse: var(--color-primitive-violet-50); /** Light fill for dark surfaces. Confirmed live use is status bar icon glyphs only; other uses unconfirmed. */
@@ -159,7 +163,7 @@
   --color-semantic-interactive-destructive-active: var(--color-primitive-red-500); /** Pressed state of interactive.destructive. */
   --color-semantic-interactive-disabled: var(--color-primitive-alpha-light-10); /** Non-interactive control fill signaling unavailable. RISK: resolves to the same value as interactive.secondary, background.stacking and interactive.pressed. For this feature specifically: a mic button disabled by denied permission must not be visually confusable with an ordinary secondary button — pair this with text.disabled and consider whether disabled state needs a non-color signal (icon change, label) as well. */
   --color-semantic-interactive-on-disabled: var(--color-primitive-alpha-light-40); /** Text and icons on interactive.disabled fills. Alias of text.disabled's value, kept in the interactive family so disabled controls (buttons, mic) don't reach into the text.* family for their icon/label color. */
-  --color-semantic-interactive-on-primary: var(--color-primitive-homie-inkwell); /** Text and icons on interactive.primary fills; must contrast >= 4.5:1. */
+  --color-semantic-interactive-on-primary: var(--color-primitive-navy-950); /** Text and icons on interactive.primary fills; must contrast >= 4.5:1. Aliases navy.950 (16.6:1 on interactive.primary). Corrected 2026-09-16: this file said homie.inkwell (3.1:1), Figma has always said navy.950; Figma wins. */
   --color-semantic-interactive-on-secondary: var(--color-primitive-violet-50); /** Text and icons on interactive.secondary fills. */
   --color-semantic-interactive-on-destructive: var(--color-primitive-red-950); /** Text and icons on interactive.destructive fills; must contrast >= 4.5:1. */
   --color-semantic-interactive-pressed: var(--color-primitive-alpha-light-10); /** Semi-transparent tap-feedback overlay for light or vivid surfaces, when no dedicated :active token exists. Applied on top of the resting fill, never as a standalone background. RISK: of the four tokens sharing this value, this is the one most likely to need independent tuning later — it's a transient tap overlay, not a static surface. If contrast ever needs adjusting for it alone, split it into its own primitive rather than nudging alpha.light-10 and affecting the other three. */
@@ -167,7 +171,7 @@
   --color-semantic-text-primary: var(--color-primitive-violet-50); /** Highest contrast text. Default when unsure which text token to pick. */
   --color-semantic-text-secondary: var(--color-primitive-alpha-light-68); /** Reduced emphasis text: subtitles, captions, timestamps, helper text. */
   --color-semantic-text-tertiary: var(--color-primitive-alpha-light-48); /** Lowest emphasis readable text: timestamps, counts, inline hints; not for anything a student must read to proceed. */
-  --color-semantic-text-inverse: var(--color-primitive-homie-inkwell); /** Dark text on light or vivid surfaces; pair with background.inverse. */
+  --color-semantic-text-inverse: var(--color-primitive-navy-950); /** Dark text on light or vivid surfaces; pair with background.inverse. Aliases navy.950. Corrected 2026-09-16: this file said homie.inkwell, Figma says navy.950; Figma wins. */
   --color-semantic-text-link: var(--color-primitive-violet-500); /** Inline hyperlink text only, not for buttons or nav items. */
   --color-semantic-text-link-hover: var(--color-primitive-violet-300); /** Hover state of text.link. */
   --color-semantic-text-disabled: var(--color-primitive-alpha-light-40); /** Low-contrast text signaling unavailable or not yet filled. */
