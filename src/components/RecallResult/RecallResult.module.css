@@ -36,6 +36,10 @@
 }
 .label {
   color: var(--color-semantic-text-tertiary);
+}
+/* On the error tint text.tertiary reads at 3.8:1; the token made for this surface is feedback.error.onSubtle. Bound the same way in Figma, 2026-09-16. */
+.root[data-state='Miss'] .label {
+  color: var(--color-semantic-feedback-error-on-subtle);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
   font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
   line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);

@@ -24,7 +24,7 @@ const meta = {
   args: { variant: 'default', rightText: 'Skip' },
   render: (args) => (
     <AppBar {...args}>
-      <ProgressIndicator progress="50" thickness="16" />
+      <ProgressIndicator progress="50" thickness="16" label="Questions" current={2} total={4} />
     </AppBar>
   ),
 } satisfies Meta<typeof AppBar>

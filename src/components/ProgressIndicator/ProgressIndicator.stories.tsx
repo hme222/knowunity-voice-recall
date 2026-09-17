@@ -11,7 +11,7 @@ const FIGMA_DESCRIPTION = `
 
 ---
 
-Built 2026-09-16. Track height bound in Figma to \`space.600\` / \`space.400\` and its radius to \`radius.full\` the same day. The 2px inset on the 24 thickness is \`space.050\`. Figma's \`border/subtle\` is not a local variable; it resolves to the same value as \`border.default\`, which is used here.
+Built 2026-09-16. Track height bound in Figma to \`space.600\` / \`space.400\` and its radius to \`radius.full\` the same day. The 2px inset on the 24 thickness is \`space.050\`. Figma's \`border/subtle\` is not a local variable; it resolves to the same value as \`border.default\`, which is used here. The bar has an accessible name (\`label\`, default "Progress") and reads "N of total" as its value. With \`showText\` on, the label over the bar is 3.14:1 as Figma binds it; see design-system.md open question 12.
 `
 
 const meta = {

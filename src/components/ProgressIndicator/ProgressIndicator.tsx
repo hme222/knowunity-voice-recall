@@ -18,6 +18,8 @@ export type ProgressIndicatorProps = {
   /** Numbers for the label, e.g. current 6 of total 12. */
   current?: number
   total?: number
+  /** Accessible name. The bar means "N of total"; say what N counts, e.g. "Questions". */
+  label?: string
   className?: string
 }
 
@@ -28,9 +30,10 @@ export function ProgressIndicator({
   showText = false,
   current,
   total,
+  label = 'Progress',
   className,
 }: ProgressIndicatorProps) {
-  const label = current !== undefined && total !== undefined ? `${current}/${total}` : undefined
+  const unit = current !== undefined && total !== undefined ? `${current}/${total}` : undefined
   return (
     <div
       className={[styles.root, className].filter(Boolean).join(' ')}
@@ -40,12 +43,13 @@ export function ProgressIndicator({
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={Number(progress)}
-      aria-valuetext={label}
+      aria-valuetext={unit && `${current} of ${total}`}
+      aria-label={label}
     >
       <div className={styles.container}>
         <div className={styles.bar} style={{ width: `${progress}%` }} />
       </div>
-      {showText && label && <span className={styles.text}>{label}</span>}
+      {showText && unit && <span className={styles.text}>{unit}</span>}
     </div>
   )
 }
