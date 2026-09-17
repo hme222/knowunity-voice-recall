@@ -183,31 +183,26 @@ than no doc, it's actively misleading whoever trusts it over looking
 directly at Figma. This pass also surfaced `Chat Input` (see open
 question 6), which no earlier pass, automated or manual, had found.
 
-11. **[NEW] `text.tertiary` fails WCAG AA for 12px text on every dark
-    surface it is bound to.** Measured 2026-09-16 with axe 4.13 across
-    all 88 stories: 4.34:1 on `background.surface` (`hintCard` "Hint",
-    `recallResult` CouldntHear "Try explaining"), 4.22:1 on
-    `feedback.success.subtle` (`recallResult` Pass "You said"). The
-    threshold is 4.5:1. The token's own description says it is not for
-    text a student must read to proceed, and these are eyebrow labels
-    beside the real content, so this was left as-is on purpose rather
-    than promoted to `text.secondary` (which would flatten the card's
-    three-tier hierarchy). The one card where it was genuinely low, Miss
-    at 3.8:1, now binds its label to `feedback.error.onSubtle`, the
-    token made for that surface, in Figma and code. Decide once for
-    the tier, not per card: either accept the ratio for eyebrow labels
-    and say so here, or lighten the tier.
-12. **[NEW] `progressIndicator`'s unit label fails on the bar.**
-    `interactive.onSecondary` (#F4F2FF) over `brand.bold` (#9178E6) is
-    3.14:1 at 9px; it only shows once the bar backs the label (75% and
-    100%), and only when `showText` is on, which Figma has off by
-    default. `brand.onBold` is the token designed for text on
-    `brand.bold`. Not changed because no screen turns the label on;
-    fix it in Figma before one does. The bar itself now carries an
-    accessible name (`label`, default "Progress") and "N of total" as
-    its value text, which axe had flagged on every story that
-    contained one.
-
+11. **Resolved 2026-09-17: `text.tertiary` was failing WCAG AA for
+    12px text.** Measured with axe 4.13 across all 88 stories: 4.34:1
+    on `background.surface`, 4.22:1 on `feedback.success.subtle`,
+    3.8:1 on `feedback.error.subtle` (threshold 4.5:1). Fixed at the
+    tier, once: a new primitive `alpha.light-52` and `text.tertiary`
+    re-aliased to it in `tokens.json` and Figma (5.2 / 5.0 / 4.5:1 on
+    those three surfaces), still clearly under `text.secondary` at
+    68%. The Miss card's label separately binds `feedback.error.onSubtle`,
+    the token made for that surface. Every story now passes axe with
+    violations promoted to errors.
+12. **Resolved 2026-09-17: `progressIndicator`'s unit label failed on
+    the bar.** `interactive.onSecondary` over `brand.bold` is 3.14:1 at
+    9px, once the bar backs the label. Figma centres the label over
+    the track at every step, so no single colour works; in code the
+    label is drawn twice, the track copy in `interactive.onSecondary`
+    and a copy clipped inside the bar in `brand.onBold` (or
+    `accent.coral.onBold`), lining up exactly. Figma still binds the
+    single light colour; its `showText` is off by default and no
+    screen turns it on. The bar also carries an accessible name
+    (`label`, default "Progress") and "N of total" as its value.
 ---
 
 ## The scaffold

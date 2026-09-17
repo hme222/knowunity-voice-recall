@@ -45,11 +45,21 @@ export function ProgressIndicator({
       aria-valuenow={Number(progress)}
       aria-valuetext={unit && `${current} of ${total}`}
       aria-label={label}
+      style={{ '--progress': progress } as React.CSSProperties}
     >
       <div className={styles.container}>
-        <div className={styles.bar} style={{ width: `${progress}%` }} />
+        {/* Unit label, centred over the track as in Figma. It is drawn twice: the
+            track copy in interactive.onSecondary, and a brand.onBold copy clipped
+            inside the bar, so it reads wherever the bar's edge falls. */}
+        {showText && unit && <span className={styles.text}>{unit}</span>}
+        <div className={styles.bar}>
+          {showText && unit && (
+            <span className={styles.textOnBar} aria-hidden="true">
+              {unit}
+            </span>
+          )}
+        </div>
       </div>
-      {showText && unit && <span className={styles.text}>{unit}</span>}
     </div>
   )
 }

@@ -32,10 +32,12 @@
 
 /* The bar never shrinks below a circle: at progress 0 it is a dot as tall as the track. */
 .bar {
+  position: relative;
   height: 100%;
-  min-width: 100%;
+  width: calc(var(--progress) * 1%);
   max-width: 100%;
   border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  overflow: hidden;
   transition: width calc(var(--motion-semantic-duration-standard) * 1ms) var(--motion-semantic-easing-standard);
 }
 .root[data-thickness='24'] .bar {
@@ -51,19 +53,38 @@
   background: var(--color-semantic-accent-coral-bold);
 }
 
-/* Unit Progress label, centred, hidden by default in Figma. */
-.text {
+/* Unit Progress label, centred, hidden by default in Figma. `.text` sits on the track; `.textOnBar` is the same
+   text inside the bar, sized to the container so both copies line up, in the colour made for brand.bold. */
+.text,
+.textOnBar {
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.text {
+  right: 0;
   color: var(--color-semantic-interactive-on-secondary);
   font-weight: var(--typography-style-caption-s-bold-font-weight);
   font-size: calc(var(--typography-style-caption-s-bold-font-size) * 1px);
   line-height: calc(var(--typography-style-caption-s-bold-line-height) * 1px);
   letter-spacing: calc(var(--typography-style-caption-s-bold-letter-spacing) * 0.01em);
-  pointer-events: none;
+}
+.textOnBar {
+  width: calc(100% * 100 / max(var(--progress), 1));
+  color: var(--color-semantic-brand-on-bold);
+  font-weight: var(--typography-style-caption-s-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-s-bold-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-caption-s-bold-letter-spacing) * 0.01em);
+}
+.root[data-variant='Coral'] .textOnBar {
+  color: var(--color-semantic-accent-coral-on-bold);
 }
 @media (prefers-reduced-motion: reduce) {
   .bar {
