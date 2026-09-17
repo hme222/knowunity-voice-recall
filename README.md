@@ -10,6 +10,7 @@ npm run dev      # http://localhost:3000
 npm run tokens   # rebuild build/css/tokens.css from tokens/tokens.json
 npm run storybook                    # http://localhost:6006, dark, 390px canvas
 npx vitest --project storybook run   # run every story as a test in headless Chromium
+npm run chromatic                    # publish Storybook to Chromatic; needs CHROMATIC_PROJECT_TOKEN in .env (git-ignored)
 ```
 
 Next.js 16 · React 19 · Tailwind 4 · TypeScript. Design tokens via Style Dictionary. Components via Storybook 10.
