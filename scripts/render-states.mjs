@@ -1,0 +1,114 @@
+// Renders every screen state at 390×844 in dark mode and hashes the result.
+// Two states that should differ but hash identically are the finding: one of them is
+// broken or was never rendered. This flags; it does not fix.
+import { chromium } from 'playwright'
+import { createHash } from 'node:crypto'
+import { writeFileSync, readFileSync } from 'node:fs'
+
+const BASE = 'http://localhost:3000'
+
+// name, route, and an optional action to reach a sub-state that has no route of its own.
+const STATES = [
+  ['home-prelock', '/'],
+  ['home-unlock-reveal', '/home/unlock'],
+  ['home-unlocked', '/home/unlocked'],
+  ['home-due-swipe1', '/home/due'],
+  ['home-due-swipe2', '/home/due', async p => { await p.getByText('Swipe to the next').click(); await p.waitForTimeout(400) }],
+  ['home-due-swipe3', '/home/due', async p => { for (const _ of [0,1]) { await p.getByText('Swipe to the next').click(); await p.waitForTimeout(400) } }],
+  ['picker', '/picker'],
+  ['00-intro', '/session/intro'],
+  ['01-idle-t1', '/session/idle/1'],
+  ['01-idle-t2', '/session/idle/2'],
+  ['01b-exit', '/session/exit'],
+  ['02-recording', '/session/recording/1'],
+  ['02-recording-paused', '/session/recording/1', async p => { await p.getByRole('button', { name: /listening/i }).click(); await p.waitForTimeout(400) }],
+  ['02a-captured', '/session/captured/1?ms=6000&attempt=1'],
+  ['03-processing', '/session/processing/1?ms=6000&attempt=1'],
+  ['03-processing-escalated', '/session/processing/1?ms=6000&attempt=1', async p => { await p.waitForTimeout(7000) }],
+  ['04-pass', '/session/pass/1?sure=1&attempt=1'],
+  ['04-pass-hinted', '/session/pass/1?sure=1&attempt=2&hinted=1'],
+  ['04a-unclear', '/session/unclear/1?attempt=1'],
+  ['05-miss', '/session/miss/1?attempt=1'],
+  ['05a-reveal', '/session/reveal/1'],
+  ['repeat', '/session/repeat/1'],
+  ['06-lockin', '/session/lock-in'],
+  ['06b-lockin-second', '/session/lock-in/second'],
+  ['07-recap', '/session/recap'],
+  ['07a-practice', '/session/recap/practice'],
+  ['blank-term', '/session/blank/1'],
+  ['offline', '/session/offline?term=1'],
+  ['resume', '/session/resume'],
+  ['transcript-passed', '/session/transcript/passed'],
+  ['transcript-revealed', '/session/transcript/revealed'],
+  ['transcript-skipped', '/session/transcript/skipped'],
+  ['permission-primer', '/permission/primer'],
+  ['permission-prompt', '/permission/prompt'],
+  ['permission-denied', '/permission/denied'],
+  ['permission-denied-expanded', '/permission/denied', async p => { await p.getByText('How to turn the mic on').click(); await p.waitForTimeout(300) }],
+  ['text-turn', '/text/turn?term=1'],
+  ['text-checking', '/text/checking?term=1&len=50'],
+  ['dd00-intro', '/drill/intro'],
+  ['dd00b-intro-returning', '/drill/intro?returning=1'],
+  ['dd01-rung1', '/drill/pass/1'],
+  ['dd04-rung2', '/drill/pass/2'],
+  ['dd05-rung3', '/drill/pass/3'],
+  ['dd06-rung4', '/drill/pass/4'],
+  ['dd02-recording', '/drill/recording?step=1'],
+  ['dd02a-captured', '/drill/captured?step=1'],
+  ['dd03-processing', '/drill/processing?step=1'],
+  ['dd07-stumble1', '/drill/miss'],
+  ['dd07b-stumble2', '/drill/miss/letter'],
+  ['dd07c-stumble3', '/drill/miss/echo'],
+  ['dd08-complete', '/drill/complete'],
+  ['dd08a-round-sheet', '/drill/complete/round'],
+]
+
+const browser = await chromium.launch()
+const ctx = await browser.newContext({
+  viewport: { width: 390, height: 844 },
+  colorScheme: 'dark',
+  deviceScaleFactor: 2,
+  reducedMotion: 'reduce', // freeze animation so a hash is stable, not a moving target
+})
+const page = await ctx.newPage()
+const results = []
+
+for (const [name, route, action] of STATES) {
+  try {
+    await page.goto(BASE + route, { waitUntil: 'networkidle', timeout: 45000 })
+    await page.waitForTimeout(350)
+    if (action) await action(page)
+    const buf = await page.screenshot({ path: `eval/shots/${name}.png` })
+    results.push({ name, route, hash: createHash('sha256').update(buf).digest('hex').slice(0, 16) })
+    process.stdout.write('.')
+  } catch (e) {
+    results.push({ name, route, hash: 'ERROR', error: String(e).split('\n')[0].slice(0, 120) })
+    process.stdout.write('x')
+  }
+}
+await browser.close()
+console.log('\n')
+
+writeFileSync('eval/shots/hashes.json', JSON.stringify(results, null, 1))
+
+const errs = results.filter(r => r.hash === 'ERROR')
+if (errs.length) {
+  console.log('COULD NOT RENDER:')
+  for (const e of errs) console.log(`  ${e.name}  ${e.route}\n    ${e.error}`)
+  console.log('')
+}
+
+const byHash = new Map()
+for (const r of results) {
+  if (r.hash === 'ERROR') continue
+  if (!byHash.has(r.hash)) byHash.set(r.hash, [])
+  byHash.get(r.hash).push(r)
+}
+const collisions = [...byHash.values()].filter(g => g.length > 1)
+if (collisions.length) {
+  console.log('IDENTICAL RENDERS — these states should differ:')
+  for (const g of collisions) console.log('  ' + g.map(r => `${r.name} (${r.route})`).join('\n  === ') + '\n')
+} else {
+  console.log('No two states rendered identically.')
+}
+console.log(`rendered ${results.length - errs.length}/${results.length}`)
