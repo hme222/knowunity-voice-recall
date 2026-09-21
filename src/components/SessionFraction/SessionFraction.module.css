@@ -1,7 +1,15 @@
 /* The "N/4" label that sits under the appBar inside the scaffold's topNavigation slot.
    In Figma it is a plain text node beside the progress ring, not part of appBar. */
 
+/* Overlaid on the progress ring inside topNavigation, per sprint-context.md § Screens.
+   Absolute so it costs the region no height: a 56px box cannot hold the app bar and a
+   stacked caption row. */
 .root {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--size-primitive-space-600) * 1px);
+  transform: translateY(-50%);
   display: block;
   text-align: center;
   color: var(--color-semantic-text-primary);

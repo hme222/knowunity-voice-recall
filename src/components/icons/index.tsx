@@ -3,7 +3,7 @@
 // component's token colour applies. Every svg fills its box: size it from the parent.
 
 import type { ComponentType } from 'react'
-import { X, Mic, RotateCcw, Eye } from 'lucide-react'
+import { X, Mic, RotateCcw, Eye, Check } from 'lucide-react'
 
 export { LoadingIcon } from './LoadingIcon'
 export { SquareIcon } from './SquareIcon'
@@ -32,6 +32,8 @@ export const RefreshGlyphIcon = lucide(RotateCcw)
 /** The transcript affordance on Recap rows and the Miss result. Was rendering as the
     Overlay variant's `plusSign` fallback while announcing "See what you said". */
 export const EyeIcon = lucide(Eye)
+/** Snackbar variant="Success". Without it the component falls back to `square`. */
+export const CheckIcon = lucide(Check)
 
 type IconProps = { className?: string }
 const base = { fill: 'none', xmlns: 'http://www.w3.org/2000/svg', 'aria-hidden': true as const, width: '100%', height: '100%' }

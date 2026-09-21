@@ -14,7 +14,14 @@
 .actions {
   display: flex;
   flex-direction: column;
+  /* The MicButton is a fixed 120 diameter; without this it falls to flex-start and
+     renders visibly left of a centred mascot and bubble. */
+  align-items: center;
   gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.actions > button:not([class*='MicButton']) {
+  align-self: stretch;
 }
 
 .mascot {

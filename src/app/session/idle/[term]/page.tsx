@@ -11,6 +11,7 @@ import {
   ProgressIndicator,
   ScreenShell,
   SessionFraction,
+  actionRowClass,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { getTerm, nextAfter, progressFor, recordOutcome, TOTAL_TERMS } from '@/lib/session'
@@ -59,15 +60,26 @@ export default function IdlePage({ params }: { params: Promise<{ term: string }>
       }
       bottomContent={
         <div className={styles.actions}>
-          <MicButton state="Idle" onClick={() => router.push(`/session/recording/${index}`)} />
-          <Button CTA="Type instead" variant="Secondary" size="M" onClick={() => router.push(`/text/turn?term=${index}`)} />
+          {/* The frame puts two buttons side by side in an 88px action zone, with the
+              mic up in middleContent. Stacking three full-width buttons here needed
+              204px against a 120 budget and spilled over the content below. */}
+          <div className={actionRowClass}>
+            <Button
+              CTA="Type instead"
+              variant="Secondary"
+              size="M"
+              fullWidth
+              onClick={() => router.push(`/text/turn?term=${index}`)}
+            />
+            <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={skip} />
+          </div>
           <Button
             CTA="I don't know this one"
             variant="Tertiary"
-            size="M"
+            size="S"
+            fullWidth
             onClick={() => router.push(`/session/blank/${index}`)}
           />
-          <Button CTA="Skip" variant="Tertiary" size="M" onClick={skip} />
         </div>
       }
     >
@@ -76,6 +88,9 @@ export default function IdlePage({ params }: { params: Promise<{ term: string }>
         <div className={styles.mascot}>
           <MascotSlot size="2XL" expression="determined" />
         </div>
+        {/* The frame places micButton in middleContent at y=334, not in the action
+            zone. It is content, not chrome. */}
+        <MicButton state="Idle" onClick={() => router.push(`/session/recording/${index}`)} />
       </div>
     </ScreenShell>
   )

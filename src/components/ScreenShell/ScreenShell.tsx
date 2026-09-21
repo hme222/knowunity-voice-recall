@@ -46,6 +46,9 @@ export type ScreenShellProps = {
   className?: string
 }
 
+/** The frames' side-by-side action row. Screens compose it into `bottomContent`. */
+export const actionRowClass = styles.actionRow
+
 export function ScreenShell({
   topNavigation,
   showTopNavSlot,

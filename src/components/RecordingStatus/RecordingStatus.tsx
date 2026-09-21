@@ -12,10 +12,9 @@ export type RecordingStatusProps = {
   /** Elapsed recording time. The page owns the interval. */
   seconds: number
   /**
-   * Paused dims the label rather than changing the mic. Accepted risk, recorded in
-   * SPEC.md § Open 12: MicButton has no Paused state, so nothing else on screen
-   * changes when the student taps. If pause turns out to matter, the fix is a real
-   * MicButton state, not more caption copy.
+   * Paused dims the label. As of 2026-09-21 MicButton also has a real `Paused`
+   * state, so the mic changes too: the accepted risk that "nothing else on screen
+   * changes" failed the identical-states gate and was reversed.
    */
   paused?: boolean
   className?: string

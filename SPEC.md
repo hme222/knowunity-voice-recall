@@ -448,10 +448,15 @@ with their answer so the reasoning isn't re-derived.
     full meter was the least visible state; your palette's greens can't
     darken legibly anyway. All values token-bound — the literals were the
     third instance of invisible binding drift in this file.
-12. ~~**Pause/resume ratification.**~~ **RESOLVED — tap to pause, caption
-    only.** A "Tap to pause" caption sits under the mic; `MicButton` gains no
+12. ~~**Pause/resume ratification.**~~ **REOPENED then RESOLVED AGAIN
+    2026-09-21 — tap to pause, with a real `MicButton` state.** A "Tap to pause" caption sits under the mic; `MicButton` gains no
     Paused state and its appearance doesn't change. The Figma explorations and
-    annotation stay as they are. **Accepted risk, recorded once:** nothing on
-    screen changes when paused, so the tap has no visible confirmation. If
-    pause turns out to matter, the fix is a real `MicButton` state, not more
-    caption copy.
+    annotation stay as they are. **The accepted risk did not survive being rendered.** It read: "nothing on
+    screen changes when paused, so the tap has no visible confirmation." That
+    is exactly what the identical-states hard gate exists to catch, and it
+    failed it: clicking the mic changed only the `aria-label` while the fill
+    stayed, `aria-pressed` stayed true, and the pulse ring kept animating —
+    motion saying capturing while text said stopped. `MicButton` now has a
+    fifth state with its own fill, glyph token, no pulse, and no
+    `aria-pressed`. The decision was taken before anyone rendered it; that is
+    the lesson, not the pause behaviour.

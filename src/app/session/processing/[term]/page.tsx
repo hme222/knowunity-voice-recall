@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { AppBar, MascotSlot, ProgressIndicator, ScreenShell, SessionFraction, Button } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { getTerm, progressFor, TOTAL_TERMS, verdictFor } from '@/lib/session'
+import { slowThreshold } from '@/lib/motion'
 import styles from './processing.module.css'
 
 // 03 Processing — Figma frame "03 Processing" (15672:20190), plus the confidence tap
@@ -25,7 +26,7 @@ function ProcessingScreen({ index }: { index: number }) {
   // "friendly, not a crash", and a new screen would read as an error.
   const [slow, setSlow] = useState(false)
   useEffect(() => {
-    const id = window.setTimeout(() => setSlow(true), 6000)
+    const id = window.setTimeout(() => setSlow(true), slowThreshold())
     return () => window.clearTimeout(id)
   }, [])
 

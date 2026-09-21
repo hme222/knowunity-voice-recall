@@ -3,6 +3,7 @@
 import { Suspense, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { MascotSlot, ScreenShell } from '@/components'
+import { processingDwell } from '@/lib/motion'
 import styles from '../text.module.css'
 
 // The typed path's equivalent of Processing — a brief "checking" beat, no confidence
@@ -20,7 +21,7 @@ function CheckingScreen() {
   const verdict = len >= 40 ? 'pass' : 'miss'
 
   useEffect(() => {
-    const id = window.setTimeout(() => router.push(`/session/${verdict}/${index}`), 1200)
+    const id = window.setTimeout(() => router.push(`/session/${verdict}/${index}`), processingDwell())
     return () => window.clearTimeout(id)
   }, [index, router, verdict])
 

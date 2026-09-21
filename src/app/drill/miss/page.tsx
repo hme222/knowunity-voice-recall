@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Button, Chips, HintCard, MascotSlot, RecallResult, ScreenShell, StrengthMeter } from '@/components'
+import { actionRowClass, Button, Chips, HintCard, MascotSlot, RecallResult, ScreenShell, StrengthMeter } from '@/components'
 import { DRILL_MISSED_WORD, DRILL_TERM, drillRung, STUMBLES } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
@@ -25,21 +25,23 @@ export default function DrillMissPage() {
       topNavigation={<DrillBar step={2} onExit={() => router.push('/picker')} />}
       bottomContent={
         <div className={styles.stack}>
-          <Button
-            CTA="Show full definition"
-            variant="Secondary"
-            size="M"
-            fullWidth
-            onClick={() => router.push('/drill/pass/1')}
-          />
-          <Button
-            CTA="Try again"
-            variant="Primary"
-            size="M"
-            fullWidth
-            onClick={() => router.push('/drill/miss/letter')}
-          />
-          <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/picker')} />
+          {/* Two real choices side by side, the way 05 Miss does it. Stacked
+              full-width they made a 192px zone and clipped 60px off the body. */}
+          <div className={actionRowClass}>
+            <Button
+              CTA="Show full definition"
+              variant="Secondary"
+              size="M"
+              onClick={() => router.push('/drill/pass/1')}
+            />
+            <Button
+              CTA="Try again"
+              variant="Primary"
+              size="M"
+              onClick={() => router.push('/drill/miss/letter')}
+            />
+          </div>
+          <Button CTA="Skip" variant="Tertiary" size="S" fullWidth onClick={() => router.push('/picker')} />
         </div>
       }
     >
@@ -48,7 +50,7 @@ export default function DrillMissPage() {
         <StrengthMeter fill={rung?.coverage ?? 25} label="Held while you get this one" />
         <p className={styles.note}>{DRILL_TERM.drillTitle ?? DRILL_TERM.title}</p>
         <MascotSlot size="2XL" expression="determined" />
-        <Chips Text={STUMBLES.first.verdict} size="S" color="Coral" active showRightIcon={false} />
+        <Chips Text={STUMBLES.first.verdict} size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} className={styles.verdictChip} />
         <RecallResult
           state="Miss"
           title={STUMBLES.first.copy}

@@ -2,7 +2,7 @@
 
 import { Suspense, use } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { AppBar, Button, Chips, MascotSlot, ProgressIndicator, RecallResult, ScreenShell, SessionFraction } from '@/components'
+import { AppBar, Button, MascotSlot, ProgressIndicator, RecallResult, ScreenShell, SessionFraction } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { getTerm, nextAfter, progressFor, recordOutcome, TOTAL_TERMS } from '@/lib/session'
 import styles from '../../result.module.css'
@@ -52,7 +52,9 @@ function UnclearScreen({ index }: { index: number }) {
     >
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="dazed" />
-        <Chips Text="Didn’t catch that" size="S" color="Coral" active showRightIcon={false} onClick={retry} />
+        {/* RecallResult supplies the one documented retry tag for CouldntHear. A second
+            chip here bound to the same handler meant two differently-labelled controls
+            doing one thing. */}
         <RecallResult
           state="CouldntHear"
           title="That one didn’t come through."

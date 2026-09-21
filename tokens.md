@@ -74,7 +74,7 @@ Raw values. Never referenced directly by a component.
 
 ## Colour semantics
 
-`color.semantic.*` — 91 tokens
+`color.semantic.*` — 93 tokens
 
 Roles. These are what components bind to.
 
@@ -166,6 +166,8 @@ Roles. These are what components bind to.
 | `color.semantic.feedback.unclear.onBold` | `{color.primitive.coral.950}` | `#2E0F06` | Text and icons on feedback.unclear.bold. |
 | `color.semantic.feedback.unclear.subtle` | `{color.primitive.coral.900}` | `#512E2C` | Tinted background if a full card treatment is ever needed for this state. |
 | `color.semantic.feedback.unclear.onSubtle` | `{color.primitive.coral.200}` | `#FFB59B` | Text and icons on feedback.unclear.subtle. |
+| `color.semantic.feedback.partial.bold` | `{color.primitive.magenta.400}` | `#E879C0` | Solid tag fill for a partially-correct verdict. Added 2026-09-21: `Partially right` on 05 Miss was reusing feedback.unclear (Coral), which design-system.md scopes narrowly to CouldntHear. That reuse put one pill on three screens meaning a system mishear, a wrong answer and a neutral pre-verdict retry — reintroducing exactly the Miss/CouldntHear conflation the unclear family was built to prevent. |
+| `color.semantic.feedback.partial.onBold` | `{color.primitive.magenta.950}` | `#2C0A20` | Text and icons on feedback.partial.bold. |
 | `color.semantic.feedback.warning.bold` | `{color.primitive.gold.400}` | `#F5B53D` | Solid fill for a due-or-caution-adjacent marker that isn't a verdict. Confirmed consumer: the 'Hint used' indicator on a recall result, distinct from the Pass/Partial/Miss verdict itself (which uses feedback.success/error), this marks how an answer was reached, not whether it was right. Parallels feedback.success.bold/feedback.error.bold/feedback.unclear.bold in structure, fourth entry in the same family. |
 | `color.semantic.feedback.warning.onBold` | `{color.primitive.gold.950}` | `#2A1D04` | Text and icons on feedback.warning.bold. |
 | `color.semantic.feedback.warning.border` | `{color.primitive.gold.400}` | `#F5B53D` | Outline for a due-or-caution element that is bordered rather than filled. Confirmed consumers: swipeChip on the plan-active home, where an amber border signals an approaching deadline without the weight of a solid fill, and dueSignalCard, which previously carried a raw hex for the same job. Currently the same value as feedback.warning.bold by design; split so a bordered treatment can move independently of a filled one. |
@@ -308,7 +310,7 @@ The composed text styles. Each resolves to a family, weight, size, line height a
 
 ## Motion primitives
 
-`motion.primitive.*` — 5 tokens
+`motion.primitive.*` — 7 tokens
 
 Durations in milliseconds, and easing curves.
 
@@ -318,11 +320,13 @@ Durations in milliseconds, and easing curves.
 | `motion.primitive.duration.250` | `250` |  | 250ms. State transitions: idle to recording, processing to result. |
 | `motion.primitive.duration.300` | `300` |  | 300ms. Swipe-to-settle for a card carousel. UNCONFIRMED: matched to common iOS carousel timing, not verified against a reference or a prototype — the same epistemic status as the +10 XP value. Tune once the swipe is prototyped. |
 | `motion.primitive.duration.1100` | `1100` |  | 1100ms, loops. Mic-pulse timing, matched to iOS dictation / WhatsApp voice-note comparables. |
+| `motion.primitive.duration.1400` | `1400` |  | 1400ms. The judging dwell: how long a Processing beat holds before resolving. UNCONFIRMED against a real round trip, like the 300ms swipe. |
+| `motion.primitive.duration.6000` | `6000` |  | 6000ms. When a judge counts as slow and Processing escalates its copy in place. Past the Design Brief's <4s target with headroom, so an ordinary wait never trips it. |
 | `motion.primitive.easing.standard` | `cubic-bezier(0.4, 0, 0.2, 1)` |  | Standard ease-out, decelerates into rest. |
 
 ## Motion semantics
 
-`motion.semantic.*` — 5 tokens
+`motion.semantic.*` — 7 tokens
 
 Named timings.
 
@@ -331,6 +335,8 @@ Named timings.
 | `motion.semantic.duration.fast` | `{motion.primitive.duration.150}` | `150` | Micro-feedback timing: button press, checkbox toggle, the mic circle's press-down scale. |
 | `motion.semantic.duration.standard` | `{motion.primitive.duration.250}` | `250` | State transitions: idle to recording, processing to result, the Voice UX Reference's Must-state beats. |
 | `motion.semantic.duration.swipe` | `{motion.primitive.duration.300}` | `300` | Card-to-card transition when the student swipes between due quizzes on the plan-active home. Longer than standard because the card travels a full screen-width and the count badge and dots update with it; the motion has to read as one continuous movement, not a state flip. |
+| `motion.semantic.duration.processingDwell` | `{motion.primitive.duration.1400}` | `1400` | How long Processing and the typed checking beat hold before resolving. One token because they are the same designed beat: they were previously written as 1400 and 1200, two numbers for one decision. |
+| `motion.semantic.duration.slowThreshold` | `{motion.primitive.duration.6000}` | `6000` | When Processing escalates to "still thinking" in place, and offers the connection path. |
 | `motion.semantic.duration.ambient` | `{motion.primitive.duration.1100}` | `1100` | Looping ambient timing, e.g. the mic listening-state pulse. |
 | `motion.semantic.easing.standard` | `{motion.primitive.easing.standard}` | `cubic-bezier(0.4, 0, 0.2, 1)` | The curve fast, standard and ambient durations all use. |
 
@@ -386,4 +392,4 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ---
 
-286 tokens across 10 groups.
+292 tokens across 10 groups.

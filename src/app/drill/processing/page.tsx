@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { MascotSlot, ScreenShell, StrengthMeter } from '@/components'
 import { drillRung, DRILL_TOTAL_RUNGS } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
+import { processingDwell } from '@/lib/motion'
 import styles from '../drill.module.css'
 
 // DD 03 Processing — Figma frame "DD 03 Processing" (15782:11891).
@@ -29,7 +30,7 @@ function DrillProcessing() {
       if (step === 2) router.push('/drill/miss')
       else if (step >= DRILL_TOTAL_RUNGS) router.push('/drill/complete')
       else router.push(`/drill/pass/${step + 1}`)
-    }, 1400)
+    }, processingDwell())
     return () => window.clearTimeout(id)
   }, [step, router])
 

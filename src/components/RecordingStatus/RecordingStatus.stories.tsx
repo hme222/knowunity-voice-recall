@@ -6,7 +6,7 @@ const DESCRIPTION = `
 
 **WHEN:** 02 Recording and DD 02 Recording, in the bottom region beneath the mic.
 
-**DON'T:** Don't let it own the clock. The page ticks and passes \`seconds\` — a component running its own interval makes its story non-deterministic and flakes the a11y run. Don't expect the mic to change when \`paused\` is on: \`MicButton\` has no Paused state, which is a recorded accepted risk (SPEC.md § Open 12), not an oversight to fix here.
+**DON'T:** Don't let it own the clock. The page ticks and passes \`seconds\` — a component running its own interval makes its story non-deterministic and flakes the a11y run. The mic changes too: \`MicButton\` gained a real \`Paused\` state on 2026-09-21, after the previous "nothing changes when paused" behaviour failed the identical-states gate.
 
 ---
 

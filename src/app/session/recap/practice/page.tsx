@@ -26,8 +26,8 @@ export default function PracticePage() {
       }
       bottomContent={
         <div className={styles.actions}>
-          <Button CTA="Drill the definition out loud" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/drill/intro')} />
-          <Button CTA="Say it back again" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/session/idle/1')} />
+          <Button CTA="Drill the definition out loud" variant="Secondary" size="M" fullWidth onClick={() => router.push('/drill/intro')} />
+          <Button CTA="Say it back again" variant="Secondary" size="M" fullWidth onClick={() => router.push('/session/idle/1')} />
           <Button CTA="Not now" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/session/recap')} />
         </div>
       }

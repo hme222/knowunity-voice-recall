@@ -20,14 +20,14 @@
 }
 
 .topNavigation {
-  /* height, not min-height. With min-height the region grew with its content and the
-     action zone moved up to 272px between consecutive turns, against this file's own
-     claim that the four chrome regions are fixed. */
+  /* Fixed, and a positioning context. The fraction is OVERLAID on the progress ring,
+     not stacked under the app bar — sprint-context.md § Screens: "a fraction (N/4)
+     centered over the progress ring". Stacking it needed ~80px in a 56px box, so it
+     bled into middleContent and was painted over by the first card. */
+  position: relative;
   height: calc(var(--component-scaffold-top-navigation-height) * 1px);
   flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--size-primitive-space-100) * 1px);
+  overflow: hidden;
 }
 
 .middle {
@@ -42,11 +42,15 @@
 }
 
 .bottom {
-  height: calc(var(--component-scaffold-bottom-content-height) * 1px);
+  /* min-height, not height. The frames vary this region deliberately: 120 on most
+     screens, 146 on 05 Miss where a text link sits below the button row. A fixed
+     height with justify-content:center spilled the excess out of the box and painted
+     it over the hint card. It grows; it does not centre overflow across its edge. */
+  min-height: calc(var(--component-scaffold-bottom-content-height) * 1px);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   gap: calc(var(--size-primitive-space-100) * 1px);
   padding: calc(var(--spacing-semantic-screen-margin) * 1px);
 }
@@ -69,4 +73,16 @@
 .sheetSlot {
   position: relative;
   z-index: 2;
+}
+
+/* The action row the frames use: two buttons side by side at half width, not stacked.
+   Stacking is what pushed Idle's action zone to 204px against a 120 budget. */
+.actionRow {
+  display: flex;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+}
+
+.actionRow > * {
+  flex: 1;
+  min-width: 0;
 }

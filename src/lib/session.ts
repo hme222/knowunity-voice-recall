@@ -207,19 +207,19 @@ export const DRILL_RUNGS: DrillRung[] = [
   {
     step: 1,
     cue: "Formal charge is the charge on an atom when every bond's electrons are split evenly between the two atoms.",
-    coverage: 0,
+    coverage: 25,
   },
   {
     step: 2,
     cue: "Formal charge is the charge on an atom when every bond's \u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 are split evenly between the two atoms.",
-    coverage: 25,
+    coverage: 50,
   },
   {
     step: 3,
     cue: "Formal charge is the \u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 on an atom when every bond's \u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 are split \u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 between the two atoms.",
-    coverage: 50,
+    coverage: 75,
   },
-  { step: 4, cue: '\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 \u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 \u2014 all of it, no cues.', coverage: 75 },
+  { step: 4, cue: '\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 \u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 \u2014 all of it, no cues.', coverage: 100 },
 ]
 
 /**

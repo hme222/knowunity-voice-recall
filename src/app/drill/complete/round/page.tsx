@@ -10,7 +10,8 @@ import styles from '../../drill.module.css'
 //
 // Its OWN branch screen, with Complete rendered behind it. A sheet is never baked into
 // a screen that represents a default state — the mistake this file has made three
-// times. That is also why ScreenShell has no showBottomSheetBackground prop.
+// times. ScreenShell does have a showBottomSheetBackground prop, and this route
+// sets it: turning it on is what marks the route as a sheet branch.
 //
 // Rows use PickerRow's `raised`: on background.surface inside a surface-filled sheet
 // they would resolve to the same value and vanish.
@@ -26,6 +27,7 @@ export default function DrillRoundPage() {
   const router = useRouter()
   return (
     <ScreenShell
+      showBottomSheetBackground
       bottomSheetOnly={
       <BottomSheet
           Title="All your takes"

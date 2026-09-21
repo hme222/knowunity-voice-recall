@@ -42,6 +42,7 @@ export default function TranscriptPage({ params }: { params: Promise<{ bucket: s
 
   return (
     <ScreenShell
+      showBottomSheetBackground
       bottomSheetOnly={
       <BottomSheet Title={copy.title} subtitle={copy.subtitle} onDismiss={() => router.back()}>
           {key !== 'skipped' && (

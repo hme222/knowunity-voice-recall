@@ -2,8 +2,8 @@
 
 import { use } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button, MascotSlot, MicButton, ScreenShell, StrengthMeter } from '@/components'
-import { drillRung, DRILL_TERM } from '@/lib/session'
+import { actionRowClass, Button, MascotSlot, MicButton, ScreenShell, StrengthMeter } from '@/components'
+import { drillRung } from '@/lib/session'
 import { DrillBar } from '../../DrillBar'
 import styles from '../../drill.module.css'
 
@@ -29,8 +29,7 @@ export default function DrillPassPage({ params }: { params: Promise<{ step: stri
     <ScreenShell
       topNavigation={<DrillBar step={n} onExit={() => router.push('/picker')} />}
       bottomContent={
-        <div className={styles.actions}>
-          <MicButton state="Idle" onClick={() => router.push(`/drill/recording?step=${n}`)} />
+        <div className={actionRowClass}>
           <Button CTA="Type instead" variant="Secondary" size="M" onClick={() => router.push(`/text/turn?term=1`)} />
           <Button CTA="Skip" variant="Tertiary" size="M" onClick={() => router.push('/picker')} />
         </div>
@@ -40,9 +39,12 @@ export default function DrillPassPage({ params }: { params: Promise<{ step: stri
         <StrengthMeter fill={rung.coverage} label="How much you can say unaided" />
         <p className={styles.note}>Say the whole thing. However it comes out.</p>
         <p className={styles.cue}>{rung.cue}</p>
-        <p className={styles.note}>{DRILL_TERM.drillTitle ?? DRILL_TERM.title}</p>
-        <div className={styles.centred}>
+        {/* Mascot and mic together in the middle. Stacking the mic with the two
+            buttons made a 264px action zone and squeezed middleContent to 442px,
+            which is what pressed the mic onto Knowie. */}
+        <div className={styles.micZone}>
           <MascotSlot size="2XL" expression="determined" />
+          <MicButton state="Idle" onClick={() => router.push(`/drill/recording?step=${n}`)} />
         </div>
       </div>
     </ScreenShell>

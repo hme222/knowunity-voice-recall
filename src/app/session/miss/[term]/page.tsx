@@ -12,6 +12,7 @@ import {
   RecallResult,
   ScreenShell,
   SessionFraction,
+  actionRowClass,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { getTerm, nextAfter, progressFor, recordOutcome, TOTAL_TERMS, XP } from '@/lib/session'
@@ -51,28 +52,37 @@ function MissScreen({ index }: { index: number }) {
       }
       bottomContent={
         <div className={styles.actions}>
-          <p className={styles.xp}>{`\u26a1 +${XP.hinted}`}</p>
-          <Button
-            CTA="Reveal answer"
-            variant="Primary"
-            size="M"
-            fullWidth
-            onClick={() => router.push(`/session/reveal/${index}`)}
-          />
-          <Button
-            CTA="Try again"
-            variant="Secondary"
-            size="M"
-            fullWidth
-            onClick={() => router.push(`/session/recording/${index}?attempt=${attempt + 1}&hinted=1`)}
-          />
-          <Button CTA="Skip · no XP" variant="Tertiary" size="M" fullWidth onClick={skip} />
+          {/* The frame's `primaryRow`: two buttons side by side, with Skip as plain
+              text beneath. The XP line moves up into the content region, where the
+              frame puts it in the app bar area rather than the action zone. */}
+          <div className={actionRowClass}>
+            <Button
+              CTA="Reveal answer"
+              variant="Primary"
+              size="M"
+              fullWidth
+              onClick={() => router.push(`/session/reveal/${index}`)}
+            />
+            <Button
+              CTA="Try again"
+              variant="Secondary"
+              size="M"
+              fullWidth
+              onClick={() => router.push(`/session/recording/${index}?attempt=${attempt + 1}&hinted=1`)}
+            />
+          </div>
+          <Button CTA="Skip · no XP" variant="Tertiary" size="S" fullWidth onClick={skip} />
         </div>
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="determined" />
-        <Chips Text="Partially right" size="S" color="Coral" active showRightIcon={false} />
+        <MascotSlot size="XL" expression="determined" />
+        <div className={styles.verdictRow}>
+          <Chips Text="Partially right" size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} />
+          {/* Beside the verdict, not at the tail of the body: at the end it sat on the
+              scroll boundary and rendered as a sliced half-line. */}
+          <p className={styles.xp}>{`\u26a1 +${XP.hinted}`}</p>
+        </div>
         <RecallResult state="Miss" title={current.missTitle} transcript={`“${current.transcript}”`} />
         <HintCard body={current.hint} />
         <Button CTA="See the full transcript" variant="Tertiary" size="S" fullWidth onClick={() => router.push('/session/transcript/revealed')} />

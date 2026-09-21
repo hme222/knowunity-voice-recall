@@ -88,6 +88,10 @@
   background: var(--color-semantic-pro-bold);
   color: var(--color-semantic-pro-on-bold);
 }
+.root[data-active][data-color='Partial'] {
+  background: var(--color-semantic-feedback-partial-bold);
+  color: var(--color-semantic-feedback-partial-on-bold);
+}
 .root[data-active][data-color='Coral'] {
   background: var(--color-semantic-feedback-unclear-bold);
   color: var(--color-semantic-feedback-unclear-on-bold);

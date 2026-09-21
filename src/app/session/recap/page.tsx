@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { AppBar, Button, ButtonIcon, ScreenShell, StatChip, TextBlock } from '@/components'
+import { AppBar, Button, ButtonIcon, MascotSlot, ScreenShell, StatChip, TextBlock } from '@/components'
 import { CloseIcon, EyeIcon } from '@/components/icons'
 import {
   Bucket,
@@ -56,7 +56,7 @@ export default function RecapPage() {
   return (
     <ScreenShell
       topNavigation={
-        <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => router.push('/')} />
+        <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => router.push('/home/unlocked')} />
       }
       bottomContent={
         <div className={styles.actions}>
@@ -84,7 +84,10 @@ export default function RecapPage() {
         </div>
       }
     >
+      {/* design-system.md § "Mascot poses" assigns laughing to 07 Recap. Its absence
+          was found independently in both scorecards. */}
       <div className={styles.headline}>
+        <MascotSlot size="2XL" expression="laughing" />
         <TextBlock
           variant="L"
           title="Session recap"

@@ -21,6 +21,20 @@
   gap: calc(var(--size-primitive-space-300) * 1px);
 }
 
+/* A verdict chip hugs its text. The body stretches its children, so the chip spanned
+   the full width and read as a banner rather than a chip. */
+.verdictChip {
+  align-self: flex-start;
+}
+
+/* Verdict and the XP it earns, on one line. */
+.verdictRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
 .xp {
   text-align: center;
   color: var(--color-semantic-accent-blue-bold);

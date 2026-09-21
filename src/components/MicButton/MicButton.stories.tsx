@@ -8,7 +8,7 @@ const FIGMA_DESCRIPTION = `
 
 **WHEN:** One instance per recall screen, the moment a student needs to speak. States map to the recall sequence specifically, idle → listening → captured, not general audio recording elsewhere in the app.
 
-**DON'T:** Don't add a fifth state. Idle/Listening/Captured/Disabled is the deliberately complete set, see design-system.md open question 1. Don't assume Captured or Disabled are wired into any screen yet, only Idle and Listening currently appear live anywhere.
+**DON'T:** Don't assume Captured or Disabled are wired into every screen. **Superseded 2026-09-21:** this line previously read “Don't add a fifth state, Idle/Listening/Captured/Disabled is the deliberately complete set”. A fifth state, \`Paused\`, was added because the four-state set failed the rubric's identical-states gate: clicking the mic to pause changed nothing but the aria-label while the pulse ring kept animating, so motion said capturing and text said stopped.
 
 ---
 
@@ -37,3 +37,14 @@ export const Listening: Story = {
 }
 export const Captured: Story = { args: { state: 'Captured' } }
 export const Disabled: Story = { args: { state: 'Disabled' } }
+
+export const Paused: Story = {
+  args: { state: 'Paused' },
+  play: async ({ canvas, expect }) => {
+    const btn = canvas.getByRole('button')
+    // The two claims the gate failure rested on: it must not look Listening, and it
+    // must not report itself as pressed while stopped.
+    await expect(btn).toHaveAttribute('aria-label', 'Paused, tap to resume')
+    await expect(btn).not.toHaveAttribute('aria-pressed')
+  },
+}

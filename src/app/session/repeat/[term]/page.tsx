@@ -12,7 +12,7 @@ import {
   SessionFraction,
   Snackbar,
 } from '@/components'
-import { CloseIcon } from '@/components/icons'
+import { CheckIcon, CloseIcon } from '@/components/icons'
 import { getTerm, nextAfter, progressFor, recordOutcome, TOTAL_TERMS, XP } from '@/lib/session'
 import styles from '../../result.module.css'
 
@@ -57,7 +57,7 @@ export default function RepeatPage({ params }: { params: Promise<{ term: string 
           title="That's it, in your own voice."
           transcript={`“${current.transcript}”`}
         />
-        <Snackbar Text="Said back unaided." variant="Success" chipText={`+${XP.repeat} XP`} />
+        <Snackbar Text="Said back unaided." variant="Success" icon={<CheckIcon />} chipText={`+${XP.repeat} XP`} />
       </div>
     </ScreenShell>
   )

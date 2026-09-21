@@ -53,7 +53,7 @@ export default function LockInPage() {
     >
       <div className={styles.body}>
         <div className={styles.badge}>
-          <Chips Text="Back for round two" size="S" color="pro" active showRightIcon={false} />
+          <Chips Text="Back for round two" size="S" color="Primary" active showLeftIcon={false} showRightIcon={false} />
         </div>
         <ChatBubble
           showTitle
