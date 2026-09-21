@@ -19,11 +19,24 @@ function CheckingScreen() {
   // can only ever pass isn't a judged path at all.
   const len = Number(searchParams.get('len') ?? '0')
   const verdict = len >= 40 ? 'pass' : 'miss'
+  // A drill turn returns to the drill. It used to land in /session/pass and the
+  // student continued into a 4-term session they never started.
+  const drillStep = searchParams.get('drill')
 
   useEffect(() => {
-    const id = window.setTimeout(() => router.push(`/session/${verdict}/${index}`), processingDwell())
+    const id = window.setTimeout(
+      () =>
+        router.push(
+          drillStep
+            ? verdict === 'pass'
+              ? `/drill/pass/${Number(drillStep) + 1}`
+              : '/drill/miss'
+            : `/session/${verdict}/${index}`,
+        ),
+      processingDwell(),
+    )
     return () => window.clearTimeout(id)
-  }, [index, router, verdict])
+  }, [index, router, verdict, drillStep])
 
   return (
     <ScreenShell>

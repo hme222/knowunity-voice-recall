@@ -28,6 +28,10 @@ function TextTurnScreen() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const index = Number(searchParams.get('term') ?? '1')
+  // A drill turn borrows this screen; without knowing that, Send routed into the
+  // session and a student practising one definition came out inside a 4-term run on a
+  // different term.
+  const drillStep = searchParams.get('drill')
   const sessionSticky = useSticky()
   const sticky = searchParams.get('sticky') === '1' || sessionSticky
   const current = getTerm(index)
@@ -69,7 +73,7 @@ function TextTurnScreen() {
               // instead of the fixture. See answerFor() in src/lib/session.ts.
               setTypedAnswer(index, answer)
               router.push(
-                `/text/checking?term=${index}&len=${answer.trim().length}${sticky ? '&sticky=1' : ''}`,
+                `/text/checking?term=${index}&len=${answer.trim().length}${sticky ? '&sticky=1' : ''}${drillStep ? `&drill=${drillStep}` : ''}`,
               )
             }}
           />
@@ -79,7 +83,7 @@ function TextTurnScreen() {
               variant="Tertiary"
               size="M"
               fullWidth
-              onClick={() => router.push(`/session/idle/${index}`)}
+              onClick={() => router.push(drillStep ? `/drill/pass/${drillStep}` : `/session/idle/${index}`)}
             />
           )}
           <Button

@@ -19,6 +19,12 @@ function UnclearScreen({ index }: { index: number }) {
   const wasSure = searchParams.get('sure') === '1'
   const current = getTerm(index)
   const attempt = Number(searchParams.get('attempt') ?? '1')
+  // A second mishear is a different situation from the first. It used to render
+  // byte-identically — same "a little closer to the mic" after the mic had already
+  // failed once — so the screen kept asking for the thing that was not working.
+  // voice-ux Principle 4: a mishear is the app's problem, so the escalation offers the
+  // way out rather than blaming the student.
+  const repeated = attempt >= 2
 
   if (!current) {
     router.replace('/session/intro')
@@ -46,7 +52,14 @@ function UnclearScreen({ index }: { index: number }) {
       }
       bottomContent={
         <div className={styles.actions}>
-          <Button CTA="Type instead" variant="Secondary" size="M" fullWidth onClick={() => router.push(`/text/turn?term=${index}`)} />
+          {/* On a repeat mishear typing leads, because the mic has now failed twice. */}
+          <Button
+            CTA="Type instead"
+            variant={repeated ? 'Primary' : 'Secondary'}
+            size="M"
+            fullWidth
+            onClick={() => router.push(`/text/turn?term=${index}`)}
+          />
           <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={skip} />
         </div>
       }
@@ -58,8 +71,12 @@ function UnclearScreen({ index }: { index: number }) {
             doing one thing. */}
         <RecallResult
           state="CouldntHear"
-          title="That one didn’t come through."
-          transcript={`Say the definition of ${current.name.toLowerCase()} again, a little closer to the mic.`}
+          title={repeated ? 'Still not coming through.' : 'That one didn’t come through.'}
+          transcript={
+            repeated
+              ? `That is twice now, so it is probably the mic and not you. Type ${current.name.toLowerCase()} instead, or try once more.`
+              : `Say the definition of ${current.name.toLowerCase()} again, a little closer to the mic.`
+          }
           onRetry={retry}
         />
       </div>

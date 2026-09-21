@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { actionRowClass, Button, Chips, HintCard, MascotSlot, ScreenShell } from '@/components'
+import { actionRowClass, Button, Chips, HintCard, MascotSlot, RecallResult, ScreenShell } from '@/components'
 import { DRILL_MISSED_WORD, STUMBLES } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
@@ -60,13 +60,10 @@ export default function DrillMissPage() {
           showLeftIcon={false}
           showRightIcon={false}
         />
-        <div className={[styles.resultCard, styles.fullWidth].join(' ')}>
-          <p className={styles.resultTitle}>{STUMBLES.first.copy}</p>
-          <p className={styles.resultLabel}>You said</p>
-          <p className={styles.resultBody}>
-            &ldquo;Formal charge is the charge on an atom when every bond&rsquo;s&hellip; um&hellip;&rdquo;
-          </p>
-        </div>
+        {/* RecallResult state="Neutral" — promoted from the inline card that three
+            drill screens were duplicating. The drill is practice, not scored
+            performance, so a miss here is not painted as an error. */}
+        <RecallResult className={styles.fullWidth} state="Neutral" title={STUMBLES.first.copy} transcript={`“Formal charge is the charge on an atom when every bond’s… um…”`} />
         <HintCard
           className={styles.fullWidth}
           label="The missing word"

@@ -331,7 +331,7 @@ Durations in milliseconds, and easing curves.
 
 ## Motion semantics
 
-`motion.semantic.*` — 8 tokens
+`motion.semantic.*` — 9 tokens
 
 Named timings.
 
@@ -345,6 +345,7 @@ Named timings.
 | `motion.semantic.duration.ambient` | `{motion.primitive.duration.1100}` | `1100` | Looping ambient timing, e.g. the mic listening-state pulse. |
 | `motion.semantic.easing.standard` | `{motion.primitive.easing.standard}` | `cubic-bezier(0.4, 0, 0.2, 1)` | The curve fast, standard and ambient durations all use. |
 | `motion.semantic.easing.ambient` | `cubic-bezier(0.4, 0, 0.6, 1)` |  | Symmetric ease for motion that loops back to where it started — the mic pulse, Knowie's breathe, the processing dots. `standard` is asymmetric and made a looping animation read as a sawtooth, which is why `ease-in-out` had been typed directly into six stylesheets. |
+| `motion.semantic.easing.linear` | `linear` |  | For continuous rotation only — a spinner. Every other easing in this file shapes a start and an end; a spin has neither, and putting it on a curve makes each turn visibly speed up and slow down. Added because `linear` was otherwise being typed directly into two component stylesheets. |
 
 ## Responsive primitives
 
@@ -413,4 +414,4 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ---
 
-313 tokens across 10 groups.
+314 tokens across 10 groups.

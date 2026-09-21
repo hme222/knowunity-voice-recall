@@ -155,43 +155,9 @@
   color: var(--color-semantic-brand-bold);
 }
 
-/* DD 07's result card. NEUTRAL, not the graded error red: the drill is practice, not
-   scored performance, so a miss here is not an error. Sampled from the frame the card
-   is a raised grey with a white title, where RecallResult state="Miss" would paint it
-   #532831 with a red title. Logged in component-gaps.md — three drill screens use it,
-   so it is a promotion candidate once RecallResult's Figma set can be checked. */
-.resultCard {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--spacing-semantic-card-label-gap) * 1px);
-  padding: calc(var(--spacing-semantic-card-padding) * 1px);
-  border-radius: calc(var(--size-primitive-radius-400) * 1px);
-  background: var(--color-semantic-background-surface);
-}
-
-.resultTitle {
-  margin: 0;
-  color: var(--color-semantic-text-primary);
-  font-weight: var(--typography-style-headline-s-font-weight);
-  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
-  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
-}
-
-.resultLabel {
-  margin: 0;
-  color: var(--color-semantic-text-tertiary);
-  font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
-}
-
-.resultBody {
-  margin: 0;
-  color: var(--color-semantic-text-secondary);
-  font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
-}
+/* The DD 07 result card was here. Promoted to `RecallResult state="Neutral"`
+   once all three stumble screens were using it — two consumers is this repo's
+   bar and it had three. See component-gaps.md. */
 
 /* The mic sits alone between the cards and the action zone, as both frames show. */
 .frameMic {

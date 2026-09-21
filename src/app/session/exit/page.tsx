@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { returnBack } from '@/lib/navigation'
 import { Button, OptionRow, ScreenShell, TextBlock } from '@/components'
-import { XP } from '@/lib/session'
+import { setSticky, XP } from '@/lib/session'
 import styles from './exit.module.css'
 
 // 01b Exit confirmation. Eight real reasons, matching IMG_7511. Tone stays light, no
@@ -26,15 +26,35 @@ const REASONS = [
   'Other',
 ]
 
+/** The two reasons the app can actually do something about. */
+const TYPING_ANSWERS = new Set([REASONS[0], REASONS[1]])
+
 export default function ExitPage() {
   const router = useRouter()
   const [picked, setPicked] = useState<string | null>(null)
+  // "I can't speak out loud right now" and "I'd rather type" both have an answer one
+  // tap away, and the sheet used to collect them and route to the mic anyway — it
+  // asked and ignored. Picking either turns the primary into the thing they asked for.
+  const wantsTyping = picked != null && TYPING_ANSWERS.has(picked)
 
   return (
     <ScreenShell
       bottomContent={
         <div className={styles.actions}>
-          <Button CTA="Keep learning" variant="Primary" size="M" fullWidth onClick={() => returnBack(router, '/session/idle/1')} />
+          {wantsTyping ? (
+            <Button
+              CTA="Type instead"
+              variant="Primary"
+              size="M"
+              fullWidth
+              onClick={() => {
+                setSticky()
+                router.push('/text/turn?term=1&sticky=1')
+              }}
+            />
+          ) : (
+            <Button CTA="Keep learning" variant="Primary" size="M" fullWidth onClick={() => returnBack(router, '/session/idle/1')} />
+          )}
           <Button CTA="Leave anyway" variant="Secondary" size="M" fullWidth onClick={() => router.push('/home/unlocked')} />
         </div>
       }

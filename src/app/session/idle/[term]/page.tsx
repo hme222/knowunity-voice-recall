@@ -73,6 +73,16 @@ function IdleScreen({ index }: { index: number }) {
         <div className={styles.actions}>
           {/* Two buttons, not three. The frame has no "I don't know this one"; the
               blank state is still reached from /text/turn, so nothing is orphaned. */}
+          {/* The typed turn has offered this since it was built; the spoken turn only
+              had Skip, so a student who genuinely did not know had to record nothing
+              or take the no-XP exit. Same escape, both paths. */}
+          <Button
+            CTA="I don't know this one"
+            variant="Tertiary"
+            size="S"
+            fullWidth
+            onClick={() => router.push(`/session/blank/${index}`)}
+          />
           <div className={actionRowClass}>
             <Button
               CTA="Type instead"

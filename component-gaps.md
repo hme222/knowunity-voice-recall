@@ -38,7 +38,6 @@ detail.
   `background.surface`, white title. DD 07 / 07b / 07c all use it. `RecallResult
   state="Miss"` is the graded version, `#532831` with a red title, which is wrong for
   the drill: the drill is practice, not scored performance. Built inline in
-  `drill.module.css`. **THREE consumers — this is past the promotion bar.** It is not
-  promoted yet only because promoting it means adding a neutral state to
-  `RecallResult`, whose Figma set I could not re-read (MCP rate limit). Promote to
-  `RecallResult state="Neutral"` once that is checked.
+  `drill.module.css`. **PROMOTED 2026-09-21** to `RecallResult state="Neutral"`
+  (surface fill, `text.primary` title) with its own story. All three drill stumble
+  screens use it and the inline CSS is deleted. Closed.

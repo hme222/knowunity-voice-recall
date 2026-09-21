@@ -36,7 +36,7 @@ export default function DrillPassPage({ params }: { params: Promise<{ step: stri
       topNavigation={<DrillBar step={n} onExit={() => router.push('/picker')} />}
       bottomContent={
         <div className={actionRowClass}>
-          <Button CTA="Type instead" variant="Secondary" size="M" onClick={() => router.push(`/text/turn?term=1`)} />
+          <Button CTA="Type instead" variant="Secondary" size="M" onClick={() => router.push(`/text/turn?term=1&drill=${n}`)} />
           <Button CTA="Skip" variant="Tertiary" size="M" onClick={() => router.push('/picker')} />
         </div>
       }

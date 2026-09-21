@@ -12,8 +12,7 @@
 
 .root {
   --pulse-duration: calc(var(--motion-semantic-duration-ambient) * 1ms);
-  /* Rings dim rather than vanish when paused: still there, plainly not listening. */
-  --pulse-paused-opacity: 0.3;
+
 }
 
 .body {
@@ -69,12 +68,12 @@
 .micWrap[data-paused='true'] .ring {
   animation: none;
   transform: scale(1);
-  opacity: var(--pulse-paused-opacity);
+  opacity: var(--component-mic-button-pulse-paused-opacity);
 }
 
 @keyframes pulse {
-  from { transform: scale(0.92); }
-  to { transform: scale(1.04); }
+  from { transform: scale(var(--component-mic-button-pulse-rest-scale)); }
+  to { transform: scale(var(--component-mic-button-pulse-peak-scale)); }
 }
 
 /* voice-ux Principle 1: status must never rest on motion alone. With motion off the

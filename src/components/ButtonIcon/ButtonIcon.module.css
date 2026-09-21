@@ -142,7 +142,7 @@
 }
 
 .spinner {
-  animation: spin calc(var(--motion-semantic-duration-ambient) * 1ms) var(--motion-semantic-easing-ambient) infinite;
+  animation: spin calc(var(--motion-semantic-duration-ambient) * 1ms) var(--motion-semantic-easing-linear) infinite;
 }
 @keyframes spin {
   to {
