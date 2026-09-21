@@ -58,6 +58,15 @@ function MissScreen({ index }: { index: number }) {
       }
       bottomContent={
         <div className={styles.actions}>
+          {/* Attempts 1 and 2 were byte-identical: one hint, same copy, same buttons.
+              A second hint is out of scope (sprint-context § "Not building this
+              sprint"), so this invents none — it says where the student is on the
+              ladder. It lives in the action zone because at the end of the body it
+              rendered below the fold, which differentiates a DOM dump and nothing a
+              student can see. */}
+          {step?.canRetry && attempt >= 2 && (
+            <p className={styles.ladderNote}>One more go, then I&rsquo;ll show you the answer.</p>
+          )}
           {/* The frame's `primaryRow`: two buttons side by side, with Skip as plain
               text beneath. The XP line moves up into the content region, where the
               frame puts it in the app bar area rather than the action zone. */}

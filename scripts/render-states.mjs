@@ -8,6 +8,34 @@ import { writeFileSync } from 'node:fs'
 const BASE = 'http://localhost:3000'
 
 // name, route, and an optional action to reach a sub-state that has no route of its own.
+/** Writes a resolved requeue, so 06b's two branches can be told apart. */
+const seedRequeue = (bucket) => async (page) => {
+  await page.evaluate(
+    (b) =>
+      sessionStorage.setItem(
+        'sayitback.session',
+        JSON.stringify({ outcomes: [{ index: 1, bucket: b, xp: b === 'Unaided' ? 10 : 0, requeued: true }], startedAt: Date.now(), lastAt: Date.now() }),
+      ),
+    bucket,
+  )
+  await page.reload({ waitUntil: 'networkidle' })
+  await page.waitForTimeout(350)
+}
+
+/** Writes the confidence tap 03 Processing would have stored, then reloads. */
+const seedTap = (index, wasSure, right) => async (page) => {
+  await page.evaluate(
+    (v) =>
+      sessionStorage.setItem(
+        'sayitback.session',
+        JSON.stringify({ outcomes: [], startedAt: Date.now(), lastAt: Date.now(), confidence: { [v.index]: { wasSure: v.wasSure, right: v.right } } }),
+      ),
+    { index, wasSure, right },
+  )
+  await page.reload({ waitUntil: 'networkidle' })
+  await page.waitForTimeout(350)
+}
+
 const STATES = [
   ['door-quiz', '/'],
   ['door-quiz-result', '/door/quiz/result'],
@@ -37,8 +65,8 @@ const STATES = [
   ['05a-reveal', '/session/reveal/1'],
   ['repeat', '/session/repeat/1'],
   ['06-lockin', '/session/lock-in'],
-  ['06b-lockin-second-skipped', '/session/lock-in/second'],
-  ['06b-lockin-second-answered', '/session/lock-in/second?answered=1'],
+  ['06b-lockin-second-skipped', '/session/lock-in/second', seedRequeue('Worth revisiting')],
+  ['06b-lockin-second-answered', '/session/lock-in/second?answered=1', seedRequeue('Unaided')],
   ['07-recap', '/session/recap'],
   ['07a-practice', '/session/recap/practice'],
   ['blank-term', '/session/blank/1'],
@@ -68,6 +96,21 @@ const STATES = [
   ['dd07c-stumble3', '/drill/miss/echo'],
   ['dd08-complete', '/drill/complete'],
   ['dd08a-round-sheet', '/drill/complete/round'],
+  // Query-parameter variants. The 03 pass rendered 59 states and reported "no
+  // collisions", which was the wrong test: it never varied a query param, and every
+  // collision the panel found lived there. These are the states that differ only by URL.
+  // These four differ by a tap STORED in sessionStorage, not by the URL. Without
+  // seeding it the pair renders identically and the harness reports a false collision
+  // — which is what happened on the first run of this list.
+  ['04-pass-sure', '/session/pass/2?sure=1&attempt=1', seedTap(2, true, true)],
+  ['04-pass-unsure', '/session/pass/2?sure=0&attempt=1', seedTap(2, false, true)],
+  ['05-miss-sure', '/session/miss/2?sure=1&attempt=1', seedTap(2, true, false)],
+  ['05-miss-unsure', '/session/miss/2?sure=0&attempt=1', seedTap(2, false, false)],
+  ['05-miss-attempt2', '/session/miss/1?attempt=2&sure=0'],
+  ['05-miss-attempt3-no-retry', '/session/miss/1?attempt=3&sure=0'],
+  ['04a-unclear-attempt2', '/session/unclear/1?attempt=2'],
+  ['text-turn-sticky', '/text/turn?term=1&sticky=1'],
+  ['text-turn-drill', '/text/turn?term=1&drill=2'],
 ]
 
 const browser = await chromium.launch()

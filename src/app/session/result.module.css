@@ -64,3 +64,14 @@
   font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
   line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
 }
+
+/* Where the student is on the retry ladder. Not a hint — the ladder has one hint by
+   decision — just the position on it, which the screen already knew. */
+.ladderNote {
+  margin: 0;
+  text-align: center;
+  color: var(--color-semantic-text-tertiary);
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+}
