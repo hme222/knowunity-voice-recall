@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Button, Chips, HintCard, MascotSlot, MicButton, RecallResult, ScreenShell, StrengthMeter } from '@/components'
+import { Button, Chips, MascotSlot, MicButton, ScreenShell } from '@/components'
 import { DRILL_MISSED_WORD, STUMBLES } from '@/lib/session'
 import styles from '../../drill.module.css'
 import { DrillBar } from '../../DrillBar'
@@ -14,10 +14,13 @@ import { DrillBar } from '../../DrillBar'
 //
 // Scaffold state resets per definition, per session — which needs a per-word stumble
 // count, unconfirmed with engineering (docs/sprint-context.md open question 8).
+//
+// Built on DD 07's shape: mascot, verdict, neutral result card, the prompt card, then
+// the mic alone. The graded red card and the full-bleed meter are not in this family.
 
 export default function DrillLetterPage() {
   const router = useRouter()
-  const blanked = `${DRILL_MISSED_WORD[0]}${'_'.repeat(DRILL_MISSED_WORD.length)}`
+  const blanked = `${DRILL_MISSED_WORD[0]}${'_'.repeat(DRILL_MISSED_WORD.length - 1)}`
 
   return (
     <ScreenShell
@@ -32,17 +35,24 @@ export default function DrillLetterPage() {
         />
       }
     >
-      <div className={styles.body}>
-        <StrengthMeter fill={28} label="Barely moved — this one was prompted" />
-        <MascotSlot size="XL" expression="determined" className={styles.mascotCentred} />
-        <Chips Text={STUMBLES.second.verdict} size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} className={styles.verdictChip} />
-        <RecallResult state="Miss" title={STUMBLES.second.copy} transcript="Starts with" />
-        {/* The blanked cue IS the first-letter hint. A HintCard restating it cost
-            120px and pushed the mic below the fold. */}
-        <HintCard body={`…every bond’s ${blanked} are split evenly…`} />
-        {/* The mic sits with the prompt it answers, not in the action zone: 132px of
-            this screen was being clipped, and the card it sliced was the hint. */}
-        <div className={styles.micZone}>
+      <div className={styles.frameBody}>
+        <MascotSlot size="2XL" expression="determined" />
+        <Chips
+          Text={STUMBLES.second.verdict}
+          size="S"
+          color="Partial"
+          active
+          showLeftIcon={false}
+          showRightIcon={false}
+        />
+        <div className={[styles.resultCard, styles.fullWidth].join(' ')}>
+          <p className={styles.resultTitle}>{STUMBLES.second.copy}</p>
+          <p className={styles.resultLabel}>Starts with</p>
+          <p className={styles.resultBody}>
+            &hellip;every bond&rsquo;s {blanked} are split evenly&hellip;
+          </p>
+        </div>
+        <div className={styles.frameMic}>
           <MicButton state="Idle" onClick={() => router.push('/drill/miss/echo')} />
         </div>
       </div>

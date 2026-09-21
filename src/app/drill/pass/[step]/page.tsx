@@ -2,8 +2,8 @@
 
 import { use } from 'react'
 import { useRouter } from 'next/navigation'
-import { actionRowClass, Button, MascotSlot, MicButton, ScreenShell, StrengthMeter } from '@/components'
-import { drillRung } from '@/lib/session'
+import { actionRowClass, Button, ChatBubble, MascotSlot, MicButton, ScreenShell, StrengthMeter } from '@/components'
+import { drillRung, DRILL_TERM } from '@/lib/session'
 import { DrillBar } from '../../DrillBar'
 import styles from '../../drill.module.css'
 
@@ -13,6 +13,12 @@ import styles from '../../drill.module.css'
 //
 // The meter fills by unaided coverage, not by which pass this is — that is the whole
 // design. Knowie grows a step each pass: within-session muscle, reset per definition.
+//
+// REBUILT TO THE FRAME 2026-09-21. This screen had been assembled from its parts in a
+// different order: a full-bleed labelled meter first, the instruction and the cue as
+// two loose paragraphs, the term as plain text, and the mascot pushed down beside the
+// mic. DD 01 reads top to bottom: mascot, meter, term pill, one card carrying the
+// instruction AND the cue, then the mic alone in the space above the actions.
 
 export default function DrillPassPage({ params }: { params: Promise<{ step: string }> }) {
   const router = useRouter()
@@ -35,15 +41,23 @@ export default function DrillPassPage({ params }: { params: Promise<{ step: stri
         </div>
       }
     >
-      <div className={styles.body}>
-        <StrengthMeter fill={rung.coverage} label="How much you can say unaided" />
-        <p className={styles.note}>Say the whole thing. However it comes out.</p>
-        <p className={styles.cue}>{rung.cue}</p>
-        {/* Mascot and mic together in the middle. Stacking the mic with the two
-            buttons made a 264px action zone and squeezed middleContent to 442px,
-            which is what pressed the mic onto Knowie. */}
-        <div className={styles.micZone}>
-          <MascotSlot size="2XL" expression="determined" />
+      <div className={styles.frameBody}>
+        <MascotSlot size="2XL" expression="determined" />
+        {/* No caption. The frame runs the meter bare at 220 centred — the label
+            "How much you can say unaided" was an addition. */}
+        <StrengthMeter fill={rung.coverage} />
+        <p className={styles.termPill}>
+          Define: <span className={styles.termPillName}>{DRILL_TERM.name}</span>
+        </p>
+        {/* One card, not two elements. The frame puts the instruction in the card's
+            title and the thinning cue in its body. */}
+        <ChatBubble
+          className={styles.fullWidth}
+          showTitle
+          title="Say the whole thing. However it comes out."
+          body={rung.cue}
+        />
+        <div className={styles.frameMic}>
           <MicButton state="Idle" onClick={() => router.push(`/drill/recording?step=${n}`)} />
         </div>
       </div>

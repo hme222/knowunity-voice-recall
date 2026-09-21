@@ -1,38 +1,48 @@
-/* Figma `strengthMeter` (15808:17668). Track 220×10, fully rounded.
+/* Figma `strengthMeter` (15808:17668). Track 220x10, fully rounded.
 
-   The Figma original carried literal hex on the track and all four fills, and its ramp
-   ran #c0dd97 → #97c459 → #639922 → #3b6d11 — darkening as it filled, so a full meter
-   was the least visible state on a dark background, and none of those greens existed
-   in the palette. Rebuilt with palette colours running the other way: the meter gets
-   more present as mastery grows, which is what a reward should do.
-   See docs/sprint-context.md open question 14. */
+   ALIGNED TO THE FIGMA RENDER 2026-09-21, on the designer's call. The previous build
+   inverted the ramp — palette teals brightening as the meter filled — on the reasoning
+   that a full meter should be the most present state. Two things were wrong with it:
+   the low band sat at green.900 (#0A2E22) on a near-black track, so an empty meter
+   looked like no meter at all, and the track itself was background.stacking, a 10%
+   white alpha rather than the component's opaque grey.
+
+   Figma's ramp darkens as it fills: #C0DD97 -> #97C459 -> #639922 -> #3B6D11 on a
+   #615E63 track. Every one of those is now a token; none is written here. See
+   docs/sprint-context.md open question 14. */
 
 .root {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: calc(var(--size-primitive-space-200) * 1px);
 }
 
 .track {
-  height: calc(var(--size-primitive-space-300) * 1px);
+  /* 220, the component's own width, centred — not stretched to the screen margin.
+     Full-bleed it read as a page-wide banner rather than a small coverage gauge. */
+  width: calc(var(--component-strength-meter-track-width) * 1px);
+  max-width: 100%;
+  height: calc(var(--component-strength-meter-track-height) * 1px);
   border-radius: calc(var(--size-primitive-radius-full) * 1px);
-  background: var(--color-semantic-background-stacking);
+  background: var(--component-strength-meter-track);
   overflow: hidden;
 }
 
 .fill {
   height: 100%;
   border-radius: calc(var(--size-primitive-radius-full) * 1px);
-  background: var(--color-semantic-accent-green-subtle);
+  background: var(--component-strength-meter-fill-low);
   transition:
     width calc(var(--motion-semantic-duration-standard) * 1ms) ease-out,
     background-color calc(var(--motion-semantic-duration-standard) * 1ms) ease-out;
 }
 
-/* Brighter as coverage grows. Three steps, not four: the palette has two usable
-   greens at this brightness and inventing a third would be a literal. */
-.fill[data-band='mid'] { background: var(--color-semantic-accent-green-bold); }
-.fill[data-band='high'] { background: var(--color-semantic-text-success); }
+/* Four bands, matching Figma's four distinct fills. Its 0 and 25 variants share one
+   colour, so `low` covers everything under 50. */
+.fill[data-band='mid'] { background: var(--component-strength-meter-fill-mid); }
+.fill[data-band='high'] { background: var(--component-strength-meter-fill-high); }
+.fill[data-band='full'] { background: var(--component-strength-meter-fill-full); }
 
 @media (prefers-reduced-motion: reduce) {
   .fill { transition: none; }

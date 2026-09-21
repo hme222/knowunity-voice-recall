@@ -111,3 +111,97 @@
 .mascotCentred {
   align-self: center;
 }
+
+/* ---- The DD frames' own layout (15782:11696 DD 01, 15782:12362 DD 07) ----
+   The drill screens were built bottom-up from their parts and drifted from the
+   frames' actual order. Both frames read: mascot at the top, then the screen's one
+   piece of status, then the cards, then the control. */
+
+/* The frames stack a centred column, not a stretched one. */
+.frameBody {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  align-items: center;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+}
+
+/* Cards still span the margin; only the small status elements hug. */
+/* width too, not just align-self: HintCard carries its own width:fit-content, which
+   wins over stretch and left it hugging "electrons" where the frame spans the margin. */
+.frameBody > .fullWidth {
+  align-self: stretch;
+  width: 100%;
+}
+
+/* DD 01's "Define: Formal charge" pill. Not in Storybook — logged in
+   component-gaps.md. A chip would be wrong: Chips' colours are verdict colours, and
+   this is a neutral label for what the student is about to define. */
+.termPill {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  padding: calc(var(--size-primitive-space-150) * 1px) calc(var(--size-primitive-space-300) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  background: var(--color-semantic-background-surface);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  color: var(--color-semantic-text-secondary);
+}
+
+.termPillName {
+  color: var(--color-semantic-brand-bold);
+}
+
+/* DD 07's result card. NEUTRAL, not the graded error red: the drill is practice, not
+   scored performance, so a miss here is not an error. Sampled from the frame the card
+   is a raised grey with a white title, where RecallResult state="Miss" would paint it
+   #532831 with a red title. Logged in component-gaps.md — three drill screens use it,
+   so it is a promotion candidate once RecallResult's Figma set can be checked. */
+.resultCard {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-semantic-card-label-gap) * 1px);
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  background: var(--color-semantic-background-surface);
+}
+
+.resultTitle {
+  margin: 0;
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-headline-s-font-weight);
+  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
+}
+
+.resultLabel {
+  margin: 0;
+  color: var(--color-semantic-text-tertiary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+}
+
+.resultBody {
+  margin: 0;
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+}
+
+/* The mic sits alone between the cards and the action zone, as both frames show. */
+.frameMic {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.frameMic > * {
+  flex-shrink: 0;
+}

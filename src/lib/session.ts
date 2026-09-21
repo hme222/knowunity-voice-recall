@@ -211,15 +211,15 @@ export const DRILL_RUNGS: DrillRung[] = [
   },
   {
     step: 2,
-    cue: "Formal charge is the charge on an atom when every bond's \u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 are split evenly between the two atoms.",
+    cue: "Formal charge is the charge on an atom when every bond's _________ are split evenly between the two atoms.",
     coverage: 50,
   },
   {
     step: 3,
-    cue: "Formal charge is the \u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 on an atom when every bond's \u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 are split \u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 between the two atoms.",
+    cue: "Formal charge is the ______ on an atom when every bond's _________ are split ______ between the two atoms.",
     coverage: 75,
   },
-  { step: 4, cue: '\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 \u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 \u2014 all of it, no cues.', coverage: 100 },
+  { step: 4, cue: '______ ______ \u2014 all of it, no cues.', coverage: 100 },
 ]
 
 /**

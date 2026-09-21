@@ -10,7 +10,7 @@ through.
 
 ## Colour primitives
 
-`color.primitive.*` — 55 tokens
+`color.primitive.*` — 60 tokens
 
 Raw values. Never referenced directly by a component.
 
@@ -22,6 +22,7 @@ Raw values. Never referenced directly by a component.
 | `color.primitive.navy.900` | `#1A1C26` |  | Raw value, not for direct use. |
 | `color.primitive.navy.950` | `#090C18` |  | Raw value, not for direct use. |
 | `color.primitive.neutral.0` | `#FFFFFF` |  | Raw value, not for direct use. |
+| `color.primitive.neutral.600` | `#615E63` |  | Raw value, not for direct use. Sampled from the Figma component render of `strengthMeter` (15808:17668). The meter track — a mid grey, opaque, not an alpha layer over the page. |
 | `color.primitive.neutral.950` | `#0A0A0A` |  | Raw value, not for direct use. |
 | `color.primitive.violet.50` | `#F4F2FF` |  | Raw value, not for direct use. |
 | `color.primitive.violet.100` | `#E4E0FF` |  | Raw value, not for direct use. |
@@ -71,6 +72,10 @@ Raw values. Never referenced directly by a component.
 | `color.primitive.alpha.dark-10` | `#0A0A0A1A` |  | Raw value, not for direct use. |
 | `color.primitive.alpha.dark-50` | `#0A0A0A80` |  | Raw value, not for direct use. |
 | `color.primitive.alpha.glass-60` | `#3D3D3D99` |  | Raw value, not for direct use. |
+| `color.primitive.moss.200` | `#C0DD97` |  | Raw value, not for direct use. Sampled from the Figma component render of `strengthMeter` (15808:17668). The meter at 0 and 25. |
+| `color.primitive.moss.400` | `#97C459` |  | Raw value, not for direct use. Sampled from the Figma component render of `strengthMeter` (15808:17668). The meter at 50. |
+| `color.primitive.moss.600` | `#639922` |  | Raw value, not for direct use. Sampled from the Figma component render of `strengthMeter` (15808:17668). The meter at 75. |
+| `color.primitive.moss.800` | `#3B6D11` |  | Raw value, not for direct use. Sampled from the Figma component render of `strengthMeter` (15808:17668). The meter at 100. |
 
 ## Colour semantics
 
@@ -361,7 +366,7 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ## Component tokens
 
-`component.*` — 22 tokens
+`component.*` — 29 tokens
 
 > Component tokens exist only when a component's bindings actually branch by state or variant in a way that benefits from its own indirection layer between it and the semantic tokens, not as documentation-only aliases for a value that never changes. micButton is the only entry here on purpose: its four states each pair with a different semantic token, and these tokens are the real thing its Figma variables are bound to, not a restatement of them. chatBubble and hintCard never branch, they bind straight to semantic tokens with nothing in between, so a component.chatBubble.* or component.hintCard.* entry here would just be a second name for a value already named once. optionRow does branch by state the same way micButton does, four variants, four different fills, but its Figma variants bind straight to the semantic tokens directly rather than through a component-specific layer. That's an inconsistency with micButton's pattern, not a mistake exactly, treat micButton's indirection layer as the older, legacy approach rather than the template: an indirection layer that never diverges from what it aliases is upkeep with no payoff. Don't add one to a new component by default. Add one only when there's a concrete reason a component's own token might need to move independently of the semantic token it currently matches.
 
@@ -389,7 +394,14 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 | `component.micButton.pulse.ringOuter` | `240` |  | Outermost pulse ring, twice the mic diameter. |
 | `component.micButton.diameter` | `{size.primitive.illustration.1500}` | `120` | Mic circle diameter, the primary tap target in the recall loop. |
 | `component.micButton.glyph.size` | `48` |  | Mic glyph box inside the 120px circle. A literal, bound in Figma on every state's glyph frame; no primitive of the right kind is 48 (tapTarget is a hit-area rule, not an icon size). |
+| `component.strengthMeter.track` | `{color.primitive.neutral.600}` | `#615E63` | The unfilled track. Opaque mid grey; it was background.stacking, a 10% white alpha that read as near-black on the page and made an empty meter look like no meter. |
+| `component.strengthMeter.fill.low` | `{color.primitive.moss.200}` | `#C0DD97` | Coverage under 50. Figma holds this value for both its 0 and 25 variants. |
+| `component.strengthMeter.fill.mid` | `{color.primitive.moss.400}` | `#97C459` | Coverage 50 to under 75. |
+| `component.strengthMeter.fill.high` | `{color.primitive.moss.600}` | `#639922` | Coverage 75 to under 100. |
+| `component.strengthMeter.fill.full` | `{color.primitive.moss.800}` | `#3B6D11` | Coverage at 100, the whole definition unaided. |
+| `component.strengthMeter.trackHeight` | `{size.primitive.space.300}` | `12` | Track height, 12. The Figma component draws 220x10; 10 is not a step in this scale and 12 is the nearest, which is what was already built. |
+| `component.strengthMeter.trackWidth` | `220` |  | Track width, 220. The Figma component draws 220x10 and the DD frames use it at that width, centred — not stretched to the screen margin, which is what made the meter read as a page-wide banner rather than a small coverage gauge. |
 
 ---
 
-292 tokens across 10 groups.
+304 tokens across 10 groups.

@@ -56,16 +56,19 @@ function MissScreen({ index }: { index: number }) {
               text beneath. The XP line moves up into the content region, where the
               frame puts it in the app bar area rather than the action zone. */}
           <div className={actionRowClass}>
+            {/* Reveal is the Secondary and Try again is the Primary, per the frame
+                and SPEC #5. They were inverted, which made giving up the emphasised
+                choice on a screen whose whole job is to invite another attempt. */}
             <Button
               CTA="Reveal answer"
-              variant="Primary"
+              variant="Secondary"
               size="M"
               fullWidth
               onClick={() => router.push(`/session/reveal/${index}`)}
             />
             <Button
               CTA="Try again"
-              variant="Secondary"
+              variant="Primary"
               size="M"
               fullWidth
               onClick={() => router.push(`/session/recording/${index}?attempt=${attempt + 1}&hinted=1`)}

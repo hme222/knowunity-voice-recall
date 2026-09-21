@@ -26,3 +26,19 @@ detail.
 | Home surround (greeting, plan cards, composer chip row) | Home ×3 | Inline in `src/app/home/HomeShell.tsx` — the real app's home isn't ours to reproduce |
 | Drill top bar (ring + fraction + Drill chip) | Drill ×9 | Inline in `src/app/drill/DrillBar.tsx` — drill-only, and it's the piece that goes if the coverage judge is confirmed |
 | Transcript sheet content, three bucket variants | Transcript sheet, DD 08a | Uses `BottomSheet` + `PickerRow raised`; the per-bucket copy is screen-local |
+
+## 2026-09-21 — the DD frame rebuild
+
+- **`termPill`** — DD 01's "Define: Formal charge" pill: surface fill, radius-full, the
+  label in text.secondary and the term in brand.bold. Built inline in
+  `src/app/drill/drill.module.css` for `/drill/pass/[step]`. Not `Chips`: every Chips
+  colour is a verdict colour, and this is a neutral label for what is about to be
+  defined. ONE consumer, so it stays screen-local.
+- **`resultCard`** (neutral result) — title + "You said" + transcript on
+  `background.surface`, white title. DD 07 / 07b / 07c all use it. `RecallResult
+  state="Miss"` is the graded version, `#532831` with a red title, which is wrong for
+  the drill: the drill is practice, not scored performance. Built inline in
+  `drill.module.css`. **THREE consumers — this is past the promotion bar.** It is not
+  promoted yet only because promoting it means adding a neutral state to
+  `RecallResult`, whose Figma set I could not re-read (MCP rate limit). Promote to
+  `RecallResult state="Neutral"` once that is checked.

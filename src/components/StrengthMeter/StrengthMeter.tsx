@@ -12,6 +12,9 @@ import styles from './StrengthMeter.module.css'
 //   1. the judge must score unaided coverage per pass — unconfirmed with engineering
 //   2. help holds the meter, never drops it: a reveal or a miss parks it rather than
 //      reducing it. A student must never watch progress go backwards for asking.
+//
+// Colour is bound to the Figma component render, including its darkens-as-it-fills
+// ramp. See the module CSS for why that was reverted to Figma on 2026-09-21.
 
 export type StrengthMeterProps = {
   /** Coverage of the definition the student can say unaided, 0–100. */
@@ -21,9 +24,12 @@ export type StrengthMeterProps = {
   className?: string
 }
 
+// Figma's variants step at 0/25/50/75/100 and its 0 and 25 share a colour, so these
+// are its four distinct fills expressed as ranges of a continuous value.
 function band(fill: number) {
+  if (fill >= 100) return 'full'
   if (fill >= 75) return 'high'
-  if (fill >= 40) return 'mid'
+  if (fill >= 50) return 'mid'
   return 'low'
 }
 

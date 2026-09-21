@@ -12,6 +12,11 @@
   background: var(--color-semantic-background-surface);
 }
 .label,
+/* DD 07 tints this label coral: the drill hands the word over rather than hinting at
+   it, and the frame marks that difference on the label. */
+.root[data-tone='missingWord'] .label {
+  color: var(--color-semantic-accent-coral-on-subtle);
+}
 .body {
   margin: 0;
 }

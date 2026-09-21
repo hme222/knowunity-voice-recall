@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Button, Chips, MascotSlot, MicButton, RecallResult, ScreenShell, StrengthMeter } from '@/components'
+import { Button, Chips, MascotSlot, MicButton, ScreenShell } from '@/components'
 import { DRILL_MISSED_WORD, STUMBLES } from '@/lib/session'
 import styles from '../../drill.module.css'
 import { DrillBar } from '../../DrillBar'
@@ -15,6 +15,9 @@ import { DrillBar } from '../../DrillBar'
 //
 // Echoing barely fills the meter, because echoing is not unaided recall. That is the
 // honest trade: the student always gets out, and the meter never lies about how.
+//
+// Built on DD 07's shape. The word to echo is the card's body, at echo size, so the
+// one thing the student has to say is the one thing the card is for.
 
 export default function DrillEchoPage() {
   const router = useRouter()
@@ -31,16 +34,22 @@ export default function DrillEchoPage() {
         />
       }
     >
-      <div className={styles.body}>
-        <StrengthMeter fill={30} label="Echoing isn't unaided — but it gets you moving" />
-        <MascotSlot size="2XL" expression="laughing" className={styles.mascotCentred} />
-        <Chips Text={STUMBLES.third.verdict} size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} className={styles.verdictChip} />
-        <RecallResult state="Miss" title={STUMBLES.third.copy} transcript="After me" />
-        <p className={styles.echoWord}>&ldquo;{DRILL_MISSED_WORD}&rdquo;</p>
-        {/* One instruction, not three. "Now you", a repeat of the sentence, and the
-            mic's own label were all saying the same thing; the label carries it. */}
-        <div className={styles.micZone}>
-          <p className={styles.note}>Now you</p>
+      <div className={styles.frameBody}>
+        <MascotSlot size="2XL" expression="laughing" />
+        <Chips
+          Text={STUMBLES.third.verdict}
+          size="S"
+          color="Partial"
+          active
+          showLeftIcon={false}
+          showRightIcon={false}
+        />
+        <div className={[styles.resultCard, styles.fullWidth].join(' ')}>
+          <p className={styles.resultTitle}>{STUMBLES.third.copy}</p>
+          <p className={styles.resultLabel}>After me</p>
+          <p className={styles.echoWord}>&ldquo;{DRILL_MISSED_WORD}&rdquo;</p>
+        </div>
+        <div className={styles.frameMic}>
           <MicButton
             state="Idle"
             label={`Say ${DRILL_MISSED_WORD} out loud`}
