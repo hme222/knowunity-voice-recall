@@ -6,6 +6,7 @@
    `flex: 1` on .middle is a sanctioned exception — see SPEC.md § Conventions. */
 
 .root {
+  position: relative;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -50,4 +51,19 @@
 .sheetOnly {
   height: calc(var(--component-scaffold-bottom-sheet-only-height) * 1px);
   flex-shrink: 0;
+}
+
+/* Figma's `Bottom-sheet background` rectangle: full-bleed, dims the screen behind a
+   sheet. Bigger than the frame in Figma (440×956) so it bleeds past the edges. */
+.sheetScrim {
+  position: absolute;
+  inset: 0;
+  background: var(--color-semantic-background-scrim);
+  z-index: 1;
+}
+
+/* The sheet itself sits above the scrim. */
+.sheetSlot {
+  position: relative;
+  z-index: 2;
 }
