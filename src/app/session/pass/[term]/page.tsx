@@ -2,6 +2,7 @@
 
 import { Suspense, use, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { goToExit, openSheet } from '@/lib/navigation'
 import { AppBar, Button, MascotSlot, ProgressIndicator, RecallResult, ScreenShell, SessionFraction } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { answerFor, getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS, XP } from '@/lib/session'
@@ -31,7 +32,7 @@ function PassScreen({ index }: { index: number }) {
     <ScreenShell
       topNavigation={
         <>
-          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => router.push('/session/exit')}>
+          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => goToExit(router)}>
             <ProgressIndicator progress={progressFor(index)} thickness="16" label="Questions" current={index} total={TOTAL_TERMS} />
           </AppBar>
           <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
@@ -47,7 +48,7 @@ function PassScreen({ index }: { index: number }) {
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
         <RecallResult state="Pass" title={current.passTitle} transcript={`“${answerFor(index)}”`} />
-        <Button CTA="See the full transcript" variant="Tertiary" size="S" fullWidth onClick={() => router.push('/session/transcript/passed')} />
+        <Button CTA="See the full transcript" variant="Tertiary" size="S" fullWidth onClick={() => openSheet(router, `/session/transcript/passed?term=${index}`)} />
       </div>
     </ScreenShell>
   )

@@ -2,6 +2,7 @@
 
 import { Suspense, use } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { goToExit, openSheet } from '@/lib/navigation'
 import {
   AppBar,
   Button,
@@ -44,7 +45,7 @@ function MissScreen({ index }: { index: number }) {
     <ScreenShell
       topNavigation={
         <>
-          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => router.push('/session/exit')}>
+          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => goToExit(router)}>
             <ProgressIndicator progress={progressFor(index)} thickness="16" label="Questions" current={index} total={TOTAL_TERMS} />
           </AppBar>
           <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
@@ -72,7 +73,7 @@ function MissScreen({ index }: { index: number }) {
               onClick={() => router.push(`/session/recording/${index}?attempt=${attempt + 1}&hinted=1`)}
             />
           </div>
-          <Button CTA="See the full transcript" variant="Tertiary" size="S" fullWidth onClick={() => router.push('/session/transcript/revealed')} />
+          <Button CTA="See the full transcript" variant="Tertiary" size="S" fullWidth onClick={() => openSheet(router, `/session/transcript/revealed?term=${index}`)} />
           <Button CTA="Skip · no XP" variant="Tertiary" size="S" fullWidth onClick={skip} />
         </div>
       }

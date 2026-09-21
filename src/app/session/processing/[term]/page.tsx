@@ -2,6 +2,7 @@
 
 import { Suspense, use, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { goToExit } from '@/lib/navigation'
 import { AppBar, MascotSlot, ProgressIndicator, ScreenShell, SessionFraction, Button } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { getTerm, progressFor, revisitsPending, verdictFor, TOTAL_TERMS } from '@/lib/session'
@@ -64,7 +65,7 @@ function ProcessingScreen({ index }: { index: number }) {
             variant="leftIconButtonOnly"
             leftIcon={<CloseIcon />}
             leftLabel="Leave"
-            onLeft={() => router.push('/session/exit')}
+            onLeft={() => goToExit(router)}
           >
             <ProgressIndicator
               progress={progressFor(index)}

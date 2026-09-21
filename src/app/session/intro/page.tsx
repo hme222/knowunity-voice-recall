@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { goToExit } from '@/lib/navigation'
 import { AppBar, Button, ChatBubble, MascotSlot, ProgressIndicator, ScreenShell, SessionFraction } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { startSession, TOTAL_TERMS } from '@/lib/session'
@@ -27,7 +28,7 @@ export default function IntroPage() {
             variant="leftIconButtonOnly"
             leftIcon={<CloseIcon />}
             leftLabel="Leave"
-            onLeft={() => router.push('/session/exit')}
+            onLeft={() => goToExit(router)}
           >
             {/* Nothing answered yet, so the bar is empty and the label states the
                 size of the thing rather than claiming you are already on term 1. */}

@@ -2,6 +2,7 @@
 
 import { Suspense, use } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { goToExit } from '@/lib/navigation'
 import { AppBar, Button, MascotSlot, ProgressIndicator, RecallResult, ScreenShell, SessionFraction } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS } from '@/lib/session'
@@ -37,7 +38,7 @@ function UnclearScreen({ index }: { index: number }) {
     <ScreenShell
       topNavigation={
         <>
-          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => router.push('/session/exit')}>
+          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => goToExit(router)}>
             <ProgressIndicator progress={progressFor(index)} thickness="16" label="Questions" current={index} total={TOTAL_TERMS} />
           </AppBar>
           <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />

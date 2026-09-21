@@ -2,6 +2,7 @@
 
 import { use } from 'react'
 import { useRouter } from 'next/navigation'
+import { goToExit } from '@/lib/navigation'
 import { AppBar, Button, ChatBubble, MascotSlot, MicButton, ScreenShell } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { getTerm } from '@/lib/session'
@@ -32,7 +33,7 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
           variant="leftIconButtonOnly"
           leftIcon={<CloseIcon />}
           leftLabel="Leave"
-          onLeft={() => router.push('/session/exit')}
+          onLeft={() => goToExit(router)}
         />
       }
       bottomContent={

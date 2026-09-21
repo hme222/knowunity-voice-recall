@@ -1,9 +1,10 @@
 'use client'
 
-import { use } from 'react'
-import { useRouter } from 'next/navigation'
+import { Suspense, use } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { returnBack } from '@/lib/navigation'
 import { BottomSheet, PickerRow, ScreenShell, TextBlock } from '@/components'
-import { TERMS } from '@/lib/session'
+import { answerFor, getTerm, TERMS } from '@/lib/session'
 import styles from '../../../drill/drill.module.css'
 
 // The transcript sheet, reachable from the Miss result's eye icon and every Recap row.
@@ -33,21 +34,24 @@ const COPY = {
 
 type Bucket = keyof typeof COPY
 
-export default function TranscriptPage({ params }: { params: Promise<{ bucket: string }> }) {
+function TranscriptScreen({ bucket }: { bucket: string }) {
   const router = useRouter()
-  const { bucket } = use(params)
   const key = (bucket in COPY ? bucket : 'passed') as Bucket
-  const term = TERMS[0]
+  // WHICH row was opened. This was TERMS[0], so every row on Recap and every "See the
+  // full transcript" opened term 1's transcript — the sheet always showed the wrong
+  // term unless you happened to be on the first one.
+  const index = Number(useSearchParams().get('term') ?? '1')
+  const term = getTerm(index) ?? TERMS[0]
   const copy = COPY[key]
 
   return (
     <ScreenShell
       showBottomSheetBackground
       bottomSheetOnly={
-      <BottomSheet Title={copy.title} subtitle={copy.subtitle} onDismiss={() => router.back()}>
+      <BottomSheet Title={copy.title} subtitle={copy.subtitle} onDismiss={() => returnBack(router, '/session/recap')}>
           {key !== 'skipped' && (
             <>
-              <PickerRow raised variant="topic" label={`“${term.transcript}”`} />
+              <PickerRow raised variant="topic" label={`“${answerFor(term.index)}”`} />
             </>
           )}
           {key !== 'passed' && <PickerRow raised variant="topic" label={term.answer} />}
@@ -58,5 +62,14 @@ export default function TranscriptPage({ params }: { params: Promise<{ bucket: s
       <TextBlock variant="L" title="Session recap" showCaption={false} />
 
     </ScreenShell>
+  )
+}
+
+export default function TranscriptPage({ params }: { params: Promise<{ bucket: string }> }) {
+  const { bucket } = use(params)
+  return (
+    <Suspense fallback={null}>
+      <TranscriptScreen bucket={bucket} />
+    </Suspense>
   )
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { returnBack } from '@/lib/navigation'
 import { AppBar, Button, ChatBubble, OptionRow, ScreenShell } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { getTerm, useSession } from '@/lib/session'
@@ -22,7 +23,7 @@ export default function PracticePage() {
   return (
     <ScreenShell
       topNavigation={
-        <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Back" onLeft={() => router.back()} />
+        <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Back" onLeft={() => returnBack(router, '/session/recap')} />
       }
       bottomContent={
         <div className={styles.actions}>

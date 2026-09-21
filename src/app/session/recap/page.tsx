@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { openSheet } from '@/lib/navigation'
 import { AppBar, Button, ButtonIcon, MascotSlot, ScreenShell, StatChip, TextBlock } from '@/components'
 import { CloseIcon, EyeIcon } from '@/components/icons'
 import {
@@ -142,7 +143,7 @@ export default function RecapPage() {
                     size="S"
                     icon={<EyeIcon />}
                     label={`See what you said for ${getTerm(row.index)?.name}`}
-                    onClick={() => router.push(`/session/transcript/${TRANSCRIPT_BUCKET[bucket]}`)}
+                    onClick={() => openSheet(router, `/session/transcript/${TRANSCRIPT_BUCKET[bucket]}?term=${row.index}`)}
                   />
                 </div>
               ))}

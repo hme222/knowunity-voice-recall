@@ -2,6 +2,7 @@
 
 import { Suspense, use } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { goToExit } from '@/lib/navigation'
 import {
   AppBar,
   Button,
@@ -47,7 +48,7 @@ function IdleScreen({ index }: { index: number }) {
             variant="leftIconButtonOnly"
             leftIcon={<CloseIcon />}
             leftLabel="Leave"
-            onLeft={() => router.push('/session/exit')}
+            onLeft={() => goToExit(router)}
           >
             <ProgressIndicator
               progress={progressFor(index)}

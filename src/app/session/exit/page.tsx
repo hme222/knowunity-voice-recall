@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { returnBack } from '@/lib/navigation'
 import { Button, OptionRow, ScreenShell, TextBlock } from '@/components'
 import { XP } from '@/lib/session'
 import styles from './exit.module.css'
@@ -33,13 +34,20 @@ export default function ExitPage() {
     <ScreenShell
       bottomContent={
         <div className={styles.actions}>
-          <Button CTA="Keep learning" variant="Primary" size="M" fullWidth onClick={() => router.back()} />
+          <Button CTA="Keep learning" variant="Primary" size="M" fullWidth onClick={() => returnBack(router, '/session/idle/1')} />
           <Button CTA="Leave anyway" variant="Secondary" size="M" fullWidth onClick={() => router.push('/home/unlocked')} />
         </div>
       }
     >
       <div className={styles.body}>
         <TextBlock variant="L" title="What made you stop?" caption="Optional — it helps us make this better." />
+        {/* ABOVE the reasons. This sentence is the one thing a wavering student needs,
+            and it used to sit under eight reason buttons, 110px below the fold on a
+            390x844 screen — so the answer to "what do I lose if I stop" was the one
+            thing you could not see. */}
+        <p className={styles.note}>
+          {`Your progress is saved. You'll keep the XP you've earned — only the +${XP.completionBonus} finishing bonus goes.`}
+        </p>
         <div className={styles.reasons}>
           {REASONS.map((reason) => (
             <OptionRow
@@ -50,9 +58,6 @@ export default function ExitPage() {
             />
           ))}
         </div>
-        <p className={styles.note}>
-          {`Your progress is saved. You'll keep the XP you've earned — only the +${XP.completionBonus} finishing bonus goes.`}
-        </p>
       </div>
     </ScreenShell>
   )

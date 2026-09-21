@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { goToExit } from '@/lib/navigation'
 import {
   AppBar,
   Button,
@@ -46,7 +47,7 @@ export default function LockInPage() {
     <ScreenShell
       topNavigation={
         <>
-          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => router.push('/session/exit')}>
+          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => goToExit(router)}>
             <ProgressIndicator progress="100" thickness="16" label="Questions" current={TOTAL_TERMS} total={TOTAL_TERMS} />
           </AppBar>
           <SessionFraction label={`Revisit ${plan.index} of ${plan.total}`} />

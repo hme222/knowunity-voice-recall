@@ -2,6 +2,7 @@
 
 import { use } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { goToExit } from '@/lib/navigation'
 import { Suspense } from 'react'
 import {
   AppBar,
@@ -50,7 +51,7 @@ function CapturedScreen({ index }: { index: number }) {
             variant="leftIconButtonOnly"
             leftIcon={<CloseIcon />}
             leftLabel="Leave"
-            onLeft={() => router.push('/session/exit')}
+            onLeft={() => goToExit(router)}
           >
             <ProgressIndicator
               progress={progressFor(index)}

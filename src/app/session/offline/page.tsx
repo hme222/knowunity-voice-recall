@@ -2,6 +2,7 @@
 
 import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { goToExit } from '@/lib/navigation'
 import { Button, MascotSlot, ScreenShell, Snackbar, TextBlock } from '@/components'
 import styles from '../interrupt.module.css'
 
@@ -28,7 +29,7 @@ function OfflineScreen() {
             fullWidth
             onClick={() => router.push(`/session/processing/${index}`)}
           />
-          <Button CTA="Leave for now" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/session/exit')} />
+          <Button CTA="Leave for now" variant="Tertiary" size="M" fullWidth onClick={() => goToExit(router)} />
         </div>
       }
     >

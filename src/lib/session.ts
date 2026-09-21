@@ -81,8 +81,12 @@ export const TERMS: Term[] = [
     title: 'Explain: Cell membrane',
     prompt: 'Say what the cell membrane does, in your own words. However you would explain it to a friend.',
     transcript: 'It is the layer around the cell that decides what gets in and what stays out.',
-    passTitle: 'That is it — you named the job and the mechanism.',
-    missTitle: 'Close — you described the cell wall, not the membrane.',
+    passTitle: 'That is it — the job and why it can be selective.',
+    // Was "you described the cell wall, not the membrane", which contradicted this
+    // term's own answer: the canned transcript says the membrane decides what gets in
+    // and out, and the answer says it controls what passes in and out. The miss has to
+    // point at what is actually missing from the transcript — the mechanism.
+    missTitle: 'The job is right. What it is made of is the part that explains how it chooses.',
     hint: 'Think about what the membrane is made of, and why that lets it choose.',
     answer:
       'The cell membrane is a phospholipid bilayer around the cell that controls which substances pass in and out.',

@@ -2,6 +2,7 @@
 
 import { use, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { goToExit } from '@/lib/navigation'
 import {
   AppBar,
   Button,
@@ -40,7 +41,7 @@ export default function RepeatPage({ params }: { params: Promise<{ term: string 
     <ScreenShell
       topNavigation={
         <>
-          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => router.push('/session/exit')}>
+          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => goToExit(router)}>
             <ProgressIndicator progress={progressFor(index)} thickness="16" label="Questions" current={index} total={TOTAL_TERMS} />
           </AppBar>
           <SessionFraction current={index} total={TOTAL_TERMS} />

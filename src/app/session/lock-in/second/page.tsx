@@ -2,6 +2,7 @@
 
 import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { goToExit } from '@/lib/navigation'
 import { AppBar, Button, ChatBubble, MascotSlot, ProgressIndicator, RecallResult, ScreenShell, SessionFraction } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { answerFor, revisitPlan, TERMS, TOTAL_TERMS, useSession } from '@/lib/session'
@@ -31,7 +32,7 @@ function LockInSecondScreen() {
     <ScreenShell
       topNavigation={
         <>
-          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => router.push('/session/exit')}>
+          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => goToExit(router)}>
             <ProgressIndicator progress="100" thickness="16" label="Questions" current={TOTAL_TERMS} total={TOTAL_TERMS} />
           </AppBar>
           <SessionFraction label={plan.total > 1 ? `Revisit ${plan.total} of ${plan.total}` : 'Last one'} />
