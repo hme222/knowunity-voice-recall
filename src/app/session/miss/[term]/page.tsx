@@ -15,7 +15,7 @@ import {
   actionRowClass,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, nextAfter, progressFor, recordOutcome, TOTAL_TERMS, XP } from '@/lib/session'
+import { answerFor, getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS, XP } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // 05 Miss + Hint — Figma frame "05 Miss + Hint (refreshed 2)" (15672:26357).
@@ -47,7 +47,7 @@ function MissScreen({ index }: { index: number }) {
           <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => router.push('/session/exit')}>
             <ProgressIndicator progress={progressFor(index)} thickness="16" label="Questions" current={index} total={TOTAL_TERMS} />
           </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} />
+          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
         </>
       }
       bottomContent={
@@ -63,14 +63,12 @@ function MissScreen({ index }: { index: number }) {
               CTA="Reveal answer"
               variant="Secondary"
               size="M"
-              fullWidth
               onClick={() => router.push(`/session/reveal/${index}`)}
             />
             <Button
               CTA="Try again"
               variant="Primary"
               size="M"
-              fullWidth
               onClick={() => router.push(`/session/recording/${index}?attempt=${attempt + 1}&hinted=1`)}
             />
           </div>
@@ -87,7 +85,7 @@ function MissScreen({ index }: { index: number }) {
               scroll boundary and rendered as a sliced half-line. */}
           <p className={styles.xp}>{`\u26a1 +${XP.hinted}`}</p>
         </div>
-        <RecallResult state="Miss" title={current.missTitle} transcript={`“${current.transcript}”`} />
+        <RecallResult state="Miss" title={current.missTitle} transcript={`“${answerFor(index)}”`} />
         <HintCard body={current.hint} />
       </div>
     </ScreenShell>

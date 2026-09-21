@@ -278,6 +278,8 @@ export type SessionState = {
    * Recap can compute during render without calling Date.now().
    */
   lastAt: number
+  /** What the student typed, by term index. Absent for spoken turns. */
+  typed?: Record<number, string>
 }
 
 const EMPTY: SessionState = { outcomes: [], startedAt: 0, lastAt: 0 }
@@ -380,7 +382,7 @@ export function nextAfter(index: number): string {
   // verdict — "no further requeue". Without this it re-enters the normal sequence and
   // the student re-runs terms they already finished.
   const alreadyRequeued = readSession().outcomes.find((o) => o.index === index)?.requeued
-  if (alreadyRequeued) return '/session/lock-in/second'
+  if (alreadyRequeued) return '/session/lock-in/second?answered=1'
   if (index < TOTAL_TERMS) return `/session/idle/${index + 1}`
   const { outcomes } = readSession()
   const requeueable = outcomes.some((o) => o.bucket === 'Worth revisiting' && !o.requeued)
@@ -393,6 +395,33 @@ export function nextAfter(index: number): string {
  */
 export function shuffledFirstTerm(): number {
   return TERMS[Math.floor(Math.random() * TERMS.length)].index
+}
+
+/**
+ * What the student actually said for a term, when we have it.
+ *
+ * SPEC § "How the mocked recall behaves" 3 says transcripts are canned, which is right
+ * for the spoken path: there is no recogniser, so there is nothing real to echo. The
+ * TYPED path is different — the student's own words are sitting right there. Echoing a
+ * fixture at someone who just typed something else breaks the one promise the concept
+ * rests on ("a clean pass echoes the student's own transcript back as proof") and it
+ * does it at the exact moment the proof is being offered.
+ */
+export function setTypedAnswer(index: number, text: string) {
+  const state = readSession()
+  write({ ...state, typed: { ...(state.typed ?? {}), [index]: text } })
+}
+
+/** The typed answer if there is one, else the term's canned transcript. */
+export function answerFor(index: number): string {
+  const typed = readSession().typed?.[index]
+  if (typed && typed.trim()) return typed.trim()
+  return getTerm(index)?.transcript ?? ''
+}
+
+/** True while any term is still owed its one requeue. */
+export function revisitsPending(): boolean {
+  return readSession().outcomes.some((o) => o.bucket === 'Worth revisiting' && !o.requeued)
 }
 
 /**

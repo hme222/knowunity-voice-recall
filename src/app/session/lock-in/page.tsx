@@ -54,7 +54,7 @@ export default function LockInPage() {
       }
       bottomContent={
         <div className={styles.actions}>
-          <MicButton state="Idle" onClick={() => router.push(`/session/recording/${term.index}?attempt=2`)} />
+          <MicButton state="Idle" onClick={() => router.push(`/session/recording/${term.index}?attempt=2&requeued=1`)} />
           <Button CTA="Skip" variant="Tertiary" size="M" onClick={() => router.push('/session/lock-in/second')} />
         </div>
       }

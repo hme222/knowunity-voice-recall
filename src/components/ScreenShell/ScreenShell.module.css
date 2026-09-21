@@ -75,14 +75,14 @@
   z-index: 2;
 }
 
-/* The action row the frames use: two buttons side by side at half width, not stacked.
-   Stacking is what pushed Idle's action zone to 204px against a 120 budget. */
+/* The frames' action row: two pills that HUG their labels, pushed to the edges of the
+   zone. 01 Idle and DD 01 both draw "Type instead" left and "Skip" right with open
+   space between them, not two equal half-width slabs — which is what `flex: 1` on the
+   children was producing, and why a Tertiary Skip measured 173px here, 358px on one
+   screen and 48px on another. */
 .actionRow {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: calc(var(--size-primitive-space-300) * 1px);
-}
-
-.actionRow > * {
-  flex: 1;
-  min-width: 0;
 }

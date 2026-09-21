@@ -13,7 +13,7 @@ import {
   SessionFraction,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, nextAfter, progressFor, recordOutcome, TOTAL_TERMS } from '@/lib/session'
+import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // 05a Reveal answer — Figma frame "05a Reveal answer result" (15752:17156), which
@@ -48,7 +48,7 @@ export default function RevealPage({ params }: { params: Promise<{ term: string 
           <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => router.push('/session/exit')}>
             <ProgressIndicator progress={progressFor(index)} thickness="16" label="Questions" current={index} total={TOTAL_TERMS} />
           </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} />
+          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
         </>
       }
       bottomContent={

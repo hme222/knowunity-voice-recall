@@ -15,6 +15,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Scratch harnesses that review agents write into the repo so Playwright's
+    // node_modules resolve. Not project source; never committed.
+    ".*-tmp/**",
+    "eval/shots/**",
   ]),
   ...storybook.configs["flat/recommended"]
 ]);

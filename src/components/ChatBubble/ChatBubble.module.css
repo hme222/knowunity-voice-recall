@@ -19,6 +19,10 @@
   line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
   letter-spacing: calc(var(--typography-style-headline-s-letter-spacing) * 0.01em);
 }
+/* The term, picked out of its own prompt. */
+.titleAccent {
+  color: var(--color-semantic-brand-bold);
+}
 .body {
   font-weight: var(--typography-style-body-m-regular-font-weight);
   font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);

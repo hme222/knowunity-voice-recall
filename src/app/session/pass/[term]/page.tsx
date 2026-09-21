@@ -4,7 +4,7 @@ import { Suspense, use, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { AppBar, Button, MascotSlot, ProgressIndicator, RecallResult, ScreenShell, SessionFraction } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, nextAfter, progressFor, recordOutcome, TOTAL_TERMS, XP } from '@/lib/session'
+import { answerFor, getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS, XP } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // 04 Pass — Figma frame "04 Pass" (15672:24247). Knowie's in-character reaction, not a
@@ -34,7 +34,7 @@ function PassScreen({ index }: { index: number }) {
           <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => router.push('/session/exit')}>
             <ProgressIndicator progress={progressFor(index)} thickness="16" label="Questions" current={index} total={TOTAL_TERMS} />
           </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} />
+          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
         </>
       }
       bottomContent={
@@ -46,7 +46,7 @@ function PassScreen({ index }: { index: number }) {
     >
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
-        <RecallResult state="Pass" title={current.passTitle} transcript={`“${current.transcript}”`} />
+        <RecallResult state="Pass" title={current.passTitle} transcript={`“${answerFor(index)}”`} />
         <Button CTA="See the full transcript" variant="Tertiary" size="S" fullWidth onClick={() => router.push('/session/transcript/passed')} />
       </div>
     </ScreenShell>

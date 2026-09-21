@@ -14,7 +14,7 @@ import {
   actionRowClass,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, nextAfter, progressFor, recordOutcome, TOTAL_TERMS } from '@/lib/session'
+import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS } from '@/lib/session'
 import styles from './idle.module.css'
 
 // 01 Idle / Commit — Figma frame "01 Idle (refreshed 2)" (15672:26255).
@@ -57,11 +57,13 @@ function IdleScreen({ index }: { index: number }) {
               total={TOTAL_TERMS}
             />
           </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} />
+          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
         </>
       }
       bottomContent={
         <div className={styles.actions}>
+          {/* Two buttons, not three. The frame has no "I don't know this one"; the
+              blank state is still reached from /text/turn, so nothing is orphaned. */}
           {/* The frame puts two buttons side by side in an 88px action zone, with the
               mic up in middleContent. Stacking three full-width buttons here needed
               204px against a 120 budget and spilled over the content below. */}
@@ -70,26 +72,26 @@ function IdleScreen({ index }: { index: number }) {
               CTA="Type instead"
               variant="Secondary"
               size="M"
-              fullWidth
               onClick={() => router.push(`/text/turn?term=${index}`)}
             />
             <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={skip} />
           </div>
-          <Button
-            CTA="I don't know this one"
-            variant="Tertiary"
-            size="S"
-            fullWidth
-            onClick={() => router.push(`/session/blank/${index}`)}
-          />
         </div>
       }
     >
       <div className={styles.body}>
-        <ChatBubble showTitle title={current.title} body={current.prompt} />
-        <div className={styles.mascot}>
-          <MascotSlot size="2XL" expression="determined" />
-        </div>
+        {/* Mascot ABOVE the bubble, as the frame has it. The build had the bubble
+            first and the mascot pushed to the bottom by margin-top:auto, which left a
+            170px hole between them and put Knowie beside the mic instead of over the
+            question. */}
+        <MascotSlot size="2XL" expression="determined" />
+        <ChatBubble
+          className={styles.bubble}
+          showTitle
+          title="Explain: "
+          titleAccent={current.name}
+          body={current.prompt}
+        />
         {/* The frame places micButton in middleContent at y=334, not in the action
             zone. It is content, not chrome. */}
         <MicButton state="Idle" onClick={() => router.push(`/session/recording/${index}${doorQuery}`)} />

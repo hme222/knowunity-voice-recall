@@ -12,8 +12,9 @@ import styles from './SessionFraction.module.css'
 //
 // TWO THINGS IT NOW SAYS THAT IT DID NOT (2026-09-21). A student could not tell how
 // far off the end was:
-//   1. On the last term it says so. "4/4" alone does not read as "this is the last
-//      one" until it is already over.
+//   1. On the last term it says so — but only when it IS the last thing. "4/4" alone
+//      does not read as an ending until it is already over, and "4/4 · last one" is a
+//      lie if a requeued term is still owed. See `moreToCome`.
 //   2. The requeue is a named round, not a term number. The frames drew 06 Lock It In
 //      as 3/4 at 75%, which ran the bar 100% -> 75% -> 100% and made the session look
 //      like it had gone backwards.
@@ -28,15 +29,21 @@ export type SessionFractionProps = {
    * terms — the requeue rounds, which sit outside the numbering by decision.
    */
   label?: string
+  /**
+   * Suppresses "last one" on the final numbered term. Requeued terms come after it, so
+   * on a run with anything owed a revisit, "4/4 · last one" is followed by two more
+   * screens — it announced an ending that had not arrived.
+   */
+  moreToCome?: boolean
   className?: string
 }
 
-export function SessionFraction({ current, total, label, className }: SessionFractionProps) {
+export function SessionFraction({ current, total, label, moreToCome, className }: SessionFractionProps) {
   const text =
     label ??
     (current != null && total != null
       ? // Said one screen early, so the end is visible before it arrives.
-        `${current}/${total}${current === total ? ' \u00b7 last one' : ''}`
+        `${current}/${total}${current === total && !moreToCome ? ' \u00b7 last one' : ''}`
       : null)
   if (text == null) return null
   return (

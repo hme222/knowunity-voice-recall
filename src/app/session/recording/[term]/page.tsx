@@ -12,7 +12,7 @@ import {
   SessionFraction,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, progressFor, TOTAL_TERMS } from '@/lib/session'
+import { getTerm, progressFor, revisitsPending, TOTAL_TERMS } from '@/lib/session'
 import styles from './recording.module.css'
 
 // 02 Recording — Figma frame "02 Recording" (15672:20100).
@@ -89,7 +89,7 @@ function RecordingScreen({ index }: { index: number }) {
               total={TOTAL_TERMS}
             />
           </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} />
+          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
         </>
       }
       bottomContent={

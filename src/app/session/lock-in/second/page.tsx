@@ -1,9 +1,10 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { AppBar, Button, MascotSlot, ProgressIndicator, RecallResult, ScreenShell, SessionFraction } from '@/components'
+import { Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { AppBar, Button, ChatBubble, MascotSlot, ProgressIndicator, RecallResult, ScreenShell, SessionFraction } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { revisitPlan, TERMS, TOTAL_TERMS, useSession } from '@/lib/session'
+import { answerFor, revisitPlan, TERMS, TOTAL_TERMS, useSession } from '@/lib/session'
 import styles from '../lock-in.module.css'
 
 // 06b Lock It In, second pass — Figma frame "06b Lock It In missed — second time,
@@ -13,8 +14,14 @@ import styles from '../lock-in.module.css'
 // There is no third attempt. A second miss ends here and the drill is offered on
 // Recap — never entered mid-session (docs/sprint-context.md § "Core loop").
 
-export default function LockInSecondPage() {
+function LockInSecondScreen() {
   const router = useRouter()
+  // Did they actually take the second attempt, or leave? Arriving from 06's Skip is
+  // not a pass, and the screen used to congratulate them either way: "Locked in. You
+  // got it this time." over a transcript they never produced. A recall check that
+  // rewards skipping is not a recall check.
+  const answered = useSearchParams().get('answered') === '1'
+  
   const state = useSession()
   const missed = state.outcomes.find((o) => o.bucket === 'Worth revisiting')
   const term = TERMS.find((t) => t.index === missed?.index) ?? TERMS[0]
@@ -35,9 +42,32 @@ export default function LockInSecondPage() {
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="excited" />
-        <RecallResult state="Pass" title="Locked in. You got it this time." transcript={`“${term.transcript}”`} />
+        <MascotSlot size="2XL" expression={answered ? 'excited' : 'determined'} />
+        {answered ? (
+          <RecallResult
+            state="Pass"
+            title="Locked in. You got it this time."
+            transcript={`“${answerFor(term.index)}”`}
+          />
+        ) : (
+          // Not RecallResult: its CouldntHear state renders a "Try again" chip, and
+          // with no onRetry it is an inert label offering something this screen exists
+          // to rule out — there is no third attempt.
+          <ChatBubble
+            showTitle
+            title="Left this one for next time."
+            body="It stays on your list, and you keep the XP you earned on the others."
+          />
+        )}
       </div>
     </ScreenShell>
+  )
+}
+
+export default function LockInSecondPage() {
+  return (
+    <Suspense fallback={null}>
+      <LockInSecondScreen />
+    </Suspense>
   )
 }

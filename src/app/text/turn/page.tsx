@@ -11,7 +11,7 @@ import {
   SessionFraction,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, nextAfter, progressFor, recordOutcome, TOTAL_TERMS } from '@/lib/session'
+import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, setTypedAnswer, TOTAL_TERMS } from '@/lib/session'
 import styles from '../text.module.css'
 
 // The text fallback turn. Not a "nice to have": some students can't speak, and many
@@ -51,7 +51,7 @@ function TextTurnScreen() {
           <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => router.push('/session/exit')}>
             <ProgressIndicator progress={progressFor(index)} thickness="16" label="Questions" current={index} total={TOTAL_TERMS} />
           </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} />
+          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
         </>
       }
       bottomContent={
@@ -62,11 +62,14 @@ function TextTurnScreen() {
             size="M"
             fullWidth
             state={answer.trim() ? 'Default' : 'Disabled'}
-            onClick={() =>
+            onClick={() => {
+              // Keep the student's own words: the result screens echo these back
+              // instead of the fixture. See answerFor() in src/lib/session.ts.
+              setTypedAnswer(index, answer)
               router.push(
                 `/text/checking?term=${index}&len=${answer.trim().length}${sticky ? '&sticky=1' : ''}`,
               )
-            }
+            }}
           />
           {!sticky && (
             <Button

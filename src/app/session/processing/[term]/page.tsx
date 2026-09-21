@@ -4,7 +4,7 @@ import { Suspense, use, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { AppBar, MascotSlot, ProgressIndicator, ScreenShell, SessionFraction, Button } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, progressFor, TOTAL_TERMS, verdictFor } from '@/lib/session'
+import { getTerm, progressFor, revisitsPending, verdictFor, TOTAL_TERMS } from '@/lib/session'
 import { doorResultHref } from '@/app/door/doors'
 import { slowThreshold } from '@/lib/motion'
 import styles from './processing.module.css'
@@ -74,7 +74,7 @@ function ProcessingScreen({ index }: { index: number }) {
               total={TOTAL_TERMS}
             />
           </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} />
+          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
         </>
       }
       bottomContent={
