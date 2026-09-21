@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { setSticky } from '@/lib/session'
 import { Button, MascotSlot, ScreenShell, TextBlock } from '@/components'
 import styles from '../permission.module.css'
 
@@ -25,7 +26,12 @@ export default function DeniedPage() {
             variant="Primary"
             size="M"
             fullWidth
-            onClick={() => router.push('/text/turn?sticky=1')}
+            onClick={() => {
+              // The decision has to outlive this turn. voice-ux.md §3: denied stays
+              // denied for the session, and it used to survive exactly one screen.
+              setSticky()
+              router.push('/text/turn?term=1&sticky=1')
+            }}
           />
           <Button
             CTA={showHow ? 'Got it' : 'How to turn the mic on'}

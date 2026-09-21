@@ -16,7 +16,7 @@ import {
   actionRowClass,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { answerFor, getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS, XP } from '@/lib/session'
+import { answerFor, calibrationFor, confidenceFor, getTerm, hintFor, nextAfter, progressFor, recordOutcome, revisitsPending, useSession, TOTAL_TERMS, XP } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // 05 Miss + Hint — Figma frame "05 Miss + Hint (refreshed 2)" (15672:26357).
@@ -30,6 +30,11 @@ function MissScreen({ index }: { index: number }) {
   const wasSure = searchParams.get('sure') === '1'
   const current = getTerm(index)
   const attempt = Number(searchParams.get('attempt') ?? '1')
+  const state = useSession()
+  // The ladder now ends. "Try again" was offered at attempt 10 with byte-identical
+  // copy; past REVEAL_AT_ATTEMPT the only way on is the reveal.
+  const step = current ? hintFor(current, attempt) : undefined
+  const sureCost = confidenceFor(state, index)?.wasSure && calibrationFor(true, false)
 
   if (!current) {
     router.replace('/session/intro')
@@ -62,16 +67,18 @@ function MissScreen({ index }: { index: number }) {
                 choice on a screen whose whole job is to invite another attempt. */}
             <Button
               CTA="Reveal answer"
-              variant="Secondary"
+              variant={step?.canRetry ? 'Secondary' : 'Primary'}
               size="M"
               onClick={() => router.push(`/session/reveal/${index}`)}
             />
-            <Button
-              CTA="Try again"
-              variant="Primary"
-              size="M"
-              onClick={() => router.push(`/session/recording/${index}?attempt=${attempt + 1}&hinted=1`)}
-            />
+            {step?.canRetry && (
+              <Button
+                CTA="Try again"
+                variant="Primary"
+                size="M"
+                onClick={() => router.push(`/session/recording/${index}?attempt=${step.nextAttempt}&hinted=1`)}
+              />
+            )}
           </div>
           <Button CTA="See the full transcript" variant="Tertiary" size="S" fullWidth onClick={() => openSheet(router, `/session/transcript/revealed?term=${index}`)} />
           <Button CTA="Skip · no XP" variant="Tertiary" size="S" fullWidth onClick={skip} />
@@ -85,9 +92,10 @@ function MissScreen({ index }: { index: number }) {
           {/* Beside the verdict, not at the tail of the body: at the end it sat on the
               scroll boundary and rendered as a sliced half-line. */}
           <p className={styles.xp}>{`\u26a1 +${XP.hinted}`}</p>
+          {sureCost ? <p className={styles.calibration}>{`${sureCost} · you were sure`}</p> : null}
         </div>
         <RecallResult state="Miss" title={current.missTitle} transcript={`“${answerFor(index)}”`} />
-        <HintCard body={current.hint} />
+        <HintCard body={step?.hint ?? current.hint} />
       </div>
     </ScreenShell>
   )

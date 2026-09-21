@@ -16,7 +16,7 @@
   -webkit-tap-highlight-color: transparent;
   font: inherit;
   border-radius: calc(var(--size-primitive-radius-full) * 1px);
-  background: var(--color-semantic-background-surface);
+  background-color: var(--color-semantic-background-surface);
   color: var(--color-semantic-text-primary);
   white-space: nowrap;
 }
@@ -78,21 +78,23 @@
   height: calc(var(--chip-icon) * 1px);
 }
 
-/* Colours. Inactive is background.surface + text.primary for every colour. */
+/* Colours. Inactive is background.surface + text.primary for every colour.
+   `background-color`, not the `background` shorthand: the shorthand resets
+   background-clip to border-box and painted the interactive hit box as a 48 pill. */
 .root[data-active][data-color='Primary'] {
-  background: var(--color-semantic-interactive-primary);
+  background-color: var(--color-semantic-interactive-primary);
   color: var(--color-semantic-interactive-on-primary);
 }
 .root[data-active][data-color='pro'] {
-  background: var(--color-semantic-pro-bold);
+  background-color: var(--color-semantic-pro-bold);
   color: var(--color-semantic-pro-on-bold);
 }
 .root[data-active][data-color='Partial'] {
-  background: var(--color-semantic-feedback-partial-bold);
+  background-color: var(--color-semantic-feedback-partial-bold);
   color: var(--color-semantic-feedback-partial-on-bold);
 }
 .root[data-active][data-color='Coral'] {
-  background: var(--color-semantic-feedback-unclear-bold);
+  background-color: var(--color-semantic-feedback-unclear-bold);
   color: var(--color-semantic-feedback-unclear-on-bold);
 }
 

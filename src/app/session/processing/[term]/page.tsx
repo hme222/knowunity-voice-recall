@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { goToExit } from '@/lib/navigation'
 import { AppBar, MascotSlot, ProgressIndicator, ScreenShell, SessionFraction, Button } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, progressFor, revisitsPending, verdictFor, TOTAL_TERMS } from '@/lib/session'
+import { getTerm, progressFor, recordConfidence, revisitsPending, verdictFor, TOTAL_TERMS } from '@/lib/session'
 import { doorResultHref } from '@/app/door/doors'
 import { slowThreshold } from '@/lib/motion'
 import styles from './processing.module.css'
@@ -40,6 +40,10 @@ function ProcessingScreen({ index }: { index: number }) {
 
   function answer(sure: boolean) {
     const verdict = verdictFor(index, ms, attempt)
+    // The tap the screen has been blocking on now costs something. It was asked for,
+    // waited for, and discarded — the Design Brief's own test is "overconfidence has to
+    // cost something", and sure/not-sure produced identical screens and identical XP.
+    recordConfidence(index, sure, verdict)
     // A run that came through a door and landed a Pass goes to that door's own result
     // rather than into the session, which it was never part of. A Miss or a mishear
     // falls through to the normal verdict screens: the help they offer is the same

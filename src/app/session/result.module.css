@@ -53,3 +53,14 @@
 .mascotCentred {
   align-self: center;
 }
+
+/* What the confidence tap was worth. Sits under the XP line, quieter than it: the tap
+   is a modifier on the term's score, not a score of its own. */
+.calibration {
+  margin: 0;
+  text-align: center;
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+}

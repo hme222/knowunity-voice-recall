@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { goToExit } from '@/lib/navigation'
 import { AppBar, Button, ChatBubble, MascotSlot, ProgressIndicator, RecallResult, ScreenShell, SessionFraction } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { answerFor, revisitPlan, TERMS, TOTAL_TERMS, useSession } from '@/lib/session'
+import { answerFor, getTerm, requeuedOutcome, requeuePassed, revisitPlan, useSession, TERMS, TOTAL_TERMS } from '@/lib/session'
 import styles from '../lock-in.module.css'
 
 // 06b Lock It In, second pass — Figma frame "06b Lock It In missed — second time,
@@ -24,8 +24,11 @@ function LockInSecondScreen() {
   const answered = useSearchParams().get('answered') === '1'
   
   const state = useSession()
-  const missed = state.outcomes.find((o) => o.bucket === 'Worth revisiting')
-  const term = TERMS.find((t) => t.index === missed?.index) ?? TERMS[0]
+  // By bucket was wrong: a requeue that PASSED is now Unaided or Hinted, so the old
+  // lookup found the wrong term or none at all. Ask which term was requeued.
+  const requeued = requeuedOutcome(state)
+  const term = getTerm(requeued?.index ?? 1) ?? TERMS[0]
+  const passed = requeuePassed(state)
   const plan = revisitPlan()
 
   return (
@@ -43,8 +46,8 @@ function LockInSecondScreen() {
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression={answered ? 'excited' : 'determined'} />
-        {answered ? (
+        <MascotSlot size="2XL" expression={answered && passed ? 'excited' : 'determined'} />
+        {answered && passed ? (
           <RecallResult
             state="Pass"
             title="Locked in. You got it this time."

@@ -12,7 +12,7 @@ import {
   SessionFraction,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, setTypedAnswer, TOTAL_TERMS } from '@/lib/session'
+import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, setTypedAnswer, useSticky, TOTAL_TERMS } from '@/lib/session'
 import styles from '../text.module.css'
 
 // The text fallback turn. Not a "nice to have": some students can't speak, and many
@@ -28,7 +28,8 @@ function TextTurnScreen() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const index = Number(searchParams.get('term') ?? '1')
-  const sticky = searchParams.get('sticky') === '1'
+  const sessionSticky = useSticky()
+  const sticky = searchParams.get('sticky') === '1' || sessionSticky
   const current = getTerm(index)
   const [answer, setAnswer] = useState('')
 

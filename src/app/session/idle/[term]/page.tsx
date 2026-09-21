@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, use } from 'react'
+import { Suspense, use, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { goToExit } from '@/lib/navigation'
 import {
@@ -15,7 +15,7 @@ import {
   actionRowClass,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS } from '@/lib/session'
+import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, useSticky, TOTAL_TERMS } from '@/lib/session'
 import styles from './idle.module.css'
 
 // 01 Idle / Commit — Figma frame "01 Idle (refreshed 2)" (15672:26255).
@@ -29,6 +29,14 @@ function IdleScreen({ index }: { index: number }) {
   const door = useSearchParams().get('door')
   const doorQuery = door ? `?door=${door}` : ''
   const current = getTerm(index)
+  // voice-ux.md §3: a denied mic stays denied for the session. It used to survive one
+  // turn — /text/turn then Continue handed the student straight back to a mic screen.
+  const sticky = useSticky()
+  useEffect(() => {
+    if (sticky) router.replace(`/text/turn?term=${index}&sticky=1`)
+  }, [sticky, index, router])
+
+  if (sticky) return null
 
   if (!current) {
     router.replace('/session/intro')
