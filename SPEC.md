@@ -195,6 +195,31 @@ Two things this does **not** override:
 Easiest first: phase 1 needs no new components, phase 2 needs components that
 exist in Figma but not in code, phases 3–5 add the unbuilt states.
 
+### Phase 0 — The doors. Where Say It Back is met for the first time.
+
+Added 2026-09-21. These were missing from the original list, which is why the
+prototype used to open one screen after its own beginning, on a home that
+cannot show the feature yet, behind a demo button.
+
+Say It Back does not exist on home until a door has shown it — there is no chip
+(`docs/sprint-context.md` § "Where it lives"). **A door is therefore the first
+screen, not home.** The rule they all carry: it is the showing that unlocks, not
+the completing, so both of a door's actions lead to `/home/unlock`.
+
+| # | Route | Screen | Figma | States | Components | Student can | Leads to |
+|---|---|---|---|---|---|---|---|
+| 0a | `/door/quiz` | Quiz complete | `15672:24061` | one | `AppBar variant="leftIconButtonOnly"` (back arrow) wrapping `ProgressIndicator progress="25"`; `MascotSlot size="2XL"`; `TextBlock`; `Button CTA="Prove it" variant="Primary" showLeftIcon` + `Button CTA="Not now" variant="Tertiary"` in an action row | Prove one term; decline | Prove it → `/session/idle/1?door=quiz`. Not now → `/home/unlock` |
+| 0b | `/door/quiz/result` | Prove It Again — term result | `15672:19827` | one | `MascotSlot size="2XL"`; `RecallResult state="Pass"`; `Button CTA="Continue" variant="Primary"` (centred, not full width) | Continue | → `/home/unlock` |
+| 0c | `/door/exam-plan` | Exam plan | `15672:23959` | one (placeholder) | `ChatBubble`; `MicButton state="Idle"`; `Button CTA="Type instead" variant="Secondary"` + `Button CTA="Skip" variant="Tertiary"` | Answer aloud; type; skip | Mic → `/session/idle/1?door=exam-plan`. Type → `/text/turn`. Skip → `/home/unlock` |
+| 0d | `/door/chat` | Chat, content-aware | `15672:24166` | one (placeholder) | `ChatBubble showTitle`; `MascotSlot size="2XL"`; XP line; `Button` ×3 | Say it back; type; skip | Say it back → `/session/idle/1?door=chat`. Skip → `/home/unlock` |
+| 0e | `/` | Home, baseline | none — this state is in no frame | one | `HomeShell`; `Button variant="Tertiary"` ×3, one per door | Reach a door | → the three door routes |
+
+A run that arrives through a door carries `?door=<id>` from `/session/idle`
+through recording and captured to processing. On a Pass, the quiz door lands on
+its own result (`src/app/door/doors.ts`); a Miss or a mishear falls through to
+the session's own verdict screens, because the help they offer is the same help
+and a door run that goes wrong should not be a dead end.
+
 ### Phase 1 — Core loop. Uses only components already in Storybook.
 
 | # | Route | Screen | States | Components | Student can | Leads to |
@@ -206,7 +231,7 @@ exist in Figma but not in code, phases 3–5 add the unbuilt states.
 | 5 | `/session/miss` | 05 Miss + Hint | one | `RecallResult state="Miss"`; `HintCard`; `Chips size="S" color="Partial" active`; `Button variant="Primary" CTA="Try again"`; `Button variant="Secondary" CTA="Reveal answer"`; `Button variant="Tertiary" CTA="Skip"` | Retry; reveal; skip; open transcript | Try again → `/session/idle`. Reveal → `/session/reveal`. Skip → next term. Transcript → `/session/transcript/revealed` |
 | 6 | `/session/reveal` | 05a Reveal answer | one | `ChatBubble` (the answer, no verdict badge); `MicButton state="Idle"`; `MascotSlot size="2XL"` | Repeat it unaided; move on | Repeat → `/session/recording` then `/session/repeat`. Next → next term |
 | 7 | `/session/processing` | 03 Processing + confidence | waiting-for-tap; escalated (judge slow) | `AppBar` + `ProgressIndicator`; `MascotSlot size="2XL"` animating; `Button variant="Secondary"` ×2 as the sure / not-sure pair | Answer "how sure are you?" | Tap → `/session/pass`, `/session/miss` or `/session/unclear` per the mock |
-| 8 | `/session/lock-in` | 06 Lock It In | one | `AppBar` + `ProgressIndicator progress="75"`; `Chips size="S" color="pro" active`; `MascotSlot`; `Button variant="Primary"`; `Button variant="Tertiary"` | Answer the requeued term cold; skip | Mic → `/session/recording`. Second miss → `/session/lock-in/second` |
+| 8 | `/session/lock-in` | 06 Lock It In | one | `AppBar` + `ProgressIndicator progress="100"` (NOT the frame's 75 — see the note in the page file: at 75 the bar ran 100 → 75 → 100 and moved backwards); `SessionFraction label="Revisit N of M"`; `Chips size="S" color="Primary" active`; `MascotSlot`; `Button variant="Primary"`; `Button variant="Tertiary"` | Answer the requeued term cold; skip | Mic → `/session/recording`. Second miss → `/session/lock-in/second` |
 | 9 | `/session/lock-in/second` | 06b Lock It In, 2nd pass | one | `RecallResult state="Pass"`; `ProgressIndicator progress="100"`; `Button variant="Primary"` | Continue | → `/session/recap` |
 | 10 | `/session/recap` | 07 Recap | solid session; rough session (CTA order flips) | `StatChip stat="XP"`, `stat="Score"`, `stat="Time"`; `ButtonIcon variant="Overlay" size="S"` ×4 (per-row transcript); `Button variant="Primary"`; `Button variant="Secondary"` | Open any term's transcript; try again; continue; accept the drill offer | Row → `/session/transcript/[bucket]`. Try again → `/session/idle` (same terms, shuffled). Continue → `/home/unlocked`. Drill → `/drill/intro` |
 | 11 | `/session/exit` | 01b Exit confirmation | one | `OptionRow state="Default"` ×8; `Button variant="Primary" CTA="Keep learning"`; `Button variant="Secondary" CTA="Leave anyway"` | Pick a reason; stay; leave | Keep → back to the previous screen. Leave → `/home/unlocked` |

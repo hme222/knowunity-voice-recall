@@ -6,6 +6,11 @@
    stacked caption row. */
 .root {
   position: absolute;
+  /* It is aria-hidden decoration stretched across the whole region, so without this it
+     sits on top of the app bar and eats every tap on the X. That is exactly what it
+     did: the exit control did nothing on all 18 session screens. Nothing that cannot
+     be clicked should ever be able to absorb a click. */
+  pointer-events: none;
   left: 0;
   right: 0;
   top: calc(var(--size-primitive-space-600) * 1px);

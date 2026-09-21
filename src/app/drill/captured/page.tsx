@@ -45,7 +45,7 @@ function DrillCaptured() {
     >
       <div className={styles.body}>
         <StrengthMeter fill={rung.coverage} label="How much you can say unaided" />
-        <MascotSlot size="2XL" expression="laughing" />
+        <MascotSlot size="2XL" expression="excited" />
         <RecallResultCaptured
           title="Here&rsquo;s what I heard. Send it, or say it again."
           transcript={DRILL_TERM.transcript}

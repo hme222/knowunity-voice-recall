@@ -29,9 +29,11 @@ export default function IntroPage() {
             leftLabel="Leave"
             onLeft={() => router.push('/session/exit')}
           >
-            <ProgressIndicator progress="25" thickness="16" label="Questions" current={1} total={TOTAL_TERMS} />
+            {/* Nothing answered yet, so the bar is empty and the label states the
+                size of the thing rather than claiming you are already on term 1. */}
+            <ProgressIndicator progress="0" thickness="16" label="Questions" current={0} total={TOTAL_TERMS} />
           </AppBar>
-          <SessionFraction current={1} total={TOTAL_TERMS} />
+          <SessionFraction label={`${TOTAL_TERMS} definitions`} />
         </>
       }
       bottomContent={
@@ -49,7 +51,7 @@ export default function IntroPage() {
         <ChatBubble
           showTitle
           title="Say It Back"
-          body="After you study a section, explain the key ideas out loud, in your own words. Speaking proves you actually know it, not just recognize it. Knowie listens and tells you how it landed."
+          body={`After you study a section, explain the key ideas out loud, in your own words. Speaking proves you actually know it, not just recognize it. Knowie listens and tells you how it landed.\n\n${TOTAL_TERMS} definitions. Anything you miss comes back once at the end.`}
         />
       </div>
     </ScreenShell>

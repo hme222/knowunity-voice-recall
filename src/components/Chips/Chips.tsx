@@ -1,5 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
-import { RefreshIcon, SquareIcon } from '../icons'
+import { RetryIcon, SquareIcon } from '../icons'
 import styles from './Chips.module.css'
 
 // Mirrors the Figma component set `chips` (9003:8679). Props carry the Figma names.
@@ -30,7 +30,12 @@ export type ChipsProps = {
   showLeftIcon?: boolean
   /** Figma `showRightIcon` (default true; false on Coral, as in Figma). */
   showRightIcon?: boolean
-  /** Left slot content; falls back to the `square` placeholder (`refresh` on Coral). */
+  /**
+   * Left slot content; falls back to the `square` placeholder, or the retry arrow on
+   * Coral. That fallback was `RefreshIcon`, an arc with no arrowhead — so the same
+   * "Try again" chip had a headless circle here and a real arrow when RecallResult
+   * passed one in. One glyph now, and it is the one with the arrow.
+   */
   leftIcon?: ReactNode
   /** Right slot content; falls back to the `square` placeholder. */
   rightIcon?: ReactNode
@@ -68,7 +73,7 @@ export function Chips({
       data-interactive={interactive || undefined}
       aria-pressed={interactive && toggle ? active : undefined}
     >
-      {showLeftIcon && <span className={styles.icon}>{leftIcon ?? (color === 'Coral' ? <RefreshIcon /> : <SquareIcon />)}</span>}
+      {showLeftIcon && <span className={styles.icon}>{leftIcon ?? (color === 'Coral' ? <RetryIcon /> : <SquareIcon />)}</span>}
       <span className={styles.label}>{text}</span>
       {showRightIcon && <span className={styles.icon}>{rightIcon ?? <SquareIcon />}</span>}
     </Tag>

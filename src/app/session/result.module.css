@@ -5,7 +5,10 @@
 .body {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  /* space-400, not betweenSections. 05 Miss carries the most of any result screen —
+     mascot, verdict, result card, hint, transcript link — and at 24 the section gap
+     alone was 96px, which is what forced Knowie down to the 64 box. */
+  gap: calc(var(--size-primitive-space-400) * 1px);
 }
 
 .actions {

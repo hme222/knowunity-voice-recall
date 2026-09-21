@@ -12,6 +12,8 @@
 
 .root {
   --pulse-duration: calc(var(--motion-semantic-duration-ambient) * 1ms);
+  /* Rings dim rather than vanish when paused: still there, plainly not listening. */
+  --pulse-paused-opacity: 0.3;
 }
 
 .body {
@@ -60,8 +62,14 @@
   animation-delay: calc(var(--motion-semantic-duration-ambient) * 0.2ms);
 }
 
-.root[data-paused='true'] .ring {
-  animation-play-state: paused;
+/* The rings stop AND return to rest when paused. This selector used to hang off
+   .root, which is ScreenShell's div — the page has no way to set data-paused on it, so
+   it never matched and the rings kept pulsing through a pause. Freezing them mid-scale
+   reads as a glitch, so they settle instead: stopped, not stuck. */
+.micWrap[data-paused='true'] .ring {
+  animation: none;
+  transform: scale(1);
+  opacity: var(--pulse-paused-opacity);
 }
 
 @keyframes pulse {

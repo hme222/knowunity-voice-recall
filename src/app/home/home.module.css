@@ -78,3 +78,18 @@
 .spotlit {
   align-self: center;
 }
+
+/* Baseline home only: the three doors, standing in for arriving at one in the real
+   app. They exist because the chip does not yet. */
+.doorsNote {
+  color: var(--color-semantic-text-tertiary);
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+}
+
+.doors {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}

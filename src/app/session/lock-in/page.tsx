@@ -14,12 +14,19 @@ import {
   SessionFraction,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { markRequeued, TERMS, TOTAL_TERMS, useSession } from '@/lib/session'
+import { markRequeued, revisitPlan, TERMS, TOTAL_TERMS, useSession } from '@/lib/session'
 import styles from './lock-in.module.css'
 
 // 06 Lock It In — Figma frame "06 Lock It In (cold re-presentation)" (15672:20688).
 // A missed term comes back later in the same session rather than resolving on one
-// attempt. Progress sits at 75% on the frame; the fraction reads 3/4.
+// attempt.
+//
+// THE FRAME IS WRONG HERE and is not reproduced. It puts this screen at 75% with the
+// fraction reading 3/4, as if the requeue were term 3. It is not — it happens after
+// term 4, so the built sequence ran 4/4 at 100%, then back to 3/4 at 75%, then 100%
+// again. The bar moved backwards, which is why the end of the session was impossible
+// to gauge. The numbered pass is genuinely finished by now, so the bar stays full and
+// this reads as its own round. See sprint-context.md § "Process notes".
 //
 // Which term returns is derived from the run: the first one bucketed Worth revisiting.
 
@@ -28,6 +35,7 @@ export default function LockInPage() {
   const state = useSession()
   const missed = state.outcomes.find((o) => o.bucket === 'Worth revisiting' && !o.requeued)
   const term = TERMS.find((t) => t.index === missed?.index) ?? TERMS[0]
+  const plan = revisitPlan()
 
   // One requeue only. Marking on arrival means the term can't come back again.
   useEffect(() => {
@@ -39,9 +47,9 @@ export default function LockInPage() {
       topNavigation={
         <>
           <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => router.push('/session/exit')}>
-            <ProgressIndicator progress="75" thickness="16" label="Questions" current={3} total={TOTAL_TERMS} />
+            <ProgressIndicator progress="100" thickness="16" label="Questions" current={TOTAL_TERMS} total={TOTAL_TERMS} />
           </AppBar>
-          <SessionFraction current={3} total={TOTAL_TERMS} />
+          <SessionFraction label={`Revisit ${plan.index} of ${plan.total}`} />
         </>
       }
       bottomContent={

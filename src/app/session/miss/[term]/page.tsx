@@ -71,12 +71,13 @@ function MissScreen({ index }: { index: number }) {
               onClick={() => router.push(`/session/recording/${index}?attempt=${attempt + 1}&hinted=1`)}
             />
           </div>
+          <Button CTA="See the full transcript" variant="Tertiary" size="S" fullWidth onClick={() => router.push('/session/transcript/revealed')} />
           <Button CTA="Skip · no XP" variant="Tertiary" size="S" fullWidth onClick={skip} />
         </div>
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="XL" expression="determined" />
+        <MascotSlot size="2XL" expression="determined" />
         <div className={styles.verdictRow}>
           <Chips Text="Partially right" size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} />
           {/* Beside the verdict, not at the tail of the body: at the end it sat on the
@@ -85,7 +86,6 @@ function MissScreen({ index }: { index: number }) {
         </div>
         <RecallResult state="Miss" title={current.missTitle} transcript={`“${current.transcript}”`} />
         <HintCard body={current.hint} />
-        <Button CTA="See the full transcript" variant="Tertiary" size="S" fullWidth onClick={() => router.push('/session/transcript/revealed')} />
       </div>
     </ScreenShell>
   )

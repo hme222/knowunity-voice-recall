@@ -107,11 +107,7 @@ export function RetryIcon({ className }: IconProps) {
   )
 }
 
-/** chips Coral's refresh glyph (16 box). */
-export function RefreshIcon({ className }: IconProps) {
-  return (
-    <svg className={className} viewBox="0 0 16 16" {...base}>
-      <path d="M14 8C14 9.32081 13.5642 10.6047 12.7601 11.6526C11.9561 12.7004 10.8287 13.4537 9.55291 13.7956C8.27711 14.1374 6.92416 14.0487 5.7039 13.5433C4.48363 13.0378 3.46425 12.1439 2.80385 11C2.14345 9.85615 1.87893 8.52635 2.05133 7.21684C2.22373 5.90734 2.82341 4.69131 3.75736 3.75736C4.69131 2.82341 5.90734 2.22373 7.21684 2.05133C8.52635 1.87893 9.85615 2.14344 11 2.80385L10.34 3.947C9.4478 3.43189 8.41055 3.22557 7.38914 3.36004C6.36772 3.49451 5.41922 3.96226 4.69074 4.69074C3.96226 5.41922 3.49451 6.36772 3.36004 7.38914C3.22557 8.41055 3.43189 9.4478 3.947 10.34C4.46212 11.2322 5.25724 11.9295 6.20904 12.3238C7.16085 12.718 8.21615 12.7872 9.21127 12.5205C10.2064 12.2539 11.0857 11.6663 11.7129 10.849C12.3401 10.0317 12.68 9.03023 12.68 8H14Z" fill="currentColor" />
-    </svg>
-  )
-}
+/* Removed 2026-09-21: `RefreshIcon`, a 16-box arc with no arrowhead. It was Chips
+   Coral's fallback glyph, so a "Try again" chip showed a headless circle unless the
+   caller happened to pass RetryIcon in. Coral falls back to RetryIcon now, and there
+   is one retry arrow in the file rather than two that disagree. */

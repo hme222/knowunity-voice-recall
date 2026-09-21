@@ -34,6 +34,8 @@ function RecordingScreen({ index }: { index: number }) {
   const hinted = searchParams.get('hinted') === '1'
   // The say-it-back repeat after a reveal: a real take, then its own result screen.
   const isRepeat = searchParams.get('repeat') === '1'
+  // Which entry door this run came from, if any. See src/app/door/doors.ts.
+  const door = searchParams.get('door')
 
   const [seconds, setSeconds] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -64,6 +66,7 @@ function RecordingScreen({ index }: { index: number }) {
     }
     const q = new URLSearchParams({ ms: String(took), attempt })
     if (hinted) q.set('hinted', '1')
+    if (door) q.set('door', door)
     router.push(`/session/captured/${index}?${q}`)
   }
 
@@ -97,7 +100,7 @@ function RecordingScreen({ index }: { index: number }) {
       }
     >
       <div className={styles.body}>
-        <div className={styles.micWrap}>
+        <div className={styles.micWrap} data-paused={paused || undefined}>
           <span className={styles.ring} aria-hidden="true" />
           <span className={styles.ring} aria-hidden="true" />
           <span className={styles.ring} aria-hidden="true" />

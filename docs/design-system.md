@@ -1101,9 +1101,22 @@ gap is real and this is the mapping — read it, don't re-decide it per screen.
 | --- | --- | --- |
 | `standby` | `determined` | Every resting/waiting screen: 00 Intro, 01 Idle, 03 Processing, 05a Reveal, 06 Lock It In |
 | `attentive` | `determined` | The drill's rung screens, where the student is about to speak |
-| `approving` | `laughing` | The in-flow win: 04 Pass, 06b Lock It In 2nd pass, 02a Captured. **Changed 2026-09-21 from `excited`**, whose head is `#0E0A18` against a `#090C18` page, about 1.01:1 — the one pose reserved for winning was the only invisible one. `laughing` is the only pose with a light head. |
+| `approving` | `excited` | The in-flow win: 04 Pass, 06b Lock It In 2nd pass, 02a Captured, the quiz door's result, the say-it-back repeat. |
 | `pleased` | `laughing` | Completion moments: 07 Recap, DD 08 Complete, DD 00b returning intro |
-| `excited` | `laughing` | Home and the unlock reveal. Also remapped 2026-09-21, same reason: on `/home/unlock` the pose renders at `3XL`, so the largest instance was the most invisible. |
+| `excited` | `excited` | The unlock reveal on home. |
+
+**Reverted 2026-09-21, the same day as the remap it undoes.** For one day
+`approving` and `excited` both pointed at `laughing`, because `excited`'s head
+was `#0E0A18` against a `#090C18` page — about 1.01:1, so the one pose reserved
+for winning was the only invisible one. That was a workaround for a bug in the
+asset, not a design decision, and it had a cost: with three of the five poses
+collapsed onto `laughing`, `excited` appeared on **zero** of 32 screens and
+Knowie effectively had one emotion. The real fault was the source art. Three of
+the four SVGs shipped with near-black bodies (`determined` `#2C0A20`, `dazed`
+`#0A1F18`, `excited` `#0E0A18`) where `laughing` alone used the brand violet.
+All four now use `#9178E6`, which is what Figma binds the mascot to
+(`--homie-inkwell`), so the remap is no longer needed and the poses are distinct
+again.
 
 `dazed` maps to no Figma pose. It is **reserved for 04a Couldn't hear**, and
 used nowhere else — a puzzled Knowie there reads as the app being confused

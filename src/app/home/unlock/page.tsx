@@ -21,11 +21,11 @@ export default function UnlockPage() {
           <SwipeChip onClick={() => router.push('/home/unlocked')} />
         </div>
         <div className={styles.coachCard}>
-          <MascotSlot size="3XL" expression="laughing" />
+          <MascotSlot size="3XL" expression="excited" />
           <TextBlock
             variant="L"
             title="You've unlocked Say It Back"
-            caption="Explain a term out loud and Knowie tells you how it landed. It lives here in your composer from now on."
+            caption="Nice work finishing your quiz. Now you can practice a definition out loud, right from here. Knowie listens and helps you lock it in."
           />
           <Button CTA="Got it" variant="Primary" size="M" fullWidth onClick={() => router.push('/home/unlocked')} />
         </div>

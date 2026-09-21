@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { AppBar, MascotSlot, ProgressIndicator, ScreenShell, SessionFraction, Button } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { getTerm, progressFor, TOTAL_TERMS, verdictFor } from '@/lib/session'
+import { doorResultHref } from '@/app/door/doors'
 import { slowThreshold } from '@/lib/motion'
 import styles from './processing.module.css'
 
@@ -20,6 +21,7 @@ function ProcessingScreen({ index }: { index: number }) {
   const ms = Number(searchParams.get('ms') ?? '0')
   const attempt = Number(searchParams.get('attempt') ?? '1')
   const hinted = searchParams.get('hinted') === '1'
+  const door = searchParams.get('door')
 
   // The second state SPEC lists: judge slow past target. Copy escalates in place —
   // same screen, no state change, Knowie keeps breathing. voice-ux's triage calls for
@@ -37,6 +39,15 @@ function ProcessingScreen({ index }: { index: number }) {
 
   function answer(sure: boolean) {
     const verdict = verdictFor(index, ms, attempt)
+    // A run that came through a door and landed a Pass goes to that door's own result
+    // rather than into the session, which it was never part of. A Miss or a mishear
+    // falls through to the normal verdict screens: the help they offer is the same
+    // help, and a door run that goes wrong should not be a dead end.
+    const doorResult = verdict === 'Pass' ? doorResultHref(door) : null
+    if (doorResult) {
+      router.push(doorResult)
+      return
+    }
     const route =
       verdict === 'Pass' ? 'pass' : verdict === 'Miss' ? 'miss' : 'unclear'
     const q = new URLSearchParams({ sure: sure ? '1' : '0', attempt: String(attempt) })

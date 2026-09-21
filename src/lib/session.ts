@@ -395,6 +395,17 @@ export function shuffledFirstTerm(): number {
   return TERMS[Math.floor(Math.random() * TERMS.length)].index
 }
 
+/**
+ * How many terms are still owed a revisit. The requeue rounds use this to say where
+ * they are ("Revisit 1 of 2") instead of borrowing a term number they do not have.
+ */
+export function revisitPlan(): { index: number; total: number } {
+  const { outcomes } = readSession()
+  const owed = outcomes.filter((o) => o.bucket === 'Worth revisiting')
+  const done = owed.filter((o) => o.requeued).length
+  return { index: Math.max(1, done), total: Math.max(1, owed.length) }
+}
+
 /** Marks the requeued term so it can't come back a second time. */
 export function markRequeued(index: number) {
   const state = readSession()

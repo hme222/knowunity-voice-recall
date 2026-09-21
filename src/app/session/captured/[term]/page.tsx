@@ -32,6 +32,8 @@ function CapturedScreen({ index }: { index: number }) {
     attempt: searchParams.get('attempt') ?? '1',
   })
   if (searchParams.get('hinted') === '1') forward.set('hinted', '1')
+  const door = searchParams.get('door')
+  if (door) forward.set('door', door)
   const attempt = searchParams.get('attempt') ?? '1'
   const hinted = searchParams.get('hinted') === '1'
 
@@ -75,7 +77,7 @@ function CapturedScreen({ index }: { index: number }) {
             variant="Secondary"
             size="M"
             fullWidth
-            onClick={() => router.push(`/session/recording/${index}?attempt=${attempt}${hinted ? '&hinted=1' : ''}`)}
+            onClick={() => router.push(`/session/recording/${index}?attempt=${attempt}${hinted ? '&hinted=1' : ''}${door ? `&door=${door}` : ''}`)}
           />
         </div>
       }

@@ -1,0 +1,66 @@
+/* The four door screens. All are the same shape as the frames: a centred content block
+   in middleContent, and a two-button action row. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+}
+
+/* The frame's `Content` block: gap 24, pt 32, pb 16, centred. */
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: calc(var(--size-primitive-space-600) * 1px);
+  padding-top: calc(var(--size-primitive-space-800) * 1px);
+  padding-bottom: calc(var(--size-primitive-space-400) * 1px);
+}
+
+/* The mic and its caption, centred in whatever the body has left. */
+.micZone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 0;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+}
+
+.micZone > * {
+  flex-shrink: 0;
+}
+
+.caption {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+  text-align: center;
+}
+
+/* The chat door's XP line, above the mascot as on the frame. */
+.xp {
+  text-align: center;
+  color: var(--color-semantic-accent-blue-bold);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+/* The result frame centres a single Continue button rather than filling the width. */
+.centredAction {
+  display: flex;
+  justify-content: center;
+}

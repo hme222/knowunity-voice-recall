@@ -1,7 +1,7 @@
 'use client'
 
-import { use } from 'react'
-import { useRouter } from 'next/navigation'
+import { Suspense, use } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import {
   AppBar,
   Button,
@@ -21,10 +21,12 @@ import styles from './idle.module.css'
 // One state. "Commit" describes this screen; it is not a second state — see
 // docs/sprint-context.md § "Core loop, decided".
 
-export default function IdlePage({ params }: { params: Promise<{ term: string }> }) {
+function IdleScreen({ index }: { index: number }) {
   const router = useRouter()
-  const { term } = use(params)
-  const index = Number(term)
+  // `door` marks a run that arrived from an entry door rather than from the chip. It
+  // rides the whole take so the run can land on the door's own result.
+  const door = useSearchParams().get('door')
+  const doorQuery = door ? `?door=${door}` : ''
   const current = getTerm(index)
 
   if (!current) {
@@ -90,8 +92,17 @@ export default function IdlePage({ params }: { params: Promise<{ term: string }>
         </div>
         {/* The frame places micButton in middleContent at y=334, not in the action
             zone. It is content, not chrome. */}
-        <MicButton state="Idle" onClick={() => router.push(`/session/recording/${index}`)} />
+        <MicButton state="Idle" onClick={() => router.push(`/session/recording/${index}${doorQuery}`)} />
       </div>
     </ScreenShell>
+  )
+}
+
+export default function IdlePage({ params }: { params: Promise<{ term: string }> }) {
+  const { term } = use(params)
+  return (
+    <Suspense fallback={null}>
+      <IdleScreen index={Number(term)} />
+    </Suspense>
   )
 }
