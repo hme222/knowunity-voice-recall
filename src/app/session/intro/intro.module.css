@@ -1,0 +1,11 @@
+/* 00 Intro. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  text-align: center;
+}

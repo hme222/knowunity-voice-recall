@@ -1,0 +1,79 @@
+/* 02 Recording — full-screen mic takeover. Figma frame "02 Recording" (15672:20100):
+   no mascot, no chat bubble.
+
+   The pulse rings are loose ELLIPSE siblings of the frame in Figma. Here they are
+   children of the mic, so they cannot be orphaned or buried in z-order — the failure
+   docs/design-system-update.md § 2 records, where all three were present, positioned
+   and invisible at once.
+
+   The rings carry their stagger in colour, not opacity: three alpha border tokens
+   rather than three raw opacity values, so nothing here is an untokenised literal.
+   Only `transform` animates. */
+
+.root {
+  --pulse-duration: calc(var(--motion-semantic-duration-ambient) * 1ms);
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.micWrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.ring {
+  position: absolute;
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  border-style: solid;
+  border-width: calc(var(--size-primitive-stroke-border) * 1px);
+  animation: pulse var(--pulse-duration) ease-out infinite;
+}
+
+.ring:nth-child(1) {
+  width: calc(var(--component-mic-button-pulse-ring-inner) * 1px);
+  height: calc(var(--component-mic-button-pulse-ring-inner) * 1px);
+  border-color: var(--color-semantic-border-strong);
+}
+
+.ring:nth-child(2) {
+  width: calc(var(--component-mic-button-pulse-ring-middle) * 1px);
+  height: calc(var(--component-mic-button-pulse-ring-middle) * 1px);
+  border-color: var(--color-primitive-alpha-light-18);
+  /* Stagger derived from the ambient loop rather than stated: one fifth, two fifths. */
+  animation-delay: calc(var(--motion-semantic-duration-ambient) * 0.2ms);
+}
+
+.ring:nth-child(3) {
+  width: calc(var(--component-mic-button-pulse-ring-outer) * 1px);
+  height: calc(var(--component-mic-button-pulse-ring-outer) * 1px);
+  border-color: var(--color-semantic-border-default);
+  animation-delay: calc(var(--motion-semantic-duration-ambient) * 0.4ms);
+}
+
+.root[data-paused='true'] .ring {
+  animation-play-state: paused;
+}
+
+@keyframes pulse {
+  from { transform: scale(0.92); }
+  to { transform: scale(1.04); }
+}
+
+/* voice-ux Principle 1: status must never rest on motion alone. With motion off the
+   rings hold still and the LISTENING label and timer carry the state. */
+@media (prefers-reduced-motion: reduce) {
+  .ring { animation: none; }
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+}

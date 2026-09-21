@@ -1,0 +1,92 @@
+/* Figma `pickerTopicRow` (15813:37270) and `pickerDrillRow` (15813:37281). Same shape —
+   318 wide, space-between, surface fill, radius 400, a trailing mic — differing only
+   in the left content: a topic name, or a term plus a state pill.
+   One component with a `variant`, because two components differing by one child is
+   two names for one thing.
+
+   Both were originally built as custom frames in Figma because of the optionRow resize
+   bug. That bug is fixed, but these are still not optionRow variants: optionRow has no
+   slot for a trailing action. */
+
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+  width: 100%;
+  padding-block: calc(var(--size-primitive-space-300) * 1px);
+  padding-inline: calc(var(--spacing-semantic-card-padding) * 1px);
+  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  background: var(--color-semantic-background-surface);
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+/* Inside a bottomSheet this would resolve to the sheet's own fill and vanish. */
+.root[data-raised='true'] {
+  background: var(--color-semantic-background-raised);
+}
+
+.root:focus-visible {
+  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * 1px);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+  min-width: 0;
+}
+
+.topic {
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+}
+
+.term {
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+}
+
+.pill {
+  flex-shrink: 0;
+  padding-block: calc(var(--size-primitive-space-050) * 1px);
+  padding-inline: calc(var(--size-primitive-space-200) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  font-weight: var(--typography-style-caption-s-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+}
+
+/* Amber marks what needs the most work, green what's near-mastered. */
+.pill[data-state='drill'] {
+  background: var(--color-semantic-feedback-warning-bold);
+  color: var(--color-semantic-feedback-warning-on-bold);
+}
+
+.pill[data-state='sharp'] {
+  background: var(--color-semantic-accent-green-subtle);
+  color: var(--color-semantic-accent-green-on-subtle);
+}
+
+.mic {
+  flex-shrink: 0;
+  width: calc(var(--size-primitive-illustration-500) * 1px);
+  height: calc(var(--size-primitive-illustration-500) * 1px);
+  display: grid;
+  place-items: center;
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  /* A 16% wash of the brand violet. color-mix keeps it derived from a token rather
+     than restating the composited value as a literal. */
+  background: color-mix(in srgb, var(--color-semantic-brand-bold) 16%, transparent);
+  color: var(--color-semantic-text-link);
+}
+
+.micGlyph { width: 45%; height: 45%; }

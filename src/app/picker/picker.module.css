@@ -1,0 +1,30 @@
+/* Picker — Figma frame "Picker page — Say It Back + drill down" (15810:11285).
+   Two areas: topics to run a full recall session, and definitions to drill. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.groupLabel {
+  text-transform: uppercase;
+  color: var(--color-semantic-text-tertiary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-caption-m-bold-letter-spacing) * 0.08em);
+}
+
+.note {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+}

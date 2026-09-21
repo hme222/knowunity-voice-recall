@@ -230,17 +230,48 @@ Verified structure, from real instances:
   (holds either a bottom input bar or the tab navbar, depending on
   screen), and `bottomSheetOnly` (empty in every instance checked so
   far except one — see below).
-- **A bottom sheet is a scaffold capability, not a separate
-  component.** Flip `showBottomSheetBackground` to true and populate
-  `bottomSheetOnly`. Exactly one screen in the "Dark" section of
-  Example Screens does this. This corrects an earlier version of this
-  doc, which listed "no bottom sheet component" as a gap — that was
-  wrong. It's not missing, it's a mode of the scaffold.
+- **A bottom sheet is a scaffold capability — and, since this sprint,
+  also a local component.** Flip `showBottomSheetBackground` to true
+  and populate `bottomSheetOnly`; exactly one screen in the "Dark"
+  section of Example Screens does this. **Corrected 2026-09-20:** an
+  earlier version of this bullet said a bottom sheet is *not* a
+  separate component. That is no longer true — a local `bottomSheet`
+  component was built this sprint (see `docs/sprint-context.md` §
+  "Components added this sprint") and it is what new sheets use. The
+  scaffold toggle remains the mechanism for the *background*; the
+  component is the sheet itself. This bullet has now been wrong in
+  both directions, which is worth noting as a pattern rather than
+  correcting a second time and moving on.
 - **The bottom tab bar (`Navigation Button` × 4 + `Avatar`) and
   `Status Bar` are also external-library components**, assembled
   inside the scaffold's `bottomContent` and header regions
   respectively. Same caveat as scaffold itself: verified as present
   and in use, not fully auditable for every variant from here.
+
+### The code counterpart: `ScreenShell`
+
+The prototype has a React equivalent, `src/components/ScreenShell/`,
+which reproduces the scaffold's regions so no screen re-invents the
+layout. Full table in `SPEC.md` § Conventions. Two things worth
+knowing here:
+
+- **The four chrome regions are fixed height; `middleContent`
+  flexes.** At an 844-tall viewport the middle computes to exactly
+  620, matching the Figma frames. At any other window height the
+  middle absorbs the difference. The heights live at
+  `component.scaffold.*` in `tokens.json`.
+- **That namespace is earned by `ScreenShell`, not by the Figma
+  component.** The rule under § "Naming conventions" says a
+  `component.*` namespace is earned when Figma bindings route through
+  it. These never will — `scaffold` is external and uninspectable. The
+  namespace is claimed on the code side instead: the heights route
+  through one component and nothing else, the same shape as
+  `component.micButton.*`. If that reading of the rule is wrong, this
+  is the place to say so; it was a deliberate call, not an oversight.
+- **`showBottomSheetBackground` is not reproduced** as a prop.
+  Sheets live on their own branch screens; making the baked-in version
+  easy is the mistake `docs/sprint-context.md` § "Process notes"
+  records three times.
 
 Every screen builds inside the scaffold by using it, with its real
 slots and toggles, not by re-deriving header/content/footer regions
@@ -1058,6 +1089,30 @@ rather than Figma's Homie pose instances; Overlay and Coral cells
 Figma never built are extrapolated from the same tokens.
 
 ---
+
+## Mascot poses — the mapping, resolved 2026-09-20
+
+Figma names five mascot poses. `public/knowie/` holds four SVGs, and
+`MASCOT_SLOT_SIZES`' sibling union `KNOWIE_EXPRESSIONS` in
+`src/components/MascotSlot/MascotSlot.tsx` exposes exactly those four. The
+gap is real and this is the mapping — read it, don't re-decide it per screen.
+
+| Figma pose | `expression` | Where it appears |
+| --- | --- | --- |
+| `standby` | `determined` | Every resting/waiting screen: 00 Intro, 01 Idle, 03 Processing, 05a Reveal, 06 Lock It In |
+| `attentive` | `determined` | The drill's rung screens, where the student is about to speak |
+| `approving` | `excited` | The in-flow win: 04 Pass, 06b Lock It In 2nd pass, 02a Captured |
+| `pleased` | `laughing` | Completion moments: 07 Recap, DD 08 Complete, DD 00b returning intro |
+| `excited` | `excited` | Home and the unlock reveal |
+
+`dazed` maps to no Figma pose. It is **reserved for 04a Couldn't hear**, and
+used nowhere else — a puzzled Knowie there reads as the app being confused
+rather than the student having failed, which is the whole point of that state
+being visually neutral (`docs/voice-ux.md` Principle 4).
+
+Two Figma poses collapse onto `determined` on purpose: `standby` and
+`attentive` both mean "waiting for you to speak", and the distinction between
+them was never load-bearing on any screen.
 
 ## Naming conventions
 

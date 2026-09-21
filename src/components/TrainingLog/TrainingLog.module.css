@@ -1,0 +1,61 @@
+/* Figma `trainingLog` (15813:37292): vertical, gap space.100, pad 12/16, radius 400,
+   a "What you climbed" heading in feedback/success/onSubtle, one row per pass, and a
+   footer line.
+
+   The card sits darker than the rows inside it so the rows read as raised. Figma used
+   a literal #1a1c2e; background.input is the nearest bound value (navy-900) and the
+   closest thing this system has to an elevated-but-recessed container — the gap
+   background.raised was added to solve from the other direction. */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  padding-block: calc(var(--size-primitive-space-300) * 1px);
+  padding-inline: calc(var(--spacing-semantic-card-padding) * 1px);
+  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  background: var(--color-semantic-background-input);
+}
+
+.heading {
+  color: var(--color-semantic-feedback-success-on-subtle);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+  width: 100%;
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  background: var(--color-semantic-background-surface);
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+}
+
+.row:focus-visible {
+  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * 1px);
+}
+
+/* The final unaided round is the one that ended the drill. */
+.row[data-final='true'] {
+  color: var(--color-semantic-feedback-success-on-subtle);
+}
+
+.footer {
+  color: var(--color-semantic-text-tertiary);
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+}

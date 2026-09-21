@@ -1,0 +1,84 @@
+/* 03 Processing — covers the STT + judge round trip, and carries the confidence tap.
+   The verdict waits indefinitely for the tap; Knowie animates so the screen never
+   reads as stuck (SPEC.md § Conventions, docs/voice-ux.md Principle 6). */
+
+.root {
+  --beat: calc(var(--motion-semantic-duration-ambient) * 1ms);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  text-align: center;
+}
+
+/* Knowie is the "still working" signal — the mascot breathes rather than a spinner,
+   so the wait has somewhere to live that isn't a dead indicator. */
+.mascot {
+  animation: breathe var(--beat) ease-in-out infinite;
+}
+
+@keyframes breathe {
+  from { transform: scale(0.98); }
+  to { transform: scale(1.02); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot { animation: none; }
+  .dot { animation: none; }
+}
+
+.line {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+}
+
+.dots {
+  display: flex;
+  gap: calc(var(--size-primitive-space-150) * 1px);
+}
+
+.dot {
+  width: calc(var(--size-primitive-space-300) * 1px);
+  height: calc(var(--size-primitive-space-300) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  background: var(--color-semantic-brand-bold);
+  animation: blink var(--beat) ease-in-out infinite;
+}
+
+.dot:nth-child(2) { animation-delay: calc(var(--motion-semantic-duration-ambient) * 0.2ms); }
+.dot:nth-child(3) { animation-delay: calc(var(--motion-semantic-duration-ambient) * 0.4ms); }
+
+@keyframes blink {
+  from { transform: translateY(0); }
+  to { transform: translateY(calc(var(--size-primitive-space-negative-100) * 1px)); }
+}
+
+/* The confidence ask. Separate from the working signal above it: two messages that
+   must not be mistaken for each other. */
+.confidence {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.ask {
+  text-align: center;
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-m-bold-font-weight);
+  font-size: calc(var(--typography-style-body-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-bold-line-height) * 1px);
+}
+
+.pair {
+  display: flex;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.pair > * { flex: 1; }

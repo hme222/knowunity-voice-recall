@@ -1,0 +1,30 @@
+/* Shared layout for the three result screens: 04 Pass, 04a Couldn't hear, 05 Miss.
+   All three are the same shape — mascot, a recallResult card, then actions — and
+   differ only in the card's state and which actions appear. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.centred {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+}
+
+.xp {
+  text-align: center;
+  color: var(--color-semantic-accent-blue-bold);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+}

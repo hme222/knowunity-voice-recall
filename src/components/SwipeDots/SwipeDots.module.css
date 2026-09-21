@@ -1,0 +1,23 @@
+/* Figma `swipeDots` (15813:37248): horizontal, gap space.150, active dot 7px in
+   feedback/warning/bold matching the chip's border, inactive 6px. */
+
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--size-primitive-space-150) * 1px);
+}
+
+.dot {
+  width: calc(var(--size-primitive-space-150) * 1px);
+  height: calc(var(--size-primitive-space-150) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  background: var(--color-semantic-border-strong);
+  transition: background-color calc(var(--motion-semantic-duration-swipe) * 1ms) ease;
+}
+
+/* The active dot matches the chip's due border rather than a fill, so the carousel
+   and the thing it is paging read as one system. */
+.dot[data-active='true'] {
+  background: var(--color-semantic-feedback-warning-border);
+}

@@ -23,7 +23,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${greed.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {/* 390px device frame, centred, filling the window. See globals.css. */}
+        <div className="device-frame">{children}</div>
+      </body>
     </html>
   );
 }

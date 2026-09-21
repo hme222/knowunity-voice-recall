@@ -1,0 +1,80 @@
+/* The home surfaces. Three states, gated first on whether the feature is unlocked and
+   then on whether the student has a plan (docs/sprint-context.md § "Where it lives"):
+     1. before first encounter — no chip at all
+     2. unlocked — the composer chip
+     3. unlocked + plan with due dates — chip plus the due signal
+   The surrounding home UI is the real app's, which isn't ours to reproduce; these
+   screens carry a stand-in for it so the Say It Back surfaces sit in context. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+}
+
+.greeting {
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-headline-m-font-weight);
+  font-size: calc(var(--typography-style-headline-m-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-m-line-height) * 1px);
+}
+
+.placeholderCard {
+  min-height: calc(var(--size-primitive-illustration-1500) * 1px);
+  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  background: var(--color-semantic-background-surface);
+  display: grid;
+  place-items: center;
+  color: var(--color-semantic-text-tertiary);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
+}
+
+.composer {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+}
+
+.chipRow {
+  display: flex;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+  overflow-x: auto;
+  padding-bottom: calc(var(--size-primitive-space-100) * 1px);
+}
+
+.due {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+  align-items: stretch;
+}
+
+/* The unlock reveal dims home and spotlights the chip. Shown once. */
+.spotlightScrim {
+  position: fixed;
+  inset: 0;
+  background: var(--color-semantic-background-scrim);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  padding: calc(var(--spacing-semantic-screen-margin) * 1px);
+  padding-bottom: calc(var(--size-primitive-space-1200) * 1px);
+  text-align: center;
+}
+
+.coachCard {
+  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  background: var(--color-semantic-background-surface);
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+}
+
+.spotlit {
+  align-self: center;
+}

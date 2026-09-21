@@ -81,6 +81,21 @@ missing and how to re-enable, don't dead-end them.
  
 This maps cleanly onto the brief's F5 "first encounter" intro screen, that
 screen is your primer.
+
+**Decided 2026-09-20, and still unbuilt.** The primer gets a real
+screen *and* a drawn iOS permission sheet on top of it, so Allow /
+Don't Allow is an actual fork a reviewer can take rather than an
+asserted one. A denial routes to a **session-level choice** — type
+this session, or go fix mic access — rather than silently downgrading
+the student. Situational typing reverts to the mic on the next term;
+a denied mic stays sticky for the session, because it can't work
+anyway. And the XP reduction for typed answers applies **only when
+voice was actually available**: penalising a student who physically
+can't speak is the opposite of what "never trap the student" is for.
+
+Until those screens exist this remains the largest hole in the
+feature — three Must-priority states with no design, flagged across
+several passes.
  
 ### 4. Be generous, and separate "misheard" from "didn't know it"
  
@@ -138,11 +153,27 @@ scope" ones as known gaps** rather than pretending they don't exist.
 | Skip a term | **Must** | "I don't know" escape (F1). |
 | Empty / silent recording (nothing said) | **If time** | Gentle "didn't catch that — try again." |
 | Very noisy / garbled transcript | **If time** | Falls back to generous judge or re-record. |
-| Judge slow / times out past target | **If time** | Friendly "taking a moment" → retry, not a crash. |
-| No / dropped network mid-answer | **If time** | Save progress (F7 already implies this). |
+| Judge slow / times out past target | **If time** | **Designed 2026-09-20:** copy escalates in place on Processing ("still thinking"), no new screen, no state change. Knowie keeps animating. |
+| No / dropped network mid-answer | **If time** | **Designed 2026-09-20:** hold the take, show "saving your answer", retry on reconnect. Needs a state between Captured and Processing. Never blames the student's speech for a connection fault. |
 | Mic hardware busy (on a call, etc.) | **Out of scope** | Note as known gap; rare in practice. |
 | Student switches language mid-answer | **Out of scope** | Real (multilingual product) but not a v1 sprint problem. |
-| Pause/resume into one take | **Out of scope** | Brief already defers this. |
+| Pause/resume into one take | ~~**Out of scope**~~ **Experimental** | **Reclassified 2026-09-20.** It was built anyway — long-press to pause, hold again to resume, plus four Figma explorations and a caption on the recording screens — against this triage, without a recorded decision. It stays on screen and is marked unratified in both docs rather than being quietly legitimised or quietly deleted. Treat it as an open question. |
+
+### Added 2026-09-20
+
+These came out of a decision pass and belong in the table above, but
+they're grouped here so the original triage stays readable as what it
+was.
+
+| State / edge case | Priority | Notes |
+| --- | --- | --- |
+| Commit (between idle and recording) | **Must** | A decided state with no screen of its own. Main flow v1 had `01 — Idle → Commit`; Complete Flow collapsed it into `01 Idle`. |
+| Captured / review before sending | **Must** | Built as `02a`. The transcript is shown *before* judging so a mishear reads as "the app misheard me," not "I failed" — Principle 4, given its own screen. |
+| Confidence tap (during Processing) | **Must** | "How sure are you?" asked after send, before the verdict, so the signal isn't contaminated. The verdict **waits indefinitely** for it; Knowie animates so the screen never reads as stuck. This is the Design Brief's "overconfidence has to cost something" made mechanical. |
+| Genuinely blank term (not a near-miss) | **Must** | One encouraged attempt — "say whatever you've got" — then reveal. Answers the Design Brief's first open question. Distinct from skip, which stays a silent exit. |
+| Say-it-back repeat after a reveal | **If time** | Optional, 1 XP, bucket unchanged. Rehearsal, not a re-verdict. |
+| Session resume after leaving | **Must** | Implied by banking per-term XP on exit. No screen exists for returning. |
+| Definition Drill Down states | — | An entire second mode: variable-length coverage drill, continuous `strengthMeter`, and a three-stage stumble scaffold (reveal → first letter → echo). See `sprint-context.md`. None of it was in this table before today. |
  
 **Rule of thumb for unlisted cases:** the brief already gives you the answer,
 *"when in doubt, give the student a way forward."* If you hit an edge case not

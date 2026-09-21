@@ -1,0 +1,80 @@
+/* Figma `swipeChip` (15813:37232): 221×59, horizontal, gap space.200, pad 10/12,
+   surface fill, amber border, fully rounded. The border is the due signal — it is
+   what distinguishes this from the plain composer chip. */
+
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+  padding: calc(var(--size-primitive-space-300) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  background: var(--color-semantic-background-surface);
+  border: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid transparent;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  transition: border-color calc(var(--motion-semantic-duration-standard) * 1ms) ease;
+}
+
+/* Plan-active: the amber border signals an approaching deadline without the weight of
+   a solid fill. Without a plan there is no deadline, so there is no border. */
+.root[data-due='true'] {
+  border-color: var(--color-semantic-feedback-warning-border);
+}
+
+.root:focus-visible {
+  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * 1px);
+}
+
+.glyph {
+  width: calc(var(--size-primitive-illustration-500) * 1px);
+  height: calc(var(--size-primitive-illustration-500) * 1px);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  color: var(--color-semantic-text-link);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-050) * 1px);
+  flex: 1;
+  min-width: 0;
+}
+
+.label {
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-m-bold-font-weight);
+  font-size: calc(var(--typography-style-body-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-bold-line-height) * 1px);
+}
+
+.sub {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.count {
+  flex-shrink: 0;
+  padding-block: calc(var(--size-primitive-space-050) * 1px);
+  padding-inline: calc(var(--size-primitive-space-200) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  background: var(--color-semantic-feedback-warning-subtle);
+  color: var(--color-semantic-feedback-warning-on-subtle);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+}
+
+/* The last card in a batch reads as cleared rather than pending. */
+.count[data-last='true'] {
+  background: var(--color-semantic-accent-green-subtle);
+  color: var(--color-semantic-accent-green-on-subtle);
+}

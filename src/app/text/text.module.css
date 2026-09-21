@@ -1,0 +1,72 @@
+/* The text fallback turn. No Figma frame — the journey map has one card saying
+   "Idle shows the prompt with a text field instead of the mic, she types and taps
+   submit, a brief checking beat covers judging, then the same Result branches".
+   That card is the whole spec; the rest is built from voice-ux Principle 5.
+
+   The field is a local build — there is no text input in the component catalog.
+   Logged in component-gaps.md. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+}
+
+.field {
+  width: 100%;
+  min-height: calc(var(--size-primitive-illustration-1500) * 1px);
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  background: var(--color-semantic-background-input);
+  border: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default);
+  color: var(--color-semantic-text-primary);
+  font-family: inherit;
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  resize: none;
+}
+
+.field::placeholder {
+  color: var(--color-semantic-text-disabled);
+}
+
+.field:focus-visible {
+  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * 1px);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.checking {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  text-align: center;
+}
+
+.line {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+}
+
+.mascot {
+  animation: breathe calc(var(--motion-semantic-duration-ambient) * 1ms) ease-in-out infinite;
+}
+
+@keyframes breathe {
+  from { transform: scale(0.98); }
+  to { transform: scale(1.02); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot { animation: none; }
+}

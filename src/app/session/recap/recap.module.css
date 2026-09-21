@@ -1,0 +1,81 @@
+/* 07 Recap — Figma frame "07 Recap (refreshed)" (15672:24456). No fraction here, which
+   is why there is no SessionHeader component.
+   Derived, never canned: the buckets, per-term XP, total and score come from the run
+   the student just did. The frame's 1/1/1/1, +22 and 75% are sample content. */
+
+.stats {
+  display: flex;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.stats > * { flex: 1; }
+
+.buckets {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+}
+
+.bucket {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-150) * 1px);
+}
+
+.bucketLabel {
+  text-transform: uppercase;
+  color: var(--color-semantic-text-tertiary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-caption-m-bold-letter-spacing) * 0.08em);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  background: var(--color-semantic-background-surface);
+}
+
+.rowTerm {
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+}
+
+.rowNote {
+  display: block;
+  color: var(--color-semantic-text-warning);
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+}
+
+.rowXp {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  white-space: nowrap;
+}
+
+.headline {
+  text-align: center;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.empty {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+}

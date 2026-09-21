@@ -2,9 +2,13 @@
 /* Generated from tokens/tokens.json — never edit tokens.css, run `npm run tokens`. */
 @import "../../build/css/tokens.css";
 
+/* Dark is the only mode. Platform Constraints: mobile iOS, 390px, dark.
+   There are no light-mode values in tokens.json and there is no light variant
+   of this feature, so honouring prefers-color-scheme would be a bug. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: var(--color-semantic-background-page);
+  --foreground: var(--color-semantic-text-primary);
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -15,17 +19,22 @@
   --font-display: var(--font-greed);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
   /* Greed VF's wdth axis: 100% is the Standard cut. The file defaults to 75 (Condensed). */
   font-stretch: 100%;
+}
+
+/* The prototype is one device wide, centred, filling the window's height.
+   responsive.primitive.deviceWidth.mobile — resolved 2026-09-16 as 390. */
+.device-frame {
+  width: calc(var(--responsive-primitive-device-width-mobile) * 1px);
+  max-width: 100%;
+  margin-inline: auto;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-semantic-background-page);
 }

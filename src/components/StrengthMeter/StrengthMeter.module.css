@@ -1,0 +1,46 @@
+/* Figma `strengthMeter` (15808:17668). Track 220×10, fully rounded.
+
+   The Figma original carried literal hex on the track and all four fills, and its ramp
+   ran #c0dd97 → #97c459 → #639922 → #3b6d11 — darkening as it filled, so a full meter
+   was the least visible state on a dark background, and none of those greens existed
+   in the palette. Rebuilt with palette colours running the other way: the meter gets
+   more present as mastery grows, which is what a reward should do.
+   See docs/sprint-context.md open question 14. */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.track {
+  height: calc(var(--size-primitive-space-300) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  background: var(--color-semantic-background-stacking);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  background: var(--color-semantic-accent-green-subtle);
+  transition:
+    width calc(var(--motion-semantic-duration-standard) * 1ms) ease-out,
+    background-color calc(var(--motion-semantic-duration-standard) * 1ms) ease-out;
+}
+
+/* Brighter as coverage grows. Three steps, not four: the palette has two usable
+   greens at this brightness and inventing a third would be a literal. */
+.fill[data-band='mid'] { background: var(--color-semantic-accent-green-bold); }
+.fill[data-band='high'] { background: var(--color-semantic-text-success); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fill { transition: none; }
+}
+
+.label {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+}

@@ -1,0 +1,83 @@
+/* Mic permission: primer, the OS sheet, and the denied fork. No Figma frames exist for
+   any of these — they live only as journey-map nodes. Behaviour from
+   docs/voice-ux.md Principle 3 and the Design Brief's F5. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  text-align: center;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+/* A drawn iOS permission sheet, so Allow / Don't Allow is a real fork a reviewer can
+   take rather than an asserted one. It is deliberately a facsimile: the prototype has
+   no microphone and the real dialog will never fire here. */
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: var(--color-semantic-background-scrim);
+  display: grid;
+  place-items: center;
+  padding: calc(var(--spacing-semantic-screen-margin) * 1px);
+}
+
+.dialog {
+  width: 100%;
+  max-width: calc(var(--size-primitive-illustration-4000) * 1px);
+  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  background: var(--color-semantic-background-floating);
+  backdrop-filter: blur(calc(var(--size-primitive-space-600) * 1px));
+  overflow: hidden;
+  text-align: center;
+}
+
+.dialogBody {
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.dialogTitle {
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-headline-xxs-bold-font-weight);
+  font-size: calc(var(--typography-style-headline-xxs-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-xxs-bold-line-height) * 1px);
+}
+
+.dialogBodyText {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-s-regular-font-weight);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
+}
+
+.dialogActions {
+  display: flex;
+  border-top: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default);
+}
+
+.dialogButton {
+  flex: 1;
+  padding: calc(var(--size-primitive-space-300) * 1px);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--color-semantic-text-link);
+  font: inherit;
+  font-weight: var(--typography-style-body-m-bold-font-weight);
+  font-size: calc(var(--typography-style-body-m-bold-font-size) * 1px);
+}
+
+.dialogButton + .dialogButton {
+  border-left: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default);
+}

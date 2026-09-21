@@ -1,0 +1,30 @@
+// Barrel for the component catalog. Every screen is a Client Component, so importing
+// from here pulls the library into the client bundle — fine at this scale, and it keeps
+// screen imports to one line. Components themselves stay unmarked (no 'use client'):
+// the boundary sits at the screen. See SPEC.md § Conventions.
+
+export { AppBar, APP_BAR_VARIANTS } from './AppBar/AppBar'
+export { BottomSheet } from './BottomSheet/BottomSheet'
+export { Button, BUTTON_VARIANTS, BUTTON_SIZES, BUTTON_STATES } from './Button/Button'
+export { ButtonGroup } from './ButtonGroup/ButtonGroup'
+export { ButtonIcon } from './ButtonIcon/ButtonIcon'
+export { ChatBubble } from './ChatBubble/ChatBubble'
+export { Chips, CHIPS_SIZES, CHIPS_COLORS } from './Chips/Chips'
+export { HintCard } from './HintCard/HintCard'
+export { MascotSlot, MASCOT_SLOT_SIZES, KNOWIE_EXPRESSIONS } from './MascotSlot/MascotSlot'
+export { MicButton, MIC_BUTTON_STATES } from './MicButton/MicButton'
+export { OptionRow, OPTION_ROW_STATES } from './OptionRow/OptionRow'
+export { DueSignalCard } from './DueSignalCard/DueSignalCard'
+export { PickerRow, PICKER_ROW_VARIANTS } from './PickerRow/PickerRow'
+export { ProgressIndicator, PROGRESS_STEPS } from './ProgressIndicator/ProgressIndicator'
+export { RecordingStatus } from './RecordingStatus/RecordingStatus'
+export { RecallResult, RECALL_RESULT_STATES } from './RecallResult/RecallResult'
+export { ScreenShell } from './ScreenShell/ScreenShell'
+export { SessionFraction } from './SessionFraction/SessionFraction'
+export { SwipeChip } from './SwipeChip/SwipeChip'
+export { SwipeDots } from './SwipeDots/SwipeDots'
+export { Snackbar, SNACKBAR_VARIANTS } from './Snackbar/Snackbar'
+export { StatChip } from './StatChip/StatChip'
+export { StrengthMeter } from './StrengthMeter/StrengthMeter'
+export { TrainingLog } from './TrainingLog/TrainingLog'
+export { TextBlock, TEXT_BLOCK_VARIANTS } from './TextBlock/TextBlock'

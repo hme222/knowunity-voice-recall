@@ -1,0 +1,62 @@
+/* Figma `dueSignalCard` (15812:15287): 287×56, horizontal, gap space.300, pad 10/12,
+   surface fill, amber 1px border, fully rounded. An amber clock badge, a due label,
+   and the Say It Back action.
+   The border was a raw hex in Figma; bound to feedback.warning.border here, the same
+   token swipeChip uses — they are the same due-signal accent and were diverging. */
+
+.root {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+  width: 100%;
+  padding: calc(var(--size-primitive-space-300) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  background: var(--color-semantic-background-surface);
+  border: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-feedback-warning-border);
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.root:focus-visible {
+  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * 1px);
+}
+
+.badge {
+  flex-shrink: 0;
+  width: calc(var(--size-primitive-space-800) * 1px);
+  height: calc(var(--size-primitive-space-800) * 1px);
+  display: grid;
+  place-items: center;
+  border-radius: calc(var(--size-primitive-radius-200) * 1px);
+  background: var(--color-semantic-feedback-warning-bold);
+  color: var(--color-semantic-feedback-warning-on-bold);
+}
+
+.badge svg { width: 60%; height: 60%; }
+
+.label {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+}
+
+.action {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-150) * 1px);
+  padding-block: calc(var(--size-primitive-space-150) * 1px);
+  padding-inline: calc(var(--size-primitive-space-300) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  background: var(--color-semantic-interactive-primary);
+  color: var(--color-semantic-interactive-on-primary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+}
+
+.actionGlyph { width: calc(var(--size-primitive-space-400) * 1px); height: calc(var(--size-primitive-space-400) * 1px); }

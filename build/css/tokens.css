@@ -55,6 +55,7 @@
   --color-primitive-alpha-light-48: #F5F3FF7A; /** Raw value, not for direct use. */
   --color-primitive-alpha-light-52: #FFFFFF85; /** Raw value, not for direct use. 52% white: the lowest tint that clears 4.5:1 for 12px text on background.surface and feedback.success.subtle. Added 2026-09-16 for text.tertiary. */
   --color-primitive-alpha-light-68: #F5F3FFAD; /** Raw value, not for direct use. */
+  --color-primitive-alpha-light-06: #FFFFFF0F; /** Raw value, not for direct use. 6% white, for a raised surface composited over a darker one. */
   --color-primitive-alpha-dark-10: #0A0A0A1A; /** Raw value, not for direct use. */
   --color-primitive-alpha-dark-50: #0A0A0A80; /** Raw value, not for direct use. */
   --color-primitive-alpha-glass-60: #3D3D3D99; /** Raw value, not for direct use. */
@@ -133,6 +134,7 @@
   --typography-primitive-font-weight-heavy: 900; /** Display L only, paired with fontFamily.display. On the Greed VF this is wght 900 (the file's own 'Heavy' instance), not 800. */
   --motion-primitive-duration-150: 150; /** 150ms. Micro-feedback: button press, checkbox toggle, mic circle press-down. */
   --motion-primitive-duration-250: 250; /** 250ms. State transitions: idle to recording, processing to result. */
+  --motion-primitive-duration-300: 300; /** 300ms. Swipe-to-settle for a card carousel. UNCONFIRMED: matched to common iOS carousel timing, not verified against a reference or a prototype — the same epistemic status as the +10 XP value. Tune once the swipe is prototyped. */
   --motion-primitive-duration-1100: 1100; /** 1100ms, loops. Mic-pulse timing, matched to iOS dictation / WhatsApp voice-note comparables. */
   --motion-primitive-easing-standard: cubic-bezier(0.4, 0, 0.2, 1); /** Standard ease-out, decelerates into rest. */
   --responsive-primitive-device-width-desktop: 1200; /** deviceWidth at the desktop breakpoint. Part of a 3-mode collection (Desktop/Mobile/Tablet); DTCG has no native mode support so each mode is a sibling token. */
@@ -148,9 +150,17 @@
   --component-button-s-height: 32; /** Size S pill height. Inside a 48px tap target (spacing.semantic.tapTarget). */
   --component-button-m-height: 40; /** Size M pill height. Inside a 48px tap target (spacing.semantic.tapTarget). */
   --component-button-l-height: 56; /** Size L pill height. Taller than the tap target, so the pill is the hit area. */
+  --component-scaffold-panel-header-height: 48; /** Status-bar region at the top of every screen. A literal: 48 here is the iOS status-bar area, unrelated to size.primitive.space.1200 (a spacing step) or spacing.semantic.tapTarget (a hit-area floor, which its own description says is not a layout rhythm value). */
+  --component-scaffold-top-navigation-height: 56; /** Region holding the appBar and the session fraction. A literal: component.button.l.height is also 56, but aliasing across components is how a value silently changes for the wrong reason. */
+  --component-scaffold-bottom-content-height: 120; /** The action zone at the foot of a screen. A literal: size.primitive.illustration.1500 is also 120, but that is an illustration box and a footer region is not one. component.micButton.diameter does alias it, legitimately, because a micButton genuinely is a 120 illustration-sized circle. */
+  --component-scaffold-bottom-sheet-only-height: 34; /** Home-indicator region, and the slot a bottom sheet occupies on its own branch screen. No primitive of this value exists. */
+  --component-mic-button-pulse-ring-inner: 160; /** Innermost pulse ring, 40 outside the 120 mic circle. */
+  --component-mic-button-pulse-ring-middle: 200; /** Middle pulse ring. */
+  --component-mic-button-pulse-ring-outer: 240; /** Outermost pulse ring, twice the mic diameter. */
   --component-mic-button-glyph-size: 48; /** Mic glyph box inside the 120px circle. A literal, bound in Figma on every state's glyph frame; no primitive of the right kind is 48 (tapTarget is a hit-area rule, not an icon size). */
   --color-semantic-background-page: var(--color-primitive-navy-950); /** Root screen canvas. Use for every screen's base background; not for cards, sheets, or modals. */
   --color-semantic-background-surface: var(--color-primitive-navy-800); /** Elevated container fill. Use for cards, bottom sheets, modals, dropdown menus, chat bubbles, toasts. */
+  --color-semantic-background-raised: var(--color-primitive-alpha-light-06); /** A surface sitting on top of another surface. Use when a card or row needs to separate from a container that is itself background.surface — the confirmed case is an optionRow inside a bottomSheet, where both would otherwise resolve to the same value and the row would vanish. Translucent on purpose so it composites correctly over any surface beneath it. Not a replacement for background.surface; only reach for it when there is a genuine second layer. */
   --color-semantic-background-inverse: var(--color-primitive-violet-50); /** Light fill for dark surfaces. Confirmed live use is status bar icon glyphs only; other uses unconfirmed. */
   --color-semantic-background-scrim: var(--color-primitive-alpha-dark-50); /** Semi-transparent overlay dimming content behind a modal. */
   --color-semantic-background-floating: var(--color-primitive-alpha-glass-60); /** Elevated floating surface with translucency, for dropdowns, tooltips, popovers. */
@@ -235,10 +245,12 @@
   --color-semantic-feedback-unclear-on-subtle: var(--color-primitive-coral-200); /** Text and icons on feedback.unclear.subtle. */
   --color-semantic-feedback-warning-bold: var(--color-primitive-gold-400); /** Solid fill for a due-or-caution-adjacent marker that isn't a verdict. Confirmed consumer: the 'Hint used' indicator on a recall result, distinct from the Pass/Partial/Miss verdict itself (which uses feedback.success/error), this marks how an answer was reached, not whether it was right. Parallels feedback.success.bold/feedback.error.bold/feedback.unclear.bold in structure, fourth entry in the same family. */
   --color-semantic-feedback-warning-on-bold: var(--color-primitive-gold-950); /** Text and icons on feedback.warning.bold. */
+  --color-semantic-feedback-warning-border: var(--color-primitive-gold-400); /** Outline for a due-or-caution element that is bordered rather than filled. Confirmed consumers: swipeChip on the plan-active home, where an amber border signals an approaching deadline without the weight of a solid fill, and dueSignalCard, which previously carried a raw hex for the same job. Currently the same value as feedback.warning.bold by design; split so a bordered treatment can move independently of a filled one. */
   --color-semantic-feedback-warning-subtle: var(--color-primitive-gold-900); /** Tinted background if a full card treatment is ever needed for this state. */
   --color-semantic-feedback-warning-on-subtle: var(--color-primitive-gold-300); /** Text and icons on feedback.warning.subtle. Same value text.warning already uses standalone. */
   --motion-semantic-duration-fast: var(--motion-primitive-duration-150); /** Micro-feedback timing: button press, checkbox toggle, the mic circle's press-down scale. */
   --motion-semantic-duration-standard: var(--motion-primitive-duration-250); /** State transitions: idle to recording, processing to result, the Voice UX Reference's Must-state beats. */
+  --motion-semantic-duration-swipe: var(--motion-primitive-duration-300); /** Card-to-card transition when the student swipes between due quizzes on the plan-active home. Longer than standard because the card travels a full screen-width and the count badge and dots update with it; the motion has to read as one continuous movement, not a state flip. */
   --motion-semantic-duration-ambient: var(--motion-primitive-duration-1100); /** Looping ambient timing, e.g. the mic listening-state pulse. */
   --motion-semantic-easing-standard: var(--motion-primitive-easing-standard); /** The curve fast, standard and ambient durations all use. */
   --responsive-primitive-root-font-size: var(--typography-primitive-font-size-root); /** Browser root font size, same across all three modes. References typography.primitive.fontSize.root. */

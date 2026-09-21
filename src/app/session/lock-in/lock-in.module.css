@@ -1,0 +1,21 @@
+/* 06 / 06b Lock It In — the requeued term, presented cold. Outside the [term]
+   numbering by decision (SPEC.md § Conventions): its own screen, its own copy, its
+   own progress value, matching the built frame. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.badge {
+  align-self: center;
+}

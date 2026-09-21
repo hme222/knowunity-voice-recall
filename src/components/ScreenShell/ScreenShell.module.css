@@ -1,0 +1,53 @@
+/* Mirrors the Figma `scaffold` component set (variant size=iPhone 13), whose regions
+   are Panel Header 48 / topNavigation 56 / middleContent 620 / bottomContent 120 /
+   bottomSheetOnly 34 = 844. The four chrome regions are fixed from tokens; the middle
+   flexes, so at an 844-tall viewport it computes to 620 and matches the frames, and at
+   any other height it absorbs the difference rather than the shell scrolling itself.
+   `flex: 1` on .middle is a sanctioned exception — see SPEC.md § Conventions. */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  background: var(--color-semantic-background-page);
+}
+
+.panelHeader {
+  height: calc(var(--component-scaffold-panel-header-height) * 1px);
+  flex-shrink: 0;
+}
+
+.topNavigation {
+  min-height: calc(var(--component-scaffold-top-navigation-height) * 1px);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+}
+
+.middle {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+  padding-block: calc(var(--size-primitive-space-200) * 1px);
+  padding-inline: calc(var(--spacing-semantic-screen-margin) * 1px);
+}
+
+.bottom {
+  min-height: calc(var(--component-scaffold-bottom-content-height) * 1px);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  padding: calc(var(--spacing-semantic-screen-margin) * 1px);
+}
+
+.sheetOnly {
+  height: calc(var(--component-scaffold-bottom-sheet-only-height) * 1px);
+  flex-shrink: 0;
+}

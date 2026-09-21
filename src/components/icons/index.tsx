@@ -2,8 +2,33 @@
 // large, inline here where it is small. All use currentColor so the consuming
 // component's token colour applies. Every svg fills its box: size it from the parent.
 
+import type { ComponentType } from 'react'
+import { X, Mic, RotateCcw } from 'lucide-react'
+
 export { LoadingIcon } from './LoadingIcon'
 export { SquareIcon } from './SquareIcon'
+
+/* Lucide glyphs, matching Figma's micGlyph_lucide / refreshGlyph_lucide, which are
+   exact Lucide geometry. Lucide emits its own width/height from a `size` prop; every
+   icon in this file instead fills its box so the parent slot sizes it. `lucide` wraps
+   one to that house convention — without it, a Lucide icon in AppBar's 24px slot
+   ignores the slot. Stroke stays currentColor like the rest. */
+function lucide(Glyph: ComponentType<{ className?: string }>) {
+  return function LucideIcon({ className }: { className?: string }) {
+    return (
+      <span className={className} style={{ display: 'block', width: '100%', height: '100%' }} aria-hidden="true">
+        <Glyph className="w-full h-full" />
+      </span>
+    )
+  }
+}
+
+/** appBar's exit control. Both real references (IMG_7511, IMG_7538) show an X, not a back arrow. */
+export const CloseIcon = lucide(X)
+/** Figma micGlyph_lucide. The outline mic, not micButton's filled artwork. */
+export const MicGlyphIcon = lucide(Mic)
+/** Figma refreshGlyph_lucide — Lucide rotate-ccw. */
+export const RefreshGlyphIcon = lucide(RotateCcw)
 
 type IconProps = { className?: string }
 const base = { fill: 'none', xmlns: 'http://www.w3.org/2000/svg', 'aria-hidden': true as const, width: '100%', height: '100%' }

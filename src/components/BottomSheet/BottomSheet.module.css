@@ -1,0 +1,53 @@
+/* Figma `bottomSheet` (15813:37265): 390 wide, vertical, gap space.300, pad 16/16/24,
+   surface fill, 24px top radius, 32×4 grabber, 17px Bold title, 0.50 scrim. */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: var(--color-semantic-background-scrim);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.sheet {
+  width: 100%;
+  max-height: 85%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  padding-bottom: calc(var(--size-primitive-space-600) * 1px);
+  border-top-left-radius: calc(var(--size-primitive-radius-600) * 1px);
+  border-top-right-radius: calc(var(--size-primitive-radius-600) * 1px);
+  background: var(--color-semantic-background-surface);
+}
+
+.grabber {
+  align-self: center;
+  width: calc(var(--size-primitive-space-800) * 1px);
+  height: calc(var(--size-primitive-space-100) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  background: var(--color-semantic-border-strong);
+}
+
+.title {
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-headline-xs-bold-font-weight);
+  font-size: calc(var(--typography-style-headline-xs-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-xs-bold-line-height) * 1px);
+}
+
+.subtitle {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-s-regular-font-weight);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}

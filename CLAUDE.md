@@ -43,6 +43,7 @@ The `storybook` MCP server is registered in `.mcp.json` and needs Storybook runn
 | `reference/screenshots/32–64` | Onboarding, study plan, revision reader, home composer, tools, profile. `52` is the mic-denied sheet. |
 | `reference/say-it-back-flow-screen-recording.mp4` | Motion and timing of the live beta flow. |
 | `public/knowie/*.svg` | Picking a Knowie expression: dazed, determined, excited, laughing. |
+| `component-gaps.md` | Before building a new screen. A running list of things built inline during a screen build, one line each; a second entry for the same thing means promote it to a real component. |
 | `src/components/<Name>/` | Using or changing a component. Built from the Figma set of the same name; props are the Figma variant names. Stories carry the Figma description. |
 | `src/app/layout.tsx`, `page.tsx`, `globals.css` | Editing the prototype shell. Loads Greed VF and `build/css/tokens.css`; `page.tsx` is still a placeholder. |
 | `.claude/skills/*/SKILL.md` | Auto-loaded by trigger. Open `references/` inside a skill only when its SKILL.md points you there. |

@@ -1,0 +1,74 @@
+/* Definition Drill Down. A different mode from the recall loop: no XP, no verdict
+   badge, and the meter is the only progress signal.
+   The built screens carry the progress ring at 25/50/75/100 — the fixed-ladder
+   fallback, shipped by decision (SPEC.md Open 5). The doc's variable-length model is
+   the intended version. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+}
+
+.centred {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  text-align: center;
+}
+
+.cue {
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  background: var(--color-semantic-background-surface);
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+}
+
+/* The echoed word on the third stumble. Deliberately larger — it is the one thing the
+   student has to say. */
+.echoWord {
+  color: var(--color-semantic-text-success);
+  font-weight: var(--typography-style-headline-s-font-weight);
+  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.mascot {
+  animation: breathe calc(var(--motion-semantic-duration-ambient) * 1ms) ease-in-out infinite;
+}
+
+@keyframes breathe {
+  from { transform: scale(0.98); }
+  to { transform: scale(1.02); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot { animation: none; }
+}
+
+.note {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+  text-align: center;
+}

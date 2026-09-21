@@ -1,0 +1,29 @@
+/* 01b Exit confirmation — Figma frame "01b Back button tapped — exit confirmation"
+   (15752:17282), matching the real reference IMG_7511.
+   Its own branch screen, never baked into a default-state screen — the rule
+   docs/sprint-context.md § "Process notes" records three times. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+}
+
+.reasons {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.note {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
