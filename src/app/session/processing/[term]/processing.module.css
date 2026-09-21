@@ -19,7 +19,7 @@
 /* Knowie is the "still working" signal — the mascot breathes rather than a spinner,
    so the wait has somewhere to live that isn't a dead indicator. */
 .mascot {
-  animation: breathe var(--beat) ease-in-out infinite;
+  animation: breathe calc(var(--beat) / 2) ease-in-out infinite alternate;
 }
 
 @keyframes breathe {
@@ -49,11 +49,11 @@
   height: calc(var(--size-primitive-space-300) * 1px);
   border-radius: calc(var(--size-primitive-radius-full) * 1px);
   background: var(--color-semantic-brand-bold);
-  animation: blink var(--beat) ease-in-out infinite;
+  animation: blink calc(var(--beat) / 2) ease-in-out infinite alternate;
 }
 
-.dot:nth-child(2) { animation-delay: calc(var(--motion-semantic-duration-ambient) * 0.2ms); }
-.dot:nth-child(3) { animation-delay: calc(var(--motion-semantic-duration-ambient) * 0.4ms); }
+.dot:nth-child(2) { animation-delay: calc(var(--motion-semantic-duration-ambient) * 0.1ms); }
+.dot:nth-child(3) { animation-delay: calc(var(--motion-semantic-duration-ambient) * 0.2ms); }
 
 @keyframes blink {
   from { transform: translateY(0); }

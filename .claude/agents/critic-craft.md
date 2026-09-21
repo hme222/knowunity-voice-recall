@@ -2,7 +2,7 @@
 name: critic-craft
 description: Adversarial critic for Craft and Coherence. Grades the Say It Back prototype against eval/rubric.md — spacing, rhythm, states, the small deliberate decisions, and whether the screens read as one product or as screens that arrived separately. Read-only; reports scores and findings and never edits. Use when grading a build, alongside critic-ux and critic-system. Do NOT use it to fix anything it finds.
 tools: Read, Grep, Glob, Bash, mcp__storybook__docs-list, mcp__storybook__docs-show, mcp__claude-in-chrome__tabs_context_mcp, mcp__claude-in-chrome__tabs_create_mcp, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__computer
-model: opus
+model: sonnet
 ---
 
 # Craft critic

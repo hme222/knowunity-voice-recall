@@ -20,7 +20,10 @@
 }
 
 .topNavigation {
-  min-height: calc(var(--component-scaffold-top-navigation-height) * 1px);
+  /* height, not min-height. With min-height the region grew with its content and the
+     action zone moved up to 272px between consecutive turns, against this file's own
+     claim that the four chrome regions are fixed. */
+  height: calc(var(--component-scaffold-top-navigation-height) * 1px);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -39,7 +42,7 @@
 }
 
 .bottom {
-  min-height: calc(var(--component-scaffold-bottom-content-height) * 1px);
+  height: calc(var(--component-scaffold-bottom-content-height) * 1px);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;

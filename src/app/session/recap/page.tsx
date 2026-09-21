@@ -2,15 +2,16 @@
 
 import { useRouter } from 'next/navigation'
 import { AppBar, Button, ButtonIcon, ScreenShell, StatChip, TextBlock } from '@/components'
-import { CloseIcon } from '@/components/icons'
+import { CloseIcon, EyeIcon } from '@/components/icons'
 import {
   Bucket,
   getTerm,
-  useSession,
   sessionTotals,
   shuffledFirstTerm,
   startSession,
   TOTAL_TERMS,
+  useSession,
+  XP,
 } from '@/lib/session'
 import styles from './recap.module.css'
 
@@ -42,6 +43,7 @@ export default function RecapPage() {
 
   const outcomes = state.outcomes
   const totals = sessionTotals(state)
+  const complete = outcomes.length === TOTAL_TERMS
   const rough = outcomes.filter((o) => o.bucket === 'Unaided' || o.bucket === 'Hinted').length <= outcomes.length / 2
 
   // Try again re-presents the same terms shuffled. It restarts the session so the Time
@@ -87,16 +89,21 @@ export default function RecapPage() {
           variant="L"
           title="Session recap"
           caption={
-            totals
-              ? `You explained ${totals.unaided} of ${outcomes.length || TOTAL_TERMS} without help.`
-              : 'Adding up your session…'
+            outcomes.length === 0
+              ? undefined
+              : complete
+                ? `You explained ${totals.unaided} of ${TOTAL_TERMS} without help. +${totals.earned} earned, +${XP.completionBonus} for finishing.`
+                : `You explained ${totals.unaided} of ${outcomes.length} without help.`
           }
+          showCaption={outcomes.length > 0}
         />
       </div>
 
-      {totals && (
+      {outcomes.length > 0 && (
         <div className={styles.stats}>
-          <StatChip stat="XP" value={`+${totals.earned}`} />
+          {/* The bonus is only real once the set is finished, which is the whole reason
+              it exists. Before that it is still up for grabs, as the exit sheet says. */}
+          <StatChip stat="XP" value={`+${complete ? totals.withBonus : totals.earned}`} />
           <StatChip stat="Score" value={`${totals.score}%`} />
           <StatChip stat="Time" value={totals.elapsed} />
         </div>
@@ -130,6 +137,7 @@ export default function RecapPage() {
                   <ButtonIcon
                     variant="Overlay"
                     size="S"
+                    icon={<EyeIcon />}
                     label={`See what you said for ${getTerm(row.index)?.name}`}
                     onClick={() => router.push(`/session/transcript/${TRANSCRIPT_BUCKET[bucket]}`)}
                   />

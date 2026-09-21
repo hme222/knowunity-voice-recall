@@ -34,7 +34,7 @@ export default function LockInSecondPage() {
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="excited" />
+        <MascotSlot size="2XL" expression="laughing" />
         <RecallResult state="Pass" title="Locked in. You got it this time." transcript={`“${term.transcript}”`} />
       </div>
     </ScreenShell>

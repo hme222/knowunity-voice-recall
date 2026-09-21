@@ -2,7 +2,7 @@
 name: critic-ambition
 description: Non-adversarial reach critic for the Say It Back prototype. Obeys every hard rule in docs/design-system.md, then asks what the work is settling for and where a safe choice could have been a strong one — proposing stronger patterns built only from components that already exist, named. Scores rule-following risk-free work at 5. Never praises. Read-only; proposes and never edits. Its score is reported separately and does NOT go into the total.
 tools: Read, Grep, Glob, Bash, mcp__storybook__docs-list, mcp__storybook__docs-show, mcp__claude-in-chrome__tabs_context_mcp, mcp__claude-in-chrome__tabs_create_mcp, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__computer
-model: opus
+model: sonnet
 ---
 
 # Ambition critic

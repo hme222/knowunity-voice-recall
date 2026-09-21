@@ -26,6 +26,11 @@ export type ChipsProps = {
   rightIcon?: ReactNode
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'color'>
 
+/**
+ * Renders a <button> only when it does something. Used without onClick it is a status
+ * label, and shipping those as focusable aria-pressed toggles put five inert chips in
+ * the tab order announcing themselves as pressed buttons that do nothing.
+ */
 export function Chips({
   Text: text,
   size = 'XXS',
@@ -39,19 +44,22 @@ export function Chips({
   type = 'button',
   ...rest
 }: ChipsProps) {
+  const interactive = rest.onClick != null
+  const Tag = (interactive ? 'button' : 'span') as 'button'
   return (
-    <button
+    <Tag
       {...rest}
-      type={type}
+      {...(interactive ? { type } : { role: 'status' })}
       className={[styles.root, className].filter(Boolean).join(' ')}
       data-size={size}
       data-color={color}
       data-active={active || undefined}
-      aria-pressed={active}
+      data-interactive={interactive || undefined}
+      aria-pressed={interactive ? active : undefined}
     >
       {showLeftIcon && <span className={styles.icon}>{leftIcon ?? (color === 'Coral' ? <RefreshIcon /> : <SquareIcon />)}</span>}
       <span className={styles.label}>{text}</span>
       {showRightIcon && <span className={styles.icon}>{rightIcon ?? <SquareIcon />}</span>}
-    </button>
+    </Tag>
   )
 }

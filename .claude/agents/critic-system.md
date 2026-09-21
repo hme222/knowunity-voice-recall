@@ -2,7 +2,7 @@
 name: critic-system
 description: Adversarial critic for System fidelity and Structure. Grades the Say It Back prototype against eval/rubric.md — whether every value traces back to a token and every component to the library, and whether the layout holds and the thing renders. Read-only; reports scores and findings and never edits. Use when grading a build, alongside critic-craft and critic-ux. Do NOT use it to fix anything it finds.
 tools: Read, Grep, Glob, Bash, mcp__storybook__docs-list, mcp__storybook__docs-show, mcp__claude-in-chrome__tabs_context_mcp, mcp__claude-in-chrome__tabs_create_mcp, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__computer
-model: opus
+model: sonnet
 ---
 
 # System critic

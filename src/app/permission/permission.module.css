@@ -72,7 +72,10 @@
   background: none;
   border: 0;
   cursor: pointer;
-  color: var(--color-semantic-text-link);
+  /* Was text.link (violet.500) on the composited glass: measured 4.18:1, below the
+     4.5 gate for 18px semibold, which is not WCAG large text. text.primary clears it
+     on the same background. */
+  color: var(--color-semantic-text-primary);
   font: inherit;
   font-weight: var(--typography-style-body-m-bold-font-weight);
   font-size: calc(var(--typography-style-body-m-bold-font-size) * 1px);

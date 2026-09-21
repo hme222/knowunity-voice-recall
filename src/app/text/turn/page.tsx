@@ -11,7 +11,7 @@ import {
   SessionFraction,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, progressFor, TOTAL_TERMS } from '@/lib/session'
+import { getTerm, nextAfter, progressFor, recordOutcome, TOTAL_TERMS } from '@/lib/session'
 import styles from '../text.module.css'
 
 // The text fallback turn. Not a "nice to have": some students can't speak, and many
@@ -30,6 +30,14 @@ function TextTurnScreen() {
   const sticky = searchParams.get('sticky') === '1'
   const current = getTerm(index)
   const [answer, setAnswer] = useState('')
+
+  // The escapes the voice turn has. Without these a student on the denied-mic path had
+  // exactly two controls, an X and a disabled Send, which breaks the brief's hard
+  // constraint on the one screen written for a student who cannot speak.
+  function skip() {
+    recordOutcome(index, 'Worth revisiting')
+    router.push(nextAfter(index))
+  }
 
   if (!current) {
     router.replace('/session/intro')
@@ -69,6 +77,14 @@ function TextTurnScreen() {
               onClick={() => router.push(`/session/idle/${index}`)}
             />
           )}
+          <Button
+            CTA="I don't know this one"
+            variant="Tertiary"
+            size="M"
+            fullWidth
+            onClick={() => router.push(`/session/blank/${index}`)}
+          />
+          <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={skip} />
         </div>
       }
     >

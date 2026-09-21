@@ -2,7 +2,7 @@
 name: critic-ux
 description: Adversarial critic for UX judgment and Accessibility. Grades the Say It Back prototype against eval/rubric.md — whether the states are handled, the hierarchy is clear, the failure paths are designed, and whether meaning ever rests on colour alone. Read-only; reports scores and findings and never edits. Use when grading a build, alongside critic-craft and critic-system. Do NOT use it to fix anything it finds.
 tools: Read, Grep, Glob, Bash, mcp__storybook__docs-list, mcp__storybook__docs-show, mcp__claude-in-chrome__tabs_context_mcp, mcp__claude-in-chrome__tabs_create_mcp, mcp__claude-in-chrome__navigate, mcp__claude-in-chrome__computer
-model: opus
+model: sonnet
 ---
 
 # UX critic

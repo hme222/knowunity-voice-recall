@@ -1101,9 +1101,9 @@ gap is real and this is the mapping — read it, don't re-decide it per screen.
 | --- | --- | --- |
 | `standby` | `determined` | Every resting/waiting screen: 00 Intro, 01 Idle, 03 Processing, 05a Reveal, 06 Lock It In |
 | `attentive` | `determined` | The drill's rung screens, where the student is about to speak |
-| `approving` | `excited` | The in-flow win: 04 Pass, 06b Lock It In 2nd pass, 02a Captured |
+| `approving` | `laughing` | The in-flow win: 04 Pass, 06b Lock It In 2nd pass, 02a Captured. **Changed 2026-09-21 from `excited`**, whose head is `#0E0A18` against a `#090C18` page, about 1.01:1 — the one pose reserved for winning was the only invisible one. `laughing` is the only pose with a light head. |
 | `pleased` | `laughing` | Completion moments: 07 Recap, DD 08 Complete, DD 00b returning intro |
-| `excited` | `excited` | Home and the unlock reveal |
+| `excited` | `laughing` | Home and the unlock reveal. Also remapped 2026-09-21, same reason: on `/home/unlock` the pose renders at `3XL`, so the largest instance was the most invisible. |
 
 `dazed` maps to no Figma pose. It is **reserved for 04a Couldn't hear**, and
 used nowhere else — a puzzled Knowie there reads as the app being confused

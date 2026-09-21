@@ -4,12 +4,13 @@ import styles from './MicButton.module.css'
 
 // Mirrors the Figma component set `micButton` (15648:10629): one `state` variant.
 
-export const MIC_BUTTON_STATES = ['Idle', 'Listening', 'Captured', 'Disabled'] as const
+export const MIC_BUTTON_STATES = ['Idle', 'Listening', 'Paused', 'Captured', 'Disabled'] as const
 export type MicButtonState = (typeof MIC_BUTTON_STATES)[number]
 
 const LABELS: Record<MicButtonState, string> = {
   Idle: 'Start speaking',
   Listening: 'Listening, tap to pause',
+  Paused: 'Paused, tap to resume',
   Captured: 'Answer captured',
   Disabled: 'Microphone unavailable',
 }
@@ -21,6 +22,8 @@ export type MicButtonProps = {
   label?: string
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'disabled' | 'aria-label'>
 
+// Only Listening is a pressed state. A paused recorder is not capturing, and the pulse
+// ring is suppressed in Paused so motion never contradicts the caption.
 export function MicButton({ state = 'Idle', label, className, type = 'button', ...rest }: MicButtonProps) {
   return (
     <button

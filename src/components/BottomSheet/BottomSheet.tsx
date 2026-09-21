@@ -1,4 +1,6 @@
-import type { ReactNode } from 'react'
+import { useEffect, type ReactNode } from 'react'
+import { ButtonIcon } from '../ButtonIcon/ButtonIcon'
+import { CloseIcon } from '../icons'
 import styles from './BottomSheet.module.css'
 
 // Mirrors the Figma component `bottomSheet` (15813:37265). `Title` is its text property.
@@ -23,6 +25,17 @@ export type BottomSheetProps = {
 }
 
 export function BottomSheet({ Title, subtitle, children, onDismiss, className }: BottomSheetProps) {
+  // A dialog whose only dismissal was a click on a presentational scrim could not be
+  // closed by keyboard at all. Escape and a labelled close control, both required.
+  useEffect(() => {
+    if (!onDismiss) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onDismiss()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [onDismiss])
+
   return (
     <div
       className={styles.scrim}
@@ -37,7 +50,18 @@ export function BottomSheet({ Title, subtitle, children, onDismiss, className }:
         onClick={(e) => e.stopPropagation()}
       >
         <span className={styles.grabber} aria-hidden="true" />
-        <h2 className={styles.title}>{Title}</h2>
+        <div className={styles.titleRow}>
+          <h2 className={styles.title}>{Title}</h2>
+          {onDismiss && (
+            <ButtonIcon
+              variant="Tertiary"
+              size="S"
+              label={`Close ${Title}`}
+              icon={<CloseIcon />}
+              onClick={onDismiss}
+            />
+          )}
+        </div>
         {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
         <div className={styles.content}>{children}</div>
       </div>

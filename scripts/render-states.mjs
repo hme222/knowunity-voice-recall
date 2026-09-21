@@ -3,7 +3,7 @@
 // broken or was never rendered. This flags; it does not fix.
 import { chromium } from 'playwright'
 import { createHash } from 'node:crypto'
-import { writeFileSync, readFileSync } from 'node:fs'
+import { writeFileSync } from 'node:fs'
 
 const BASE = 'http://localhost:3000'
 
@@ -14,7 +14,7 @@ const STATES = [
   ['home-unlocked', '/home/unlocked'],
   ['home-due-swipe1', '/home/due'],
   ['home-due-swipe2', '/home/due', async p => { await p.getByText('Swipe to the next').click(); await p.waitForTimeout(400) }],
-  ['home-due-swipe3', '/home/due', async p => { for (const _ of [0,1]) { await p.getByText('Swipe to the next').click(); await p.waitForTimeout(400) } }],
+  ['home-due-swipe3', '/home/due', async p => { for (let i = 0; i < 2; i++) { await p.getByText('Swipe to the next').click(); await p.waitForTimeout(400) } }],
   ['picker', '/picker'],
   ['00-intro', '/session/intro'],
   ['01-idle-t1', '/session/idle/1'],

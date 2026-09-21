@@ -19,7 +19,7 @@
   font-weight: var(--typography-style-caption-m-bold-font-weight);
   font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
   line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
-  letter-spacing: calc(var(--typography-style-caption-m-bold-letter-spacing) * 0.08em);
+  letter-spacing: calc(var(--typography-primitive-tracking-wide) * 0.01em);
 }
 
 .note {

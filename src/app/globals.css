@@ -33,7 +33,12 @@ body {
   width: calc(var(--responsive-primitive-device-width-mobile) * 1px);
   max-width: 100%;
   margin-inline: auto;
-  min-height: 100dvh;
+  /* height, not min-height. With min-height the frame grows past the viewport and the
+     document scrolls, taking the app bar and progress ring off the top with it —
+     ScreenShell's middle region then never engages its own overflow. Fixing the frame
+     makes the content region absorb the difference, which is what the scaffold is for. */
+  height: 100dvh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   background: var(--color-semantic-background-page);

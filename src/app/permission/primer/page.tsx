@@ -31,7 +31,7 @@ export default function PrimerPage() {
         <TextBlock
           variant="XL"
           title="Ready to say it out loud?"
-          caption="Knowie needs your mic to hear your answer. It only listens while you hold the button, and nothing is recorded anywhere else. You can always type instead."
+          caption="Knowie needs your mic to hear your answer. It only listens while you're recording, and nothing is kept anywhere else. You can always type instead."
         />
       </div>
     </ScreenShell>

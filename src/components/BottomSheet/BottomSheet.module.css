@@ -51,3 +51,10 @@
   flex-direction: column;
   gap: calc(var(--size-primitive-space-200) * 1px);
 }
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+}

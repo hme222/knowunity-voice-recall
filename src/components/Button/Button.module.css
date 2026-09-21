@@ -7,6 +7,9 @@
   align-items: center;
   justify-content: center;
   min-height: calc(var(--spacing-semantic-tap-target) * 1px);
+  /* And a minimum WIDTH. min-height alone left a short Tertiary label ("Skip")
+     rendering 30px wide, which clears 44pt on one axis only. */
+  min-width: calc(var(--spacing-semantic-tap-target) * 1px);
   padding: 0;
   margin: 0;
   border: 0;

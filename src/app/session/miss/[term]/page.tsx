@@ -66,7 +66,7 @@ function MissScreen({ index }: { index: number }) {
             fullWidth
             onClick={() => router.push(`/session/recording/${index}?attempt=${attempt + 1}&hinted=1`)}
           />
-          <Button CTA="Skip \u00b7 no XP" variant="Tertiary" size="M" fullWidth onClick={skip} />
+          <Button CTA="Skip · no XP" variant="Tertiary" size="M" fullWidth onClick={skip} />
         </div>
       }
     >

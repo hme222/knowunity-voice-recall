@@ -1,6 +1,8 @@
 /* chips — mirrors the Figma component set `chips` (9003:8679). */
 
 .root {
+  /* An interactive chip needs the 44pt hit area even though the pill is 32 tall.
+     An inert one does not, because it is not a target. */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -89,4 +91,24 @@
 .root[data-active][data-color='Coral'] {
   background: var(--color-semantic-feedback-unclear-bold);
   color: var(--color-semantic-feedback-unclear-on-bold);
+}
+
+/* Interactive chips only: the pill stays its designed height, the hit area clears
+   spacing.semantic.tapTarget via a transparent inset. */
+.root[data-interactive] {
+  position: relative;
+}
+
+.root[data-interactive]::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  min-height: calc(var(--spacing-semantic-tap-target) * 1px);
+  transform: translateY(-50%);
+}
+
+.root:not([data-interactive]) {
+  cursor: default;
 }

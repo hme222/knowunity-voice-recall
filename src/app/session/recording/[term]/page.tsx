@@ -101,14 +101,11 @@ function RecordingScreen({ index }: { index: number }) {
           <span className={styles.ring} aria-hidden="true" />
           <span className={styles.ring} aria-hidden="true" />
           <span className={styles.ring} aria-hidden="true" />
-          {/* Stays Listening while paused. SPEC.md Open 12: MicButton gains no Paused
-              state and its appearance doesn't change — the accepted risk is that the
-              tap has no visible confirmation on the mic itself. RecordingStatus below
-              carries it. Reusing `Captured` here would have repurposed a state whose
-              accessible name is "Answer captured". */}
+          {/* A real Paused state as of 2026-09-21. The accepted risk that "nothing on
+              screen changes when paused" failed its own gate: the fill was identical
+              and the pulse ring kept animating while the caption said stopped. */}
           <MicButton
-            state="Listening"
-            label={paused ? 'Paused, tap to resume' : undefined}
+            state={paused ? 'Paused' : 'Listening'}
             onClick={() => setPaused((p) => !p)}
           />
         </div>

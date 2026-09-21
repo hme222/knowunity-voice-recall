@@ -21,7 +21,7 @@ export default function UnlockPage() {
           <SwipeChip onClick={() => router.push('/home/unlocked')} />
         </div>
         <div className={styles.coachCard}>
-          <MascotSlot size="3XL" expression="excited" />
+          <MascotSlot size="3XL" expression="laughing" />
           <TextBlock
             variant="L"
             title="You've unlocked Say It Back"
