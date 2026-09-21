@@ -1,10 +1,20 @@
 /* 02a Captured — screen layout only. The card itself is the RecallResultCaptured
    component, promoted when DD 02a became its second consumer. */
 
+/* align-items, like every other body in the flow. Without it the 120px mascot sat at
+   x=28 while every other screen centres it at x=195 — this file was missed when the
+   mascot was centred everywhere else, because it was not in the 21 screens measured. */
 .body {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: calc(var(--spacing-semantic-between-sections) * 1px);
+}
+
+/* The card still spans the margin. */
+.card {
+  align-self: stretch;
+  width: 100%;
 }
 
 .actions {

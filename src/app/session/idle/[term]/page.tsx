@@ -65,9 +65,6 @@ function IdleScreen({ index }: { index: number }) {
         <div className={styles.actions}>
           {/* Two buttons, not three. The frame has no "I don't know this one"; the
               blank state is still reached from /text/turn, so nothing is orphaned. */}
-          {/* The frame puts two buttons side by side in an 88px action zone, with the
-              mic up in middleContent. Stacking three full-width buttons here needed
-              204px against a 120 budget and spilled over the content below. */}
           <div className={actionRowClass}>
             <Button
               CTA="Type instead"
@@ -75,7 +72,7 @@ function IdleScreen({ index }: { index: number }) {
               size="M"
               onClick={() => router.push(`/text/turn?term=${index}`)}
             />
-            <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={skip} />
+            <Button CTA="Skip" variant="Tertiary" size="M" onClick={skip} />
           </div>
         </div>
       }

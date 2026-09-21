@@ -86,6 +86,7 @@ function CapturedScreen({ index }: { index: number }) {
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="determined" />
         <RecallResultCaptured
+          className={styles.card}
           title="Here&rsquo;s what I heard. Send it, or say it again."
           transcript={current.transcript}
           tag={
