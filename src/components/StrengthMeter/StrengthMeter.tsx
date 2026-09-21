@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import styles from './StrengthMeter.module.css'
 
 // Mirrors Figma's `strengthMeter` (15808:17668), but continuous rather than stepped.
@@ -35,6 +36,10 @@ function band(fill: number) {
 
 export function StrengthMeter({ fill, label, className }: StrengthMeterProps) {
   const clamped = Math.max(0, Math.min(100, fill))
+  // The visible caption IS the bar's name. Naming the bar with the same string in
+  // aria-label read it twice — once as the bar, once as text. Without a caption the
+  // bar still needs a name, so the fallback stays as aria-label.
+  const labelId = useId()
   return (
     <div className={[styles.root, className].filter(Boolean).join(' ')}>
       <div
@@ -43,11 +48,16 @@ export function StrengthMeter({ fill, label, className }: StrengthMeterProps) {
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(clamped)}
-        aria-label={label ?? 'How much you can say unaided'}
+        aria-labelledby={label ? labelId : undefined}
+        aria-label={label ? undefined : 'How much you can say unaided'}
       >
         <div className={styles.fill} style={{ width: `${clamped}%` }} data-band={band(clamped)} />
       </div>
-      {label && <p className={styles.label}>{label}</p>}
+      {label && (
+        <p id={labelId} className={styles.label}>
+          {label}
+        </p>
+      )}
     </div>
   )
 }

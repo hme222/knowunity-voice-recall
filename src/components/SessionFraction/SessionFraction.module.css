@@ -16,10 +16,22 @@
   top: calc(var(--size-primitive-space-600) * 1px);
   transform: translateY(-50%);
   display: block;
+  margin: 0;
   text-align: center;
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
   font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
   line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
   letter-spacing: calc(var(--typography-style-caption-m-bold-letter-spacing) * 0.01em);
+}
+
+/* The readable backing. The ring's fill passes under the text as the session advances,
+   and text.primary fell to 3.15:1 on brand.bold. A background.page pill exactly one
+   line tall (captionMBold's 16, the same as the 16 track) reads as a cut-out in the
+   bar, and the text is on the page colour whatever the progress. */
+.pill {
+  display: inline-block;
+  padding-inline: calc(var(--size-primitive-space-200) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  background: var(--color-semantic-background-page);
 }

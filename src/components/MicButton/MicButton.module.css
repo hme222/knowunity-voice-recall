@@ -56,22 +56,23 @@
   height: calc(var(--component-mic-button-glyph-size) * 1px);
 }
 
-/* Listening: the pulsing ring is additive motion (see component.micButton.listening.fill); the fill carries the state on its own. */
+/* Listening: the pulsing ring is additive motion (see component.micButton.listening.fill); the fill carries the state on its own.
+   It loops, so it runs on easing.ambient; its travel and opacity are component.micButton.pulse.glyph.*. */
 .pulse {
   position: absolute;
   inset: 0;
   border-radius: inherit;
   background: var(--component-mic-button-listening-fill);
-  animation: pulse calc(var(--motion-semantic-duration-ambient) * 1ms) var(--motion-semantic-easing-standard) infinite;
+  animation: pulse calc(var(--motion-semantic-duration-ambient) * 1ms) var(--motion-semantic-easing-ambient) infinite;
   pointer-events: none;
 }
 @keyframes pulse {
   from {
     transform: scale(1);
-    opacity: 0.5;
+    opacity: var(--component-mic-button-pulse-glyph-peak-opacity);
   }
   to {
-    transform: scale(1.4);
+    transform: scale(var(--component-mic-button-pulse-glyph-peak-scale));
     opacity: 0;
   }
 }

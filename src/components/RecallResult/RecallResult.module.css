@@ -20,6 +20,12 @@
   background: var(--color-semantic-background-surface);
   --result-title: var(--color-semantic-text-primary);
 }
+/* Neutral: the drill's ungraded card (DD 07). Same surface and title as CouldntHear,
+   without the retry tag and with the "You said" label. */
+.root[data-state='Neutral'] {
+  background: var(--color-semantic-background-surface);
+  --result-title: var(--color-semantic-text-primary);
+}
 
 .title,
 .label,

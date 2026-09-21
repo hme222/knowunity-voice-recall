@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { actionRowClass, AppBar, Button, MascotSlot, ProgressIndicator, ScreenShell, TextBlock } from '@/components'
+import { AppBar, Button, MascotSlot, ProgressIndicator, ScreenShell } from '@/components'
 import { MicGlyphIcon } from '@/components/icons'
 import { proveItHref } from '../doors'
 import styles from '../door.module.css'
@@ -28,7 +28,7 @@ export default function QuizCompleteDoor() {
         </AppBar>
       }
       bottomContent={
-        <div className={actionRowClass}>
+        <div className={styles.doorActions}>
           <Button CTA="Not now" variant="Tertiary" size="M" onClick={() => router.push('/home/unlock')} />
           <Button
             CTA="Prove it"
@@ -44,7 +44,12 @@ export default function QuizCompleteDoor() {
       <div className={styles.body}>
         <div className={styles.content}>
           <MascotSlot size="2XL" expression="determined" />
-          <TextBlock variant="L" title="Quiz complete!" caption="9/10 correct. Want to prove one sticks?" />
+          {/* The frame draws these as loose text nodes at Headline S over Body M
+              Regular, not as a textBlock. TextBlock's L renders 44px. */}
+          <div className={styles.screenTitle}>
+            <h1 className={styles.screenTitleHeading}>Quiz complete!</h1>
+            <p className={styles.screenTitleCaption}>9/10 correct. Want to prove one sticks?</p>
+          </div>
         </div>
       </div>
     </ScreenShell>

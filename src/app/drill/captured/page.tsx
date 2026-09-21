@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Button, Chips, MascotSlot, RecallResultCaptured, ScreenShell, StrengthMeter } from '@/components'
+import { Button, MascotSlot, RecallResultCaptured, ScreenShell, StrengthMeter } from '@/components'
 import { drillRung, DRILL_TERM } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
@@ -34,7 +34,7 @@ function DrillCaptured() {
             onClick={() => router.push(`/drill/processing?step=${step}`)}
           />
           <Button
-            CTA="Re-record"
+            CTA="Say it again"
             variant="Secondary"
             size="M"
             fullWidth
@@ -49,16 +49,10 @@ function DrillCaptured() {
         <RecallResultCaptured
           title="Here&rsquo;s what I heard. Send it, or say it again."
           transcript={DRILL_TERM.transcript}
-          tag={
-            <Chips
-              Text="Try again"
-              size="S"
-              color="Coral"
-              active
-              showRightIcon={false}
-              onClick={() => router.push(`/drill/recording?step=${step}`)}
-            />
-          }
+          /* No `tag` chip. The action zone below already offers "Say it again" and
+             "Looks right" — the frame's pair — so an in-card chip repeating one of them
+             put two controls with the same label on one screen. One action, one
+             control. Logged in component-gaps.md. */
         />
       </div>
     </ScreenShell>

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { openSheet } from '@/lib/navigation'
-import { AppBar, Button, ButtonIcon, MascotSlot, ScreenShell, StatChip, TextBlock } from '@/components'
+import { AppBar, Button, ButtonIcon, MascotSlot, ScreenShell, StatChip } from '@/components'
 import { CloseIcon, EyeIcon } from '@/components/icons'
 import {
   Bucket,
@@ -47,7 +47,7 @@ export default function RecapPage() {
   const complete = outcomes.length === TOTAL_TERMS
   const rough = outcomes.filter((o) => o.bucket === 'Unaided' || o.bucket === 'Hinted').length <= outcomes.length / 2
 
-  // Try again re-presents the same terms shuffled. It restarts the session so the Time
+  // "Run it again" re-presents the same terms shuffled. It restarts the session so the Time
   // stat measures this run, not the one before it.
   function tryAgain() {
     startSession()
@@ -62,14 +62,14 @@ export default function RecapPage() {
       bottomContent={
         <div className={styles.actions}>
           <Button
-            CTA={rough ? 'Try again' : 'Done'}
+            CTA={rough ? 'Run it again' : 'Done'}
             variant="Primary"
             size="M"
             fullWidth
             onClick={() => (rough ? tryAgain() : router.push('/home/unlocked'))}
           />
           <Button
-            CTA={rough ? 'Done' : 'Try again'}
+            CTA={rough ? 'Done' : 'Run it again'}
             variant="Secondary"
             size="M"
             fullWidth
@@ -89,18 +89,19 @@ export default function RecapPage() {
           was found independently in both scorecards. */}
       <div className={styles.headline}>
         <MascotSlot size="2XL" expression="laughing" className={styles.mascotCentred} />
-        <TextBlock
-          variant="L"
-          title="Session recap"
-          caption={
-            outcomes.length === 0
-              ? undefined
-              : complete
+        {/* Headline S over Body M Regular, as the frames set a screen title — not
+            TextBlock's L, which renders 44px. See door.module.css for the same note;
+            the evidence there is a direct read of the Quiz complete frame. */}
+        <div className={styles.screenTitle}>
+          <h1 className={styles.screenTitleHeading}>Session recap</h1>
+          {outcomes.length > 0 && (
+            <p className={styles.screenTitleCaption}>
+              {complete
                 ? `You explained ${totals.unaided} of ${TOTAL_TERMS} without help. +${totals.earned} earned, +${XP.completionBonus} for finishing.`
-                : `You explained ${totals.unaided} of ${outcomes.length} without help.`
-          }
-          showCaption={outcomes.length > 0}
-        />
+                : `You explained ${totals.unaided} of ${outcomes.length} without help.`}
+            </p>
+          )}
+        </div>
       </div>
 
       {outcomes.length > 0 && (

@@ -13,7 +13,7 @@
   cursor: pointer;
   font: inherit;
   text-align: left;
-  transition: border-color calc(var(--motion-semantic-duration-standard) * 1ms) ease;
+  transition: border-color calc(var(--motion-semantic-duration-standard) * 1ms) var(--motion-semantic-easing-standard);
 }
 
 /* Plan-active: the amber border signals an approaching deadline without the weight of

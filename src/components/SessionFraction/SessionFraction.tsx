@@ -18,6 +18,11 @@ import styles from './SessionFraction.module.css'
 //   2. The requeue is a named round, not a term number. The frames drew 06 Lock It In
 //      as 3/4 at 75%, which ran the bar 100% -> 75% -> 100% and made the session look
 //      like it had gone backwards.
+//
+// It paints its own backing (2026-09-21). Overlaid on the ring, text.primary measured
+// 13.95:1 over the empty track and 3.15:1 over the filled brand.bold — it got harder to
+// read as the session went on. No single text colour clears 4.5:1 against both, so the
+// text sits in a background.page pill: a cut-out in the bar, readable at any progress.
 
 export type SessionFractionProps = {
   /** The term the student is on, 1-based. Omit when `label` names the round instead. */
@@ -48,7 +53,7 @@ export function SessionFraction({ current, total, label, moreToCome, className }
   if (text == null) return null
   return (
     <p className={[styles.root, className].filter(Boolean).join(' ')} aria-hidden="true">
-      {text}
+      <span className={styles.pill}>{text}</span>
     </p>
   )
 }

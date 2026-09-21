@@ -12,6 +12,8 @@ const FIGMA_DESCRIPTION = `
 ---
 
 Built 2026-09-16. Fully bound in Figma; nothing added. The tag is the real Chips component (S, Coral, active) with the retry glyph exported from this set. The Miss label uses \`feedback.error.onSubtle\` (bound in Figma too): \`text.tertiary\` measured 3.8:1 on the error tint. Pass and CouldntHear keep \`text.tertiary\` at 4.22 / 4.34:1, an accepted eyebrow-label ratio, see design-system.md open question 11.
+
+**Neutral added 2026-09-21.** A fourth state for the drill (DD 07, 15782:12362), where a stumble is practice, not a scored miss: \`background.surface\` with a \`text.primary\` title, no tag, "You said" label. Until now the drill screens rebuilt this card inline (\`component-gaps.md\`).
 `
 
 const meta = {
@@ -37,4 +39,12 @@ export const Miss: Story = {
 }
 export const CouldntHear: Story = {
   args: { state: 'CouldntHear', title: "We couldn't catch that.", transcript: "formal charge once more, whenever you're ready." },
+}
+export const Neutral: Story = {
+  name: 'Neutral — the drill’s ungraded miss',
+  args: {
+    state: 'Neutral',
+    title: 'Close. One word is missing.',
+    transcript: '“Formal charge is the charge on an atom when every bond’s… um…”',
+  },
 }

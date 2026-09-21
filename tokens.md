@@ -331,7 +331,7 @@ Durations in milliseconds, and easing curves.
 
 ## Motion semantics
 
-`motion.semantic.*` — 7 tokens
+`motion.semantic.*` — 8 tokens
 
 Named timings.
 
@@ -344,6 +344,7 @@ Named timings.
 | `motion.semantic.duration.slowThreshold` | `{motion.primitive.duration.6000}` | `6000` | When Processing escalates to "still thinking" in place, and offers the connection path. |
 | `motion.semantic.duration.ambient` | `{motion.primitive.duration.1100}` | `1100` | Looping ambient timing, e.g. the mic listening-state pulse. |
 | `motion.semantic.easing.standard` | `{motion.primitive.easing.standard}` | `cubic-bezier(0.4, 0, 0.2, 1)` | The curve fast, standard and ambient durations all use. |
+| `motion.semantic.easing.ambient` | `cubic-bezier(0.4, 0, 0.6, 1)` |  | Symmetric ease for motion that loops back to where it started — the mic pulse, Knowie's breathe, the processing dots. `standard` is asymmetric and made a looping animation read as a sawtooth, which is why `ease-in-out` had been typed directly into six stylesheets. |
 
 ## Responsive primitives
 
@@ -366,7 +367,7 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ## Component tokens
 
-`component.*` — 29 tokens
+`component.*` — 37 tokens
 
 > Component tokens exist only when a component's bindings actually branch by state or variant in a way that benefits from its own indirection layer between it and the semantic tokens, not as documentation-only aliases for a value that never changes. micButton is the only entry here on purpose: its four states each pair with a different semantic token, and these tokens are the real thing its Figma variables are bound to, not a restatement of them. chatBubble and hintCard never branch, they bind straight to semantic tokens with nothing in between, so a component.chatBubble.* or component.hintCard.* entry here would just be a second name for a value already named once. optionRow does branch by state the same way micButton does, four variants, four different fills, but its Figma variants bind straight to the semantic tokens directly rather than through a component-specific layer. That's an inconsistency with micButton's pattern, not a mistake exactly, treat micButton's indirection layer as the older, legacy approach rather than the template: an indirection layer that never diverges from what it aliases is upkeep with no payoff. Don't add one to a new component by default. Add one only when there's a concrete reason a component's own token might need to move independently of the semantic token it currently matches.
 
@@ -375,6 +376,7 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 | `component.button.s.height` | `32` |  | Size S pill height. Inside a 48px tap target (spacing.semantic.tapTarget). |
 | `component.button.m.height` | `40` |  | Size M pill height. Inside a 48px tap target (spacing.semantic.tapTarget). |
 | `component.button.l.height` | `56` |  | Size L pill height. Taller than the tap target, so the pill is the hit area. |
+| `component.button.inlinePrimaryMinWidth` | `157` |  | Minimum width for a primary that shares a row with a filling dismissal. The Quiz complete frame (15672:24061) fixes its 'Prove it' at 157 while 'Not now' flexes; letting the primary hug shrank it to 109 and the row read as a text link beside a small pill. |
 | `component.scaffold.panelHeader.height` | `48` |  | Status-bar region at the top of every screen. A literal: 48 here is the iOS status-bar area, unrelated to size.primitive.space.1200 (a spacing step) or spacing.semantic.tapTarget (a hit-area floor, which its own description says is not a layout rhythm value). |
 | `component.scaffold.topNavigation.height` | `56` |  | Region holding the appBar and the session fraction. A literal: component.button.l.height is also 56, but aliasing across components is how a value silently changes for the wrong reason. |
 | `component.scaffold.bottomContent.height` | `120` |  | The action zone at the foot of a screen. A literal: size.primitive.illustration.1500 is also 120, but that is an illustration box and a footer region is not one. component.micButton.diameter does alias it, legitimately, because a micButton genuinely is a 120 illustration-sized circle. |
@@ -389,19 +391,26 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 | `component.micButton.paused.glyph` | `{color.semantic.text.primary}` | `#F4F2FF` | Paused mic circle icon colour, on the quieter paused fill. |
 | `component.micButton.disabled.fill` | `{color.semantic.interactive.disabled}` | `#FFFFFF1A` | Disabled mic circle fill, for permission-denied or mic-unavailable states. |
 | `component.micButton.disabled.glyph` | `{color.semantic.interactive.onDisabled}` | `#FFFFFF66` | Disabled mic circle icon color, for permission-denied or mic-unavailable states. |
-| `component.micButton.pulse.ringInner` | `160` |  | Innermost pulse ring, 40 outside the 120 mic circle. |
-| `component.micButton.pulse.ringMiddle` | `200` |  | Middle pulse ring. |
-| `component.micButton.pulse.ringOuter` | `240` |  | Outermost pulse ring, twice the mic diameter. |
+| `component.micButton.pulse.restScale` | `0.92` |  | Ring scale at the bottom of the pulse. |
+| `component.micButton.pulse.peakScale` | `1.04` |  | Ring scale at the top of the pulse. |
+| `component.micButton.pulse.pausedOpacity` | `0.3` |  | Ring opacity when the take is paused: still present, plainly not listening. |
+| `component.micButton.pulse.glyphPeakScale` | `1.4` |  | How far the mic glyph ring expands on the button itself. |
+| `component.micButton.pulse.glyphPeakOpacity` | `0.5` |  | Glyph ring opacity at the top of its travel. |
 | `component.micButton.diameter` | `{size.primitive.illustration.1500}` | `120` | Mic circle diameter, the primary tap target in the recall loop. |
 | `component.micButton.glyph.size` | `48` |  | Mic glyph box inside the 120px circle. A literal, bound in Figma on every state's glyph frame; no primitive of the right kind is 48 (tapTarget is a hit-area rule, not an icon size). |
 | `component.strengthMeter.track` | `{color.primitive.neutral.600}` | `#615E63` | The unfilled track. Opaque mid grey; it was background.stacking, a 10% white alpha that read as near-black on the page and made an empty meter look like no meter. |
-| `component.strengthMeter.fill.low` | `{color.primitive.moss.200}` | `#C0DD97` | Coverage under 50. Figma holds this value for both its 0 and 25 variants. |
-| `component.strengthMeter.fill.mid` | `{color.primitive.moss.400}` | `#97C459` | Coverage 50 to under 75. |
-| `component.strengthMeter.fill.high` | `{color.primitive.moss.600}` | `#639922` | Coverage 75 to under 100. |
-| `component.strengthMeter.fill.full` | `{color.primitive.moss.800}` | `#3B6D11` | Coverage at 100, the whole definition unaided. |
+| `component.strengthMeter.fill.low` | `{color.primitive.moss.800}` | `#3B6D11` | Coverage under 50. REVERSED 2026-09-21 on the designer's call. Figma's ramp darkens as it fills, which rendered a full meter at 1.03:1 against the track — the reward state was the invisible one, while 25% was the brightest. Every hue is still Figma's; only which rung carries which changed, so a fuller meter is now a more present one. |
+| `component.strengthMeter.fill.mid` | `{color.primitive.moss.600}` | `#639922` | Coverage 50 to under 75.Sampled from the Figma component render of `strengthMeter` (15808:17668). |
+| `component.strengthMeter.fill.high` | `{color.primitive.moss.400}` | `#97C459` | Coverage 75 to under 100.Sampled from the Figma component render of `strengthMeter` (15808:17668). |
+| `component.strengthMeter.fill.full` | `{color.primitive.moss.200}` | `#C0DD97` | Coverage at 100, the whole definition unaided. The brightest rung, so the meter is most visible when it is most earned. |
 | `component.strengthMeter.trackHeight` | `{size.primitive.space.300}` | `12` | Track height, 12. The Figma component draws 220x10; 10 is not a step in this scale and 12 is the nearest, which is what was already built. |
 | `component.strengthMeter.trackWidth` | `220` |  | Track width, 220. The Figma component draws 220x10 and the DD frames use it at that width, centred — not stretched to the screen margin, which is what made the meter read as a page-wide banner rather than a small coverage gauge. |
+| `component.bottomSheet.grabber.width` | `32` |  | Grabber width, 32. Was space.800, a spacing step standing in for a size. |
+| `component.bottomSheet.grabber.height` | `4` |  | Grabber height, 4. Was space.100. |
+| `component.bottomSheet.maxHeight` | `85` |  | Sheet ceiling as a percentage of the frame, so a long sheet still shows the screen it sits over. |
+| `component.card.placeholderMinHeight` | `120` |  | Minimum height of home's placeholder cards. Was illustration.1500, an illustration box used as a card height — right number, wrong meaning. |
+| `component.card.captionMaxWidth` | `280` |  | Measure for a centred screen caption. 280 is what the Quiz complete frame (15672:24061) sets on its caption text node, so the line breaks where the frame breaks it. |
 
 ---
 
-304 tokens across 10 groups.
+313 tokens across 10 groups.

@@ -21,7 +21,9 @@
 }
 
 .placeholderCard {
-  min-height: calc(var(--size-primitive-illustration-1500) * 1px);
+  /* A card height, not an illustration box — the exact confusion
+     component.scaffold's own $description warns about. */
+  min-height: calc(var(--component-card-placeholder-min-height) * 1px);
   border-radius: calc(var(--size-primitive-radius-400) * 1px);
   background: var(--color-semantic-background-surface);
   display: grid;

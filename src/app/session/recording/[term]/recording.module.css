@@ -37,7 +37,7 @@
   /* Half the period, reversed. Sampled at 60ms the old loop climbed to scale 1.039
      then snapped to 0.923 in a single frame, every 1.1s, because direction defaulted
      to normal. A pulse that jumps is a sawtooth. */
-  animation: pulse calc(var(--pulse-duration) / 2) ease-in-out infinite alternate;
+  animation: pulse calc(var(--pulse-duration) / 2) var(--motion-semantic-easing-ambient) infinite alternate;
 }
 
 .ring:nth-child(1) {

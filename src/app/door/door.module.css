@@ -64,3 +64,55 @@
   display: flex;
   justify-content: center;
 }
+
+/* ---- Screen title, as the frames actually draw it ----
+   Quiz complete (15672:24061) sets its title with a loose text node at Headline S
+   (font-size-lg, 21) over a Body M Regular caption (18/24) — NOT a textBlock instance.
+   `TextBlock variant="L"` renders 44px, which is faithful to textBlock's own Figma set
+   (9003:9039); the set simply is not what these screens use. Measured on the built
+   screen the title was 44/44 against the frame's 21/24. */
+
+.screenTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  text-align: center;
+}
+
+.screenTitleHeading {
+  margin: 0;
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-headline-s-font-weight);
+  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-headline-s-letter-spacing) * 0.01em);
+}
+
+.screenTitleCaption {
+  margin: 0;
+  max-width: calc(var(--component-card-caption-max-width) * 1px);
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-body-m-regular-letter-spacing) * 0.01em);
+}
+
+/* The frame's action row: the dismissal FILLS the leftover width, the primary is a
+   fixed 157 pill. Not two hugging pills pushed apart. */
+.doorActions {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+}
+
+.doorActions > :first-child {
+  flex: 1 0 0;
+  min-width: 0;
+}
+
+/* The frame fixes the primary's width while the dismissal flexes. */
+.doorActions > :last-child {
+  min-width: calc(var(--component-button-inline-primary-min-width) * 1px);
+}

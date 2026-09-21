@@ -45,6 +45,23 @@ export const XP = {
   skipped: 0,
   /** Forfeited by leaving; per-term XP is banked. */
   completionBonus: 5,
+  // The confidence tap (03 Processing, "How sure are you?") is the Design Brief's own
+  // test — "overconfidence has to cost something and underconfidence has to be
+  // rewarded, or the screen is just flattery." These three make it mechanical. They
+  // are judged on the FIRST tap that got a real verdict (a couldn't-hear does not
+  // count), so a hint or a reveal can never launder the original call.
+  /** Sure, and right first time. Called it. */
+  sureRight: 2,
+  /** Not sure, and right first time. Knew more than they thought — a little, never a
+   *  penalty. Below sureRight on purpose: if doubting paid as well as knowing, "Not
+   *  sure" would be the only rational tap and the signal would die. */
+  unsureRight: 1,
+  /** Sure, and wrong first time. The one real cost in the model. -3 is one repeat's
+   *  worth: enough that a 4-term run visibly loses ground, not enough to wipe a term.
+   *  Applied to the session total, not the term, so it bites even when the term itself
+   *  ends on 0 (revealed or skipped). The total is floored at 0. Say "Sure" only when
+   *  you would bet 3:1 on it — the break-even is 75%. */
+  sureWrong: -3,
 } as const
 
 export const XP_BY_BUCKET: Record<Bucket, number> = {
@@ -190,6 +207,52 @@ export function verdictFor(termIndex: number, durationMs: number, attempt: numbe
 }
 
 // ---------------------------------------------------------------------------
+// The hint ladder
+// ---------------------------------------------------------------------------
+// hint → retry → second hint → retry → reveal (Design Brief § "What Knowunity
+// specified"). Keyed on the attempt number the miss arrived with, which is what the
+// screens already carry, so the ladder needs no new state. Bounded: from the third
+// missed attempt on, Try again is withdrawn and the reveal is the only way forward. A
+// requeue starts at attempt 2 (06 Lock It In), so a missed requeue gets the strong hint
+// and one retry — a second chance, not a whole new ladder.
+
+/** The attempt at which a miss can no longer be retried. */
+export const REVEAL_AT_ATTEMPT = 3
+
+export type HintStep = {
+  /** 1 on the first miss, 2 from the second on. Which `hintCard` body to show. */
+  level: 1
+  /** The hint body for this rung. */
+  hint: string
+  /** False from REVEAL_AT_ATTEMPT on: hide Try again, or go straight to the reveal. */
+  canRetry: boolean
+  /** The attempt number to send Try again to. Undefined once retrying is closed. */
+  nextAttempt?: number
+}
+
+/** Which rung of the ladder a miss on `attempt` lands on. */
+export function hintFor(term: Term, attempt: number): HintStep {
+  const n = Number.isFinite(attempt) && attempt > 0 ? Math.floor(attempt) : 1
+  // ONE hint, repeated. `docs/sprint-context.md` § "Not building this sprint" lists
+  // "Second hint", and CLAUDE.md makes that list binding. The Design Brief describes a
+  // two-hint ladder, but under § "What Knowunity specified at kickoff" — the kickoff
+  // ask, which this sprint scoped down. A `hint2` was briefly added here against that
+  // rule and is removed.
+  //
+  // What DOES stay is the bound. The real defect was that "Try again" was still offered
+  // at attempt 10 with byte-identical copy: a loop with no end. It ends at
+  // REVEAL_AT_ATTEMPT now, and the reveal is the escalation the second hint would have
+  // been.
+  const canRetry = n < REVEAL_AT_ATTEMPT
+  return {
+    level: 1,
+    hint: term.hint,
+    canRetry,
+    nextAttempt: canRetry ? n + 1 : undefined,
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Definition Drill Down
 // ---------------------------------------------------------------------------
 // A separate opt-in practice mode: work one definition out loud until you own it.
@@ -270,9 +333,25 @@ export type TermOutcome = {
    * list rather than decorating it, so there is no badge.
    */
   wasSure?: boolean
+  /**
+   * The confidence adjustment for this term — XP.sureRight, XP.unsureRight,
+   * XP.sureWrong, or 0 (not sure and wrong, or never asked). Kept apart from `xp` so a
+   * Recap row can print the bucket's figure and the call separately, and so a negative
+   * never has to be shown as a term's XP: `xp` is what the term paid, `calibration` is
+   * what the call did to the session total.
+   */
+  calibration?: number
   /** Set once the term has come back at 06 Lock It In. There is no second requeue. */
   requeued?: boolean
 }
+
+/** The first judged confidence tap for a term. Set at 03 Processing, read at record time. */
+export type ConfidenceTap = {
+  wasSure: boolean
+  /** Whether the verdict that followed the tap was a Pass. */
+  right: boolean
+}
+
 export type SessionState = {
   outcomes: TermOutcome[]
   startedAt: number
@@ -284,6 +363,19 @@ export type SessionState = {
   lastAt: number
   /** What the student typed, by term index. Absent for spoken turns. */
   typed?: Record<number, string>
+  /**
+   * The first tap per term that got a real verdict. A tap that preceded a couldn't-hear
+   * is not stored: that was the app failing, not the student, and it must not be scored
+   * as either a hit or a miss.
+   */
+  confidence?: Record<number, ConfidenceTap>
+  /**
+   * The mic was denied this session (docs/voice-ux.md § 3: "a denied mic stays sticky
+   * for the session, because it can't work anyway"). Every term routes to the typed
+   * turn. Survives Try again — startSession keeps it — because the OS setting has not
+   * changed just because the run restarted.
+   */
+  sticky?: boolean
 }
 
 const EMPTY: SessionState = { outcomes: [], startedAt: 0, lastAt: 0 }
@@ -338,27 +430,146 @@ function write(state: SessionState) {
 
 export function startSession() {
   const now = Date.now()
-  write({ outcomes: [], startedAt: now, lastAt: now })
+  const { sticky } = readSession()
+  write({ outcomes: [], startedAt: now, lastAt: now, ...(sticky ? { sticky } : {}) })
 }
 
+// ---------------------------------------------------------------------------
+// The confidence tap
+// ---------------------------------------------------------------------------
+
+/**
+ * Record the tap from 03 Processing. Call it in the tap handler, before routing to the
+ * verdict screen, with the verdict `verdictFor` produced for this attempt. Only the first
+ * judged tap per term is kept: a retry after a hint, or the requeue at 06, never
+ * overwrites the original call, because that call is the thing being scored. A
+ * CouldntHear verdict is ignored entirely.
+ */
+export function recordConfidence(index: number, wasSure: boolean, verdict: Verdict) {
+  if (verdict === 'CouldntHear') return
+  const state = readSession()
+  if (state.confidence?.[index]) return
+  write({
+    ...state,
+    confidence: { ...(state.confidence ?? {}), [index]: { wasSure, right: verdict === 'Pass' } },
+  })
+}
+
+/** The stored first tap for a term, if there was one. Pure; pass the state from useSession(). */
+export function confidenceFor(state: SessionState, index: number): ConfidenceTap | undefined {
+  return state.confidence?.[index]
+}
+
+/**
+ * The confidence adjustment for a call. `right` is whether the first judged verdict was
+ * a Pass. Undefined `wasSure` means the tap was never made (typed path, a skip from
+ * Idle) and scores nothing either way.
+ */
+export function calibrationFor(wasSure: boolean | undefined, right: boolean): number {
+  if (wasSure === undefined) return 0
+  if (right) return wasSure ? XP.sureRight : XP.unsureRight
+  return wasSure ? XP.sureWrong : 0
+}
+
+/**
+ * Whether the first judged verdict was a Pass, read off the bucket. Unaided is the only
+ * bucket a term reaches without first missing: Hinted means a retry after a miss,
+ * Revealed and Worth revisiting mean it was never passed. A couldn't-hear never stores
+ * a tap, so it cannot masquerade as a miss here.
+ */
+function firstAttemptRight(bucket: Bucket): boolean {
+  return bucket === 'Unaided'
+}
+
+/**
+ * What a term is worth, given its bucket and the first judged tap. `total` is base plus
+ * calibration, floored at 0 for the live in-flow figure — the negative case is charged
+ * to the session total in sessionTotals, so a term never displays below zero.
+ *
+ * Pass: `xpFor('Unaided', tap?.wasSure)` → { base: 10, calibration: 2, total: 12 } when
+ * they said Sure. Miss (skip or reveal after a Sure): base 0, calibration -3, total 0.
+ */
+export function xpFor(
+  bucket: Bucket,
+  wasSure?: boolean,
+  opts?: { repeated?: boolean },
+): { base: number; calibration: number; total: number } {
+  const base = XP_BY_BUCKET[bucket] + (opts?.repeated ? XP.repeat : 0)
+  const calibration = calibrationFor(wasSure, firstAttemptRight(bucket))
+  return { base, calibration, total: Math.max(0, base + calibration) }
+}
+
+/** A term's recorded outcome, if it has resolved. Pure; pass the state from useSession(). */
+export function outcomeFor(state: SessionState, index: number): TermOutcome | undefined {
+  return state.outcomes.find((o) => o.index === index)
+}
+
+/**
+ * Resolve a term. Re-recording the same index replaces its bucket and XP but keeps what
+ * the run already knows about it — `requeued` above all. Dropping that flag was the
+ * requeue bug: a term re-answered at 06 Lock It In came back through here as a fresh
+ * outcome, nextAfter no longer saw it as requeued, and the session ran again from term 2.
+ *
+ * The confidence adjustment comes from the tap stored by recordConfidence, never from
+ * `opts.wasSure`: that option only feeds the Recap sort, and it can arrive from a tap
+ * that preceded a couldn't-hear, which must not be scored. Until 03 Processing calls
+ * recordConfidence, calibration is 0 everywhere — exactly today's behaviour.
+ */
 export function recordOutcome(
   index: number,
   bucket: Bucket,
   opts?: { repeated?: boolean; wasSure?: boolean },
-) {
+): TermOutcome {
   const state = readSession()
+  const prior = state.outcomes.find((o) => o.index === index)
+  const tap = state.confidence?.[index]
+  const wasSure = tap?.wasSure ?? opts?.wasSure ?? prior?.wasSure
   const xp = XP_BY_BUCKET[bucket] + (opts?.repeated ? XP.repeat : 0)
+  const calibration = tap ? calibrationFor(tap.wasSure, tap.right) : 0
+  const outcome: TermOutcome = {
+    index,
+    bucket,
+    xp,
+    repeated: opts?.repeated,
+    wasSure,
+    calibration,
+    requeued: prior?.requeued,
+  }
   const outcomes = state.outcomes.filter((o) => o.index !== index)
-  outcomes.push({ index, bucket, xp, repeated: opts?.repeated, wasSure: opts?.wasSure })
+  outcomes.push(outcome)
   outcomes.sort((a, b) => a.index - b.index)
   write({ ...state, outcomes, lastAt: Date.now() })
+  return outcome
 }
 
+/**
+ * The Recap's numbers, all derivable from the rows so the total is never a figure the
+ * reviewer can see is wrong:
+ *
+ *   termXp      = Σ row.xp                       (what the buckets paid)
+ *   calibration = Σ row.calibration              (signed; the confidence line)
+ *   earned      = max(0, termXp + calibration)   (the session, before the bonus)
+ *   withBonus   = earned + XP.completionBonus    (only once the set is complete)
+ *
+ * `earned` and `withBonus` keep their names so existing callers stay correct; they now
+ * include the calibration. Recap should print the calibration line whenever it is
+ * non-zero, otherwise the rows will not appear to add up.
+ */
 export function sessionTotals(state: SessionState) {
-  const earned = state.outcomes.reduce((sum, o) => sum + o.xp, 0)
+  const termXp = state.outcomes.reduce((sum, o) => sum + o.xp, 0)
+  const calibration = state.outcomes.reduce((sum, o) => sum + (o.calibration ?? 0), 0)
+  const sureWrong = state.outcomes.filter((o) => (o.calibration ?? 0) < 0).length
+  const unsureRight = state.outcomes.filter((o) => o.calibration === XP.unsureRight).length
+  const sureRight = state.outcomes.filter((o) => o.calibration === XP.sureRight).length
+  const earned = Math.max(0, termXp + calibration)
   const unaided = state.outcomes.filter((o) => o.bucket === 'Unaided').length
   const elapsedMs = state.startedAt ? Math.max(0, state.lastAt - state.startedAt) : 0
   return {
+    termXp,
+    calibration,
+    sureRight,
+    unsureRight,
+    sureWrong,
     earned,
     withBonus: earned + XP.completionBonus,
     unaided,
@@ -382,15 +593,51 @@ export function formatElapsed(ms: number) {
  * value. A term already requeued once is not requeued again; 06b closes it.
  */
 export function nextAfter(index: number): string {
+  const state = readSession()
   // A term that has already come back at 06 Lock It In closes there, whatever the
   // verdict — "no further requeue". Without this it re-enters the normal sequence and
-  // the student re-runs terms they already finished.
-  const alreadyRequeued = readSession().outcomes.find((o) => o.index === index)?.requeued
+  // the student re-runs terms they already finished. The flag is read from the run, not
+  // the query string: 06 marks the term on arrival, and recordOutcome now keeps the
+  // mark when the term is re-recorded, so no screen has to carry `requeued=1` along.
+  const alreadyRequeued = state.outcomes.find((o) => o.index === index)?.requeued
   if (alreadyRequeued) return '/session/lock-in/second?answered=1'
-  if (index < TOTAL_TERMS) return `/session/idle/${index + 1}`
-  const { outcomes } = readSession()
-  const requeueable = outcomes.some((o) => o.bucket === 'Worth revisiting' && !o.requeued)
+  if (index < TOTAL_TERMS) return termHref(index + 1, state)
+  const requeueable = state.outcomes.some((o) => o.bucket === 'Worth revisiting' && !o.requeued)
   return requeueable ? '/session/lock-in' : '/session/recap'
+}
+
+// ---------------------------------------------------------------------------
+// The denied mic
+// ---------------------------------------------------------------------------
+
+/**
+ * Mark the mic as denied for the rest of the session. Call from /permission/denied
+ * before routing to the typed turn. Idempotent; `setSticky(false)` clears it, for a
+ * student who has gone and turned the mic back on.
+ */
+export function setSticky(on = true) {
+  const state = readSession()
+  write({ ...state, sticky: on || undefined })
+}
+
+/** Whether the mic is denied this session. Pure; pass the state from useSession(). */
+export function isSticky(state: SessionState): boolean {
+  return state.sticky === true
+}
+
+/** isSticky, subscribed. Safe to call during render. */
+export function useSticky(): boolean {
+  return isSticky(useSession())
+}
+
+/**
+ * Where a term is answered: the mic screen, or the typed turn when the mic is denied.
+ * Every route that starts a term should go through here — nextAfter does — so a denied
+ * student is never handed a mic screen. `sticky=1` is still put on the URL so the typed
+ * turn reads the same on a cold load.
+ */
+export function termHref(index: number, state: SessionState = readSession()): string {
+  return isSticky(state) ? `/text/turn?term=${index}&sticky=1` : `/session/idle/${index}`
 }
 
 /**
@@ -423,18 +670,34 @@ export function answerFor(index: number): string {
   return getTerm(index)?.transcript ?? ''
 }
 
-/** True while any term is still owed its one requeue. */
-export function revisitsPending(): boolean {
-  return readSession().outcomes.some((o) => o.bucket === 'Worth revisiting' && !o.requeued)
+/** True while any term is still owed its one requeue. Pass the state from useSession() in render. */
+export function revisitsPending(state: SessionState = readSession()): boolean {
+  return state.outcomes.some((o) => o.bucket === 'Worth revisiting' && !o.requeued)
+}
+
+/**
+ * The term that has come back at 06 Lock It In, whatever it resolved to since. 06b must
+ * look this up by the `requeued` mark, not by bucket: a requeued term that is answered
+ * is re-recorded as Unaided or Hinted, so a bucket search finds nothing and falls back
+ * to term 1. Pure; pass the state from useSession().
+ */
+export function requeuedOutcome(state: SessionState): TermOutcome | undefined {
+  return state.outcomes.find((o) => o.requeued)
+}
+
+/** Whether the requeued term was actually answered — passed, not skipped or revealed. */
+export function requeuePassed(state: SessionState): boolean {
+  const o = requeuedOutcome(state)
+  return !!o && (o.bucket === 'Unaided' || o.bucket === 'Hinted')
 }
 
 /**
  * How many terms are still owed a revisit. The requeue rounds use this to say where
  * they are ("Revisit 1 of 2") instead of borrowing a term number they do not have.
  */
-export function revisitPlan(): { index: number; total: number } {
-  const { outcomes } = readSession()
-  const owed = outcomes.filter((o) => o.bucket === 'Worth revisiting')
+export function revisitPlan(state: SessionState = readSession()): { index: number; total: number } {
+  // A requeued term keeps counting as owed after it is re-recorded into another bucket.
+  const owed = state.outcomes.filter((o) => o.bucket === 'Worth revisiting' || o.requeued)
   const done = owed.filter((o) => o.requeued).length
   return { index: Math.max(1, done), total: Math.max(1, owed.length) }
 }

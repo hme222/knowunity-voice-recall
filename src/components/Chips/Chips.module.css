@@ -2,10 +2,13 @@
 
 .root {
   /* An interactive chip needs the 44pt hit area even though the pill is 32 tall.
-     An inert one does not, because it is not a target. */
+     An inert one does not, because it is not a target. See [data-interactive] below. */
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+  height: calc(var(--chip-height) * 1px);
+  min-width: calc(var(--chip-height) * 1px);
   border: 0;
   margin: 0;
   appearance: none;
@@ -22,31 +25,27 @@
   outline-offset: calc(var(--size-primitive-space-050) * 1px);
 }
 
-/* Sizes — height, padding, gap, icon box and label style from the variant bindings. */
+/* Sizes — pill height, padding, gap, icon box and label style from the variant bindings. */
 .root[data-size='XXS'] {
-  height: calc(var(--size-primitive-icon-250) * 1px);
-  min-width: calc(var(--size-primitive-icon-250) * 1px);
+  --chip-height: var(--size-primitive-icon-250);
   padding-inline: calc(var(--size-primitive-space-150) * 1px);
   gap: calc(var(--size-primitive-space-050) * 1px);
   --chip-icon: var(--size-primitive-icon-150);
 }
 .root[data-size='XS'] {
-  height: calc(var(--size-primitive-icon-300) * 1px);
-  min-width: calc(var(--size-primitive-icon-300) * 1px);
+  --chip-height: var(--size-primitive-icon-300);
   padding-inline: calc(var(--size-primitive-space-200) * 1px);
   gap: calc(var(--size-primitive-space-100) * 1px);
   --chip-icon: var(--size-primitive-icon-150);
 }
 .root[data-size='S'] {
-  height: calc(var(--component-button-s-height) * 1px);
-  min-width: calc(var(--component-button-s-height) * 1px);
+  --chip-height: var(--component-button-s-height);
   padding-inline: calc(var(--size-primitive-space-300) * 1px);
   gap: calc(var(--size-primitive-space-100) * 1px);
   --chip-icon: var(--size-primitive-icon-200);
 }
 .root[data-size='M'] {
-  height: calc(var(--component-button-m-height) * 1px);
-  min-width: calc(var(--component-button-m-height) * 1px);
+  --chip-height: var(--component-button-m-height);
   padding-inline: calc(var(--size-primitive-space-400) * 1px);
   gap: calc(var(--size-primitive-space-150) * 1px);
   --chip-icon: var(--size-primitive-icon-250);
@@ -97,20 +96,36 @@
   color: var(--color-semantic-feedback-unclear-on-bold);
 }
 
-/* Interactive chips only: the pill stays its designed height, the hit area clears
-   spacing.semantic.tapTarget via a transparent inset. */
+/* Interactive chips only: the <button> box itself is spacing.semantic.tapTarget tall,
+   and the pill inside it keeps its designed height. Transparent block borders make up
+   the difference and background-clip keeps the fill off them, so the pill paints at 32
+   (S) while the element measures 48. The previous version drew the hit area on an
+   ::after pseudo, which extended what a finger could press but left the element's own
+   box at 32 — which is what every audit tool measures, and what the gate failed on.
+   The negative block margin gives the extra height back to the layout, so the pill sits
+   exactly where an inert chip of the same size would; the hit area overlaps the
+   neighbouring padding, never a neighbouring target. */
 .root[data-interactive] {
+  --chip-inset: calc((var(--spacing-semantic-tap-target) - var(--chip-height)) / 2);
   position: relative;
+  height: calc(var(--spacing-semantic-tap-target) * 1px);
+  border-block: calc(var(--chip-inset) * 1px) solid transparent;
+  background-clip: padding-box;
+  margin-block: calc(var(--chip-inset) * -1px);
 }
 
-.root[data-interactive]::after {
+/* The focus ring hugs the visible pill (the padding box), not the 48 hit box. */
+.root[data-interactive]:focus-visible {
+  outline: none;
+}
+.root[data-interactive]:focus-visible::after {
   content: '';
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  min-height: calc(var(--spacing-semantic-tap-target) * 1px);
-  transform: translateY(-50%);
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * 1px);
 }
 
 .root:not([data-interactive]) {

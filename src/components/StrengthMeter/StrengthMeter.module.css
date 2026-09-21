@@ -34,8 +34,8 @@
   border-radius: calc(var(--size-primitive-radius-full) * 1px);
   background: var(--component-strength-meter-fill-low);
   transition:
-    width calc(var(--motion-semantic-duration-standard) * 1ms) ease-out,
-    background-color calc(var(--motion-semantic-duration-standard) * 1ms) ease-out;
+    width calc(var(--motion-semantic-duration-standard) * 1ms) var(--motion-semantic-easing-standard),
+    background-color calc(var(--motion-semantic-duration-standard) * 1ms) var(--motion-semantic-easing-standard);
 }
 
 /* Four bands, matching Figma's four distinct fills. Its 0 and 25 variants share one

@@ -7,7 +7,6 @@ import { Suspense } from 'react'
 import {
   AppBar,
   Button,
-  Chips,
   MascotSlot,
   ProgressIndicator,
   RecallResultCaptured,
@@ -74,7 +73,7 @@ function CapturedScreen({ index }: { index: number }) {
             onClick={() => router.push(`/session/processing/${index}?${forward}`)}
           />
           <Button
-            CTA="Re-record"
+            CTA="Say it again"
             variant="Secondary"
             size="M"
             fullWidth
@@ -89,16 +88,10 @@ function CapturedScreen({ index }: { index: number }) {
           className={styles.card}
           title="Here&rsquo;s what I heard. Send it, or say it again."
           transcript={current.transcript}
-          tag={
-            <Chips
-              Text="Try again"
-              size="S"
-              color="Coral"
-              active
-              showRightIcon={false}
-              onClick={() => router.push(`/session/recording/${index}?attempt=${attempt}${hinted ? '&hinted=1' : ''}`)}
-            />
-          }
+          /* No `tag` chip. The action zone below already offers "Say it again" and
+             "Looks right" — the frame's pair — so an in-card chip repeating one of them
+             put two controls with the same label on one screen. One action, one
+             control. Logged in component-gaps.md. */
         />
       </div>
     </ScreenShell>

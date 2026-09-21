@@ -28,9 +28,14 @@ export default function DrillCompletePage() {
       bottomContent={
         <div className={styles.stack}>
           <Button CTA="Done" variant="Primary" size="M" fullWidth onClick={() => router.push('/picker')} />
+          {/* Secondary, matching 07 Recap's vocabulary for the same shape of choice.
+              This screen had Done Primary / Try again TERTIARY while Recap had the pair
+              as Primary / Secondary — the same two actions with opposite weight, two
+              screens apart in one session. Recap's conditional promotion of the restart
+              on a rough run stays; that one is deliberate. */}
           <Button
-            CTA="Try again"
-            variant="Tertiary"
+            CTA="Run it again"
+            variant="Secondary"
             size="M"
             fullWidth
             onClick={() => router.push('/drill/intro?returning=1')}

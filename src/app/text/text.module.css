@@ -53,13 +53,16 @@
 }
 
 .line {
+  /* Was inheriting the browser default and rendering 18/27 against 18/24 everywhere
+     else in the flow. */
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-m-regular-font-weight);
   font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
 }
 
 .mascot {
-  animation: breathe calc(var(--motion-semantic-duration-ambient) * 0.5ms) ease-in-out infinite alternate;
+  animation: breathe calc(var(--motion-semantic-duration-ambient) * 0.5ms) var(--motion-semantic-easing-ambient) infinite alternate;
 }
 
 @keyframes breathe {

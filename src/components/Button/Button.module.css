@@ -191,7 +191,7 @@
 
 /* Loading — spinner in the centre icon container, coloured like the variant's label. */
 .spinner {
-  animation: spin calc(var(--motion-semantic-duration-ambient) * 1ms) linear infinite;
+  animation: spin calc(var(--motion-semantic-duration-ambient) * 1ms) var(--motion-semantic-easing-ambient) infinite;
 }
 @keyframes spin {
   to {

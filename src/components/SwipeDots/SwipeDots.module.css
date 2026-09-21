@@ -13,7 +13,7 @@
   height: calc(var(--size-primitive-space-150) * 1px);
   border-radius: calc(var(--size-primitive-radius-full) * 1px);
   background: var(--color-semantic-border-strong);
-  transition: background-color calc(var(--motion-semantic-duration-swipe) * 1ms) ease;
+  transition: background-color calc(var(--motion-semantic-duration-swipe) * 1ms) var(--motion-semantic-easing-standard);
 }
 
 /* The active dot matches the chip's due border rather than a fill, so the carousel

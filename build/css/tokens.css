@@ -145,6 +145,7 @@
   --motion-primitive-duration-1400: 1400; /** 1400ms. The judging dwell: how long a Processing beat holds before resolving. UNCONFIRMED against a real round trip, like the 300ms swipe. */
   --motion-primitive-duration-6000: 6000; /** 6000ms. When a judge counts as slow and Processing escalates its copy in place. Past the Design Brief's <4s target with headroom, so an ordinary wait never trips it. */
   --motion-primitive-easing-standard: cubic-bezier(0.4, 0, 0.2, 1); /** Standard ease-out, decelerates into rest. */
+  --motion-semantic-easing-ambient: cubic-bezier(0.4, 0, 0.6, 1); /** Symmetric ease for motion that loops back to where it started — the mic pulse, Knowie's breathe, the processing dots. `standard` is asymmetric and made a looping animation read as a sawtooth, which is why `ease-in-out` had been typed directly into six stylesheets. */
   --responsive-primitive-device-width-desktop: 1200; /** deviceWidth at the desktop breakpoint. Part of a 3-mode collection (Desktop/Mobile/Tablet); DTCG has no native mode support so each mode is a sibling token. */
   --responsive-primitive-device-width-mobile: 390; /** deviceWidth at the mobile breakpoint. Part of a 3-mode collection (Desktop/Mobile/Tablet); DTCG has no native mode support so each mode is a sibling token. RESOLVED 2026-09-16: was 375 in the Figma Responsive collection; set to 390 to match this sprint's Platform Constraints and the scaffold component's 'iPhone 13' size variant (390pt, confirmed in use across Example Screens). Figma's Responsive collection was updated to 390 the same day; the two are in sync. */
   --responsive-primitive-device-width-tablet: 768; /** deviceWidth at the tablet breakpoint. Part of a 3-mode collection (Desktop/Mobile/Tablet); DTCG has no native mode support so each mode is a sibling token. */
@@ -158,15 +159,23 @@
   --component-button-s-height: 32; /** Size S pill height. Inside a 48px tap target (spacing.semantic.tapTarget). */
   --component-button-m-height: 40; /** Size M pill height. Inside a 48px tap target (spacing.semantic.tapTarget). */
   --component-button-l-height: 56; /** Size L pill height. Taller than the tap target, so the pill is the hit area. */
+  --component-button-inline-primary-min-width: 157; /** Minimum width for a primary that shares a row with a filling dismissal. The Quiz complete frame (15672:24061) fixes its 'Prove it' at 157 while 'Not now' flexes; letting the primary hug shrank it to 109 and the row read as a text link beside a small pill. */
   --component-scaffold-panel-header-height: 48; /** Status-bar region at the top of every screen. A literal: 48 here is the iOS status-bar area, unrelated to size.primitive.space.1200 (a spacing step) or spacing.semantic.tapTarget (a hit-area floor, which its own description says is not a layout rhythm value). */
   --component-scaffold-top-navigation-height: 56; /** Region holding the appBar and the session fraction. A literal: component.button.l.height is also 56, but aliasing across components is how a value silently changes for the wrong reason. */
   --component-scaffold-bottom-content-height: 120; /** The action zone at the foot of a screen. A literal: size.primitive.illustration.1500 is also 120, but that is an illustration box and a footer region is not one. component.micButton.diameter does alias it, legitimately, because a micButton genuinely is a 120 illustration-sized circle. */
   --component-scaffold-bottom-sheet-only-height: 34; /** Home-indicator region, and the slot a bottom sheet occupies on its own branch screen. No primitive of this value exists. */
-  --component-mic-button-pulse-ring-inner: 160; /** Innermost pulse ring, 40 outside the 120 mic circle. */
-  --component-mic-button-pulse-ring-middle: 200; /** Middle pulse ring. */
-  --component-mic-button-pulse-ring-outer: 240; /** Outermost pulse ring, twice the mic diameter. */
+  --component-mic-button-pulse-rest-scale: 0.92; /** Ring scale at the bottom of the pulse. */
+  --component-mic-button-pulse-peak-scale: 1.04; /** Ring scale at the top of the pulse. */
+  --component-mic-button-pulse-paused-opacity: 0.3; /** Ring opacity when the take is paused: still present, plainly not listening. */
+  --component-mic-button-pulse-glyph-peak-scale: 1.4; /** How far the mic glyph ring expands on the button itself. */
+  --component-mic-button-pulse-glyph-peak-opacity: 0.5; /** Glyph ring opacity at the top of its travel. */
   --component-mic-button-glyph-size: 48; /** Mic glyph box inside the 120px circle. A literal, bound in Figma on every state's glyph frame; no primitive of the right kind is 48 (tapTarget is a hit-area rule, not an icon size). */
   --component-strength-meter-track-width: 220; /** Track width, 220. The Figma component draws 220x10 and the DD frames use it at that width, centred — not stretched to the screen margin, which is what made the meter read as a page-wide banner rather than a small coverage gauge. */
+  --component-bottom-sheet-grabber-width: 32; /** Grabber width, 32. Was space.800, a spacing step standing in for a size. */
+  --component-bottom-sheet-grabber-height: 4; /** Grabber height, 4. Was space.100. */
+  --component-bottom-sheet-max-height: 85; /** Sheet ceiling as a percentage of the frame, so a long sheet still shows the screen it sits over. */
+  --component-card-placeholder-min-height: 120; /** Minimum height of home's placeholder cards. Was illustration.1500, an illustration box used as a card height — right number, wrong meaning. */
+  --component-card-caption-max-width: 280; /** Measure for a centred screen caption. 280 is what the Quiz complete frame (15672:24061) sets on its caption text node, so the line breaks where the frame breaks it. */
   --color-semantic-background-page: var(--color-primitive-navy-950); /** Root screen canvas. Use for every screen's base background; not for cards, sheets, or modals. */
   --color-semantic-background-surface: var(--color-primitive-navy-800); /** Elevated container fill. Use for cards, bottom sheets, modals, dropdown menus, chat bubbles, toasts. */
   --color-semantic-background-raised: var(--color-primitive-alpha-light-06); /** A surface sitting on top of another surface. Use when a card or row needs to separate from a container that is itself background.surface — the confirmed case is an optionRow inside a bottomSheet, where both would otherwise resolve to the same value and the row would vanish. Translucent on purpose so it composites correctly over any surface beneath it. Not a replacement for background.surface; only reach for it when there is a genuine second layer. */
@@ -274,10 +283,10 @@
   --spacing-semantic-card-label-gap: var(--size-primitive-space-150); /** Vertical gap between a card's own label or title and its body text. chatBubble's title-to-body gap, hintCard's label-to-body gap. Not for gaps between separate blocks on a screen, that's betweenSections. */
   --component-mic-button-diameter: var(--size-primitive-illustration-1500); /** Mic circle diameter, the primary tap target in the recall loop. */
   --component-strength-meter-track: var(--color-primitive-neutral-600); /** The unfilled track. Opaque mid grey; it was background.stacking, a 10% white alpha that read as near-black on the page and made an empty meter look like no meter. */
-  --component-strength-meter-fill-low: var(--color-primitive-moss-200); /** Coverage under 50. Figma holds this value for both its 0 and 25 variants. */
-  --component-strength-meter-fill-mid: var(--color-primitive-moss-400); /** Coverage 50 to under 75. */
-  --component-strength-meter-fill-high: var(--color-primitive-moss-600); /** Coverage 75 to under 100. */
-  --component-strength-meter-fill-full: var(--color-primitive-moss-800); /** Coverage at 100, the whole definition unaided. */
+  --component-strength-meter-fill-low: var(--color-primitive-moss-800); /** Coverage under 50. REVERSED 2026-09-21 on the designer's call. Figma's ramp darkens as it fills, which rendered a full meter at 1.03:1 against the track — the reward state was the invisible one, while 25% was the brightest. Every hue is still Figma's; only which rung carries which changed, so a fuller meter is now a more present one. */
+  --component-strength-meter-fill-mid: var(--color-primitive-moss-600); /** Coverage 50 to under 75.Sampled from the Figma component render of `strengthMeter` (15808:17668). */
+  --component-strength-meter-fill-high: var(--color-primitive-moss-400); /** Coverage 75 to under 100.Sampled from the Figma component render of `strengthMeter` (15808:17668). */
+  --component-strength-meter-fill-full: var(--color-primitive-moss-200); /** Coverage at 100, the whole definition unaided. The brightest rung, so the meter is most visible when it is most earned. */
   --component-strength-meter-track-height: var(--size-primitive-space-300); /** Track height, 12. The Figma component draws 220x10; 10 is not a step in this scale and 12 is the nearest, which is what was already built. */
   --typography-style-display-l-font-family: var(--typography-primitive-font-family-display); /** Largest display size, Condensed Heavy: fontFamily.display (Greed Condensed in Figma) with fontWidth.condensed (wdth 75) and fontWeight.heavy (900) on the VF in code. Applied 2026-09-16. */
   --typography-style-display-l-font-weight: var(--typography-primitive-font-weight-heavy); /** Largest display size, Condensed Heavy: fontFamily.display (Greed Condensed in Figma) with fontWidth.condensed (wdth 75) and fontWeight.heavy (900) on the VF in code. Applied 2026-09-16. */

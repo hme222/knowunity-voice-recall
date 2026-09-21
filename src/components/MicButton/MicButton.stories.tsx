@@ -40,7 +40,9 @@ export const Disabled: Story = { args: { state: 'Disabled' } }
 
 export const Paused: Story = {
   args: { state: 'Paused' },
-  play: async ({ canvas, expect }) => {
+  // `expect` comes from storybook/test, as in Listening above. Destructuring it from the
+  // play context threw "expect is not a function" — this story had never actually run.
+  play: async ({ canvas }) => {
     const btn = canvas.getByRole('button')
     // The two claims the gate failure rested on: it must not look Listening, and it
     // must not report itself as pressed while stopped.

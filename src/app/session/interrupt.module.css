@@ -25,7 +25,7 @@
 }
 
 .mascot {
-  animation: breathe calc(var(--motion-semantic-duration-ambient) * 0.5ms) ease-in-out infinite alternate;
+  animation: breathe calc(var(--motion-semantic-duration-ambient) * 0.5ms) var(--motion-semantic-easing-ambient) infinite alternate;
 }
 
 @keyframes breathe {

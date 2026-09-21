@@ -92,3 +92,32 @@
 .mascotCentred {
   align-self: center;
 }
+
+/* Screen title, matching the doors. The frames set a screen title as Headline S over
+   Body M Regular; TextBlock's L renders 44px, which is faithful to textBlock's own
+   Figma set but is not what these screens draw. */
+.screenTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  text-align: center;
+}
+
+.screenTitleHeading {
+  margin: 0;
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-headline-s-font-weight);
+  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-headline-s-letter-spacing) * 0.01em);
+}
+
+.screenTitleCaption {
+  margin: 0;
+  max-width: calc(var(--component-card-caption-max-width) * 1px);
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+}
