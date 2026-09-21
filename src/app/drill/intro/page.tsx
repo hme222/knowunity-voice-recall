@@ -23,8 +23,8 @@ function DrillIntro() {
     <ScreenShell
       bottomContent={
         <div className={styles.stack}>
-          <Button CTA="Start drilling" variant="Primary" size="M" fullWidth onClick={() => router.push('/drill/pass/1')} />
-          <Button CTA="Not now" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/picker')} />
+          <Button CTA="Let’s go" variant="Primary" size="M" fullWidth onClick={() => router.push('/drill/pass/1')} />
+          <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/picker')} />
         </div>
       }
     >
@@ -33,14 +33,17 @@ function DrillIntro() {
         {returning ? (
           <ChatBubble
             showTitle
-            title={DRILL_TERM.title}
+            title={DRILL_TERM.drillTitle ?? DRILL_TERM.title}
             body="Say it, miss a word, keep going. That's the whole thing."
           />
         ) : (
           <ChatBubble
             showTitle
-            title="Drill it out loud"
-            body="Say the whole definition. Each time you get it, a few words disappear — until you're saying it with nothing on screen. No grade, no XP. You're done when you can say it unaided."
+            title="Definition drill"
+            body={
+              "Four rounds. Each one takes more words away until you\u2019re saying it on your own. " +
+              "Not graded, no XP watching. Miss a word and I\u2019ll show it to you."
+            }
           />
         )}
       </div>

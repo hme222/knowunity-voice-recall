@@ -61,6 +61,12 @@ export default function IdlePage({ params }: { params: Promise<{ term: string }>
         <div className={styles.actions}>
           <MicButton state="Idle" onClick={() => router.push(`/session/recording/${index}`)} />
           <Button CTA="Type instead" variant="Secondary" size="M" onClick={() => router.push(`/text/turn?term=${index}`)} />
+          <Button
+            CTA="I don't know this one"
+            variant="Tertiary"
+            size="M"
+            onClick={() => router.push(`/session/blank/${index}`)}
+          />
           <Button CTA="Skip" variant="Tertiary" size="M" onClick={skip} />
         </div>
       }

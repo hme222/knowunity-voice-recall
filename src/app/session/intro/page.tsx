@@ -40,7 +40,7 @@ export default function IntroPage() {
           variant="Primary"
           size="M"
           fullWidth
-          onClick={() => router.push('/session/idle/1')}
+          onClick={() => router.push('/permission/primer')}
         />
       }
     >

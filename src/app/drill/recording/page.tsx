@@ -49,8 +49,13 @@ function DrillRecording() {
         <StrengthMeter fill={rung.coverage} label="How much you can say unaided" />
         <p className={styles.cue}>{rung.cue}</p>
         <div className={styles.centred}>
+          {/* Stays Listening while paused. SPEC.md Open 12: MicButton gains no Paused
+              state and its appearance doesn't change — the accepted risk is that the
+              tap has no visible confirmation on the mic itself. RecordingStatus below
+              carries it. Reusing `Captured` here would have repurposed a state whose
+              accessible name is "Answer captured". */}
           <MicButton
-            state={paused ? 'Captured' : 'Listening'}
+            state="Listening"
             label={paused ? 'Paused, tap to resume' : undefined}
             onClick={() => setPaused((p) => !p)}
           />

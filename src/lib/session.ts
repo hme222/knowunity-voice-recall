@@ -30,6 +30,8 @@ export type Term = {
   hint: string
   /** Shown on 05a Reveal answer, as Knowie's own bubble. */
   answer: string
+  /** The drill uses "Define:", the recall loop uses "Explain:". From the frames. */
+  drillTitle?: string
 }
 
 /** XP curve — docs/sprint-context.md § "XP model", revised 2026-09-20. */
@@ -64,10 +66,14 @@ export const TERMS: Term[] = [
       "It's the charge on an atom if you split every bond's electrons evenly between the two atoms.",
     // from the RecallResult stories, which carry the frame's copy
     passTitle: "Nailed it — that's the whole definition.",
-    missTitle: 'Close — you described the octet rule, not formal charge.',
-    hint: 'Think about how the electrons in each bond get shared.',
+    // from the frame — 05 Miss + Hint
+    missTitle:
+      'You\u2019ve got the \u201ccharge on an atom\u201d part right. The \u201cevenly split\u201d piece is what\u2019s missing.',
+    hint: 'Think about how the electrons\nin each bond get divided up.',
+    // from the frame — 05a Reveal answer
     answer:
-      "Formal charge is the charge an atom would carry if the electrons in every bond were shared perfectly evenly between the two atoms.",
+      "Formal charge is the charge on an atom when every bond's electrons are split evenly between the two atoms.",
+    drillTitle: 'Define: Formal charge',
   },
   {
     index: 2,
@@ -133,9 +139,19 @@ export function dueCountLabel(indexFromZero: number) {
  */
 export const PICKER_TOPICS = [
   { label: 'Chemistry: bonding', seeded: true },
-  { label: 'Biology: the cell', seeded: false },
-  { label: 'Physics: motion', seeded: false },
+  { label: 'Chemistry: acids and bases', seeded: false },
+  { label: 'Biology: cell transport', seeded: false },
 ]
+
+/** The drill list on the picker, from the frame. Amber = needs the most work. */
+export const PICKER_DRILLS = [
+  { label: 'Formal charge', state: 'drill' as const },
+  { label: 'Hybridisation', state: 'drill' as const },
+  { label: 'Resonance', state: 'sharp' as const },
+]
+
+/** The home greeting, from the frame. */
+export const HOME_GREETING = 'Evening study session, Harry?'
 
 export function getTerm(index: number): Term | undefined {
   return TERMS.find((t) => t.index === index)
@@ -190,21 +206,27 @@ export const DRILL_TERM = TERMS[0]
 export const DRILL_RUNGS: DrillRung[] = [
   {
     step: 1,
-    cue: "Formal charge is the charge an atom would carry if the electrons in every bond were shared perfectly evenly between the two atoms.",
+    cue: "Formal charge is the charge on an atom when every bond's electrons are split evenly between the two atoms.",
     coverage: 0,
   },
   {
     step: 2,
-    cue: "Formal charge is the charge an atom would carry if the electrons in every bond were shared perfectly ▢▢▢▢▢▢ between the two atoms.",
+    cue: "Formal charge is the charge on an atom when every bond's \u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 are split evenly between the two atoms.",
     coverage: 25,
   },
   {
     step: 3,
-    cue: "Formal charge is the ▢▢▢▢▢▢ an atom would carry if the ▢▢▢▢▢▢▢▢▢ in every bond were shared perfectly ▢▢▢▢▢▢ between the two atoms.",
+    cue: "Formal charge is the \u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 on an atom when every bond's \u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 are split \u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 between the two atoms.",
     coverage: 50,
   },
-  { step: 4, cue: "▢▢▢▢▢▢ ▢▢▢▢▢▢ — all of it, no cues.", coverage: 75 },
+  { step: 4, cue: '\u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 \u25a2\u25a2\u25a2\u25a2\u25a2\u25a2 \u2014 all of it, no cues.', coverage: 75 },
 ]
+
+/**
+ * The word the scaffold escalates on. `electrons` on every stumble frame — the whole
+ * scaffold hangs off one word, so this lives here rather than being repeated.
+ */
+export const DRILL_MISSED_WORD = 'electrons'
 
 export const DRILL_TOTAL_RUNGS = DRILL_RUNGS.length
 
@@ -218,9 +240,9 @@ export function drillRung(step: number): DrillRung | undefined {
  * per session.
  */
 export const STUMBLES = {
-  first: { route: 'miss', copy: 'The word you missed was **evenly**. Take the pass again.' },
-  second: { route: 'letter', copy: 'Still that one. It starts with **e** — the word stays on screen this time.' },
-  third: { route: 'echo', copy: 'Say it with me: **evenly**. Just that word, then the whole line.' },
+  first: { verdict: '\u2713 Partially correct, one missed', copy: "One word off. It's below, then take it again." },
+  second: { verdict: '\u2713 Partially correct, one missed', copy: "Still tricky? Here's a nudge." },
+  third: { verdict: '\u2713 Partially correct, one missed', copy: "Let's say this one together." },
 } as const
 
 // ---------------------------------------------------------------------------
@@ -354,10 +376,23 @@ export function formatElapsed(ms: number) {
  * value. A term already requeued once is not requeued again; 06b closes it.
  */
 export function nextAfter(index: number): string {
+  // A term that has already come back at 06 Lock It In closes there, whatever the
+  // verdict — "no further requeue". Without this it re-enters the normal sequence and
+  // the student re-runs terms they already finished.
+  const alreadyRequeued = readSession().outcomes.find((o) => o.index === index)?.requeued
+  if (alreadyRequeued) return '/session/lock-in/second'
   if (index < TOTAL_TERMS) return `/session/idle/${index + 1}`
   const { outcomes } = readSession()
   const requeueable = outcomes.some((o) => o.bucket === 'Worth revisiting' && !o.requeued)
   return requeueable ? '/session/lock-in' : '/session/recap'
+}
+
+/**
+ * Try again re-presents the same terms in a different order, so position cues from the
+ * first run don't carry over. Returns the term to start on.
+ */
+export function shuffledFirstTerm(): number {
+  return TERMS[Math.floor(Math.random() * TERMS.length)].index
 }
 
 /** Marks the requeued term so it can't come back a second time. */

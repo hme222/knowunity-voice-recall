@@ -9,6 +9,7 @@ import { DRILL_TOTAL_RUNGS, progressFor } from '@/lib/session'
 // model drops both and leaves progress entirely to StrengthMeter; if the coverage
 // judge is confirmed, this is the piece that goes.
 
+/** The frame shows no fraction on the first rung, only the ring. */
 export function DrillBar({ step, onExit }: { step: number; onExit: () => void }) {
   return (
     <>
@@ -21,7 +22,7 @@ export function DrillBar({ step, onExit }: { step: number; onExit: () => void })
           total={DRILL_TOTAL_RUNGS}
         />
       </AppBar>
-      <SessionFraction current={step} total={DRILL_TOTAL_RUNGS} />
+      {step > 1 && <SessionFraction current={step} total={DRILL_TOTAL_RUNGS} />}
       <Chips Text="Drill" size="S" color="Primary" active={false} showRightIcon={false} />
     </>
   )

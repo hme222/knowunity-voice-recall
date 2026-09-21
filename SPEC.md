@@ -101,7 +101,7 @@ Two things this does **not** override:
   | Exception | Where | Why, and what would retire it |
   | --- | --- | --- |
   | `flex: 1` on `middleContent` | `ScreenShell.module.css` | A flex ratio is not a design value and no token can express it. Nothing retires this. |
-  | Raw 6% white on a raised surface | `BottomSheet` content rows | An `optionRow` inside a `bottomSheet` resolves to the sheet's own fill and vanishes. Retired by adding `background.raised` — see `docs/sprint-context.md` open question 10. Do not copy it to a second consumer. |
+  | ~~Raw 6% white on a raised surface~~ | ~~`BottomSheet` content rows~~ | **RETIRED 2026-09-20.** `background.raised` now exists in `tokens.json` and `PickerRow` consumes it via its `raised` prop. The literal is gone; only `flex: 1` remains live. |
 - **The 390px frame lives in `src/app/layout.tsx`**, so every route including
   home and picker inherits it. It is a property of the prototype, not of the
   session.
@@ -241,20 +241,28 @@ exist in Figma but not in code, phases 3–5 add the unbuilt states.
 | 25 | `/` | Home — pre-unlock | one | Home shell, **no Say It Back chip** | Nothing Say-It-Back related | — |
 | 26 | `/home/unlock` | Unlock reveal | one | Home shell dimmed; **`SwipeChip`** spotlighted; `MascotSlot size="3XL" expression="excited"` | Acknowledge | → `/home/unlocked` |
 | 27 | `/home/unlocked` | Home — chip | one | Home shell + **`SwipeChip`** in the composer | Open the picker | → `/picker` |
-| 28 | `/home/due` (+ `/2`, `/3`) | Home — due-signal | swipe 1 / 2 / 3 | **`DueSignalCard`**, **`SwipeChip`**, **`SwipeDots active="1\|2\|3"`** | Swipe; tap a due quiz; use the chip | Card → `/session/intro` for that lesson. Chip → `/picker` |
+| 28 | `/home/due` | Home — due-signal | swipe 1 / 2 / 3, in-page | **`DueSignalCard`**, **`SwipeChip`**, **`SwipeDots active="1\|2\|3"`** | Swipe; tap a due quiz; use the chip | Card → `/session/intro` for that lesson. Chip → `/picker` |
 | 29 | `/picker` | Picker | seeded first run; populated | **`PickerTopicRow`**, **`PickerDrillRow`**, **`DrillListItem`** | Choose a topic; choose a definition to drill | Topic → `/session/intro`. Definition → `/drill/intro` |
 
 ### Phase 5 — Definition Drill Down. Needs the drill components.
 
 | # | Route | Screen | Components | Leads to |
 |---|---|---|---|---|
-| 30–31 | `/drill/intro`, `/drill/intro/returning` | DD 00 / 00b | `ChatBubble`; `MicButton state="Idle"`; `Chips`; `Button` | → `/drill/pass/1` |
+| 30–31 | `/drill/intro`, `/drill/intro?returning=1` | DD 00 / 00b | `ChatBubble`; `MicButton state="Idle"`; `Chips`; `Button` | → `/drill/pass/1` |
 | 32 | `/drill/pass/[n]` | DD 01 / 04 / 05 / 06 | **`StrengthMeter fill={0–100}`**; `ChatBubble`; `MicButton state="Idle"` | → `/drill/recording` |
 | 33–35 | `/drill/recording`, `/drill/captured`, `/drill/processing` | DD 02 / 02a / 03 | `MicButton state="Listening"`; **`RecallResultCaptured`**; `MascotSlot` | → next rung or `/drill/miss` |
 | 36–38 | `/drill/miss`, `/drill/miss/letter`, `/drill/miss/echo` | DD 07 / 07b / 07c | `RecallResult state="Miss"`; `HintCard`; `Chips color="Partial"` | Stumble 1 → 2 → 3, then always completable |
 | 39–40 | `/drill/complete`, `/drill/complete/round` | DD 08 / 08a | **`TrainingLog`**; **`BottomSheet`** | → `/picker` |
 
-⚠️ = blocked on the `Chips` colour drift. See "What's missing" below.
+⚠️ **The `Chips` colour drift.** Figma's `chips` set has `Unclear`, `Success` and
+`Partial`; the code component has `Primary`, `pro` and `Coral`. `Coral` is bound to
+`feedback.unclear.bold`, i.e. it *is* Figma's `Unclear` under the older name, so screens
+needing `Unclear` use `Coral` and match. **Screens needing `Partial` also use `Coral`** —
+05 Miss and the drill stumbles — which is a real substitution, not an equivalence:
+`docs/design-system.md` warns against assuming Coral outside the CouldntHear tag.
+Recorded here so it is a decision rather than drift. Resolving it means either renaming
+Figma's `Unclear` back to `Coral` or adding `Partial` and `Success` to the code
+component.
 
 ---
 
@@ -279,10 +287,12 @@ And for the prototype specifically:
 - Real persistence. Session state lives in memory for the length of a run.
 - Real notifications, and the notification-permission flow the journey map
   sketches for the exit sheet.
-- **Pause/resume during recording.** The frame has no pause affordance and no
-  pause copy — "Hold to pause, hold again to resume" is a loose annotation
-  beside the screens, never on one. The interaction is: tap the mic to stop,
-  `Done speaking` to send. Pause stays unbuilt and unratified.
+- ~~**Pause/resume during recording.**~~ **Superseded — see Open 12.** This entry
+  predates the tap-to-pause decision and contradicted it inside the same file. The
+  built interaction is: **tap the mic to pause or resume**, `Done speaking` ends the
+  take. What stays out of scope is a *visible* paused state: `MicButton` gains no
+  Paused variant and its appearance does not change, which is the accepted risk
+  recorded in Open 12.
 - **Cancel-the-take during recording.** `/session/captured/[term]` already
   offers Re-record, so discarding a take is one tap through a screen that
   exists. Recording has one action.

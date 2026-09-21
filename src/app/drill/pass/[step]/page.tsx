@@ -31,14 +31,16 @@ export default function DrillPassPage({ params }: { params: Promise<{ step: stri
       bottomContent={
         <div className={styles.actions}>
           <MicButton state="Idle" onClick={() => router.push(`/drill/recording?step=${n}`)} />
-          <Button CTA="Leave the drill" variant="Tertiary" size="M" onClick={() => router.push('/picker')} />
+          <Button CTA="Type instead" variant="Secondary" size="M" onClick={() => router.push(`/text/turn?term=1`)} />
+          <Button CTA="Skip" variant="Tertiary" size="M" onClick={() => router.push('/picker')} />
         </div>
       }
     >
       <div className={styles.body}>
         <StrengthMeter fill={rung.coverage} label="How much you can say unaided" />
+        <p className={styles.note}>Say the whole thing. However it comes out.</p>
         <p className={styles.cue}>{rung.cue}</p>
-        <p className={styles.note}>{DRILL_TERM.title}</p>
+        <p className={styles.note}>{DRILL_TERM.drillTitle ?? DRILL_TERM.title}</p>
         <div className={styles.centred}>
           <MascotSlot size="2XL" expression="determined" />
         </div>

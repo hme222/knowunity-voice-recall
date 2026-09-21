@@ -30,12 +30,12 @@ export default function LockInSecondPage() {
         </>
       }
       bottomContent={
-        <Button CTA="See your recap" variant="Primary" size="M" fullWidth onClick={() => router.push('/session/recap')} />
+        <Button CTA="Continue" variant="Primary" size="M" fullWidth onClick={() => router.push('/session/recap')} />
       }
     >
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="excited" />
-        <RecallResult state="Pass" title="Locked in. That one stuck." transcript={`“${term.transcript}”`} />
+        <RecallResult state="Pass" title="Locked in. You got it this time." transcript={`“${term.transcript}”`} />
       </div>
     </ScreenShell>
   )

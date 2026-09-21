@@ -26,15 +26,20 @@ export default function PracticePage() {
       }
       bottomContent={
         <div className={styles.actions}>
-          <Button CTA="Run them again now" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/session/idle/1')} />
-          <Button CTA="Drill one out loud" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/drill/intro')} />
+          <Button CTA="Drill the definition out loud" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/drill/intro')} />
+          <Button CTA="Say it back again" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/session/idle/1')} />
+          <Button CTA="Not now" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/session/recap')} />
         </div>
       }
     >
       <ChatBubble
         showTitle
-        title="Practice what I missed"
-        body="These are the ones that needed help. Run them again in a session, or drill a single definition until you own it."
+        title="How do you want to practice?"
+        body={
+          missed.length === 1
+            ? `One term to go back over: ${getTerm(missed[0].index)?.name}.`
+            : `${missed.length} terms to go back over.`
+        }
       />
       <div className={styles.buckets}>
         {missed.map((o) => (

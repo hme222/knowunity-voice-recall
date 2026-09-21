@@ -15,7 +15,8 @@ detail.
 | Session fraction ("N/4") under the app bar | 00 Intro | **Promoted** → `src/components/SessionFraction/` when 01 Idle needed it |
 | Session fraction ("N/4") under the app bar | 01 Idle | **Promoted** → `src/components/SessionFraction/` |
 | Recording status — LISTENING label, elapsed timer, pause caption | 02 Recording | **Promoted immediately** → `src/components/RecordingStatus/` (DD 02 Recording is the known second consumer) |
-| Captured result card (Figma `recallResult/Captured`, 15782:13076) | 02a Captured | Inline. Second consumer will be DD 02a — promote then |
+| Captured result card (Figma `recallResult/Captured`, 15782:13076) | 02a Captured | **Promoted** → `src/components/RecallResultCaptured/` |
+| Captured result card | DD 02a Captured | **Promoted** — this was the second consumer. A spec review caught that the promotion had been predicted here and never done. |
 | Confidence ask (the sure / not-sure pair) | 03 Processing | Inline. Second consumer will be DD 03 — promote then |
 | Recap bucket row (term + per-term XP + confidence note) | 07 Recap | Inline |
 | Stat chip row wrapper | 07 Recap | Inline |

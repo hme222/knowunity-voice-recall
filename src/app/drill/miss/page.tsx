@@ -1,8 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Button, HintCard, MascotSlot, ScreenShell, StrengthMeter } from '@/components'
-import { drillRung } from '@/lib/session'
+import { Button, Chips, HintCard, MascotSlot, RecallResult, ScreenShell, StrengthMeter } from '@/components'
+import { DRILL_MISSED_WORD, DRILL_TERM, drillRung, STUMBLES } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
 
@@ -12,6 +12,9 @@ import styles from '../drill.module.css'
 // Reveal the missed word, retake the pass. The meter HOLDS — it does not drop. A
 // student must never watch progress go backwards for asking for help, which is the
 // second of the two rules the whole variable-length design rests on.
+//
+// The transcript trails off mid-sentence, as on the frame: it shows where they got to,
+// which is what makes the missed word land.
 
 export default function DrillMissPage() {
   const router = useRouter()
@@ -23,22 +26,35 @@ export default function DrillMissPage() {
       bottomContent={
         <div className={styles.stack}>
           <Button
-            CTA="Take the pass again"
+            CTA="Show full definition"
+            variant="Secondary"
+            size="M"
+            fullWidth
+            onClick={() => router.push('/drill/pass/1')}
+          />
+          <Button
+            CTA="Try again"
             variant="Primary"
             size="M"
             fullWidth
             onClick={() => router.push('/drill/miss/letter')}
           />
-          <Button CTA="Leave the drill" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/picker')} />
+          <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/picker')} />
         </div>
       }
     >
       <div className={styles.body}>
         {/* Parked, not reduced. */}
         <StrengthMeter fill={rung?.coverage ?? 25} label="Held while you get this one" />
+        <p className={styles.note}>{DRILL_TERM.drillTitle ?? DRILL_TERM.title}</p>
         <MascotSlot size="2XL" expression="determined" />
-        <HintCard body="The word you missed was “evenly”. Take the pass again from the top." />
-        <p className={styles.note}>Nothing lost — the meter waits for you.</p>
+        <Chips Text={STUMBLES.first.verdict} size="S" color="Coral" active showRightIcon={false} />
+        <RecallResult
+          state="Miss"
+          title={STUMBLES.first.copy}
+          transcript={"“Formal charge is the charge on an atom when every bond’s… um…”"}
+        />
+        <HintCard body={`The missing word — ${DRILL_MISSED_WORD}`} />
       </div>
     </ScreenShell>
   )

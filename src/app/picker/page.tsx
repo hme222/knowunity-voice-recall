@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { AppBar, PickerRow, ScreenShell, TextBlock } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { PICKER_TOPICS, TERMS, useSession } from '@/lib/session'
+import { PICKER_DRILLS, PICKER_TOPICS } from '@/lib/session'
 import styles from './picker.module.css'
 
 // Picker — Figma frame "Picker page — Say It Back + drill down" (15810:11285).
@@ -18,10 +18,6 @@ import styles from './picker.module.css'
 
 export default function PickerPage() {
   const router = useRouter()
-  const state = useSession()
-  const attempted = new Set(state.outcomes.map((o) => o.index))
-  const drillable = TERMS.filter((t) => attempted.has(t.index))
-
   return (
     <ScreenShell
       topNavigation={
@@ -29,10 +25,15 @@ export default function PickerPage() {
       }
     >
       <div className={styles.body}>
-        <TextBlock variant="L" title="What do you want to explain?" showCaption={false} />
+        <TextBlock
+          variant="L"
+          title="Say It Back"
+          caption="Run a recall session, or drill one definition out loud."
+        />
+        <input className={styles.search} type="search" placeholder="Search your topics" aria-label="Search your topics" />
 
         <section className={styles.group}>
-          <h2 className={styles.groupLabel}>Topics</h2>
+          <h2 className={styles.groupLabel}>Or pick a topic</h2>
           {PICKER_TOPICS.map((topic) => (
             <PickerRow
               key={topic.label}
@@ -41,27 +42,23 @@ export default function PickerPage() {
               onClick={() => router.push('/session/intro')}
             />
           ))}
-          <p className={styles.note}>
-            From the quiz that unlocked Say It Back, plus anything you&rsquo;ve revised since.
-          </p>
+
         </section>
 
         <section className={styles.group}>
           <h2 className={styles.groupLabel}>Drill a definition</h2>
-          {drillable.map((t) => (
+          <p className={styles.note}>
+            Definitions you&rsquo;ve attempted. Amber ones need the most work.
+          </p>
+          {PICKER_DRILLS.map((d) => (
             <PickerRow
-              key={t.index}
+              key={d.label}
               variant="drill"
-              label={t.name}
-              state={state.outcomes.find((o) => o.index === t.index)?.bucket === 'Unaided' ? 'sharp' : 'drill'}
+              label={d.label}
+              state={d.state}
               onClick={() => router.push('/drill/intro')}
             />
           ))}
-          {drillable.length === 0 && (
-            <p className={styles.note}>
-              Definitions you&rsquo;ve already tried show up here. Run a session first.
-            </p>
-          )}
         </section>
       </div>
     </ScreenShell>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Button, MascotSlot, ScreenShell, StrengthMeter, TrainingLog } from '@/components'
+import { Button, MascotSlot, RecallResult, ScreenShell, StrengthMeter, TrainingLog } from '@/components'
 import { DRILL_TERM } from '@/lib/session'
 import styles from '../drill.module.css'
 
@@ -27,9 +27,9 @@ export default function DrillCompletePage() {
     <ScreenShell
       bottomContent={
         <div className={styles.stack}>
-          <Button CTA="Back to practice" variant="Primary" size="M" fullWidth onClick={() => router.push('/picker')} />
+          <Button CTA="Done" variant="Primary" size="M" fullWidth onClick={() => router.push('/picker')} />
           <Button
-            CTA="Drill it again"
+            CTA="Try again"
             variant="Tertiary"
             size="M"
             fullWidth
@@ -40,10 +40,15 @@ export default function DrillCompletePage() {
     >
       <div className={styles.body}>
         <StrengthMeter fill={100} label="You said all of it unaided" />
+        <p className={styles.note}>{DRILL_TERM.drillTitle ?? DRILL_TERM.title}</p>
         <div className={styles.centred}>
           <MascotSlot size="2XL" expression="laughing" />
-          <p className={styles.cue}>{DRILL_TERM.answer}</p>
         </div>
+        <RecallResult
+          state="Pass"
+          title="That’s the whole thing. Yours."
+          transcript={`“${DRILL_TERM.answer}”`}
+        />
         <TrainingLog rounds={ROUNDS} onSelect={() => router.push('/drill/complete/round')} />
       </div>
     </ScreenShell>

@@ -13,11 +13,16 @@ function CheckingScreen() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const index = Number(searchParams.get('term') ?? '1')
+  // The typed path's mock, parallel to the spoken one: recording duration selects the
+  // verdict there, answer length here. A typed miss has to be reachable — a path that
+  // can only ever pass isn't a judged path at all.
+  const len = Number(searchParams.get('len') ?? '0')
+  const verdict = len >= 40 ? 'pass' : 'miss'
 
   useEffect(() => {
-    const id = window.setTimeout(() => router.push(`/session/pass/${index}`), 1200)
+    const id = window.setTimeout(() => router.push(`/session/${verdict}/${index}`), 1200)
     return () => window.clearTimeout(id)
-  }, [index, router])
+  }, [index, router, verdict])
 
   return (
     <ScreenShell>

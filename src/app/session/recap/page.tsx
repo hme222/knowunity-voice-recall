@@ -1,13 +1,15 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { AppBar, Button, ScreenShell, StatChip, TextBlock } from '@/components'
+import { AppBar, Button, ButtonIcon, ScreenShell, StatChip, TextBlock } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import {
   Bucket,
   getTerm,
   useSession,
   sessionTotals,
+  shuffledFirstTerm,
+  startSession,
   TOTAL_TERMS,
 } from '@/lib/session'
 import styles from './recap.module.css'
@@ -24,6 +26,14 @@ import styles from './recap.module.css'
 
 const ORDER: Bucket[] = ['Unaided', 'Hinted', 'Revealed', 'Worth revisiting']
 
+/** Which of the sheet's three content states a bucket opens. */
+const TRANSCRIPT_BUCKET: Record<Bucket, string> = {
+  Unaided: 'passed',
+  Hinted: 'passed',
+  Revealed: 'revealed',
+  'Worth revisiting': 'skipped',
+}
+
 export default function RecapPage() {
   const router = useRouter()
   // useSession wraps sessionStorage in useSyncExternalStore: a server snapshot means
@@ -34,6 +44,13 @@ export default function RecapPage() {
   const totals = sessionTotals(state)
   const rough = outcomes.filter((o) => o.bucket === 'Unaided' || o.bucket === 'Hinted').length <= outcomes.length / 2
 
+  // Try again re-presents the same terms shuffled. It restarts the session so the Time
+  // stat measures this run, not the one before it.
+  function tryAgain() {
+    startSession()
+    router.push(`/session/idle/${shuffledFirstTerm()}`)
+  }
+
   return (
     <ScreenShell
       topNavigation={
@@ -42,18 +59,18 @@ export default function RecapPage() {
       bottomContent={
         <div className={styles.actions}>
           <Button
-            CTA={rough ? 'Try again' : 'Continue'}
+            CTA={rough ? 'Try again' : 'Done'}
             variant="Primary"
             size="M"
             fullWidth
-            onClick={() => router.push(rough ? '/session/idle/1' : '/')}
+            onClick={() => (rough ? tryAgain() : router.push('/home/unlocked'))}
           />
           <Button
-            CTA={rough ? 'Continue' : 'Try again'}
+            CTA={rough ? 'Done' : 'Try again'}
             variant="Secondary"
             size="M"
             fullWidth
-            onClick={() => router.push(rough ? '/' : '/session/idle/1')}
+            onClick={() => (rough ? router.push('/home/unlocked') : tryAgain())}
           />
           <Button
             CTA="Practice what I missed"
@@ -107,6 +124,15 @@ export default function RecapPage() {
                     )}
                   </span>
                   <span className={styles.rowXp}>{`+${row.xp} XP`}</span>
+                  {/* Every row opens its transcript. The sheet adapts by bucket, so a
+                      skipped term shows the answer alone rather than a take that
+                      never happened. */}
+                  <ButtonIcon
+                    variant="Overlay"
+                    size="S"
+                    label={`See what you said for ${getTerm(row.index)?.name}`}
+                    onClick={() => router.push(`/session/transcript/${TRANSCRIPT_BUCKET[bucket]}`)}
+                  />
                 </div>
               ))}
             </section>

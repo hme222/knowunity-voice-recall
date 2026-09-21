@@ -39,8 +39,8 @@ function PassScreen({ index }: { index: number }) {
       }
       bottomContent={
         <div className={styles.actions}>
-          <p className={styles.xp}>{`+${hinted ? XP.hinted : XP.unaided} XP`}</p>
-          <Button CTA="Next" variant="Primary" size="M" fullWidth onClick={() => router.push(nextAfter(index))} />
+          <p className={styles.xp}>{`\u26a1 +${hinted ? XP.hinted : XP.unaided}`}</p>
+          <Button CTA="Continue" variant="Primary" size="M" fullWidth onClick={() => router.push(nextAfter(index))} />
         </div>
       }
     >

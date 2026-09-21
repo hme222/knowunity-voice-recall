@@ -54,7 +54,11 @@ function TextTurnScreen() {
             size="M"
             fullWidth
             state={answer.trim() ? 'Default' : 'Disabled'}
-            onClick={() => router.push(`/text/checking?term=${index}${sticky ? '&sticky=1' : ''}`)}
+            onClick={() =>
+              router.push(
+                `/text/checking?term=${index}&len=${answer.trim().length}${sticky ? '&sticky=1' : ''}`,
+              )
+            }
           />
           {!sticky && (
             <Button

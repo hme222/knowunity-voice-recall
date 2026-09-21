@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button, SwipeChip, SwipeDots } from '@/components'
+import { Button, DueSignalCard, SwipeChip, SwipeDots } from '@/components'
 import { DUE_QUIZZES, dueCountLabel } from '@/lib/session'
 import { HomeShell } from '../HomeShell'
 import styles from '../home.module.css'
@@ -26,6 +26,15 @@ function DueHome() {
     <HomeShell>
       <div className={styles.composer}>
         <div className={styles.due}>
+          {/* One quiz due needs no pager, which is the case DueSignalCard was built
+              for. With several, the swipeable chips supersede it. */}
+          {DUE_QUIZZES.length === 1 ? (
+            <DueSignalCard
+              DueLabel={`Quiz due ${quiz.due}`}
+              onClick={() => router.push('/session/intro')}
+            />
+          ) : (
+            <>
           <SwipeChip
             due
             QuizLabel={`${quiz.term} · due ${quiz.due}`}
@@ -40,6 +49,8 @@ function DueHome() {
             fullWidth
             onClick={() => setActive((a) => (a + 1) % DUE_QUIZZES.length)}
           />
+            </>
+          )}
         </div>
 
         <div className={styles.chipRow}>

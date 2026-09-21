@@ -15,14 +15,14 @@ import styles from './exit.module.css'
 // "progress saves, returning resumes".
 
 const REASONS = [
-  'Room is too noisy',
-  "I'd rather type",
-  'Talking to the app feels awkward',
-  "The question wasn't clear",
-  "I don't know this material yet",
-  'Just checking it out',
-  "I'm out of time",
-  'Something else',
+  "I can\u2019t speak out loud right now (I\u2019m around people / in public)",
+  'I\u2019d rather type than talk',
+  'I was just checking how it looks',
+  'I don\u2019t understand how this works',
+  'Something didn\u2019t work right (mic / it couldn\u2019t hear me)',
+  'I feel awkward talking to the app',
+  'The question was bad',
+  'Other',
 ]
 
 export default function ExitPage() {
@@ -34,7 +34,7 @@ export default function ExitPage() {
       bottomContent={
         <div className={styles.actions}>
           <Button CTA="Keep learning" variant="Primary" size="M" fullWidth onClick={() => router.back()} />
-          <Button CTA="Leave anyway" variant="Secondary" size="M" fullWidth onClick={() => router.push('/')} />
+          <Button CTA="Leave anyway" variant="Secondary" size="M" fullWidth onClick={() => router.push('/home/unlocked')} />
         </div>
       }
     >

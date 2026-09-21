@@ -53,15 +53,15 @@ export default function RevealPage({ params }: { params: Promise<{ term: string 
       }
       bottomContent={
         <div className={styles.centred}>
-          <MicButton state="Idle" label="Say it back" onClick={() => router.push(`/session/repeat/${index}`)} />
-          <Button CTA="Next question" variant="Tertiary" size="M" onClick={moveOn} />
+          <MicButton state="Idle" label="Say it back" onClick={() => router.push(`/session/recording/${index}?repeat=1`)} />
+          <Button CTA="Skip" variant="Tertiary" size="M" onClick={moveOn} />
         </div>
       }
     >
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="determined" />
-        <ChatBubble showTitle title={current.title} body={current.answer} />
-        <ChatBubble body="Try it yourself after reading." />
+        <ChatBubble showTitle title="Here’s the answer. Now say it back." body={current.answer} />
+        <ChatBubble body="Say it back, in your own words" />
       </div>
     </ScreenShell>
   )

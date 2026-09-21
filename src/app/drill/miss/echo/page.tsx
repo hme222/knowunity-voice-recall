@@ -1,7 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Button, MascotSlot, MicButton, ScreenShell, StrengthMeter } from '@/components'
+import { Button, Chips, MascotSlot, MicButton, RecallResult, ScreenShell, StrengthMeter } from '@/components'
+import { DRILL_MISSED_WORD, DRILL_TERM, STUMBLES } from '@/lib/session'
 import styles from '../../drill.module.css'
 import { DrillBar } from '../../DrillBar'
 
@@ -22,17 +23,25 @@ export default function DrillEchoPage() {
       topNavigation={<DrillBar step={2} onExit={() => router.push('/picker')} />}
       bottomContent={
         <div className={styles.actions}>
-          <MicButton state="Idle" label="Say it with me" onClick={() => router.push('/drill/pass/3')} />
-          <Button CTA="Leave the drill" variant="Tertiary" size="M" onClick={() => router.push('/picker')} />
+          <MicButton state="Idle" label={`Say ${DRILL_MISSED_WORD} out loud`} onClick={() => router.push('/drill/pass/3')} />
+          <Button
+            CTA="Come back to this one"
+            variant="Tertiary"
+            size="M"
+            onClick={() => router.push('/picker')}
+          />
         </div>
       }
     >
-      <div className={styles.centred}>
+      <div className={styles.body}>
         <StrengthMeter fill={30} label="Echoing isn't unaided — but it gets you moving" />
+        <p className={styles.note}>{DRILL_TERM.drillTitle ?? DRILL_TERM.title}</p>
         <MascotSlot size="2XL" expression="laughing" />
-        <p className={styles.note}>Say it with me.</p>
-        <p className={styles.echoWord}>evenly</p>
-        <p className={styles.note}>Just that word, then take the whole line again.</p>
+        <Chips Text={STUMBLES.third.verdict} size="S" color="Coral" active showRightIcon={false} />
+        <RecallResult state="Miss" title={STUMBLES.third.copy} transcript="After me" />
+        <p className={styles.echoWord}>&ldquo;{DRILL_MISSED_WORD}&rdquo;</p>
+        <p className={styles.note}>Now you</p>
+        <p className={styles.note}>Say &ldquo;{DRILL_MISSED_WORD}&rdquo; out loud.</p>
       </div>
     </ScreenShell>
   )

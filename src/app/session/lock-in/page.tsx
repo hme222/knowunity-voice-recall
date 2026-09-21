@@ -53,9 +53,13 @@ export default function LockInPage() {
     >
       <div className={styles.body}>
         <div className={styles.badge}>
-          <Chips Text="Back for round two" size="S" color="pro" active showRightIcon={false} />
+          <Chips Text="+1 bonus XP" size="S" color="pro" active showRightIcon={false} />
         </div>
-        <ChatBubble showTitle title={term.title} body={term.prompt} />
+        <ChatBubble
+          showTitle
+          title="That one was tricky. Want to lock it in?"
+          body={"Try the full answer once more, unaided this time and you’ll see this one again later in the session. Totally optional."}
+        />
         <MascotSlot size="2XL" expression="determined" />
       </div>
     </ScreenShell>

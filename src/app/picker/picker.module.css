@@ -28,3 +28,22 @@
   font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
   line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
 }
+
+/* "Search your topics" — on the frame, and it had no counterpart in the build. */
+.search {
+  width: 100%;
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  background: var(--color-semantic-background-input);
+  border: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default);
+  color: var(--color-semantic-text-primary);
+  font-family: inherit;
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+}
+
+.search::placeholder { color: var(--color-semantic-text-disabled); }
+
+.search:focus-visible {
+  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * 1px);
+}

@@ -1,0 +1,36 @@
+/* Mirrors Figma's `recallResult/Captured` (15782:13076): vertical, gap space.150,
+   card padding, radius 400, surface fill. */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-150) * 1px);
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  background: var(--color-semantic-background-surface);
+}
+
+.tag {
+  align-self: flex-start;
+}
+
+.title {
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-headline-xxs-bold-font-weight);
+  font-size: calc(var(--typography-style-headline-xxs-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-xxs-bold-line-height) * 1px);
+}
+
+.label {
+  color: var(--color-semantic-text-tertiary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+}
+
+.transcript {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+}

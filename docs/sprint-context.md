@@ -431,7 +431,7 @@ description field, particularly `bottomSheet`'s own-branch-screen rule.
 9. **NEW — drill eligibility data.** The picker's drill list assumes
    per-student, per-definition Recap-bucket tracking (only definitions
    already attempted appear). **Unconfirmed with engineering.**
-10. ~~**NEW — no elevated-surface token.**~~ **DEFERRED for this sprint.**
+10. ~~**NEW — no elevated-surface token.**~~ **RESOLVED 2026-09-20.**
     An `optionRow` inside a `bottomSheet` resolves to the same fill as the
     sheet and vanishes; the raw 6% white patch stays and is documented as the
     one sanctioned literal in the system. Don't copy it to the next nested

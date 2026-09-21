@@ -9,6 +9,7 @@ import {
   Chips,
   MascotSlot,
   ProgressIndicator,
+  RecallResultCaptured,
   ScreenShell,
   SessionFraction,
 } from '@/components'
@@ -24,7 +25,15 @@ function CapturedScreen({ index }: { index: number }) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const current = getTerm(index)
-  const ms = searchParams.get('ms') ?? '0'
+  // Forwarded wholesale rather than picked apart: dropping one of these is what broke
+  // the chain before.
+  const forward = new URLSearchParams({
+    ms: searchParams.get('ms') ?? '0',
+    attempt: searchParams.get('attempt') ?? '1',
+  })
+  if (searchParams.get('hinted') === '1') forward.set('hinted', '1')
+  const attempt = searchParams.get('attempt') ?? '1'
+  const hinted = searchParams.get('hinted') === '1'
 
   if (!current) {
     router.replace('/session/intro')
@@ -59,35 +68,34 @@ function CapturedScreen({ index }: { index: number }) {
             variant="Primary"
             size="M"
             fullWidth
-            onClick={() => router.push(`/session/processing/${index}?ms=${ms}`)}
+            onClick={() => router.push(`/session/processing/${index}?${forward}`)}
           />
           <Button
             CTA="Re-record"
             variant="Secondary"
             size="M"
             fullWidth
-            onClick={() => router.push(`/session/recording/${index}`)}
+            onClick={() => router.push(`/session/recording/${index}?attempt=${attempt}${hinted ? '&hinted=1' : ''}`)}
           />
         </div>
       }
     >
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="determined" />
-        <div className={styles.card}>
-          <div className={styles.tag}>
+        <RecallResultCaptured
+          title="Here&rsquo;s what I heard. Send it, or say it again."
+          transcript={current.transcript}
+          tag={
             <Chips
               Text="Try again"
               size="S"
               color="Coral"
               active
               showRightIcon={false}
-              onClick={() => router.push(`/session/recording/${index}`)}
+              onClick={() => router.push(`/session/recording/${index}?attempt=${attempt}${hinted ? '&hinted=1' : ''}`)}
             />
-          </div>
-          <p className={styles.title}>Here&rsquo;s what I heard. Send it, or say it again.</p>
-          <p className={styles.label}>You said</p>
-          <p className={styles.transcript}>&ldquo;{current.transcript}&rdquo;</p>
-        </div>
+          }
+        />
       </div>
     </ScreenShell>
   )

@@ -51,22 +51,22 @@ function MissScreen({ index }: { index: number }) {
       }
       bottomContent={
         <div className={styles.actions}>
-          <p className={styles.xp}>{`+${XP.hinted} XP if you get it now`}</p>
-          <Button
-            CTA="Try again"
-            variant="Primary"
-            size="M"
-            fullWidth
-            onClick={() => router.push(`/session/recording/${index}?attempt=${attempt + 1}&hinted=1`)}
-          />
+          <p className={styles.xp}>{`\u26a1 +${XP.hinted}`}</p>
           <Button
             CTA="Reveal answer"
-            variant="Secondary"
+            variant="Primary"
             size="M"
             fullWidth
             onClick={() => router.push(`/session/reveal/${index}`)}
           />
-          <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={skip} />
+          <Button
+            CTA="Try again"
+            variant="Secondary"
+            size="M"
+            fullWidth
+            onClick={() => router.push(`/session/recording/${index}?attempt=${attempt + 1}&hinted=1`)}
+          />
+          <Button CTA="Skip \u00b7 no XP" variant="Tertiary" size="M" fullWidth onClick={skip} />
         </div>
       }
     >

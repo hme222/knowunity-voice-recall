@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { Button, SwipeChip } from '@/components'
+import { TOTAL_TERMS, useSession } from '@/lib/session'
 import { HomeShell } from '../HomeShell'
 import styles from '../home.module.css'
 
@@ -12,6 +13,8 @@ import styles from '../home.module.css'
 
 export default function UnlockedHomePage() {
   const router = useRouter()
+  const state = useSession()
+  const partway = state.outcomes.length > 0 && state.outcomes.length < TOTAL_TERMS
   return (
     <HomeShell>
       <div className={styles.composer}>
@@ -20,6 +23,15 @@ export default function UnlockedHomePage() {
             <Button key={tool} CTA={tool} variant="Secondary" size="S" />
           ))}
         </div>
+        {partway && (
+          <Button
+            CTA="Pick up where you left off"
+            variant="Secondary"
+            size="M"
+            fullWidth
+            onClick={() => router.push('/session/resume')}
+          />
+        )}
         <SwipeChip onClick={() => router.push('/picker')} />
         <Button
           CTA="Add a quiz due date (demo: plan active)"

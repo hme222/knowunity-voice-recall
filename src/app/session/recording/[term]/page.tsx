@@ -1,7 +1,7 @@
 'use client'
 
-import { use, useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { Suspense, use, useEffect, useRef, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import {
   AppBar,
   Button,
@@ -23,11 +23,17 @@ import styles from './recording.module.css'
 // The take's duration selects the verdict downstream. It is carried in the query so it
 // survives the navigation without needing session state for a value used once.
 
-export default function RecordingPage({ params }: { params: Promise<{ term: string }> }) {
+function RecordingScreen({ index }: { index: number }) {
   const router = useRouter()
-  const { term } = use(params)
-  const index = Number(term)
+  const searchParams = useSearchParams()
   const current = getTerm(index)
+  // Carried through the take, not dropped: `attempt` is what lets the scripted
+  // couldn't-hear fire once rather than forever, and `hinted` is what makes the
+  // Hinted bucket reachable at all.
+  const attempt = searchParams.get('attempt') ?? '1'
+  const hinted = searchParams.get('hinted') === '1'
+  // The say-it-back repeat after a reveal: a real take, then its own result screen.
+  const isRepeat = searchParams.get('repeat') === '1'
 
   const [seconds, setSeconds] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -52,7 +58,13 @@ export default function RecordingPage({ params }: { params: Promise<{ term: stri
 
   function done() {
     const took = Date.now() - startedAt.current
-    router.push(`/session/captured/${index}?ms=${took}`)
+    if (isRepeat) {
+      router.push(`/session/repeat/${index}`)
+      return
+    }
+    const q = new URLSearchParams({ ms: String(took), attempt })
+    if (hinted) q.set('hinted', '1')
+    router.push(`/session/captured/${index}?${q}`)
   }
 
   return (
@@ -89,13 +101,27 @@ export default function RecordingPage({ params }: { params: Promise<{ term: stri
           <span className={styles.ring} aria-hidden="true" />
           <span className={styles.ring} aria-hidden="true" />
           <span className={styles.ring} aria-hidden="true" />
+          {/* Stays Listening while paused. SPEC.md Open 12: MicButton gains no Paused
+              state and its appearance doesn't change — the accepted risk is that the
+              tap has no visible confirmation on the mic itself. RecordingStatus below
+              carries it. Reusing `Captured` here would have repurposed a state whose
+              accessible name is "Answer captured". */}
           <MicButton
-            state={paused ? 'Captured' : 'Listening'}
+            state="Listening"
             label={paused ? 'Paused, tap to resume' : undefined}
             onClick={() => setPaused((p) => !p)}
           />
         </div>
       </div>
     </ScreenShell>
+  )
+}
+
+export default function RecordingPage({ params }: { params: Promise<{ term: string }> }) {
+  const { term } = use(params)
+  return (
+    <Suspense fallback={null}>
+      <RecordingScreen index={Number(term)} />
+    </Suspense>
   )
 }

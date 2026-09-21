@@ -25,7 +25,21 @@ const ROUNDS = [
 export default function DrillRoundPage() {
   const router = useRouter()
   return (
-    <ScreenShell>
+    <ScreenShell
+      bottomSheetOnly={
+      <BottomSheet
+          Title="All your takes"
+          subtitle="Every round you just did, in order. The stumble is in there too."
+          onDismiss={() => router.push('/drill/complete')}
+        >
+          <PickerRow raised variant="drill" label="Round 1 · Full definition" state="sharp" />
+          <PickerRow raised variant="drill" label="Round 2 · Stumbled on “evenly”" state="drill" />
+          <PickerRow raised variant="drill" label="Round 3 · Several gone" state="sharp" />
+          <PickerRow raised variant="drill" label="Round 4 · All you" state="sharp" />
+          <p className={styles.note}>&ldquo;{DRILL_TERM.transcript}&rdquo;</p>
+        </BottomSheet>
+      }
+    >
       <div className={styles.body}>
         <StrengthMeter fill={100} label="You said all of it unaided" />
         <div className={styles.centred}>
@@ -34,17 +48,6 @@ export default function DrillRoundPage() {
         <TrainingLog rounds={ROUNDS} />
       </div>
 
-      <BottomSheet
-        Title="All your takes"
-        subtitle="Every round you just did, in order. The stumble is in there too."
-        onDismiss={() => router.push('/drill/complete')}
-      >
-        <PickerRow raised variant="drill" label="Round 1 · Full definition" state="sharp" />
-        <PickerRow raised variant="drill" label="Round 2 · Stumbled on “evenly”" state="drill" />
-        <PickerRow raised variant="drill" label="Round 3 · Several gone" state="sharp" />
-        <PickerRow raised variant="drill" label="Round 4 · All you" state="sharp" />
-        <p className={styles.note}>&ldquo;{DRILL_TERM.transcript}&rdquo;</p>
-      </BottomSheet>
     </ScreenShell>
   )
 }

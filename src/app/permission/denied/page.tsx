@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button, MascotSlot, ScreenShell, TextBlock } from '@/components'
 import styles from '../permission.module.css'
@@ -14,6 +15,7 @@ import styles from '../permission.module.css'
 
 export default function DeniedPage() {
   const router = useRouter()
+  const [showHow, setShowHow] = useState(false)
   return (
     <ScreenShell
       bottomContent={
@@ -26,11 +28,12 @@ export default function DeniedPage() {
             onClick={() => router.push('/text/turn?sticky=1')}
           />
           <Button
-            CTA="How to turn the mic on"
+            CTA={showHow ? 'Got it' : 'How to turn the mic on'}
             variant="Secondary"
             size="M"
             fullWidth
-            onClick={() => router.push('/permission/primer')}
+            aria-expanded={showHow}
+            onClick={() => setShowHow((v) => !v)}
           />
         </div>
       }
@@ -40,8 +43,15 @@ export default function DeniedPage() {
         <TextBlock
           variant="L"
           title="No mic, no problem"
-          caption="You can type your answers instead — same questions, same hints, and you keep the full XP. To speak them later, turn the microphone on for Knowunity in Settings › Privacy › Microphone."
+          caption="You can type your answers instead — same questions, same hints, and you keep the full XP."
         />
+        {showHow && (
+          <TextBlock
+            variant="S"
+            title="Turning the mic back on"
+            caption="Open Settings, then Privacy & Security, then Microphone, and switch Knowunity on. Come back here and speaking will work straight away."
+          />
+        )}
       </div>
     </ScreenShell>
   )

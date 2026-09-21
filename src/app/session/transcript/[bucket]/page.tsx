@@ -41,18 +41,21 @@ export default function TranscriptPage({ params }: { params: Promise<{ bucket: s
   const copy = COPY[key]
 
   return (
-    <ScreenShell>
+    <ScreenShell
+      bottomSheetOnly={
+      <BottomSheet Title={copy.title} subtitle={copy.subtitle} onDismiss={() => router.back()}>
+          {key !== 'skipped' && (
+            <>
+              <PickerRow raised variant="topic" label={`“${term.transcript}”`} />
+            </>
+          )}
+          {key !== 'passed' && <PickerRow raised variant="topic" label={term.answer} />}
+          <p className={styles.note}>{term.title}</p>
+        </BottomSheet>
+      }
+    >
       <TextBlock variant="L" title="Session recap" showCaption={false} />
 
-      <BottomSheet Title={copy.title} subtitle={copy.subtitle} onDismiss={() => router.back()}>
-        {key !== 'skipped' && (
-          <>
-            <PickerRow raised variant="topic" label={`“${term.transcript}”`} />
-          </>
-        )}
-        {key !== 'passed' && <PickerRow raised variant="topic" label={term.answer} />}
-        <p className={styles.note}>{term.title}</p>
-      </BottomSheet>
     </ScreenShell>
   )
 }

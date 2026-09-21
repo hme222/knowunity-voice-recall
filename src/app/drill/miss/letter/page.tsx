@@ -1,7 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Button, HintCard, MascotSlot, MicButton, ScreenShell, StrengthMeter } from '@/components'
+import { Button, Chips, HintCard, MascotSlot, MicButton, RecallResult, ScreenShell, StrengthMeter } from '@/components'
+import { DRILL_MISSED_WORD, DRILL_TERM, STUMBLES } from '@/lib/session'
 import styles from '../../drill.module.css'
 import { DrillBar } from '../../DrillBar'
 
@@ -16,23 +17,31 @@ import { DrillBar } from '../../DrillBar'
 
 export default function DrillLetterPage() {
   const router = useRouter()
+  const blanked = `${DRILL_MISSED_WORD[0]}${'_'.repeat(DRILL_MISSED_WORD.length)}`
+
   return (
     <ScreenShell
       topNavigation={<DrillBar step={2} onExit={() => router.push('/picker')} />}
       bottomContent={
         <div className={styles.actions}>
           <MicButton state="Idle" onClick={() => router.push('/drill/miss/echo')} />
-          <Button CTA="Leave the drill" variant="Tertiary" size="M" onClick={() => router.push('/picker')} />
+          <Button
+            CTA="Come back to this one"
+            variant="Tertiary"
+            size="M"
+            onClick={() => router.push('/picker')}
+          />
         </div>
       }
     >
       <div className={styles.body}>
         <StrengthMeter fill={28} label="Barely moved — this one was prompted" />
+        <p className={styles.note}>{DRILL_TERM.drillTitle ?? DRILL_TERM.title}</p>
         <MascotSlot size="2XL" expression="determined" />
-        <HintCard body="Same word again. It starts with “e” — and it stays on screen this time." />
-        <p className={styles.cue}>
-          …were shared perfectly <strong>e______</strong> between the two atoms.
-        </p>
+        <Chips Text={STUMBLES.second.verdict} size="S" color="Coral" active showRightIcon={false} />
+        <RecallResult state="Miss" title={STUMBLES.second.copy} transcript="Starts with" />
+        <p className={styles.cue}>…every bond&rsquo;s {blanked} are split evenly…</p>
+        <HintCard body={`First letter — ${DRILL_MISSED_WORD[0]}`} />
       </div>
     </ScreenShell>
   )

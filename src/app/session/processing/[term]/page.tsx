@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, use } from 'react'
+import { Suspense, use, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { AppBar, MascotSlot, ProgressIndicator, ScreenShell, SessionFraction, Button } from '@/components'
 import { CloseIcon } from '@/components/icons'
@@ -18,6 +18,16 @@ function ProcessingScreen({ index }: { index: number }) {
   const current = getTerm(index)
   const ms = Number(searchParams.get('ms') ?? '0')
   const attempt = Number(searchParams.get('attempt') ?? '1')
+  const hinted = searchParams.get('hinted') === '1'
+
+  // The second state SPEC lists: judge slow past target. Copy escalates in place —
+  // same screen, no state change, Knowie keeps breathing. voice-ux's triage calls for
+  // "friendly, not a crash", and a new screen would read as an error.
+  const [slow, setSlow] = useState(false)
+  useEffect(() => {
+    const id = window.setTimeout(() => setSlow(true), 6000)
+    return () => window.clearTimeout(id)
+  }, [])
 
   if (!current) {
     router.replace('/session/intro')
@@ -28,7 +38,9 @@ function ProcessingScreen({ index }: { index: number }) {
     const verdict = verdictFor(index, ms, attempt)
     const route =
       verdict === 'Pass' ? 'pass' : verdict === 'Miss' ? 'miss' : 'unclear'
-    router.push(`/session/${route}/${index}?sure=${sure ? '1' : '0'}&attempt=${attempt}`)
+    const q = new URLSearchParams({ sure: sure ? '1' : '0', attempt: String(attempt) })
+    if (hinted) q.set('hinted', '1')
+    router.push(`/session/${route}/${index}?${q}`)
   }
 
   return (
@@ -60,6 +72,15 @@ function ProcessingScreen({ index }: { index: number }) {
             <Button CTA="Sure" variant="Secondary" size="M" fullWidth onClick={() => answer(true)} />
             <Button CTA="Not sure" variant="Secondary" size="M" fullWidth onClick={() => answer(false)} />
           </div>
+          {slow && (
+            <Button
+              CTA="Having connection trouble?"
+              variant="Tertiary"
+              size="S"
+              fullWidth
+              onClick={() => router.push(`/session/offline?term=${index}`)}
+            />
+          )}
         </div>
       }
     >
@@ -67,7 +88,11 @@ function ProcessingScreen({ index }: { index: number }) {
         <div className={styles.mascot}>
           <MascotSlot size="2XL" expression="determined" />
         </div>
-        <p className={styles.line}>Let me check that against the definition&hellip;</p>
+        <p className={styles.line}>
+          {slow
+            ? 'Still thinking — hang on, this one is taking a moment.'
+            : 'Let me check that against the definition…'}
+        </p>
         <div className={styles.dots} aria-hidden="true">
           <span className={styles.dot} />
           <span className={styles.dot} />
