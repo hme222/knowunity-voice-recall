@@ -22,7 +22,7 @@ export default function QuizCompleteDoor() {
   return (
     <ScreenShell
       topNavigation={
-        <AppBar variant="leftIconButtonOnly" leftLabel="Back" onLeft={() => router.push('/')}>
+        <AppBar variant="leftIconButtonOnly" leftLabel="Back" onLeft={() => router.push('/home')}>
           {/* The frame's bar is at 25% — the quiz behind this screen, not our session. */}
           <ProgressIndicator progress="25" thickness="16" label="Quiz" current={1} total={4} />
         </AppBar>

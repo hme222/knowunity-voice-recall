@@ -34,7 +34,7 @@ export default function DrillLetterPage() {
     >
       <div className={styles.body}>
         <StrengthMeter fill={28} label="Barely moved — this one was prompted" />
-        <MascotSlot size="XL" expression="determined" />
+        <MascotSlot size="XL" expression="determined" className={styles.mascotCentred} />
         <Chips Text={STUMBLES.second.verdict} size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} className={styles.verdictChip} />
         <RecallResult state="Miss" title={STUMBLES.second.copy} transcript="Starts with" />
         {/* The blanked cue IS the first-letter hint. A HintCard restating it cost

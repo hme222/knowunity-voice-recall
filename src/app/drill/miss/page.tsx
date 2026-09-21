@@ -49,7 +49,7 @@ export default function DrillMissPage() {
         {/* Parked, not reduced. */}
         <StrengthMeter fill={rung?.coverage ?? 25} label="Held while you get this one" />
         <p className={styles.note}>{DRILL_TERM.drillTitle ?? DRILL_TERM.title}</p>
-        <MascotSlot size="2XL" expression="determined" />
+        <MascotSlot size="2XL" expression="determined" className={styles.mascotCentred} />
         <Chips Text={STUMBLES.first.verdict} size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} className={styles.verdictChip} />
         <RecallResult
           state="Miss"

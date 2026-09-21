@@ -45,7 +45,7 @@ function PassScreen({ index }: { index: number }) {
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="excited" />
+        <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
         <RecallResult state="Pass" title={current.passTitle} transcript={`“${current.transcript}”`} />
         <Button CTA="See the full transcript" variant="Tertiary" size="S" fullWidth onClick={() => router.push('/session/transcript/passed')} />
       </div>

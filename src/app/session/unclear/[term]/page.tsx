@@ -51,7 +51,7 @@ function UnclearScreen({ index }: { index: number }) {
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="dazed" />
+        <MascotSlot size="2XL" expression="dazed" className={styles.mascotCentred} />
         {/* RecallResult supplies the one documented retry tag for CouldntHear. A second
             chip here bound to the same handler meant two differently-labelled controls
             doing one thing. */}

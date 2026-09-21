@@ -26,7 +26,7 @@ export default function ChatDoor() {
   return (
     <ScreenShell
       topNavigation={
-        <AppBar variant="leftIconButtonOnly" leftLabel="Back" onLeft={() => router.push('/')}>
+        <AppBar variant="leftIconButtonOnly" leftLabel="Back" onLeft={() => router.push('/home')}>
           <ProgressIndicator progress="25" thickness="16" label="Chat" current={1} total={4} />
         </AppBar>
       }

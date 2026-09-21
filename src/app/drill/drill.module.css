@@ -103,3 +103,11 @@
 .verdictChip {
   align-self: flex-start;
 }
+
+/* The mascot is a fixed 120px box in a column that stretches its children, so without
+   this it lands hard against the left margin. The frames centre it, and it was centred
+   on 11 screens and left-aligned on 10 — which is what made it read as small on the
+   ones where it was adrift beside a full-width card. */
+.mascotCentred {
+  align-self: center;
+}

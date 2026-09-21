@@ -87,7 +87,7 @@ export default function RecapPage() {
       {/* design-system.md § "Mascot poses" assigns laughing to 07 Recap. Its absence
           was found independently in both scorecards. */}
       <div className={styles.headline}>
-        <MascotSlot size="2XL" expression="laughing" />
+        <MascotSlot size="2XL" expression="laughing" className={styles.mascotCentred} />
         <TextBlock
           variant="L"
           title="Session recap"

@@ -77,7 +77,7 @@ function MissScreen({ index }: { index: number }) {
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="determined" />
+        <MascotSlot size="2XL" expression="determined" className={styles.mascotCentred} />
         <div className={styles.verdictRow}>
           <Chips Text="Partially right" size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} />
           {/* Beside the verdict, not at the tail of the body: at the end it sat on the

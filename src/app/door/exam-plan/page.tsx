@@ -27,7 +27,7 @@ export default function ExamPlanDoor() {
   return (
     <ScreenShell
       topNavigation={
-        <AppBar variant="leftIconButtonOnly" leftLabel="Back" onLeft={() => router.push('/')}>
+        <AppBar variant="leftIconButtonOnly" leftLabel="Back" onLeft={() => router.push('/home')}>
           <ProgressIndicator progress="25" thickness="16" label="Plan steps" current={1} total={4} />
         </AppBar>
       }

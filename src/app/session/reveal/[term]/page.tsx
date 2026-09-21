@@ -59,7 +59,7 @@ export default function RevealPage({ params }: { params: Promise<{ term: string 
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="determined" />
+        <MascotSlot size="2XL" expression="determined" className={styles.mascotCentred} />
         <ChatBubble showTitle title="Here’s the answer. Now say it back." body={current.answer} />
         <ChatBubble body="Say it back, in your own words" />
       </div>

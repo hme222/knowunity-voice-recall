@@ -33,7 +33,7 @@ export default function DrillEchoPage() {
     >
       <div className={styles.body}>
         <StrengthMeter fill={30} label="Echoing isn't unaided — but it gets you moving" />
-        <MascotSlot size="2XL" expression="laughing" />
+        <MascotSlot size="2XL" expression="laughing" className={styles.mascotCentred} />
         <Chips Text={STUMBLES.third.verdict} size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} className={styles.verdictChip} />
         <RecallResult state="Miss" title={STUMBLES.third.copy} transcript="After me" />
         <p className={styles.echoWord}>&ldquo;{DRILL_MISSED_WORD}&rdquo;</p>

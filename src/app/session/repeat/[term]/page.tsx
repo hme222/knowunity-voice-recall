@@ -51,7 +51,7 @@ export default function RepeatPage({ params }: { params: Promise<{ term: string 
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="excited" />
+        <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
         <RecallResult
           state="Pass"
           title="That's it, in your own voice."
