@@ -3,7 +3,15 @@
 import { use } from 'react'
 import { useRouter } from 'next/navigation'
 import { goToExit } from '@/lib/navigation'
-import { AppBar, Button, ChatBubble, MascotSlot, MicButton, ScreenShell } from '@/components'
+import {
+  micRegionClass,
+  AppBar,
+  Button,
+  ChatBubble,
+  MascotSlot,
+  MicButton,
+  ScreenShell,
+} from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { getTerm } from '@/lib/session'
 import styles from '../../interrupt.module.css'
@@ -37,10 +45,7 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
         />
       }
       bottomContent={
-        <div className={styles.actions}>
-          <MicButton state="Idle" label="Say whatever you've got" onClick={() => router.push(`/session/recording/${index}`)} />
-          <Button CTA="Just show me" variant="Tertiary" size="M" fullWidth onClick={() => router.push(`/session/reveal/${index}`)} />
-        </div>
+        <Button CTA="Just show me" variant="Tertiary" size="M" fullWidth onClick={() => router.push(`/session/reveal/${index}`)} />
       }
     >
       <div className={styles.body}>
@@ -50,6 +55,12 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
           title="Drawing a blank?"
           body="Say whatever you've got — even half of it. Getting it wrong out loud sticks better than reading the answer, and nothing here is scored against you."
         />
+        {/* One fixed mic region, on every voice screen. The control used to sit at
+            eight different heights and jump 91px on the very tap that starts
+            recording. sprint-context.md, 2026-09-22. */}
+        <div className={micRegionClass}>
+          <MicButton state="Idle" label="Say whatever you've got" onClick={() => router.push(`/session/recording/${index}`)} />
+        </div>
       </div>
     </ScreenShell>
   )

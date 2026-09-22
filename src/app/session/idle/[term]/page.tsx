@@ -4,6 +4,8 @@ import { Suspense, use, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { goToExit } from '@/lib/navigation'
 import {
+  actionRowClass,
+  micRegionClass,
   AppBar,
   Button,
   ChatBubble,
@@ -12,7 +14,6 @@ import {
   ProgressIndicator,
   ScreenShell,
   SessionFraction,
-  actionRowClass,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, useSticky, TOTAL_TERMS } from '@/lib/session'
@@ -108,9 +109,12 @@ function IdleScreen({ index }: { index: number }) {
           titleAccent={current.name}
           body={current.prompt}
         />
-        {/* The frame places micButton in middleContent at y=334, not in the action
-            zone. It is content, not chrome. */}
-        <MicButton state="Idle" onClick={() => router.push(`/session/recording/${index}${doorQuery}`)} />
+        {/* One fixed mic region, on every voice screen. The control used to sit at
+            eight different heights and jump 91px on the very tap that starts
+            recording. sprint-context.md, 2026-09-22. */}
+        <div className={micRegionClass}>
+          <MicButton state="Idle" onClick={() => router.push(`/session/recording/${index}${doorQuery}`)} />
+        </div>
       </div>
     </ScreenShell>
   )

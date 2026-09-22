@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Button, MicButton, RecordingStatus, ScreenShell, StrengthMeter } from '@/components'
+import { micRegionClass, Button, MicButton, RecordingStatus, ScreenShell, StrengthMeter } from '@/components'
 import { drillRung } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
@@ -48,7 +48,7 @@ function DrillRecording() {
       <div className={styles.body}>
         <StrengthMeter fill={rung.coverage} label="How much you can say unaided" />
         <p className={styles.cue}>{rung.cue}</p>
-        <div className={styles.centred}>
+        <div className={micRegionClass}>
           {/* A real Paused state as of 2026-09-21. The accepted risk that "nothing on
               screen changes when paused" failed its own gate: the fill was identical
               and the pulse ring kept animating while the caption said stopped. */}

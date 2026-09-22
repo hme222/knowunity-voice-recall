@@ -41,6 +41,33 @@
   padding-inline: calc(var(--spacing-semantic-screen-margin) * 1px);
 }
 
+/* A fade at the foot of the region when it overflows, so a cut row reads as "more
+   below". Applied by the shell rather than per screen: four screens were slicing a row
+   mid-height with nothing to say more existed, and the only cue was the half-row
+   itself. `mask-image` rather than a gradient overlay so it works over any background
+   and costs no element. */
+.middle[data-overflowing='true'] {
+  mask-image: linear-gradient(
+    to bottom,
+    #000 calc(100% - var(--component-scaffold-scroll-fade-height) * 1px),
+    transparent 100%
+  );
+}
+
+/* The mic's fixed region, at the foot of middleContent on every voice screen. */
+.micRegion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: calc(var(--component-scaffold-mic-region-height) * 1px);
+  margin-top: auto;
+}
+
+.micRegion > * {
+  flex-shrink: 0;
+}
+
 .bottom {
   /* min-height, not height. The frames vary this region deliberately: 120 on most
      screens, 146 on 05 Miss where a text link sits below the button row. A fixed

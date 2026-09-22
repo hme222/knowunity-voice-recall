@@ -165,6 +165,8 @@
   --component-scaffold-top-navigation-height: 56; /** Region holding the appBar and the session fraction. A literal: component.button.l.height is also 56, but aliasing across components is how a value silently changes for the wrong reason. */
   --component-scaffold-bottom-content-height: 120; /** The action zone at the foot of a screen. A literal: size.primitive.illustration.1500 is also 120, but that is an illustration box and a footer region is not one. component.micButton.diameter does alias it, legitimately, because a micButton genuinely is a 120 illustration-sized circle. */
   --component-scaffold-bottom-sheet-only-height: 34; /** Home-indicator region, and the slot a bottom sheet occupies on its own branch screen. No primitive of this value exists. */
+  --component-scaffold-mic-region-height: 200; /** The fixed region the mic sits in at the foot of middleContent, on every voice screen. 120 for the control plus 40 clear above and below. It exists because the mic used to sit at EIGHT different heights and moved 91px on the very tap that starts recording — the content above absorbs the difference now, and the control does not move under the finger. */
+  --component-scaffold-scroll-fade-height: 40; /** Height of the fade at the foot of a content region that overflows. Four screens sliced a row mid-height with no cue that more existed; a half-row is not an affordance. */
   --component-mic-button-pulse-rest-scale: 0.92; /** Ring scale at the bottom of the pulse. */
   --component-mic-button-pulse-peak-scale: 1.04; /** Ring scale at the top of the pulse. */
   --component-mic-button-pulse-paused-opacity: 0.3; /** Ring opacity when the take is paused: still present, plainly not listening. */

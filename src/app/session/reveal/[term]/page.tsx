@@ -4,6 +4,7 @@ import { use } from 'react'
 import { useRouter } from 'next/navigation'
 import { goToExit } from '@/lib/navigation'
 import {
+  micRegionClass,
   AppBar,
   Button,
   ChatBubble,
@@ -53,16 +54,19 @@ export default function RevealPage({ params }: { params: Promise<{ term: string 
         </>
       }
       bottomContent={
-        <div className={styles.centred}>
-          <MicButton state="Idle" label="Say it back" onClick={() => router.push(`/session/recording/${index}?repeat=1`)} />
-          <Button CTA="Skip" variant="Tertiary" size="M" onClick={moveOn} />
-        </div>
+        <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={moveOn} />
       }
     >
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="determined" className={styles.mascotCentred} />
         <ChatBubble showTitle title="Here’s the answer. Now say it back." body={current.answer} />
         <ChatBubble body="Say it back, in your own words" />
+        {/* One fixed mic region, on every voice screen. The control used to sit at
+            eight different heights and jump 91px on the very tap that starts
+            recording. sprint-context.md, 2026-09-22. */}
+        <div className={micRegionClass}>
+          <MicButton state="Idle" label="Say it back" onClick={() => router.push(`/session/recording/${index}?repeat=1`)} />
+        </div>
       </div>
     </ScreenShell>
   )

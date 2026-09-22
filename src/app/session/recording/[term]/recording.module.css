@@ -22,7 +22,14 @@
   justify-content: center;
 }
 
+/* Same fixed region as every other voice screen. Without it the mic sat at y=383 here
+   and y=566 on 01 Idle, so it moved 183px on the tap that starts the recording — the
+   one tap where the control must not move. The rings are absolute children, so the
+   height comes from the region rather than from them. */
 .micWrap {
+  height: calc(var(--component-scaffold-mic-region-height) * 1px);
+  margin-top: auto;
+  flex-shrink: 0;
   position: relative;
   display: grid;
   place-items: center;

@@ -20,7 +20,7 @@ export { ProgressIndicator, PROGRESS_STEPS } from './ProgressIndicator/ProgressI
 export { RecallResultCaptured } from './RecallResultCaptured/RecallResultCaptured'
 export { RecordingStatus } from './RecordingStatus/RecordingStatus'
 export { RecallResult, RECALL_RESULT_STATES } from './RecallResult/RecallResult'
-export { ScreenShell, actionRowClass } from './ScreenShell/ScreenShell'
+export { ScreenShell, actionRowClass, micRegionClass } from './ScreenShell/ScreenShell'
 export { SessionFraction } from './SessionFraction/SessionFraction'
 export { SwipeChip } from './SwipeChip/SwipeChip'
 export { SwipeDots } from './SwipeDots/SwipeDots'

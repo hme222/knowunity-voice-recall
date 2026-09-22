@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { goToExit } from '@/lib/navigation'
 import {
+  micRegionClass,
   AppBar,
   Button,
   ChatBubble,
@@ -54,10 +55,7 @@ export default function LockInPage() {
         </>
       }
       bottomContent={
-        <div className={styles.actions}>
-          <MicButton state="Idle" onClick={() => router.push(`/session/recording/${term.index}?attempt=2&requeued=1`)} />
-          <Button CTA="Skip" variant="Tertiary" size="M" onClick={() => router.push('/session/lock-in/second')} />
-        </div>
+        <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/session/lock-in/second')} />
       }
     >
       <div className={styles.body}>
@@ -70,6 +68,12 @@ export default function LockInPage() {
           body={"Try the full answer once more, unaided this time and you’ll see this one again later in the session. Totally optional."}
         />
         <MascotSlot size="2XL" expression="determined" />
+        {/* One fixed mic region, on every voice screen. The control used to sit at
+            eight different heights and jump 91px on the very tap that starts
+            recording. sprint-context.md, 2026-09-22. */}
+        <div className={micRegionClass}>
+          <MicButton state="Idle" onClick={() => router.push(`/session/recording/${term.index}?attempt=2&requeued=1`)} />
+        </div>
       </div>
     </ScreenShell>
   )

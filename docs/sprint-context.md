@@ -98,6 +98,50 @@ above.
   than settled. It stays on screen; treat it as an open question, not
   a conclusion.
 
+Added 2026-09-22, resolving the findings in `eval/scorecard-04.md`:
+
+- **A typed pass scores as Hinted (+7), not Unaided (+10), when voice was
+  available.** This puts a number on the decision already recorded above
+  ("typed answers are reduced, but only when voice was available") without
+  inventing a new tier: choosing to type removes the retrieval-out-loud the
+  feature exists to test, so it lands where "got there with help" lands. A
+  student whose mic is denied keeps the full +10 — the build distinguishes them
+  by the sticky flag. The Recap BUCKET still says Unaided; only the XP is
+  reduced, because the student did retrieve it unaided, just not aloud.
+- **The mic has one fixed region on every voice screen.** It sat at eight
+  different heights and moved 91px on the very tap that starts recording. One
+  region, and the content above absorbs the difference.
+- **One screen-title scale.** Headline S, as the Complete Flow frames draw it.
+  "Say It Back" was 21px on 00 Intro and 44px on the picker, consecutive
+  screens, and the permission primer used 76px Display M — a token whose own
+  description reserves it for "hero numeric moments".
+- **Skip has one placement and one label**, overriding the frames' per-screen
+  positions. Four placements and two labels for one escape was the clearer
+  problem.
+- **A content region that overflows shows a fade.** Four screens sliced a row
+  mid-height with no cue that more existed.
+- **Three waits become one composition.** 03 Processing, DD 03 and the typed
+  checking beat share a shell, mascot position and dots; only the content below
+  differs. The typed beat had been dropping the app bar entirely, so the chrome
+  blinked for one screen mid-flow.
+- **The confidence tap is not asked on a take the app is about to reject.** A
+  too-short take goes straight to 04a Couldn't hear. Asking how sure you are
+  about an answer that was never heard is a question the screen has not earned.
+- **XP is shown only where it is earned.** 05 Miss had "+7" in the same slot and
+  style as Pass's earned "+10", while Reveal pays 0 — a promise dressed as a
+  balance.
+- **Nothing renders as a button unless it does something.** DD 08's round rows
+  open the round sheet; the transcript quote and home's tool chips become
+  non-interactive reference chrome.
+- **The exit reasons are a radiogroup.** Eight `aria-pressed` toggles with no
+  group announced as eight independent switches for one single-choice question.
+  "Other" stays selectable and opens nothing, like the other seven.
+- **The Recap keeps its Score chip**, and this is a KNOWN TENSION rather than a
+  settled point: the Design Brief calls this "conversational, not quiz-graded",
+  and a percentage grades it. The chip is on the built 07 Recap frame, and the
+  frame wins under `docs/design-system.md`'s source-of-truth order. Revisit if
+  the brief's framing is ever given precedence over the frames.
+
 Added 2026-09-20:
 
 - **A per-term confidence tap sits inside Processing.** "How sure are

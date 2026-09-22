@@ -1,4 +1,6 @@
-import type { ReactNode } from 'react'
+'use client'
+
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import styles from './ScreenShell.module.css'
 
 // The React counterpart of the Figma `scaffold` component set, variant `size=iPhone 13`.
@@ -49,6 +51,13 @@ export type ScreenShellProps = {
 /** The frames' side-by-side action row. Screens compose it into `bottomContent`. */
 export const actionRowClass = styles.actionRow
 
+/**
+ * The mic's fixed region, at the foot of middleContent. Every voice screen wraps its
+ * MicButton in this so the control sits at one height across the whole flow — it used
+ * to sit at eight, and to jump 91px on the tap that starts recording.
+ */
+export const micRegionClass = styles.micRegion
+
 export function ScreenShell({
   topNavigation,
   showTopNavSlot,
@@ -62,13 +71,34 @@ export function ScreenShell({
   const topOn = showTopNavSlot ?? topNavigation != null
   const bottomOn = showBottomNavSlot ?? bottomContent != null
 
+  // Whether the content region has more below the fold. Drives the fade; a half-row is
+  // not an affordance. Measured rather than guessed, and re-measured on resize and
+  // whenever the content changes, because most of these screens are state-dependent.
+  const middleRef = useRef<HTMLElement>(null)
+  const [overflowing, setOverflowing] = useState(false)
+  const measure = useCallback(() => {
+    const el = middleRef.current
+    if (el) setOverflowing(el.scrollHeight - el.clientHeight > 1)
+  }, [])
+  useEffect(() => {
+    measure()
+    const el = middleRef.current
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    for (const child of Array.from(el.children)) ro.observe(child)
+    return () => ro.disconnect()
+  }, [measure, children])
+
   return (
     <div className={[styles.root, className].filter(Boolean).join(' ')} data-sheet={showBottomSheetBackground}>
       {/* Panel Header — the status-bar region. Empty in the prototype; the real app's
           Status Bar is an external-library component we don't reproduce. */}
       <div className={styles.panelHeader} aria-hidden="true" />
       {topOn && <div className={styles.topNavigation}>{topNavigation}</div>}
-      <main className={styles.middle}>{children}</main>
+      <main ref={middleRef} className={styles.middle} data-overflowing={overflowing || undefined}>
+        {children}
+      </main>
       {bottomOn && <div className={styles.bottom}>{bottomContent}</div>}
       {/* Figma's `Bottom-sheet background`: a full-bleed scrim that dims everything
           above it. It sits under bottomSheetOnly so the sheet reads over it. */}
