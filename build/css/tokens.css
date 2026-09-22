@@ -246,6 +246,7 @@
   --color-semantic-brand-on-bold: var(--color-primitive-violet-950); /** Text and icons on brand.bold. */
   --color-semantic-brand-subtle: var(--color-primitive-violet-900); /** Low emphasis brand fill: tinted brand panels. */
   --color-semantic-brand-on-subtle: var(--color-primitive-violet-400); /** Text and icons on brand.subtle. */
+  --color-semantic-brand-on-surface: var(--color-primitive-violet-300); /** Brand-coloured TEXT on background.surface — the term picked out of its own prompt on 01 Idle and the drill's `Define:` pill. Not brand.bold: that is a FILL colour, and as 12px text on surface it measures 4.43:1, which fails the 4.5 gate. violet.300 is 5.67:1 on surface and 7.16:1 on page, so it holds at any size. Added 2026-09-22 after a rendered-pixel sweep caught the drill pill. */
   --color-semantic-pro-bold: var(--color-primitive-gold-400); /** Solid PRO fill: PRO badges, upgrade banners. Not for warnings. */
   --color-semantic-pro-on-bold: var(--color-primitive-gold-950); /** Text and icons on pro.bold. */
   --color-semantic-pro-subtle: var(--color-primitive-gold-900); /** Low emphasis PRO fill. */

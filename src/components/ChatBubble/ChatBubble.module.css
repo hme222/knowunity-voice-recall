@@ -19,9 +19,11 @@
   line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
   letter-spacing: calc(var(--typography-style-headline-s-letter-spacing) * 0.01em);
 }
-/* The term, picked out of its own prompt. */
+/* The term, picked out of its own prompt. Same token as the drill's `Define:` pill —
+   one colour for one idea — and it clears 4.5:1 on surface at any size, where
+   brand.bold only clears the large-text threshold. */
 .titleAccent {
-  color: var(--color-semantic-brand-bold);
+  color: var(--color-semantic-brand-on-surface);
 }
 .body {
   font-weight: var(--typography-style-body-m-regular-font-weight);

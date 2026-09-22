@@ -79,7 +79,7 @@ Raw values. Never referenced directly by a component.
 
 ## Colour semantics
 
-`color.semantic.*` — 93 tokens
+`color.semantic.*` — 94 tokens
 
 Roles. These are what components bind to.
 
@@ -154,6 +154,7 @@ Roles. These are what components bind to.
 | `color.semantic.brand.onBold` | `{color.primitive.violet.950}` | `#0E0A18` | Text and icons on brand.bold. |
 | `color.semantic.brand.subtle` | `{color.primitive.violet.900}` | `#15103A` | Low emphasis brand fill: tinted brand panels. |
 | `color.semantic.brand.onSubtle` | `{color.primitive.violet.400}` | `#7B65E0` | Text and icons on brand.subtle. |
+| `color.semantic.brand.onSurface` | `{color.primitive.violet.300}` | `#A78BFA` | Brand-coloured TEXT on background.surface — the term picked out of its own prompt on 01 Idle and the drill's `Define:` pill. Not brand.bold: that is a FILL colour, and as 12px text on surface it measures 4.43:1, which fails the 4.5 gate. violet.300 is 5.67:1 on surface and 7.16:1 on page, so it holds at any size. Added 2026-09-22 after a rendered-pixel sweep caught the drill pill. |
 | `color.semantic.pro.bold` | `{color.primitive.gold.400}` | `#F5B53D` | Solid PRO fill: PRO badges, upgrade banners. Not for warnings. |
 | `color.semantic.pro.onBold` | `{color.primitive.gold.950}` | `#2A1D04` | Text and icons on pro.bold. |
 | `color.semantic.pro.subtle` | `{color.primitive.gold.900}` | `#3A2D0B` | Low emphasis PRO fill. |
@@ -414,4 +415,4 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ---
 
-314 tokens across 10 groups.
+315 tokens across 10 groups.

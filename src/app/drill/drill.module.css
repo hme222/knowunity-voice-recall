@@ -151,8 +151,10 @@
   color: var(--color-semantic-text-secondary);
 }
 
+/* brand.onSurface, not brand.bold. brand.bold is a FILL; at 12px on
+   background.surface it measures 4.43:1 and fails the contrast gate. */
 .termPillName {
-  color: var(--color-semantic-brand-bold);
+  color: var(--color-semantic-brand-on-surface);
 }
 
 /* The DD 07 result card was here. Promoted to `RecallResult state="Neutral"`
