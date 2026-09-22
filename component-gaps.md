@@ -48,3 +48,11 @@ detail.
   render helper for the drill's fixture strings, not a design-system component, and
   nothing outside the drill has blanks. Promote if a third consumer appears outside
   `src/app/drill/`.
+
+- **`ProcessingBeat`** (`src/components/ProcessingBeat/`) — the wait: Knowie breathing,
+  a status line, three dots. Extracted 2026-09-22 from THREE inline copies that had
+  drifted into three shapes — 03 Processing with dots at mascot y=295, DD 03 with its
+  meter pinned top and no dots at y=385, and the typed beat with no app bar at all at
+  y=355, so the chrome blinked for one screen mid-flow. Three consumers, well past the
+  promotion bar. Has no Figma counterpart: it is a composition the frames draw three
+  times rather than a component they name.

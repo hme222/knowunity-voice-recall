@@ -2,11 +2,10 @@
 
 import { Suspense, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { MascotSlot, ScreenShell, StrengthMeter } from '@/components'
+import { ProcessingBeat, ScreenShell, StrengthMeter } from '@/components'
 import { drillRung, DRILL_TOTAL_RUNGS } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import { processingDwell } from '@/lib/motion'
-import styles from '../drill.module.css'
 
 // DD 03 Processing — Figma frame "DD 03 Processing" (15782:11891).
 //
@@ -35,16 +34,21 @@ function DrillProcessing() {
   }, [step, router])
 
   return (
-    <ScreenShell topNavigation={<DrillBar step={step} onExit={() => router.push('/picker')} />}>
-      <div className={styles.body}>
-        <StrengthMeter fill={rung?.coverage ?? 0} label="Scoring what you said unaided" />
-        <div className={styles.centred}>
-          <div className={styles.mascot}>
-            <MascotSlot size="2XL" expression="determined" />
-          </div>
-          <p className={styles.note}>Checking how much of that was you&hellip;</p>
-        </div>
-      </div>
+    <ScreenShell
+      topNavigation={<DrillBar step={step} onExit={() => router.push('/picker')} />}
+      // Reserved though this screen has no actions, which is the scaffold's own rule:
+      // "a region that is on still reserves its height even with nothing in it, which
+      // is what keeps the action zone in the same place from screen to screen". Without
+      // it this wait sat 60px below the other two.
+      showBottomNavSlot
+    >
+      {/* Same wait composition as 03 Processing and the typed beat. The meter goes
+          above it — that is the only thing that differs, and it is the one piece of
+          this screen the core loop has no equivalent for. */}
+      <ProcessingBeat
+        line="Checking how much of that was you…"
+        above={<StrengthMeter fill={rung?.coverage ?? 0} label="Scoring what you said unaided" />}
+      />
     </ScreenShell>
   )
 }

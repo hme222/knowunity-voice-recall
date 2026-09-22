@@ -1,0 +1,26 @@
+/* The confidence tap. Two equal choices — neither is the safe one, and making one a
+   Primary would tell the student which answer the app prefers. */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.ask {
+  margin: 0;
+  text-align: center;
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-m-bold-font-weight);
+  font-size: calc(var(--typography-style-body-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-bold-line-height) * 1px);
+}
+
+.pair {
+  display: flex;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.pair > * {
+  flex: 1;
+}

@@ -3,7 +3,7 @@
 import { Suspense, use, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { goToExit } from '@/lib/navigation'
-import { AppBar, MascotSlot, ProgressIndicator, ScreenShell, SessionFraction, Button } from '@/components'
+import { AppBar, Button, ConfidenceAsk, ProcessingBeat, ProgressIndicator, ScreenShell, SessionFraction } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { getTerm, progressFor, recordConfidence, revisitsPending, verdictFor, TOTAL_TERMS } from '@/lib/session'
 import { doorResultHref } from '@/app/door/doors'
@@ -98,15 +98,15 @@ function ProcessingScreen({ index }: { index: number }) {
           <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
         </>
       }
+      // Reserve the action zone before the question arrives. ScreenShell's own doc
+      // says this flag exists so "a region that is on still reserves its height even
+      // with nothing in it, which is what keeps the action zone in the same place from
+      // screen to screen" — and here it keeps it in the same place from MOMENT to
+      // moment: without it the wait jumped 60px the instant the ask appeared, and an unusable take has no ask at all.
+      showBottomNavSlot
       bottomContent={
         <div className={styles.confidence}>
-          {unusable ? null : <p className={styles.ask}>How sure are you?</p>}
-          {!unusable && (
-            <div className={styles.pair}>
-              <Button CTA="Sure" variant="Secondary" size="M" fullWidth onClick={() => answer(true)} />
-              <Button CTA="Not sure" variant="Secondary" size="M" fullWidth onClick={() => answer(false)} />
-            </div>
-          )}
+          {!unusable && <ConfidenceAsk onAnswer={answer} />}
           {slow && (
             <Button
               CTA="Having connection trouble?"
@@ -119,21 +119,13 @@ function ProcessingScreen({ index }: { index: number }) {
         </div>
       }
     >
-      <div className={styles.body}>
-        <div className={styles.mascot}>
-          <MascotSlot size="2XL" expression="determined" />
-        </div>
-        <p className={styles.line} role="status" aria-live="polite">
-          {slow
+      <ProcessingBeat
+        line={
+          slow
             ? 'Still thinking — hang on, this one is taking a moment.'
-            : 'Let me check that against the definition…'}
-        </p>
-        <div className={styles.dots} aria-hidden="true">
-          <span className={styles.dot} />
-          <span className={styles.dot} />
-          <span className={styles.dot} />
-        </div>
-      </div>
+            : 'Let me check that against the definition…'
+        }
+      />
     </ScreenShell>
   )
 }

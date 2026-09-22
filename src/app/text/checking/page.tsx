@@ -2,10 +2,11 @@
 
 import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Button, MascotSlot, ScreenShell } from '@/components'
+import { AppBar, ConfidenceAsk, ProcessingBeat, ProgressIndicator, ScreenShell, SessionFraction } from '@/components'
 import { processingDwell } from '@/lib/motion'
-import { recordConfidence, verdictFor } from '@/lib/session'
-import styles from '../text.module.css'
+import { CloseIcon } from '@/components/icons'
+import { goToExit } from '@/lib/navigation'
+import { progressFor, recordConfidence, revisitsPending, verdictFor, TOTAL_TERMS } from '@/lib/session'
 
 // The typed path's equivalent of 03 Processing.
 //
@@ -60,26 +61,41 @@ function CheckingScreen() {
 
   return (
     <ScreenShell
+      topNavigation={
+        // It used to render NO top navigation, so the header vanished between
+        // /text/turn and the verdict and reappeared one screen later — the chrome
+        // blinked mid-flow. Same bar as every other numbered-term screen.
+        <>
+          <AppBar
+            variant="leftIconButtonOnly"
+            leftIcon={<CloseIcon />}
+            leftLabel="Leave"
+            onLeft={() => goToExit(router)}
+          >
+            <ProgressIndicator
+              progress={progressFor(index)}
+              thickness="16"
+              label="Questions"
+              current={index}
+              total={TOTAL_TERMS}
+            />
+          </AppBar>
+          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
+        </>
+      }
+      // Reserve the action zone before the question arrives. ScreenShell's own doc
+      // says this flag exists so "a region that is on still reserves its height even
+      // with nothing in it, which is what keeps the action zone in the same place from
+      // screen to screen" — and here it keeps it in the same place from MOMENT to
+      // moment: without it the wait jumped 60px the instant the ask appeared.
+      showBottomNavSlot
       bottomContent={
-        asking ? (
-          <div className={styles.confidence}>
-            <p className={styles.ask}>How sure are you?</p>
-            <div className={styles.pair}>
-              <Button CTA="Sure" variant="Secondary" size="M" fullWidth onClick={() => onward(true)} />
-              <Button CTA="Not sure" variant="Secondary" size="M" fullWidth onClick={() => onward(false)} />
-            </div>
-          </div>
-        ) : undefined
+        asking ? <ConfidenceAsk onAnswer={onward} /> : undefined
       }
     >
-      <div className={styles.checking}>
-        <div className={styles.mascot}>
-          <MascotSlot size="2XL" expression="determined" />
-        </div>
-        <p className={styles.line} role="status" aria-live="polite">
-          {asking ? 'Before I show you — how did that feel?' : 'Checking that against the definition…'}
-        </p>
-      </div>
+      <ProcessingBeat
+        line={asking ? 'Before I show you — how did that feel?' : 'Checking that against the definition…'}
+      />
     </ScreenShell>
   )
 }
