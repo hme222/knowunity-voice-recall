@@ -34,7 +34,8 @@ export default function ResumePage() {
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="determined" />
+        {/* Welcome back. Picking up where you left off is a small good moment. */}
+        <MascotSlot size="2XL" expression="excited" />
         <TextBlock
           variant="L"
           title="You were partway through"

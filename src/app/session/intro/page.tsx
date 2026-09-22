@@ -48,7 +48,10 @@ export default function IntroPage() {
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="determined" />
+        {/* The invitation that opens the whole feature. It wore the same face as 03
+            Processing, which is the working state — the first thing Knowie does should not
+            look like concentrating. */}
+        <MascotSlot size="2XL" expression="excited" />
         <ChatBubble
           showTitle
           title="Say It Back"

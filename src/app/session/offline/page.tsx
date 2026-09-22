@@ -35,7 +35,10 @@ function OfflineScreen() {
     >
       <div className={styles.body}>
         <div className={styles.mascot}>
-          <MascotSlot size="2XL" expression="determined" />
+          {/* The connection dropped. Same class as 04a Couldn't hear — the app failed, not the
+            student — and dazed is the pose that says so. It was wearing the working face
+            while telling the student something had gone wrong. */}
+          <MascotSlot size="2XL" expression="dazed" />
         </div>
         <TextBlock
           variant="L"

@@ -27,7 +27,8 @@ export default function PrimerPage() {
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="determined" />
+        {/* "Ready to say it out loud?" is an invitation, not a wait. */}
+        <MascotSlot size="2XL" expression="excited" />
         <TextBlock
           variant="XL"
           title="Ready to say it out loud?"

@@ -43,7 +43,9 @@ export default function QuizCompleteDoor() {
     >
       <div className={styles.body}>
         <div className={styles.content}>
-          <MascotSlot size="2XL" expression="determined" />
+          {/* "Quiz complete! 9/10 correct." is a celebration, and this is the FIRST screen of
+            the prototype. It opened on the working face. */}
+          <MascotSlot size="2XL" expression="laughing" />
           {/* The frame draws these as loose text nodes at Headline S over Body M
               Regular, not as a textBlock. TextBlock's L renders 44px. */}
           <div className={styles.screenTitle}>

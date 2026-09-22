@@ -1097,13 +1097,39 @@ Figma names five mascot poses. `public/knowie/` holds four SVGs, and
 `src/components/MascotSlot/MascotSlot.tsx` exposes exactly those four. The
 gap is real and this is the mapping — read it, don't re-decide it per screen.
 
-| Figma pose | `expression` | Where it appears |
-| --- | --- | --- |
-| `standby` | `determined` | Every resting/waiting screen: 00 Intro, 01 Idle, 03 Processing, 05a Reveal, 06 Lock It In |
-| `attentive` | `determined` | The drill's rung screens, where the student is about to speak |
-| `approving` | `excited` | The in-flow win: 04 Pass, 06b Lock It In 2nd pass, 02a Captured, the quiz door's result, the say-it-back repeat. |
-| `pleased` | `laughing` | Completion moments: 07 Recap, DD 08 Complete, DD 00b returning intro |
-| `excited` | `excited` | The unlock reveal on home. |
+Four poses, and they differ ONLY in the eyes — the silhouette is identical and
+the body is one colour. Measured at the 96px they render at, the pairs differ by
+between 4.4% and 11.2% of pixels; `dazed` and `excited` differ by 4.4%. So the
+range cannot be carried by subtlety. Each pose has to be used for one clearly
+different kind of moment, or the set reads as one face.
+
+| `expression` | What it is | The kind of moment | Screens |
+| --- | --- | --- | --- |
+| `determined` | Half-lidded, focused | **Working or waiting.** Knowie is busy, or it is the student's turn. | 01 Idle, 02a Captured, 03 Processing, the typed checking beat, 05 Miss, 05a Reveal, 06 Lock It In, blank term, the drill's rungs and stumbles, DD 02a Captured, DD 03, the chat and exam-plan doors, the OS permission sheet |
+| `excited` | Open, alert | **A win, or an invitation with energy.** Something good just happened, or is being offered. | 04 Pass, 06b Lock It In 2nd pass (when it actually passed), the say-it-back repeat, the quiz door's result, the unlock reveal, **00 Intro**, **the mic primer**, **session resume** |
+| `laughing` | Eyes curved shut, warm | **Completion, or warmth while helping.** Something has finished, or Knowie is carrying the student through. | 07 Recap, DD 08 Complete, DD 08a Round, DD 07c echo, DD 00b returning intro, **the quiz-complete door** |
+| `dazed` | Wide, big pupils | **The APP failed, not the student.** | 04a Couldn't hear, mic denied, **offline** |
+
+**Amended 2026-09-22.** Six screens moved, because `determined` had drifted onto
+18 of 33 slots and was being used as a default rather than a meaning:
+
+- **00 Intro, the mic primer and session resume → `excited`.** All three are
+  invitations. Intro is the first thing Knowie ever does and it wore the same
+  face as 03 Processing, which is the concentrating face.
+- **The quiz-complete door → `laughing`.** "Quiz complete! 9/10 correct" is a
+  celebration, and it is the first screen of the prototype.
+- **Offline → `dazed`.** A dropped connection is the app failing, which is
+  exactly what this pose is for. It had been wearing the working face while
+  telling the student something had gone wrong. This widens `dazed` from
+  "reserved for 04a Couldn't hear" to the system-failure states generally —
+  the rationale was always *whose fault it reads as*, not which screen.
+- **DD 02a Captured → `determined`.** A review-before-sending beat, not a win;
+  nothing has been judged yet. Its core-loop twin was already `determined`, so
+  one beat wore two faces in two flows.
+
+`session/blank` stays `determined` on purpose. The student is the one drawing a
+blank there, and a puzzled Knowie would read as puzzled *at them* — the opposite
+of what `dazed` is for. "Say whatever you've got" wants the steady face.
 
 **Reverted 2026-09-21, the same day as the remap it undoes.** For one day
 `approving` and `excited` both pointed at `laughing`, because `excited`'s head
