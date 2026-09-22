@@ -11,7 +11,8 @@
     "tokens": "style-dictionary build --config style-dictionary.config.mjs && node scripts/generate-tokens-md.mjs",
     "chromatic": "chromatic --exit-zero-on-changes",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "check:vars": "node scripts/check-vars.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.47.0",

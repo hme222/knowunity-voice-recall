@@ -369,7 +369,7 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ## Component tokens
 
-`component.*` — 37 tokens
+`component.*` — 40 tokens
 
 > Component tokens exist only when a component's bindings actually branch by state or variant in a way that benefits from its own indirection layer between it and the semantic tokens, not as documentation-only aliases for a value that never changes. micButton is the only entry here on purpose: its four states each pair with a different semantic token, and these tokens are the real thing its Figma variables are bound to, not a restatement of them. chatBubble and hintCard never branch, they bind straight to semantic tokens with nothing in between, so a component.chatBubble.* or component.hintCard.* entry here would just be a second name for a value already named once. optionRow does branch by state the same way micButton does, four variants, four different fills, but its Figma variants bind straight to the semantic tokens directly rather than through a component-specific layer. That's an inconsistency with micButton's pattern, not a mistake exactly, treat micButton's indirection layer as the older, legacy approach rather than the template: an indirection layer that never diverges from what it aliases is upkeep with no payoff. Don't add one to a new component by default. Add one only when there's a concrete reason a component's own token might need to move independently of the semantic token it currently matches.
 
@@ -398,6 +398,9 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 | `component.micButton.pulse.pausedOpacity` | `0.3` |  | Ring opacity when the take is paused: still present, plainly not listening. |
 | `component.micButton.pulse.glyphPeakScale` | `1.4` |  | How far the mic glyph ring expands on the button itself. |
 | `component.micButton.pulse.glyphPeakOpacity` | `0.5` |  | Glyph ring opacity at the top of its travel. |
+| `component.micButton.pulse.ring.inner` | `152` |  | Innermost ring: mic diameter (120) plus 16 clear on each side. |
+| `component.micButton.pulse.ring.middle` | `184` |  | Middle ring, one 32 step out from inner. |
+| `component.micButton.pulse.ring.outer` | `216` |  | Outermost ring, one 32 step out from middle. Widest point of the pulse at peakScale: 216 x 1.04 = 225, inside the 358 content width. |
 | `component.micButton.diameter` | `{size.primitive.illustration.1500}` | `120` | Mic circle diameter, the primary tap target in the recall loop. |
 | `component.micButton.glyph.size` | `48` |  | Mic glyph box inside the 120px circle. A literal, bound in Figma on every state's glyph frame; no primitive of the right kind is 48 (tapTarget is a hit-area rule, not an icon size). |
 | `component.strengthMeter.track` | `{color.primitive.neutral.600}` | `#615E63` | The unfilled track. Opaque mid grey; it was background.stacking, a 10% white alpha that read as near-black on the page and made an empty meter look like no meter. |
@@ -415,4 +418,4 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ---
 
-315 tokens across 10 groups.
+318 tokens across 10 groups.

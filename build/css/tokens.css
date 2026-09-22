@@ -170,6 +170,9 @@
   --component-mic-button-pulse-paused-opacity: 0.3; /** Ring opacity when the take is paused: still present, plainly not listening. */
   --component-mic-button-pulse-glyph-peak-scale: 1.4; /** How far the mic glyph ring expands on the button itself. */
   --component-mic-button-pulse-glyph-peak-opacity: 0.5; /** Glyph ring opacity at the top of its travel. */
+  --component-mic-button-pulse-ring-inner: 152; /** Innermost ring: mic diameter (120) plus 16 clear on each side. */
+  --component-mic-button-pulse-ring-middle: 184; /** Middle ring, one 32 step out from inner. */
+  --component-mic-button-pulse-ring-outer: 216; /** Outermost ring, one 32 step out from middle. Widest point of the pulse at peakScale: 216 x 1.04 = 225, inside the 358 content width. */
   --component-mic-button-glyph-size: 48; /** Mic glyph box inside the 120px circle. A literal, bound in Figma on every state's glyph frame; no primitive of the right kind is 48 (tapTarget is a hit-area rule, not an icon size). */
   --component-strength-meter-track-width: 220; /** Track width, 220. The Figma component draws 220x10 and the DD frames use it at that width, centred — not stretched to the screen margin, which is what made the meter read as a page-wide banner rather than a small coverage gauge. */
   --component-bottom-sheet-grabber-width: 32; /** Grabber width, 32. Was space.800, a spacing step standing in for a size. */

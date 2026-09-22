@@ -105,7 +105,7 @@ function ProcessingScreen({ index }: { index: number }) {
         <div className={styles.mascot}>
           <MascotSlot size="2XL" expression="determined" />
         </div>
-        <p className={styles.line}>
+        <p className={styles.line} role="status" aria-live="polite">
           {slow
             ? 'Still thinking — hang on, this one is taking a moment.'
             : 'Let me check that against the definition…'}

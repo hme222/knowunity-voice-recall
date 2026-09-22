@@ -22,7 +22,7 @@ detail.
 | Stat chip row wrapper | 07 Recap | Inline |
 | Drawn iOS permission sheet | Mic primer + prompt | Inline. Deliberately a facsimile — the prototype has no mic and the real dialog never fires |
 | Multi-line text input | Text fallback turn | Inline. No text input exists in the catalog at all |
-| Pulse rings around the mic | 02 Recording | Inline, but sized from new `component.micButton.pulse.*` tokens rather than literals |
+| Pulse rings around the mic | 02 Recording | Inline, but sized from `component.micButton.pulse.ring.*`. **This claim was FALSE until 2026-09-22** — the CSS referenced those tokens from the day it was written, the `pulse` group was added later with only the scale and opacity values, and all three rings rendered 2x2px. `npm run check:vars` now fails on a var() that resolves to nothing rather than literals |
 | Home surround (greeting, plan cards, composer chip row) | Home ×3 | Inline in `src/app/home/HomeShell.tsx` — the real app's home isn't ours to reproduce |
 | Drill top bar (ring + fraction + Drill chip) | Drill ×9 | Inline in `src/app/drill/DrillBar.tsx` — drill-only, and it's the piece that goes if the coverage judge is confirmed |
 | Transcript sheet content, three bucket variants | Transcript sheet, DD 08a | Uses `BottomSheet` + `PickerRow raised`; the per-bucket copy is screen-local |

@@ -33,7 +33,10 @@ export function MicButton({ state = 'Idle', label, className, type = 'button', .
       data-state={state}
       disabled={state === 'Disabled'}
       aria-label={label ?? LABELS[state]}
-      aria-pressed={state === 'Listening' || undefined}
+      // Both recording states are the SAME toggle. Reporting `pressed` only while
+      // Listening made the paused mic announce as a plain button — the state where
+      // knowing it is a toggle matters most, because resuming is the way out.
+      aria-pressed={state === 'Listening' ? true : state === 'Paused' ? false : undefined}
     >
       {state === 'Listening' && <span className={styles.pulse} aria-hidden="true" />}
       <span className={styles.glyph}><MicIcon /></span>

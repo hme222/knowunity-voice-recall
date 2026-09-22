@@ -44,7 +44,7 @@ function CheckingScreen() {
         <div className={styles.mascot}>
           <MascotSlot size="2XL" expression="determined" />
         </div>
-        <p className={styles.line}>Checking that against the definition&hellip;</p>
+        <p className={styles.line} role="status" aria-live="polite">Checking that against the definition&hellip;</p>
       </div>
     </ScreenShell>
   )

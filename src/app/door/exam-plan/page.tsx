@@ -50,13 +50,10 @@ export default function ExamPlanDoor() {
         <ChatBubble body="Let's test your understanding of organic foundations with some active-recall. To begin, please explain the concept of formal charge and the formula used to calculate it for an atom in a molecule." />
         <div className={styles.micZone}>
           <p className={styles.caption}>Tap to answer</p>
+          {/* No "Skip question" here. The action row below already carries "Skip" to
+              the same destination, so this screen offered one escape twice under two
+              names, 109px apart. */}
           <MicButton state="Idle" onClick={() => router.push(proveItHref('exam-plan'))} />
-          <Button
-            CTA="Skip question"
-            variant="Tertiary"
-            size="S"
-            onClick={() => router.push('/home/unlock')}
-          />
         </div>
       </div>
     </ScreenShell>
