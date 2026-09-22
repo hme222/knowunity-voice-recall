@@ -2,7 +2,7 @@
 
 import { Suspense, use } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { goToExit, openSheet } from '@/lib/navigation'
+import { goToExit } from '@/lib/navigation'
 import {
   AppBar,
   Button,
@@ -89,7 +89,12 @@ function MissScreen({ index }: { index: number }) {
               />
             )}
           </div>
-          <Button CTA="See the full transcript" variant="Tertiary" size="S" fullWidth onClick={() => openSheet(router, `/session/transcript/revealed?term=${index}`)} />
+          {/* No "See the full transcript" here. The card above already shows "You
+              said" and the transcript, so it repeated what was on screen — and it
+              opened the REVEALED sheet, which appends the definition. A tertiary link
+              was handing over the answer that "Reveal answer" exists to give, except
+              Reveal pays 0 XP while this route left the +7 and Try again intact.
+              The sheet is still reached from every Recap row. */}
           <Button CTA="Skip · no XP" variant="Tertiary" size="S" fullWidth onClick={skip} />
         </div>
       }

@@ -2,7 +2,7 @@
 
 import { Suspense, use, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { goToExit, openSheet } from '@/lib/navigation'
+import { goToExit } from '@/lib/navigation'
 import { AppBar, Button, MascotSlot, ProgressIndicator, RecallResult, ScreenShell, SessionFraction } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { answerFor, getTerm, nextAfter, outcomeFor, progressFor, recordOutcome, revisitsPending, useSession, TOTAL_TERMS, XP } from '@/lib/session'
@@ -60,7 +60,9 @@ function PassScreen({ index }: { index: number }) {
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
         <RecallResult state="Pass" title={current.passTitle} transcript={`“${answerFor(index)}”`} />
-        <Button CTA="See the full transcript" variant="Tertiary" size="S" fullWidth onClick={() => openSheet(router, `/session/transcript/passed?term=${index}`)} />
+        {/* Removed for the same reason as 05 Miss: the card above already shows "You
+            said" and the transcript, and the `passed` sheet renders that one string and
+            nothing else. No leak here, just a control spent on nothing. */}
       </div>
     </ScreenShell>
   )
