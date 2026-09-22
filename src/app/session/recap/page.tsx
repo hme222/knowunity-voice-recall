@@ -26,7 +26,22 @@ import styles from './recap.module.css'
 // wrong sorts to the top of Worth revisiting. That is the whole surfacing mechanism;
 // there is no badge (decided 2026-09-20).
 
-const ORDER: Bucket[] = ['Unaided', 'Hinted', 'Revealed', 'Worth revisiting']
+/**
+ * Bucket order. Two orders, not one.
+ *
+ * sprint-context.md § "Recap reorders rather than relabels" says a confidently-wrong
+ * term "sorts to the top of Worth revisiting". It did — and Worth revisiting was the
+ * LAST bucket, so on a mixed run the heading rendered at y=770 against a content
+ * region ending at 618, and the "You were sure about this one." line at y=812. The
+ * signal the whole confidence tap exists to produce was 152px below the fold, under a
+ * score percentage. Sorting to the top of a bucket nobody reaches is not surfacing.
+ *
+ * So when there is something to revisit, the recap opens with it. Nothing is
+ * regraded and nothing is relabelled — the same rows in the same buckets, in the
+ * order that puts the thing worth acting on first.
+ */
+const ORDER_SETTLED: Bucket[] = ['Unaided', 'Hinted', 'Revealed', 'Worth revisiting']
+const ORDER_WITH_MISSES: Bucket[] = ['Worth revisiting', 'Revealed', 'Hinted', 'Unaided']
 
 /** Which of the sheet's three content states a bucket opens. */
 const TRANSCRIPT_BUCKET: Record<Bucket, string> = {
@@ -45,6 +60,10 @@ export default function RecapPage() {
   const outcomes = state.outcomes
   const totals = sessionTotals(state)
   const complete = outcomes.length === TOTAL_TERMS
+  const needsRevisiting = outcomes.some(
+    (o) => o.bucket === 'Worth revisiting' || o.bucket === 'Revealed' || (o.calibration ?? 0) < 0,
+  )
+  const order = needsRevisiting ? ORDER_WITH_MISSES : ORDER_SETTLED
   const rough = outcomes.filter((o) => o.bucket === 'Unaided' || o.bucket === 'Hinted').length <= outcomes.length / 2
 
   // "Run it again" re-presents the same terms shuffled. It restarts the session so the Time
@@ -118,7 +137,7 @@ export default function RecapPage() {
         {outcomes.length === 0 && state && (
           <p className={styles.empty}>Nothing recorded yet — this session hasn&rsquo;t been run.</p>
         )}
-        {ORDER.map((bucket) => {
+        {order.map((bucket) => {
           const rows = outcomes
             .filter((o) => o.bucket === bucket)
             // Confidently-wrong sorts first. The signal drives the list, it doesn't decorate it.

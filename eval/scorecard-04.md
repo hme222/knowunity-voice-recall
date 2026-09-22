@@ -84,7 +84,7 @@ referencing. The documentation asserts a binding that was never made.
 
 Each of these I reproduced myself; the critic that raised it is noted.
 
-### 1. The recap buries the thing the whole confidence mechanic exists to produce (ambition)
+### 1. The recap buries the thing the whole confidence mechanic exists to produce (ambition) — **FIXED 2026-09-22**
 
 Seeded a mixed run — one confidently-wrong term among passes:
 
@@ -99,7 +99,13 @@ The payoff sits 152px below the fold, under a percentage that grades the
 session as a quiz in a feature defined as *not quiz-graded*. `ORDER` in
 `recap/page.tsx:29` puts Worth revisiting last.
 
-### 2. A typist can dodge the cost the brief demands (UX)
+**Fixed.** Two orders now: when anything is owed a revisit the recap opens with
+it, otherwise it leads with what was earned. Nothing is regraded or relabelled —
+the same rows in the same buckets. Re-measured on the same seeded run: the
+heading moves 770 → 392 and `You were sure about this one.` moves 812 → **434,
+visible**. A clean run still reads Unaided → Hinted.
+
+### 2. A typist can dodge the cost the brief demands (UX) — **FIXED 2026-09-22**
 
 Drove the typed path end to end:
 
@@ -113,6 +119,22 @@ There is no confidence tap on the typed path, so a typist can never be
 confidently wrong. The −3 never applies, and the recap's confidently-wrong sort
 is blind to them. `/permission/denied` promises "same questions, same hints, and
 you keep the full XP" — the path is equal in reward and unequal in cost.
+
+**Fixed.** `/text/checking` now asks the same question in the same shape after
+its dwell, and calls the same `recordConfidence`. sprint-context says the tap
+"occupies a wait the design already had to cover", and this screen is exactly
+such a wait, so asking here follows that decision rather than bending it.
+Verified on all four outcomes: typed pass + sure = +2, typed pass + not sure =
++1, typed miss + sure records `right:false` so the −3 applies, typed miss + not
+sure = 0. A drill turn stays exempt — it is not graded and has no XP for a
+confidence signal to price.
+
+STILL OPEN from the same finding, and it needs a number from the designer:
+sprint-context line 234 decides that "typed answers are reduced, but only when
+voice was available" and names no reduction. The build already tracks *why*
+someone is typing (the sticky flag distinguishes a denied mic from a choice), so
+the mechanism is there and only the value is missing. A typed pass with voice
+available still pays the full +10.
 
 ### 3. The mic moves under the finger (craft)
 

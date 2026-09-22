@@ -73,3 +73,32 @@
 @media (prefers-reduced-motion: reduce) {
   .mascot { animation: none; }
 }
+
+/* The confidence ask, identical to 03 Processing's. The typed path now asks the same
+   question in the same shape, because a mechanic that can be dodged by choosing the
+   other path is not a mechanic. Same values as processing.module.css rather than a
+   shared class: the two screens are in different route groups and a third file to hold
+   four rules would be worse than the repetition. If a third consumer appears, promote
+   it — that is the bar in component-gaps.md. */
+.confidence {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.ask {
+  text-align: center;
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-m-bold-font-weight);
+  font-size: calc(var(--typography-style-body-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-bold-line-height) * 1px);
+}
+
+.pair {
+  display: flex;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.pair > * {
+  flex: 1;
+}
