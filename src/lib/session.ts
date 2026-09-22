@@ -489,12 +489,39 @@ function firstAttemptRight(bucket: Bucket): boolean {
  * Pass: `xpFor('Unaided', tap?.wasSure)` → { base: 10, calibration: 2, total: 12 } when
  * they said Sure. Miss (skip or reveal after a Sure): base 0, calibration -3, total 0.
  */
+/**
+ * Did this term's answer come from the keyboard when the mic was available?
+ *
+ * sprint-context.md: "Typed answers are reduced, but only when voice was available."
+ * A student whose mic is denied keeps the full value — the reduction is for choosing
+ * the keyboard, not for being unable to speak, and `sticky` is how the build tells
+ * those apart.
+ */
+export function typedByChoice(state: SessionState, index: number): boolean {
+  return Boolean(state.typed?.[index]?.trim()) && !isSticky(state)
+}
+
+/**
+ * What a bucket pays, reduced when the answer was typed by choice.
+ *
+ * Decided 2026-09-22: a typed pass scores as Hinted rather than Unaided, reusing an
+ * existing tier instead of inventing a number — typing removes the retrieval-out-loud
+ * the feature exists to test, so it lands where "got there with help" lands. The Recap
+ * BUCKET stays Unaided, because the student did retrieve it unaided, just not aloud.
+ * Only an unaided pass has anything to lose; every lower tier already sits at or below
+ * the hinted value.
+ */
+export function bucketXp(bucket: Bucket, typedWhenVoiceWorked: boolean): number {
+  if (typedWhenVoiceWorked && bucket === 'Unaided') return XP.hinted
+  return XP_BY_BUCKET[bucket]
+}
+
 export function xpFor(
   bucket: Bucket,
   wasSure?: boolean,
-  opts?: { repeated?: boolean },
+  opts?: { repeated?: boolean; typedWhenVoiceWorked?: boolean },
 ): { base: number; calibration: number; total: number } {
-  const base = XP_BY_BUCKET[bucket] + (opts?.repeated ? XP.repeat : 0)
+  const base = bucketXp(bucket, opts?.typedWhenVoiceWorked ?? false) + (opts?.repeated ? XP.repeat : 0)
   const calibration = calibrationFor(wasSure, firstAttemptRight(bucket))
   return { base, calibration, total: Math.max(0, base + calibration) }
 }
@@ -524,7 +551,8 @@ export function recordOutcome(
   const prior = state.outcomes.find((o) => o.index === index)
   const tap = state.confidence?.[index]
   const wasSure = tap?.wasSure ?? opts?.wasSure ?? prior?.wasSure
-  const xp = XP_BY_BUCKET[bucket] + (opts?.repeated ? XP.repeat : 0)
+  // Reduced when the student chose the keyboard over a working mic.
+  const xp = bucketXp(bucket, typedByChoice(state, index)) + (opts?.repeated ? XP.repeat : 0)
   const calibration = tap ? calibrationFor(tap.wasSure, tap.right) : 0
   const outcome: TermOutcome = {
     index,

@@ -16,7 +16,7 @@ import {
   actionRowClass,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { answerFor, calibrationFor, confidenceFor, getTerm, hintFor, nextAfter, progressFor, recordOutcome, revisitsPending, useSession, TOTAL_TERMS, XP } from '@/lib/session'
+import { answerFor, getTerm, hintFor, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // 05 Miss + Hint — Figma frame "05 Miss + Hint (refreshed 2)" (15672:26357).
@@ -30,11 +30,9 @@ function MissScreen({ index }: { index: number }) {
   const wasSure = searchParams.get('sure') === '1'
   const current = getTerm(index)
   const attempt = Number(searchParams.get('attempt') ?? '1')
-  const state = useSession()
   // The ladder now ends. "Try again" was offered at attempt 10 with byte-identical
   // copy; past REVEAL_AT_ATTEMPT the only way on is the reveal.
   const step = current ? hintFor(current, attempt) : undefined
-  const sureCost = confidenceFor(state, index)?.wasSure && calibrationFor(true, false)
 
   if (!current) {
     router.replace('/session/intro')
@@ -101,13 +99,11 @@ function MissScreen({ index }: { index: number }) {
     >
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="determined" className={styles.mascotCentred} />
-        <div className={styles.verdictRow}>
-          <Chips Text="Partially right" size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} />
-          {/* Beside the verdict, not at the tail of the body: at the end it sat on the
-              scroll boundary and rendered as a sliced half-line. */}
-          <p className={styles.xp}>{`\u26a1 +${XP.hinted}`}</p>
-          {sureCost ? <p className={styles.calibration}>{`${sureCost} · you were sure`}</p> : null}
-        </div>
+        {/* No XP here. It read "⚡ +7" in the same slot and style as the earned "+10"
+            on 04 Pass, while Reveal pays 0 and Skip says "no XP" — a promise dressed as
+            a balance. XP is shown where it is earned: Pass, the repeat, and Recap.
+            sprint-context.md, 2026-09-22. */}
+        <Chips Text="Partially right" size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} />
         <RecallResult state="Miss" title={current.missTitle} transcript={`“${answerFor(index)}”`} />
         <HintCard body={step?.hint ?? current.hint} />
       </div>

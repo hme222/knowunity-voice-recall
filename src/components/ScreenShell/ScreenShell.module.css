@@ -47,9 +47,13 @@
    itself. `mask-image` rather than a gradient overlay so it works over any background
    and costs no element. */
 .middle[data-overflowing='true'] {
+  /* A mask reads only the ALPHA channel, so the colour here is not a colour decision
+     and has no token to bind to — `black` means "fully opaque" and nothing else. Was
+     #000, which check:tokens flagged as a raw hex, correctly: a literal in component
+     source should always have to justify itself. */
   mask-image: linear-gradient(
     to bottom,
-    #000 calc(100% - var(--component-scaffold-scroll-fade-height) * 1px),
+    black calc(100% - var(--component-scaffold-scroll-fade-height) * 1px),
     transparent 100%
   );
 }

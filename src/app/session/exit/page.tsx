@@ -68,11 +68,16 @@ export default function ExitPage() {
         <p className={styles.note}>
           {`Your progress is saved. You'll keep the XP you've earned — only the +${XP.completionBonus} finishing bonus goes.`}
         </p>
-        <div className={styles.reasons}>
+        {/* One question, one answer, so it announces as one group. It was eight
+            independent aria-pressed toggles with nothing tying them together.
+            "Other" stays selectable and opens nothing, like the other seven —
+            sprint-context.md, 2026-09-22. */}
+        <div className={styles.reasons} role="radiogroup" aria-label="What made you stop?">
           {REASONS.map((reason) => (
             <OptionRow
               key={reason}
               label={reason}
+              inGroup
               state={picked === reason ? 'Selected' : 'Default'}
               onClick={() => setPicked(reason)}
             />

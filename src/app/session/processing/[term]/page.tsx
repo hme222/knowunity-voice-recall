@@ -7,7 +7,7 @@ import { AppBar, MascotSlot, ProgressIndicator, ScreenShell, SessionFraction, Bu
 import { CloseIcon } from '@/components/icons'
 import { getTerm, progressFor, recordConfidence, revisitsPending, verdictFor, TOTAL_TERMS } from '@/lib/session'
 import { doorResultHref } from '@/app/door/doors'
-import { slowThreshold } from '@/lib/motion'
+import { processingDwell, slowThreshold } from '@/lib/motion'
 import styles from './processing.module.css'
 
 // 03 Processing — Figma frame "03 Processing" (15672:20190), plus the confidence tap
@@ -27,11 +27,27 @@ function ProcessingScreen({ index }: { index: number }) {
   // The second state SPEC lists: judge slow past target. Copy escalates in place —
   // same screen, no state change, Knowie keeps breathing. voice-ux's triage calls for
   // "friendly, not a crash", and a new screen would read as an error.
+  // A take the mock already knows is unusable gets no confidence question. Asking how
+  // sure someone is about an answer that was never heard is a question the screen has
+  // not earned, and it used to ask, then route to "that one didn't come through".
+  const unusable = verdictFor(index, ms, attempt) === 'CouldntHear'
+
   const [slow, setSlow] = useState(false)
   useEffect(() => {
     const id = window.setTimeout(() => setSlow(true), slowThreshold())
     return () => window.clearTimeout(id)
   }, [])
+
+  // Straight through on an unusable take, after the same judging beat, so the timing
+  // never leaks the outcome before the screen does.
+  useEffect(() => {
+    if (!unusable) return
+    const id = window.setTimeout(
+      () => router.push(`/session/unclear/${index}?attempt=${attempt}`),
+      processingDwell(),
+    )
+    return () => window.clearTimeout(id)
+  }, [unusable, index, attempt, router])
 
   if (!current) {
     router.replace('/session/intro')
@@ -84,11 +100,13 @@ function ProcessingScreen({ index }: { index: number }) {
       }
       bottomContent={
         <div className={styles.confidence}>
-          <p className={styles.ask}>How sure are you?</p>
-          <div className={styles.pair}>
-            <Button CTA="Sure" variant="Secondary" size="M" fullWidth onClick={() => answer(true)} />
-            <Button CTA="Not sure" variant="Secondary" size="M" fullWidth onClick={() => answer(false)} />
-          </div>
+          {unusable ? null : <p className={styles.ask}>How sure are you?</p>}
+          {!unusable && (
+            <div className={styles.pair}>
+              <Button CTA="Sure" variant="Secondary" size="M" fullWidth onClick={() => answer(true)} />
+              <Button CTA="Not sure" variant="Secondary" size="M" fullWidth onClick={() => answer(false)} />
+            </div>
+          )}
           {slow && (
             <Button
               CTA="Having connection trouble?"
