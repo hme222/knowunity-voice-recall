@@ -54,8 +54,14 @@ function DueHome() {
         </div>
 
         <div className={styles.chipRow}>
+          {/* The real app's tools. They are reference chrome, not controls we own, and
+              they were rendering as <button>s that did nothing — a row of four
+              promises. Non-interactive spans now; nothing looks tappable unless it is.
+              sprint-context.md, 2026-09-22. */}
           {['Scan', 'Summarize', 'Flashcards', 'Quiz'].map((tool) => (
-            <Button key={tool} CTA={tool} variant="Secondary" size="S" />
+            <span key={tool} className={styles.toolChip}>
+              {tool}
+            </span>
           ))}
         </div>
         {/* The always-present chip. The card above is a layer on top of it, and a

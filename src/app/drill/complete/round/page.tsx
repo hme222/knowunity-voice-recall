@@ -1,6 +1,7 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { BottomSheet, MascotSlot, PickerRow, ScreenShell, StrengthMeter, TrainingLog } from '@/components'
 import { DRILL_TERM } from '@/lib/session'
 import styles from '../../drill.module.css'
@@ -23,15 +24,28 @@ const ROUNDS = [
   { label: 'Round 4 · All you', final: true },
 ]
 
-export default function DrillRoundPage() {
+function DrillRoundScreen() {
   const router = useRouter()
+  // Which row was tapped. DD 08's caption says "Tap any round to see all 4 takes" and
+  // every row opened this sheet in an identical state, so the tap was real but its
+  // target never acknowledged it. The subtitle names the round now.
+  //
+  // PickerRow has no `active`/selected prop — checked against its Storybook docs, which
+  // list variant, label, state, raised and type. Marking the tapped ROW would mean
+  // adding API to a component whose Figma set does not have it, so this says it in the
+  // sheet's own copy instead.
+  const tapped = Number(useSearchParams().get('round') ?? '0')
   return (
     <ScreenShell
       showBottomSheetBackground
       bottomSheetOnly={
       <BottomSheet
           Title="All your takes"
-          subtitle="Every round you just did, in order. The stumble is in there too."
+          subtitle={
+            tapped > 0
+              ? `Round ${tapped} is below, with every other take you did.`
+              : 'Every round you just did, in order. The stumble is in there too.'
+          }
           onDismiss={() => router.push('/drill/complete')}
         >
           <PickerRow raised variant="drill" label="Round 1 · Full definition" state="sharp" />
@@ -51,5 +65,13 @@ export default function DrillRoundPage() {
       </div>
 
     </ScreenShell>
+  )
+}
+
+export default function DrillRoundPage() {
+  return (
+    <Suspense fallback={null}>
+      <DrillRoundScreen />
+    </Suspense>
   )
 }

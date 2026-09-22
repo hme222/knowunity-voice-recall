@@ -46,11 +46,10 @@ export default function DeniedPage() {
     >
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="dazed" />
-        <TextBlock
-          variant="L"
-          title="No mic, no problem"
-          caption="You can type your answers instead — same questions, same hints, and you keep the full XP."
-        />
+        <div className="screenTitle">
+          <h1 className="screenTitleHeading">No mic, no problem</h1>
+          <p className="screenTitleCaption">You can type your answers instead — same questions, same hints, and you keep the full XP.</p>
+        </div>
         {showHow && (
           <TextBlock
             variant="S"

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { AppBar, PickerRow, ScreenShell, TextBlock } from '@/components'
+import { AppBar, PickerRow, ScreenShell } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { PICKER_DRILLS, PICKER_TOPICS } from '@/lib/session'
 import styles from './picker.module.css'
@@ -25,11 +25,10 @@ export default function PickerPage() {
       }
     >
       <div className={styles.body}>
-        <TextBlock
-          variant="L"
-          title="Say It Back"
-          caption="Run a recall session, or drill one definition out loud."
-        />
+        <div className="screenTitle">
+          <h1 className="screenTitleHeading">Say It Back</h1>
+          <p className="screenTitleCaption">Run a recall session, or drill one definition out loud.</p>
+        </div>
         <input className={styles.search} type="search" placeholder="Search your topics" aria-label="Search your topics" />
 
         <section className={styles.group}>

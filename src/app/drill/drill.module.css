@@ -212,3 +212,17 @@
   font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
   line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
 }
+
+/* A transcript quote inside the sheet. It was a PickerRow, which renders a <button>,
+   so the whole transcript became a tappable element's accessible name and the tap did
+   nothing. */
+.quote {
+  margin: 0;
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  border-radius: calc(var(--size-primitive-radius-200) * 1px);
+  background: var(--color-semantic-background-raised);
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+}

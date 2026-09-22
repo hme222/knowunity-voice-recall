@@ -48,9 +48,9 @@ export default function QuizCompleteDoor() {
           <MascotSlot size="2XL" expression="laughing" />
           {/* The frame draws these as loose text nodes at Headline S over Body M
               Regular, not as a textBlock. TextBlock's L renders 44px. */}
-          <div className={styles.screenTitle}>
-            <h1 className={styles.screenTitleHeading}>Quiz complete!</h1>
-            <p className={styles.screenTitleCaption}>9/10 correct. Want to prove one sticks?</p>
+          <div className="screenTitle">
+            <h1 className="screenTitleHeading">Quiz complete!</h1>
+            <p className="screenTitleCaption">9/10 correct. Want to prove one sticks?</p>
           </div>
         </div>
       </div>

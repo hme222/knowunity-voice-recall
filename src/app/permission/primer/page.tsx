@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Button, MascotSlot, ScreenShell, TextBlock } from '@/components'
+import { Button, MascotSlot, ScreenShell } from '@/components'
 import styles from '../permission.module.css'
 
 // Mic permission primer. No Figma frame — this exists only as a journey-map node.
@@ -29,11 +29,10 @@ export default function PrimerPage() {
       <div className={styles.body}>
         {/* "Ready to say it out loud?" is an invitation, not a wait. */}
         <MascotSlot size="2XL" expression="excited" />
-        <TextBlock
-          variant="XL"
-          title="Ready to say it out loud?"
-          caption="Knowie needs your mic to hear your answer. It only listens while you're recording, and nothing is kept anywhere else. You can always type instead."
-        />
+        <div className="screenTitle">
+          <h1 className="screenTitleHeading">Ready to say it out loud?</h1>
+          <p className="screenTitleCaption">Knowie needs your mic to hear your answer. It only listens while you’re recording, and nothing is kept anywhere else. You can always type instead.</p>
+        </div>
       </div>
     </ScreenShell>
   )

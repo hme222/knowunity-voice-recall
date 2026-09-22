@@ -54,7 +54,7 @@ export default function DrillCompletePage() {
           title="That’s the whole thing. Yours."
           transcript={`“${DRILL_TERM.answer}”`}
         />
-        <TrainingLog rounds={ROUNDS} onSelect={() => router.push('/drill/complete/round')} />
+        <TrainingLog rounds={ROUNDS} onSelect={(i) => router.push(`/drill/complete/round?round=${i + 1}`)} />
       </div>
     </ScreenShell>
   )

@@ -43,3 +43,50 @@ body {
   flex-direction: column;
   background: var(--color-semantic-background-page);
 }
+
+/* ---- Screen title ----
+   ONE scale for every screen title, Headline S over Body M Regular, which is how the
+   Complete Flow frames draw them: a loose text node, not a `textBlock` instance.
+
+   There were four scales before this. "Say It Back" was 21px on 00 Intro and 44px on
+   the picker — consecutive screens — the permission primer used 76px Display M, whose
+   own token description reserves it for "hero numeric moments" and whose three lines
+   ate 228px of a 620 region, and five more screens sat at 44px.
+
+   It lives here rather than in a component because it is not one: `TextBlock` is
+   faithful to its own Figma set (9003:9039), which really does have sizes that large.
+   The frames simply do not use textBlock for screen titles. A global utility is the
+   honest shape for "how this app sets a screen title".
+   Decided 2026-09-22, docs/sprint-context.md. */
+
+.screenTitle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  text-align: center;
+}
+
+.screenTitleHeading {
+  margin: 0;
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-headline-s-font-weight);
+  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-headline-s-letter-spacing) * 0.01em);
+}
+
+.screenTitleCaption {
+  margin: 0;
+  max-width: calc(var(--component-card-caption-max-width) * 1px);
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+}
+
+/* Left-aligned variant, for sheets and lists where a centred title would float. */
+.screenTitleStart {
+  align-items: flex-start;
+  text-align: left;
+}

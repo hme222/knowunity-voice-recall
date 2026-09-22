@@ -111,10 +111,10 @@ export default function RecapPage() {
         {/* Headline S over Body M Regular, as the frames set a screen title — not
             TextBlock's L, which renders 44px. See door.module.css for the same note;
             the evidence there is a direct read of the Quiz complete frame. */}
-        <div className={styles.screenTitle}>
-          <h1 className={styles.screenTitleHeading}>Session recap</h1>
+        <div className="screenTitle">
+          <h1 className="screenTitleHeading">Session recap</h1>
           {outcomes.length > 0 && (
-            <p className={styles.screenTitleCaption}>
+            <p className="screenTitleCaption">
               {complete
                 ? `You explained ${totals.unaided} of ${TOTAL_TERMS} without help. +${totals.earned} earned, +${XP.completionBonus} for finishing.`
                 : `You explained ${totals.unaided} of ${outcomes.length} without help.`}

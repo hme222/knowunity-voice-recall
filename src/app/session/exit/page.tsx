@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { returnBack } from '@/lib/navigation'
-import { Button, OptionRow, ScreenShell, TextBlock } from '@/components'
+import { Button, OptionRow, ScreenShell } from '@/components'
 import { setSticky, XP } from '@/lib/session'
 import styles from './exit.module.css'
 
@@ -60,7 +60,10 @@ export default function ExitPage() {
       }
     >
       <div className={styles.body}>
-        <TextBlock variant="L" title="What made you stop?" caption="Optional — it helps us make this better." />
+        <div className="screenTitle">
+          <h1 className="screenTitleHeading">What made you stop?</h1>
+          <p className="screenTitleCaption">Optional — it helps us make this better.</p>
+        </div>
         {/* ABOVE the reasons. This sentence is the one thing a wavering student needs,
             and it used to sit under eight reason buttons, 110px below the fold on a
             390x844 screen — so the answer to "what do I lose if I stop" was the one

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { MascotSlot, ScreenShell, TextBlock } from '@/components'
+import { MascotSlot, ScreenShell } from '@/components'
 import styles from '../permission.module.css'
 
 // The primer with a drawn iOS permission sheet on top. The prototype has no microphone
@@ -15,7 +15,9 @@ export default function PromptPage() {
     <ScreenShell>
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="determined" />
-        <TextBlock variant="XL" title="Ready to say it out loud?" showCaption={false} />
+        <div className="screenTitle">
+          <h1 className="screenTitleHeading">Ready to say it out loud?</h1>
+        </div>
       </div>
 
       <div className={styles.scrim} role="dialog" aria-modal="true" aria-label="Microphone permission">

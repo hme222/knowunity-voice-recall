@@ -3,7 +3,7 @@
 import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { goToExit } from '@/lib/navigation'
-import { Button, MascotSlot, ScreenShell, Snackbar, TextBlock } from '@/components'
+import { Button, MascotSlot, ScreenShell, Snackbar } from '@/components'
 import styles from '../interrupt.module.css'
 
 // Network dropped mid-take. The take is held and retried on reconnect rather than
@@ -40,11 +40,10 @@ function OfflineScreen() {
             while telling the student something had gone wrong. */}
           <MascotSlot size="2XL" expression="dazed" />
         </div>
-        <TextBlock
-          variant="L"
-          title="Saving your answer"
-          caption="You've lost connection, so this one is waiting rather than lost. It'll send as soon as you're back."
-        />
+        <div className="screenTitle">
+          <h1 className="screenTitleHeading">Saving your answer</h1>
+          <p className="screenTitleCaption">You’ve lost connection, so this one is waiting rather than lost. It’ll send as soon as you’re back.</p>
+        </div>
         <Snackbar Text="No connection — your answer is held." variant="Error" chipText="Waiting" />
       </div>
     </ScreenShell>

@@ -3,7 +3,7 @@
 import { Suspense, use } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { returnBack } from '@/lib/navigation'
-import { BottomSheet, PickerRow, ScreenShell, TextBlock } from '@/components'
+import { BottomSheet, ScreenShell } from '@/components'
 import { answerFor, getTerm, TERMS } from '@/lib/session'
 import styles from '../../../drill/drill.module.css'
 
@@ -51,15 +51,20 @@ function TranscriptScreen({ bucket }: { bucket: string }) {
       <BottomSheet Title={copy.title} subtitle={copy.subtitle} onDismiss={() => returnBack(router, '/session/recap')}>
           {key !== 'skipped' && (
             <>
-              <PickerRow raised variant="topic" label={`“${answerFor(term.index)}”`} />
+              {/* A quote, not a control. This was a PickerRow, which renders a <button> — so
+                the whole transcript became a tappable thing's accessible name, and the
+                tap did nothing. */}
+              <p className={styles.quote}>{`“${answerFor(term.index)}”`}</p>
             </>
           )}
-          {key !== 'passed' && <PickerRow raised variant="topic" label={term.answer} />}
+          {key !== 'passed' && <p className={styles.quote}>{term.answer}</p>}
           <p className={styles.note}>{term.title}</p>
         </BottomSheet>
       }
     >
-      <TextBlock variant="L" title="Session recap" showCaption={false} />
+      <div className="screenTitle">
+          <h1 className="screenTitleHeading">Session recap</h1>
+        </div>
 
     </ScreenShell>
   )

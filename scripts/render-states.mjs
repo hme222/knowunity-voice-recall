@@ -56,8 +56,12 @@ const STATES = [
   ['02-recording', '/session/recording/1'],
   ['02-recording-paused', '/session/recording/1', async p => { await p.getByRole('button', { name: /listening/i }).click(); await p.waitForTimeout(400) }],
   ['02a-captured', '/session/captured/1?ms=6000&attempt=1'],
-  ['03-processing', '/session/processing/1?ms=6000&attempt=1'],
-  ['03-processing-escalated', '/session/processing/1?ms=6000&attempt=1', async p => { await p.waitForTimeout(7000) }],
+  // Term 2, not term 1: term 1 attempt 1 is the SCRIPTED couldn't-hear, so processing
+  // now correctly skips the confidence tap and routes onward. Pointing these two at it
+  // meant screenshotting a screen that is designed to leave.
+  ['03-processing', '/session/processing/2?ms=6000&attempt=1'],
+  ['03-processing-unusable-take', '/session/processing/1?ms=800&attempt=1'],
+  ['03-processing-escalated', '/session/processing/2?ms=6000&attempt=1', async p => { await p.waitForTimeout(7000) }],
   ['04-pass', '/session/pass/1?sure=1&attempt=1'],
   ['04-pass-hinted', '/session/pass/1?sure=1&attempt=2&hinted=1'],
   ['04a-unclear', '/session/unclear/1?attempt=1'],

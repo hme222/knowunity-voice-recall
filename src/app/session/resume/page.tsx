@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Button, MascotSlot, ScreenShell, StatChip, TextBlock } from '@/components'
+import { Button, MascotSlot, ScreenShell, StatChip } from '@/components'
 import { sessionTotals, TOTAL_TERMS, useSession } from '@/lib/session'
 import styles from '../interrupt.module.css'
 
@@ -36,11 +36,12 @@ export default function ResumePage() {
       <div className={styles.body}>
         {/* Welcome back. Picking up where you left off is a small good moment. */}
         <MascotSlot size="2XL" expression="excited" />
-        <TextBlock
-          variant="L"
-          title="You were partway through"
-          caption={`${done} of ${TOTAL_TERMS} done. Your XP is safe — only the finishing bonus is still up for grabs.`}
-        />
+        <div className="screenTitle">
+          <h1 className="screenTitleHeading">You were partway through</h1>
+          <p className="screenTitleCaption">
+            {`${done} of ${TOTAL_TERMS} done. Your XP is safe — only the finishing bonus is still up for grabs.`}
+          </p>
+        </div>
         <StatChip stat="XP" value={`+${totals.earned}`} />
       </div>
     </ScreenShell>
