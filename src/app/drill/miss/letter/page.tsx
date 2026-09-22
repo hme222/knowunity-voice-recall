@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { Button, Chips, MascotSlot, MicButton, RecallResult, ScreenShell } from '@/components'
 import { DRILL_MISSED_WORD, STUMBLES } from '@/lib/session'
 import styles from '../../drill.module.css'
+import { Cue } from '../../Cue'
 import { DrillBar } from '../../DrillBar'
 
 // DD 07b — second stumble on the SAME word. Figma frame "DD 07b Miss — 2nd stumble
@@ -48,7 +49,9 @@ export default function DrillLetterPage() {
         {/* RecallResult state="Neutral" — promoted from the inline card that three
             drill screens were duplicating. The drill is practice, not scored
             performance, so a miss here is not painted as an error. */}
-        <RecallResult className={styles.fullWidth} state="Neutral" title={STUMBLES.second.copy} transcript={`…every bond’s ${blanked} are split evenly…`} />
+        <RecallResult className={styles.fullWidth} state="Neutral" title={STUMBLES.second.copy} transcript="Starts with" />
+        {/* Drawn blank, same as the thinning passes. */}
+        <Cue className={[styles.cueBody, styles.fullWidth].join(' ')} text={`…every bond’s ${blanked} are split evenly…`} />
         <div className={styles.frameMic}>
           <MicButton state="Idle" onClick={() => router.push('/drill/miss/echo')} />
         </div>

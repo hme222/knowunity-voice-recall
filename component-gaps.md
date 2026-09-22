@@ -41,3 +41,10 @@ detail.
   `drill.module.css`. **PROMOTED 2026-09-21** to `RecallResult state="Neutral"`
   (surface fill, `text.primary` title) with its own story. All three drill stumble
   screens use it and the inline CSS is deleted. Closed.
+
+- **`Cue`** (`src/app/drill/Cue.tsx`) — renders a thinned definition with its blanks
+  DRAWN as rules rather than typed as characters. Two consumers: `/drill/pass/[step]`
+  and `/drill/miss/letter`. Not promoted to `src/components/`: it is a route-local
+  render helper for the drill's fixture strings, not a design-system component, and
+  nothing outside the drill has blanks. Promote if a third consumer appears outside
+  `src/app/drill/`.

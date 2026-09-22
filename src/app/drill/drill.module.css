@@ -173,3 +173,42 @@
 .frameMic > * {
   flex-shrink: 0;
 }
+
+/* A drawn blank. Sized in `ch` from the number of letters removed, so the gap is
+   proportional to the word it replaces and stays continuous at any font size. See
+   Cue.tsx for why this is not just underscores. */
+.blank {
+  display: inline-block;
+  width: calc(var(--blank-length) * 1ch);
+  vertical-align: baseline;
+  border-bottom: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid currentColor;
+  /* Sits on the baseline rather than through it. */
+  margin-bottom: calc(var(--size-primitive-space-050) * 1px);
+}
+
+/* The cue card. Same shape as ChatBubble — which takes a string body and so cannot
+   hold a drawn blank — kept in step with it deliberately. */
+.cueCard {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-semantic-card-label-gap) * 1px);
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  background: var(--color-semantic-background-surface);
+}
+
+.cueTitle {
+  margin: 0;
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-headline-s-font-weight);
+  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
+}
+
+.cueBody {
+  margin: 0;
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+}

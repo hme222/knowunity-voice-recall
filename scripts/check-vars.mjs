@@ -33,6 +33,7 @@ for (const f of files) {
 const RUNTIME_INJECTED = new Map([
   ['--font-greed', 'set by next/font/local in src/app/layout.tsx, on the <html> element'],
   ['--progress', 'set inline per instance by ProgressIndicator, style={{ "--progress": n }}'],
+  ['--blank-length', 'set inline per blank by src/app/drill/Cue.tsx, from the number of letters removed'],
 ])
 
 const missing = []

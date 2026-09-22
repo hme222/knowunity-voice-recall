@@ -2,8 +2,9 @@
 
 import { use } from 'react'
 import { useRouter } from 'next/navigation'
-import { actionRowClass, Button, ChatBubble, MascotSlot, MicButton, ScreenShell, StrengthMeter } from '@/components'
+import { actionRowClass, Button, MascotSlot, MicButton, ScreenShell, StrengthMeter } from '@/components'
 import { drillRung, DRILL_TERM } from '@/lib/session'
+import { Cue } from '../../Cue'
 import { DrillBar } from '../../DrillBar'
 import styles from '../../drill.module.css'
 
@@ -51,12 +52,13 @@ export default function DrillPassPage({ params }: { params: Promise<{ step: stri
         </p>
         {/* One card, not two elements. The frame puts the instruction in the card's
             title and the thinning cue in its body. */}
-        <ChatBubble
-          className={styles.fullWidth}
-          showTitle
-          title="Say the whole thing. However it comes out."
-          body={rung.cue}
-        />
+        {/* The cue's blanks are DRAWN, not typed — see Cue.tsx. ChatBubble's `body`
+            takes a string, so the bubble carries the instruction and the thinned
+            definition sits directly under it in the same card shape. */}
+        <div className={[styles.cueCard, styles.fullWidth].join(' ')}>
+          <p className={styles.cueTitle}>Say the whole thing. However it comes out.</p>
+          <Cue className={styles.cueBody} text={rung.cue} />
+        </div>
         <div className={styles.frameMic}>
           <MicButton state="Idle" onClick={() => router.push(`/drill/recording?step=${n}`)} />
         </div>
