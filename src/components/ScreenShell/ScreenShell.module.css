@@ -72,18 +72,19 @@
   flex-shrink: 0;
 }
 
+/* FIXED, not min-height. It used to grow to whatever a screen stacked in it — six
+   values across 44 routes, 120 to 248 — so the zone's top moved by up to 128px as you
+   advanced and no control landed twice in the same place. It holds one row of up to two
+   controls, plus optionally one tertiary link beneath. Anything more belongs in
+   middleContent. See docs/sprint-context.md, 2026-09-22. */
 .bottom {
-  /* min-height, not height. The frames vary this region deliberately: 120 on most
-     screens, 146 on 05 Miss where a text link sits below the button row. A fixed
-     height with justify-content:center spilled the excess out of the box and painted
-     it over the hint card. It grows; it does not centre overflow across its edge. */
-  min-height: calc(var(--component-scaffold-bottom-content-height) * 1px);
+  height: calc(var(--component-scaffold-action-zone-height) * 1px);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   gap: calc(var(--size-primitive-space-100) * 1px);
-  padding: calc(var(--spacing-semantic-screen-margin) * 1px);
+  padding-inline: calc(var(--spacing-semantic-screen-margin) * 1px);
 }
 
 .sheetOnly {

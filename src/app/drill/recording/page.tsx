@@ -34,7 +34,6 @@ function DrillRecording() {
       topNavigation={<DrillBar step={step} onExit={() => router.push('/picker')} />}
       bottomContent={
         <div className={styles.actions}>
-          <RecordingStatus seconds={seconds} paused={paused} />
           <Button
             CTA="Done speaking"
             variant="Primary"
@@ -48,7 +47,7 @@ function DrillRecording() {
       <div className={styles.body}>
         <StrengthMeter fill={rung.coverage} label="How much you can say unaided" />
         <p className={styles.cue}>{rung.cue}</p>
-        <div className={micRegionClass}>
+        <div className={[micRegionClass, styles.micWithCaption].join(' ')}>
           {/* A real Paused state as of 2026-09-21. The accepted risk that "nothing on
               screen changes when paused" failed its own gate: the fill was identical
               and the pulse ring kept animating while the caption said stopped. */}
@@ -56,6 +55,10 @@ function DrillRecording() {
             state={paused ? 'Paused' : 'Listening'}
             onClick={() => setPaused((p) => !p)}
           />
+          {/* With the mic, as on 02 Recording. */}
+          <div className={styles.micCaption}>
+            <RecordingStatus seconds={seconds} paused={paused} />
+          </div>
         </div>
       </div>
     </ScreenShell>

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { returnBack } from '@/lib/navigation'
-import { AppBar, Button, ChatBubble, OptionRow, ScreenShell } from '@/components'
+import { actionRowClass, AppBar, Button, ChatBubble, OptionRow, ScreenShell } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { getTerm, useSession } from '@/lib/session'
 import styles from '../recap.module.css'
@@ -27,9 +27,13 @@ export default function PracticePage() {
       }
       bottomContent={
         <div className={styles.actions}>
-          <Button CTA="Drill the definition out loud" variant="Secondary" size="M" fullWidth onClick={() => router.push('/drill/intro')} />
-          <Button CTA="Say it back again" variant="Secondary" size="M" fullWidth onClick={() => router.push('/session/idle/1')} />
-          <Button CTA="Not now" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/session/recap')} />
+          {/* The two ways to practise share the row; the dismissal is the link. Three
+              stacked measured 176 against a 136 budget. */}
+          <div className={actionRowClass}>
+            <Button CTA="Drill it out loud" variant="Secondary" size="M" onClick={() => router.push('/drill/intro')} />
+            <Button CTA="Say it back again" variant="Secondary" size="M" onClick={() => router.push('/session/idle/1')} />
+          </div>
+          <Button CTA="Not now" variant="Tertiary" size="S" fullWidth onClick={() => router.push('/session/recap')} />
         </div>
       }
     >

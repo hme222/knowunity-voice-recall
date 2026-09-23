@@ -108,6 +108,12 @@ Added 2026-09-22, resolving the findings in `eval/scorecard-04.md`:
   student whose mic is denied keeps the full +10 — the build distinguishes them
   by the sticky flag. The Recap BUCKET still says Unaided; only the XP is
   reduced, because the student did retrieve it unaided, just not aloud.
+- **The action zone is ONE fixed height, 136, on every screen.** It holds one row of
+  up to two controls, plus optionally one tertiary link beneath. It had been a
+  min-height that grew to whatever a screen stacked in it — six values across 44
+  routes, 120 to 248 — so its top moved by up to 128px as the student advanced and no
+  control ever landed twice in the same place. Anything that does not fit belongs in
+  middleContent, not in a taller zone.
 - **The mic has one fixed region on every voice screen.** It sat at eight
   different heights and moved 91px on the very tap that starts recording. One
   region, and the content above absorbs the difference.

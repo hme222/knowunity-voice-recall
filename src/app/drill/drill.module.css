@@ -226,3 +226,18 @@
   font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
   line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
 }
+
+/* Wraps the shared mic region so the recording caption can sit under the mic without
+   shifting its centre — see the note in session/recording's stylesheet. */
+.micWithCaption {
+  position: relative;
+}
+
+.micCaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+}

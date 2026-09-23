@@ -369,7 +369,7 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ## Component tokens
 
-`component.*` — 42 tokens
+`component.*` — 43 tokens
 
 > Component tokens exist only when a component's bindings actually branch by state or variant in a way that benefits from its own indirection layer between it and the semantic tokens, not as documentation-only aliases for a value that never changes. micButton is the only entry here on purpose: its four states each pair with a different semantic token, and these tokens are the real thing its Figma variables are bound to, not a restatement of them. chatBubble and hintCard never branch, they bind straight to semantic tokens with nothing in between, so a component.chatBubble.* or component.hintCard.* entry here would just be a second name for a value already named once. optionRow does branch by state the same way micButton does, four variants, four different fills, but its Figma variants bind straight to the semantic tokens directly rather than through a component-specific layer. That's an inconsistency with micButton's pattern, not a mistake exactly, treat micButton's indirection layer as the older, legacy approach rather than the template: an indirection layer that never diverges from what it aliases is upkeep with no payoff. Don't add one to a new component by default. Add one only when there's a concrete reason a component's own token might need to move independently of the semantic token it currently matches.
 
@@ -385,6 +385,7 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 | `component.scaffold.bottomSheetOnly.height` | `34` |  | Home-indicator region, and the slot a bottom sheet occupies on its own branch screen. No primitive of this value exists. |
 | `component.scaffold.micRegionHeight` | `200` |  | The fixed region the mic sits in at the foot of middleContent, on every voice screen. 120 for the control plus 40 clear above and below. It exists because the mic used to sit at EIGHT different heights and moved 91px on the very tap that starts recording — the content above absorbs the difference now, and the control does not move under the finger. |
 | `component.scaffold.scrollFadeHeight` | `40` |  | Height of the fade at the foot of a content region that overflows. Four screens sliced a row mid-height with no cue that more existed; a half-row is not an affordance. |
+| `component.scaffold.actionZoneHeight` | `136` |  | The action zone, FIXED on every screen. It holds one row of up to two controls, and optionally one tertiary link beneath: 48 + 8 + 48 + 32 padding. It was a min-height and grew to whatever a screen stacked in it — measured across 44 routes it took six values, 120 to 248, so the action zone's top moved by 128px as you advanced and no control ever landed twice in the same place. The scaffold's own region is 120 and the frames put a single row in it; 136 is that row plus the tertiary link 05 Miss's frame shows beneath it. |
 | `component.micButton.idle.stroke` | `{color.semantic.border.strong}` | `#FFFFFF40` | Idle mic circle outline. border.strong: the Figma Idle frame had always rendered at this value, bound to border/strong directly; rebound through this token 2026-09-16 (the token had said border.default). |
 | `component.micButton.idle.glyph` | `{color.semantic.text.primary}` | `#F4F2FF` | Idle mic circle icon color. |
 | `component.micButton.listening.fill` | `{color.semantic.brand.bold}` | `#9178E6` | Listening mic circle fill; the pulsing ring on top is additive motion, not load-bearing, so it still reads with reduced motion on. |
@@ -420,4 +421,4 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ---
 
-320 tokens across 10 groups.
+321 tokens across 10 groups.

@@ -3,14 +3,7 @@
 import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { goToExit } from '@/lib/navigation'
-import {
-  AppBar,
-  Button,
-  ChatBubble,
-  ProgressIndicator,
-  ScreenShell,
-  SessionFraction,
-} from '@/components'
+import { actionRowClass, AppBar, Button, ChatBubble, ProgressIndicator, ScreenShell, SessionFraction } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, setTypedAnswer, useSticky, TOTAL_TERMS } from '@/lib/session'
 import { DrillBar } from '../../drill/DrillBar'
@@ -70,6 +63,10 @@ function TextTurnScreen() {
       }
       bottomContent={
         <div className={styles.actions}>
+          {/* One row, one link. This zone held FOUR stacked buttons and measured 248px
+              against a 136 budget — Send, the voice escape, the blank escape and Skip,
+              all full width, all equal weight. Send leads; the two escapes share the
+              row beneath it; Skip is the quiet link the frames put last. */}
           <Button
             CTA="Send"
             variant="Primary"
@@ -85,23 +82,23 @@ function TextTurnScreen() {
               )
             }}
           />
-          {!sticky && (
+          <div className={actionRowClass}>
+            {!sticky && (
+              <Button
+                CTA="Say it instead"
+                variant="Tertiary"
+                size="S"
+                onClick={() => router.push(drillStep ? `/drill/pass/${drillStep}` : `/session/idle/${index}`)}
+              />
+            )}
             <Button
-              CTA="Say it instead"
+              CTA="I don't know this one"
               variant="Tertiary"
-              size="M"
-              fullWidth
-              onClick={() => router.push(drillStep ? `/drill/pass/${drillStep}` : `/session/idle/${index}`)}
+              size="S"
+              onClick={() => router.push(`/session/blank/${index}`)}
             />
-          )}
-          <Button
-            CTA="I don't know this one"
-            variant="Tertiary"
-            size="M"
-            fullWidth
-            onClick={() => router.push(`/session/blank/${index}`)}
-          />
-          <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={skip} />
+            <Button CTA="Skip" variant="Tertiary" size="S" onClick={skip} />
+          </div>
         </div>
       }
     >

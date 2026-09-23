@@ -35,6 +35,20 @@
   place-items: center;
 }
 
+/* The status sits UNDER the mic and out of the flow. Inside the grid it shifted the
+   mic's centre up by 34px, so the control moved on the tap that starts recording —
+   the exact thing the fixed region exists to prevent. Out of the flow it is near the
+   control it describes (it used to be 235px away in the action zone) and the mic stays
+   put. */
+.micCaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+}
+
 .ring {
   position: absolute;
   border-radius: calc(var(--size-primitive-radius-full) * 1px);

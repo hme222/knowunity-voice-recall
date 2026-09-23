@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { openSheet } from '@/lib/navigation'
-import { AppBar, Button, ButtonIcon, MascotSlot, ScreenShell, StatChip } from '@/components'
+import { actionRowClass, AppBar, Button, ButtonIcon, MascotSlot, ScreenShell, StatChip } from '@/components'
 import { CloseIcon, EyeIcon } from '@/components/icons'
 import {
   Bucket,
@@ -80,24 +80,28 @@ export default function RecapPage() {
       }
       bottomContent={
         <div className={styles.actions}>
-          <Button
-            CTA={rough ? 'Run it again' : 'Done'}
-            variant="Primary"
-            size="M"
-            fullWidth
-            onClick={() => (rough ? tryAgain() : router.push('/home/unlocked'))}
-          />
-          <Button
-            CTA={rough ? 'Done' : 'Run it again'}
-            variant="Secondary"
-            size="M"
-            fullWidth
-            onClick={() => (rough ? router.push('/home/unlocked') : tryAgain())}
-          />
+          {/* The two real choices share a row; the practice offer is the link beneath.
+              Three stacked full-width buttons measured 176 against a 136 budget, and
+              gave a targeted second pass the same weight as ending the session. Recap's
+              conditional promotion on a rough run stays — that one is deliberate. */}
+          <div className={actionRowClass}>
+            <Button
+              CTA={rough ? 'Run it again' : 'Done'}
+              variant="Primary"
+              size="M"
+              onClick={() => (rough ? tryAgain() : router.push('/home/unlocked'))}
+            />
+            <Button
+              CTA={rough ? 'Done' : 'Run it again'}
+              variant="Secondary"
+              size="M"
+              onClick={() => (rough ? router.push('/home/unlocked') : tryAgain())}
+            />
+          </div>
           <Button
             CTA="Practice what I missed"
             variant="Tertiary"
-            size="M"
+            size="S"
             fullWidth
             onClick={() => router.push('/session/recap/practice')}
           />

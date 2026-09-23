@@ -95,7 +95,6 @@ function RecordingScreen({ index }: { index: number }) {
       }
       bottomContent={
         <div className={styles.actions}>
-          <RecordingStatus seconds={seconds} paused={paused} />
           <Button CTA="Done speaking" variant="Primary" size="M" fullWidth onClick={done} />
         </div>
       }
@@ -112,6 +111,12 @@ function RecordingScreen({ index }: { index: number }) {
             state={paused ? 'Paused' : 'Listening'}
             onClick={() => setPaused((p) => !p)}
           />
+          {/* With the mic, not 235px away in the action zone. "Tap to pause" was
+              separated from the thing you tap, and the status stack pushed the zone to
+              148 against a 136 budget. */}
+          <div className={styles.micCaption}>
+            <RecordingStatus seconds={seconds} paused={paused} />
+          </div>
         </div>
       </div>
     </ScreenShell>
