@@ -120,7 +120,7 @@ export default function RecapPage() {
           {outcomes.length > 0 && (
             <p className="screenTitleCaption">
               {complete
-                ? `You explained ${totals.unaided} of ${TOTAL_TERMS} without help. +${totals.earned} earned, +${XP.completionBonus} for finishing.`
+                ? `You explained ${totals.unaided} of ${TOTAL_TERMS} without help.`
                 : `You explained ${totals.unaided} of ${outcomes.length} without help.`}
             </p>
           )}
@@ -135,6 +135,26 @@ export default function RecapPage() {
           <StatChip stat="Score" value={`${totals.score}%`} />
           <StatChip stat="Time" value={totals.elapsed} />
         </div>
+      )}
+
+      {/* THE WORKING. The XP chip folds in the confidence adjustment and the finishing
+          bonus; the rows below show each term's base XP. So the chip read +19 while the
+          rows added to 20, and nothing on screen reconciled them — on the one screen
+          whose job is to avoid flattery, and whose own header comment quotes the brief:
+          "a summary cannot show a number the reviewer can see is wrong". Every part of
+          the sum is now on screen and adds up. */}
+      {outcomes.length > 0 && (totals.calibration !== 0 || complete) && (
+        <p className={styles.working}>
+          {[
+            `+${totals.termXp} from the terms below`,
+            totals.calibration !== 0
+              ? `${totals.calibration > 0 ? '+' : ''}${totals.calibration} for how sure you were`
+              : null,
+            complete ? `+${XP.completionBonus} for finishing` : null,
+          ]
+            .filter(Boolean)
+            .join(' · ')}
+        </p>
       )}
 
       <div className={styles.buckets}>

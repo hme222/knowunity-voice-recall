@@ -113,7 +113,16 @@ function ProcessingScreen({ index }: { index: number }) {
               variant="Tertiary"
               size="S"
               fullWidth
-              onClick={() => router.push(`/session/offline?term=${index}`)}
+              onClick={() => {
+                // The take goes WITH the student. Sending only `term` meant the
+                // retry came back with no duration, the mock read that as unusable,
+                // and a held answer resolved as "that one didn't come through" — a
+                // connection fault returned as the student's speech.
+                const held = new URLSearchParams({ term: String(index), ms: String(ms), attempt: String(attempt) })
+                if (hinted) held.set('hinted', '1')
+                if (door) held.set('door', door)
+                router.push(`/session/offline?${held}`)
+              }}
             />
           )}
         </div>

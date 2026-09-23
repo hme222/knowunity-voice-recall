@@ -65,3 +65,14 @@
 
 
 
+
+/* The XP sum, shown so it can be checked against the rows. Quieter than the chips —
+   it explains them, it is not a fourth stat. */
+.working {
+  margin: 0;
+  text-align: center;
+  color: var(--color-semantic-text-tertiary);
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+}

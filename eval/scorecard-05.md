@@ -79,7 +79,7 @@ both mean the gate is slightly less proven than "PASS" suggests.
 
 ## The two that matter most, both verified by me
 
-### 1. The Recap reports a number the student can check and disprove
+### 1. The Recap reports a number the student can check and disprove — **FIXED 2026-09-23**
 
 Seeded two sure-wrong plus two unaided:
 
@@ -98,7 +98,14 @@ words — *"a summary whose job is to avoid flattery cannot show a number the
 reviewer can see is wrong"*, which is quoted in `recap/page.tsx`'s own header
 comment.
 
-### 2. An offline retry becomes the student's fault
+**Fixed.** The model was right — `earned = termXp + calibration` — and the
+working was invisible, so nothing on screen reconciled the chip to the rows. The
+sum is now shown: `+20 from the terms below · -6 for how sure you were · +5 for
+finishing`. Verified in both directions: the penalty run reconciles 20 - 6 + 5 =
+19, and a called-it run reconciles 37 + 3 + 5 = 45. The caption no longer states
+arithmetic it does not show.
+
+### 2. An offline retry becomes the student's fault — **FIXED 2026-09-23**
 
 ```
 /session/offline?term=2 → "Try sending again"
@@ -110,6 +117,14 @@ comment.
 A held, confirmed answer and a connection fault come back as a mishear. That
 inverts `voice-ux.md` Principle 4, and `/session/offline`'s own copy exists
 specifically to blame the connection rather than the speech.
+
+**Fixed.** The take now travels with the student: 03 Processing hands `ms`,
+`attempt`, `hinted` and `door` to the offline screen, and the offline screen
+hands them back unchanged. A retry resolves to the verdict the original take
+earned, because the network dropping is not new evidence about how the student
+spoke. Driven end to end: a 6s take → slow escalation → offline → "Try sending
+again" → `/session/pass/2`, where it previously landed on
+`/session/unclear/2?attempt=1`.
 
 ---
 

@@ -17,7 +17,19 @@ import styles from '../interrupt.module.css'
 
 function OfflineScreen() {
   const router = useRouter()
-  const index = Number(useSearchParams().get('term') ?? '1')
+  const params = useSearchParams()
+  const index = Number(params.get('term') ?? '1')
+  // The same take, handed back exactly as it arrived. A retry must resolve to the
+  // verdict the original take earned — the network dropping is not new evidence about
+  // how the student spoke, and this screen exists to keep those two apart
+  // (voice-ux Principle 4).
+  const held = new URLSearchParams({
+    ms: params.get('ms') ?? '0',
+    attempt: params.get('attempt') ?? '1',
+  })
+  if (params.get('hinted') === '1') held.set('hinted', '1')
+  const door = params.get('door')
+  if (door) held.set('door', door)
   return (
     <ScreenShell
       bottomContent={
@@ -27,7 +39,7 @@ function OfflineScreen() {
             variant="Primary"
             size="M"
             fullWidth
-            onClick={() => router.push(`/session/processing/${index}`)}
+            onClick={() => router.push(`/session/processing/${index}?${held}`)}
           />
           <Button CTA="Leave for now" variant="Tertiary" size="M" fullWidth onClick={() => goToExit(router)} />
         </div>
