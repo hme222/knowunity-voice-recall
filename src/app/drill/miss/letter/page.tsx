@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Button, Chips, MascotSlot, MicButton, RecallResult, ScreenShell } from '@/components'
+import { micRegionClass, Button, Chips, MascotSlot, MicButton, RecallResult, ScreenShell } from '@/components'
 import { DRILL_MISSED_WORD, STUMBLES } from '@/lib/session'
 import styles from '../../drill.module.css'
 import { Cue } from '../../Cue'
@@ -52,7 +52,7 @@ export default function DrillLetterPage() {
         <RecallResult className={styles.fullWidth} state="Neutral" title={STUMBLES.second.copy} transcript="Starts with" />
         {/* Drawn blank, same as the thinning passes. */}
         <Cue className={[styles.cueBody, styles.fullWidth].join(' ')} text={`…every bond’s ${blanked} are split evenly…`} />
-        <div className={styles.frameMic}>
+        <div className={micRegionClass}>
           <MicButton state="Idle" onClick={() => router.push('/drill/miss/echo')} />
         </div>
       </div>

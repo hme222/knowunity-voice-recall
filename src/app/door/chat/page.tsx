@@ -3,10 +3,12 @@
 import { useRouter } from 'next/navigation'
 import {
   actionRowClass,
+  micRegionClass,
   AppBar,
   Button,
   ChatBubble,
   MascotSlot,
+  MicButton,
   ProgressIndicator,
   ScreenShell,
 } from '@/components'
@@ -52,13 +54,12 @@ export default function ChatDoor() {
           title="Chat, content-aware"
           body="Placeholder — prefilled off a real conversation."
         />
-        <div className={styles.micZone}>
-          <Button
-            CTA="Say it back"
-            variant="Secondary"
-            size="M"
-            onClick={() => router.push(proveItHref('chat'))}
-          />
+        {/* A mic, in the shared region, like the exam-plan door. It was a Secondary
+            Button — two doors offering the same thing two ways, and the one that opens
+            a voice feature did it without showing a mic. */}
+        <div className={micRegionClass}>
+          <p className={styles.caption}>Tap to answer</p>
+          <MicButton state="Idle" onClick={() => router.push(proveItHref('chat'))} />
         </div>
       </div>
     </ScreenShell>

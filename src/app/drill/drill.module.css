@@ -35,15 +35,6 @@
   line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
 }
 
-/* The echoed word on the third stumble. Deliberately larger — it is the one thing the
-   student has to say. */
-.echoWord {
-  color: var(--color-semantic-text-success);
-  font-weight: var(--typography-style-headline-s-font-weight);
-  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
-  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
-}
-
 /* Buttons only. The mic is NOT an action-zone item: at 120px it pushed this region to
    192-264px against a 120 budget, and every pixel came out of middleContent, which
    then clipped its own hint card. The mic lives in middleContent, as on 01 Idle. */
@@ -54,34 +45,10 @@
   gap: calc(var(--size-primitive-space-200) * 1px);
 }
 
-/* The mic and whatever names the task, centred in the space the body has left. */
-.micZone {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  min-height: 0;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
-}
-
 .stack {
   display: flex;
   flex-direction: column;
   gap: calc(var(--size-primitive-space-200) * 1px);
-}
-
-.mascot {
-  animation: breathe calc(var(--motion-semantic-duration-ambient) * 0.5ms) var(--motion-semantic-easing-ambient) infinite alternate;
-}
-
-@keyframes breathe {
-  from { transform: scale(0.98); }
-  to { transform: scale(1.02); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .mascot { animation: none; }
 }
 
 .note {
@@ -90,18 +57,6 @@
   font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
   line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
   text-align: center;
-}
-
-/* The mic is a circle. As a flex item in a column that runs out of room it was being
-   shrunk vertically into a 120x52 ellipse, which is not a state it has. */
-.micZone > * {
-  flex-shrink: 0;
-}
-
-/* A verdict chip hugs its text. Stretched edge to edge by the body's default
-   align-items it read as a banner, and stopped looking like a chip at all. */
-.verdictChip {
-  align-self: flex-start;
 }
 
 /* The mascot is a fixed 120px box in a column that stretches its children, so without
@@ -155,23 +110,6 @@
    background.surface it measures 4.43:1 and fails the contrast gate. */
 .termPillName {
   color: var(--color-semantic-brand-on-surface);
-}
-
-/* The DD 07 result card was here. Promoted to `RecallResult state="Neutral"`
-   once all three stumble screens were using it — two consumers is this repo's
-   bar and it had three. See component-gaps.md. */
-
-/* The mic sits alone between the cards and the action zone, as both frames show. */
-.frameMic {
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  align-items: center;
-  justify-content: center;
-}
-
-.frameMic > * {
-  flex-shrink: 0;
 }
 
 /* A drawn blank. Sized in `ch` from the number of letters removed, so the gap is

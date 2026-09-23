@@ -1,16 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import {
-  actionRowClass,
-  AppBar,
-  Button,
-  ChatBubble,
-  MascotSlot,
-  MicButton,
-  ProgressIndicator,
-  ScreenShell,
-} from '@/components'
+import { actionRowClass, micRegionClass, AppBar, Button, ChatBubble, MascotSlot, MicButton, ProgressIndicator, ScreenShell } from '@/components'
 import { proveItHref } from '../doors'
 import styles from '../door.module.css'
 
@@ -48,7 +39,7 @@ export default function ExamPlanDoor() {
           <MascotSlot size="2XL" expression="determined" />
         </div>
         <ChatBubble body="Let's test your understanding of organic foundations with some active-recall. To begin, please explain the concept of formal charge and the formula used to calculate it for an atom in a molecule." />
-        <div className={styles.micZone}>
+        <div className={micRegionClass}>
           <p className={styles.caption}>Tap to answer</p>
           {/* No "Skip question" here. The action row below already carries "Skip" to
               the same destination, so this screen offered one escape twice under two

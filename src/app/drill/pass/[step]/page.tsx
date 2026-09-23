@@ -2,7 +2,7 @@
 
 import { use } from 'react'
 import { useRouter } from 'next/navigation'
-import { actionRowClass, Button, MascotSlot, MicButton, ScreenShell, StrengthMeter } from '@/components'
+import { actionRowClass, micRegionClass, Button, MascotSlot, MicButton, ScreenShell, StrengthMeter } from '@/components'
 import { drillRung, DRILL_TERM } from '@/lib/session'
 import { Cue } from '../../Cue'
 import { DrillBar } from '../../DrillBar'
@@ -59,7 +59,7 @@ export default function DrillPassPage({ params }: { params: Promise<{ step: stri
           <p className={styles.cueTitle}>Say the whole thing. However it comes out.</p>
           <Cue className={styles.cueBody} text={rung.cue} />
         </div>
-        <div className={styles.frameMic}>
+        <div className={micRegionClass}>
           <MicButton state="Idle" onClick={() => router.push(`/drill/recording?step=${n}`)} />
         </div>
       </div>

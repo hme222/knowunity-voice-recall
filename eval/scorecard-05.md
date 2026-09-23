@@ -25,7 +25,12 @@ finding, not an anomaly to explain away. Four dimensions fell and none rose.
 
 Three causes, and all three are mine.
 
-**1. I fixed one family and left the other.** The mic region, the strongest
+**1. I fixed one family and left the other.** — **FIXED 2026-09-23.** All ten mic
+screens are in the shared region now; `frameMic` and the door's `micZone` are
+retired, and the chat door got a real mic instead of a Secondary button. Spread
+295 → 30px, eight of eleven exactly at 566, idle → recording 0.
+
+ The mic region, the strongest
 change in the pass, reached six of the ten screens that have a mic. The commit
 message says "every voice screen puts its mic there". It does not:
 
@@ -42,14 +47,28 @@ Worse, the drill now reproduces the exact transition I claimed to have fixed:
 **144px**. A half-applied fix reads worse than uniform drift, because the two
 families now visibly disagree.
 
-**2. Extraction without deletion.** `ProcessingBeat` and `ConfidenceAsk` were
+**2. Extraction without deletion.** — **FIXED 2026-09-23**, with a detour worth
+recording: my first strip used a non-greedy regex across `[\s\S]` and ate a whole
+block, taking `drill.module.css` from 243 to 106 lines along with `.frameBody`,
+`.termPill`, `.note`, `.stack` and `.mascotCentred`. Nothing failed — lint and
+typecheck stayed clean and the screens still rendered, because a missing
+CSS-module class resolves to `undefined` and simply drops the class. Only the mic
+measurement moving the wrong way exposed it. Redone with balanced-brace parsing.
+
+ `ProcessingBeat` and `ConfidenceAsk` were
 promoted and the code they replaced was left behind.
 `processing.module.css` defines **twelve** selectors; its page references
 **two**. `drill.module.css` and `text.module.css` each still carry a `.mascot`
 breathe no TSX uses — three orphaned copies of the composition the commit says
 was unified, including duplicate `breathe` and `blink` keyframes.
 
-**3. New rigidity traded for old.** The fixed 200px mic region is a fixed height
+**3. New rigidity traded for old.** — **FIXED 2026-09-23.** The region is
+`position: sticky; bottom: 0` with a min-height of the control plus one step,
+rather than a hard 200. At 844 nothing changes; at 667 and 600 the prompt scrolls
+and the mic stays put. Verified: 0 mics clipped across 44 routes at both 844 and
+667.
+
+ The fixed 200px mic region is a fixed height
 that clips: at 390×600 the mic on `/session/idle/1` renders at 454–574 with
 `main` ending at **430** — entirely below the fold, and the fade masks the empty
 clear-space above it, so nothing signals more exists. I measured at 844 only.

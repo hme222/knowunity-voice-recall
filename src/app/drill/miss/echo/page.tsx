@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Button, Chips, MascotSlot, MicButton, RecallResult, ScreenShell } from '@/components'
+import { micRegionClass, Button, Chips, MascotSlot, MicButton, RecallResult, ScreenShell } from '@/components'
 import { DRILL_MISSED_WORD, STUMBLES } from '@/lib/session'
 import styles from '../../drill.module.css'
 import { DrillBar } from '../../DrillBar'
@@ -48,7 +48,7 @@ export default function DrillEchoPage() {
             drill screens were duplicating. The drill is practice, not scored
             performance, so a miss here is not painted as an error. */}
         <RecallResult className={styles.fullWidth} state="Neutral" title={STUMBLES.third.copy} transcript={`“${DRILL_MISSED_WORD}”`} />
-        <div className={styles.frameMic}>
+        <div className={micRegionClass}>
           <MicButton
             state="Idle"
             label={`Say ${DRILL_MISSED_WORD} out loud`}

@@ -6,49 +6,10 @@
   --beat: calc(var(--motion-semantic-duration-ambient) * 1ms);
 }
 
-.body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
-  text-align: center;
-}
-
-/* Knowie is the "still working" signal — the mascot breathes rather than a spinner,
-   so the wait has somewhere to live that isn't a dead indicator. */
-.mascot {
-  animation: breathe calc(var(--beat) / 2) var(--motion-semantic-easing-ambient) infinite alternate;
-}
-
 @keyframes breathe {
   from { transform: scale(0.98); }
   to { transform: scale(1.02); }
 }
-
-.line {
-  color: var(--color-semantic-text-secondary);
-  font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
-}
-
-.dots {
-  display: flex;
-  gap: calc(var(--size-primitive-space-150) * 1px);
-}
-
-.dot {
-  width: calc(var(--size-primitive-space-300) * 1px);
-  height: calc(var(--size-primitive-space-300) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
-  background: var(--color-semantic-brand-bold);
-  animation: blink calc(var(--beat) / 2) var(--motion-semantic-easing-ambient) infinite alternate;
-}
-
-.dot:nth-child(2) { animation-delay: calc(var(--motion-semantic-duration-ambient) * 0.1ms); }
-.dot:nth-child(3) { animation-delay: calc(var(--motion-semantic-duration-ambient) * 0.2ms); }
 
 @keyframes blink {
   from { transform: translateY(0); }
@@ -61,29 +22,4 @@
   display: flex;
   flex-direction: column;
   gap: calc(var(--size-primitive-space-200) * 1px);
-}
-
-.ask {
-  text-align: center;
-  color: var(--color-semantic-text-primary);
-  font-weight: var(--typography-style-body-m-bold-font-weight);
-  font-size: calc(var(--typography-style-body-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-bold-line-height) * 1px);
-}
-
-.pair {
-  display: flex;
-  gap: calc(var(--size-primitive-space-200) * 1px);
-}
-
-.pair > * { flex: 1; }
-
-/* LAST IN THE FILE ON PURPOSE. This block used to sit above `.dot`, so the later
-   `.dot { animation: blink … }` won on source order and three dots kept blinking under
-   `prefers-reduced-motion: reduce`. Equal specificity means position decides. */
-@media (prefers-reduced-motion: reduce) {
-  .mascot,
-  .dot {
-    animation: none;
-  }
 }

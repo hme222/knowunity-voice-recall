@@ -58,16 +58,33 @@
   );
 }
 
-/* The mic's fixed region, at the foot of middleContent on every voice screen. */
+/* The mic's region, at the foot of middleContent on every voice screen.
+   It is a PREFERRED height, not a fixed one. Fixed at 200 it clipped: at 390x600 the
+   mic rendered at 454-574 with the content region ending at 430, so the primary
+   control of the screen was entirely below the fold and the fade masked the empty
+   clear-space above it — nothing on screen said a mic existed. The control must
+   survive a short window; the clear space around it is what gives way. */
 .micRegion {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
   height: calc(var(--component-scaffold-mic-region-height) * 1px);
+  /* Never smaller than the control plus a step of breathing room. */
+  min-height: calc((var(--component-mic-button-diameter) + var(--size-primitive-space-400)) * 1px);
+  flex-shrink: 1;
   margin-top: auto;
+  /* PINNED to the foot of the content region. At 844 there is slack and this changes
+     nothing; on a shorter screen — 390x667 is an iPhone SE, not a hypothetical — the
+     prompt above scrolls and the mic stays where the thumb expects it. Without this the
+     control left the viewport entirely and the fade masked the empty space above it,
+     so nothing on screen said a mic existed. */
+  position: sticky;
+  bottom: 0;
+  /* The prompt must not show through the control it sits under. */
+  background: var(--color-semantic-background-page);
 }
 
+/* The control itself never shrinks — only the room around it. */
 .micRegion > * {
   flex-shrink: 0;
 }
