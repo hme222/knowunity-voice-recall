@@ -17,7 +17,7 @@ detail.
 | Recording status — LISTENING label, elapsed timer, pause caption | 02 Recording | **Promoted immediately** → `src/components/RecordingStatus/` (DD 02 Recording is the known second consumer) |
 | Captured result card (Figma `recallResult/Captured`, 15782:13076) | 02a Captured | **Promoted** → `src/components/RecallResultCaptured/` |
 | Captured result card | DD 02a Captured | **Promoted** — this was the second consumer. A spec review caught that the promotion had been predicted here and never done. |
-| Confidence ask (the sure / not-sure pair) | 03 Processing | Inline. Second consumer will be DD 03 — promote then |
+| Confidence ask (the sure / not-sure pair) | 03 Processing | **Promoted** → `src/components/ConfidenceAsk/`. This row still predicted the promotion after it had happened; scorecard-05 caught the ledger contradicting the tree. |
 | Recap bucket row (term + per-term XP + confidence note) | 07 Recap | Inline |
 | Stat chip row wrapper | 07 Recap | Inline |
 | Drawn iOS permission sheet | Mic primer + prompt | Inline. Deliberately a facsimile — the prototype has no mic and the real dialog never fires |
@@ -56,3 +56,4 @@ detail.
   y=355, so the chrome blinked for one screen mid-flow. Three consumers, well past the
   promotion bar. Has no Figma counterpart: it is a composition the frames draw three
   times rather than a component they name.
+| Home chrome — status bar, app bar with the PRO and streak chips, tool chips, composer, tab bar | /home, /home/due, /home/unlocked | Inline in `HomeShell`, shared by all three home routes. Built to frame 15674:34093. Not promoted: one consumer, and it is the host app's chrome rather than part of the feature. |

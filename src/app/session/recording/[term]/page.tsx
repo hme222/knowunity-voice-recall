@@ -13,7 +13,7 @@ import {
   SessionFraction,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, progressFor, revisitsPending, TOTAL_TERMS } from '@/lib/session'
+import { getTerm, progressFor, revisitsPending, TOTAL_TERMS, verdictFor } from '@/lib/session'
 import styles from './recording.module.css'
 
 // 02 Recording — Figma frame "02 Recording" (15672:20100).
@@ -68,6 +68,18 @@ function RecordingScreen({ index }: { index: number }) {
     const q = new URLSearchParams({ ms: String(took), attempt })
     if (hinted) q.set('hinted', '1')
     if (door) q.set('door', door)
+    // A take the mock already knows is unusable does NOT get a review screen. 02a
+    // Captured is "here's what I heard, send it or say it again" — it prints a clean,
+    // complete transcript and asks the student to confirm it. On term 1 the scripted
+    // mishear fired anyway, so confirming "Looks right" led straight to "That one
+    // didn't come through", on the first term of the session. The app cannot show you
+    // your words and then say it never heard them. Nothing was captured, so there is
+    // nothing to review: go to the judging beat, which already routes an unusable take
+    // to 04a without asking the confidence question either.
+    if (verdictFor(index, took, Number(attempt)) === 'CouldntHear') {
+      router.push(`/session/processing/${index}?${q}`)
+      return
+    }
     router.push(`/session/captured/${index}?${q}`)
   }
 
@@ -101,6 +113,12 @@ function RecordingScreen({ index }: { index: number }) {
     >
       <div className={styles.body}>
         <div className={styles.micWrap} data-paused={paused || undefined}>
+          {/* The rings are centred on the MIC, not on the region. They are absolute
+              with no offsets, so they take their static position from this stack —
+              once the mic moved to the top of the region, a stack of its own is what
+              keeps them concentric. Offsets would not work: the pulse animates
+              `transform`, so a centring translate would be overwritten every frame. */}
+          <div className={styles.micStack}>
           <span className={styles.ring} aria-hidden="true" />
           <span className={styles.ring} aria-hidden="true" />
           <span className={styles.ring} aria-hidden="true" />
@@ -111,6 +129,7 @@ function RecordingScreen({ index }: { index: number }) {
             state={paused ? 'Paused' : 'Listening'}
             onClick={() => setPaused((p) => !p)}
           />
+          </div>
           {/* With the mic, not 235px away in the action zone. "Tap to pause" was
               separated from the thing you tap, and the status stack pushed the zone to
               148 against a 136 budget. */}

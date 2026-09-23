@@ -66,7 +66,11 @@
    survive a short window; the clear space around it is what gives way. */
 .micRegion {
   display: flex;
-  align-items: center;
+  /* TOP of the region, not centred in it. 02 Recording needs the space under the
+     control for its status line, and that has to be the same on every voice screen or
+     the mic moves on the tap that starts recording — which is the one thing this
+     region exists to prevent. Raising it here raises it everywhere, together. */
+  align-items: flex-start;
   justify-content: center;
   height: calc(var(--component-scaffold-mic-region-height) * 1px);
   /* Never smaller than the control plus a step of breathing room. */

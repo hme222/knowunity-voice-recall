@@ -16,7 +16,7 @@ import {
   SessionFraction,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, useSticky, TOTAL_TERMS } from '@/lib/session'
+import { ensureSessionStarted, getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS, useSticky } from '@/lib/session'
 import styles from './idle.module.css'
 
 // 01 Idle / Commit — Figma frame "01 Idle (refreshed 2)" (15672:26255).
@@ -36,6 +36,14 @@ function IdleScreen({ index }: { index: number }) {
   useEffect(() => {
     if (sticky) router.replace(`/text/turn?term=${index}&sticky=1`)
   }, [sticky, index, router])
+  // Start the session clock here rather than only on 00 Intro. The doors go straight
+  // to /session/idle/1?door=…, so a door run never ran startSession and the Recap's
+  // Time chip read 0:00 on a session the student had just spent minutes on. 01 Idle is
+  // the first screen of every entry path; the helper no-ops once the clock is running,
+  // so terms 2-4 do not restart it.
+  useEffect(() => {
+    ensureSessionStarted()
+  }, [])
 
   if (sticky) return null
 
@@ -101,7 +109,10 @@ function IdleScreen({ index }: { index: number }) {
             first and the mascot pushed to the bottom by margin-top:auto, which left a
             170px hole between them and put Knowie beside the mic instead of over the
             question. */}
-        <MascotSlot size="2XL" expression="determined" />
+        {/* `excited` from 2026-09-23. This is the ask — "Explain: formal charge" — and
+            the half-lidded working face read as unimpressed at the student before they
+            had said anything. The invitation faces are the excited ones. */}
+        <MascotSlot size="2XL" expression="excited" />
         <ChatBubble
           className={styles.bubble}
           showTitle

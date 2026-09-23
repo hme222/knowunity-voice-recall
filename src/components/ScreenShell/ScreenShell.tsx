@@ -14,6 +14,13 @@ import styles from './ScreenShell.module.css'
 // action zone in the same place from screen to screen.
 
 export type ScreenShellProps = {
+  /**
+   * Figma `Panel Header`: the status-bar region. Left empty on every session screen —
+   * the real app's Status Bar is an external-library component we don't reproduce —
+   * but home is built to a frame that has one, so the region is a slot rather than a
+   * reserved 48 of nothing. Its height is fixed either way.
+   */
+  panelHeader?: ReactNode
   /** Figma `topNavigation`: the AppBar and, on session screens, the fraction beside it. */
   topNavigation?: ReactNode
   /**
@@ -59,6 +66,7 @@ export const actionRowClass = styles.actionRow
 export const micRegionClass = styles.micRegion
 
 export function ScreenShell({
+  panelHeader,
   topNavigation,
   showTopNavSlot,
   children,
@@ -92,9 +100,15 @@ export function ScreenShell({
 
   return (
     <div className={[styles.root, className].filter(Boolean).join(' ')} data-sheet={showBottomSheetBackground}>
-      {/* Panel Header — the status-bar region. Empty in the prototype; the real app's
-          Status Bar is an external-library component we don't reproduce. */}
-      <div className={styles.panelHeader} aria-hidden="true" />
+      {/* Panel Header — the status-bar region, and a real slot as of 2026-09-23. It was
+          a reserved 48 of nothing on the reasoning that the real app's Status Bar is an
+          external-library component. Home is built to a frame that HAS one, and with no
+          slot the status bar had to go into topNavigation, which is a fixed 56 with
+          overflow:hidden — so it pushed the app bar out and the app bar simply vanished.
+          The scaffold has this region; the shell now exposes it. */}
+      <div className={styles.panelHeader} aria-hidden={panelHeader ? undefined : true}>
+        {panelHeader}
+      </div>
       {topOn && <div className={styles.topNavigation}>{topNavigation}</div>}
       <main ref={middleRef} className={styles.middle} data-overflowing={overflowing || undefined}>
         {children}

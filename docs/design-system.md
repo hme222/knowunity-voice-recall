@@ -1127,6 +1127,14 @@ different kind of moment, or the set reads as one face.
   nothing has been judged yet. Its core-loop twin was already `determined`, so
   one beat wore two faces in two flows.
 
+**Amended 2026-09-23, by the designer.** **01 Idle → `excited`.** The ask screen
+— "Explain: formal charge" — wore the half-lidded face, which read as
+unimpressed at a student who had not said anything yet. 01 Idle is an
+invitation, and by this table's own rule invitations are `excited`; it was
+listed under "it is the student's turn", which turned out to describe the
+mechanics rather than the feeling. This drops `determined` to the moments where
+Knowie or the app is genuinely busy.
+
 **Amended 2026-09-23, by the designer.** **02a Captured and DD 02a Captured →
 `excited`.** The 2026-09-22 amendment had reasoned from *what the beat is* — a
 review-before-sending, nothing judged yet — and landed on the working face. On

@@ -22,19 +22,13 @@ export default function HomePage() {
   const router = useRouter()
   return (
     <HomeShell>
-      <div className={styles.composer}>
-        <div className={styles.chipRow}>
-          {/* The real app's tools. They are reference chrome, not controls we own, and
-              they were rendering as <button>s that did nothing — a row of four
-              promises. Non-interactive spans now; nothing looks tappable unless it is.
-              sprint-context.md, 2026-09-22. */}
-          {['Scan', 'Summarize', 'Flashcards', 'Quiz'].map((tool) => (
-            <span key={tool} className={styles.toolChip}>
-              {tool}
-            </span>
-          ))}
-        </div>
-        {/* No Say It Back chip. The only way to meet the feature is through a door.
+      <>
+        {/* The tool chips, the composer and the tab bar are HomeShell's now — they are
+            the host app's chrome and were being rebuilt on each of the three home
+            routes. This route supplies only its own Say It Back surface, which on the
+            baseline is the absence of one.
+
+            No Say It Back chip. The only way to meet the feature is through a door.
             These three stand in for arriving at one in the real app. */}
         <p className={styles.doorsNote}>Say It Back isn&rsquo;t here yet. It appears after you meet it:</p>
         <div className={styles.doors}>
@@ -49,7 +43,7 @@ export default function HomePage() {
             />
           ))}
         </div>
-      </div>
+      </>
     </HomeShell>
   )
 }

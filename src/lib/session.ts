@@ -460,6 +460,26 @@ export function startSession() {
   write({ outcomes: [], startedAt: now, lastAt: now, ...(sticky ? { sticky } : {}) })
 }
 
+/**
+ * Start the clock if nothing has started it yet, and leave a run in progress alone.
+ *
+ * `startSession` only ran on 00 Intro, and the doors go straight to
+ * `/session/idle/1?door=…` — so a door run never started the clock, `startedAt` stayed
+ * 0, and the Recap's Time chip read 0:00 for a session the student had just spent four
+ * minutes on. Every other Recap number survived because they derive from `outcomes`,
+ * which is written lazily as terms resolve; the clock was the one value that needed a
+ * beginning and never got one.
+ *
+ * Called from 01 Idle, which is the first screen of EVERY entry path. Guarded on
+ * `startedAt` so terms 2-4 don't restart it.
+ */
+export function ensureSessionStarted() {
+  const state = readSession()
+  if (state.startedAt) return
+  const now = Date.now()
+  write({ ...state, startedAt: now, lastAt: now })
+}
+
 // ---------------------------------------------------------------------------
 // The confidence tap
 // ---------------------------------------------------------------------------

@@ -171,12 +171,14 @@
   position: relative;
 }
 
-/* Above the mic, as on 02 Recording. */
+/* BELOW the mic, as on 02 Recording. The mic is top-aligned in the region, so the
+   bottom 80 of it is the status's — under the control, clear of it, and in the order
+   the sentence reads. */
 .micCaption {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: calc(100% + var(--size-primitive-space-600) * 1px);
+  bottom: 0;
   display: flex;
   justify-content: center;
 }

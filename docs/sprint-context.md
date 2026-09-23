@@ -133,6 +133,55 @@ Added 2026-09-22, resolving the findings in `eval/scorecard-04.md`:
 - **The confidence tap is not asked on a take the app is about to reject.** A
   too-short take goes straight to 04a Couldn't hear. Asking how sure you are
   about an answer that was never heard is a question the screen has not earned.
+
+Added 2026-09-23, from the designer clicking the built prototype:
+
+- **Being sure and wrong costs nothing.** `XP.sureWrong` was -3, on the Design
+  Brief's "overconfidence has to cost something". Overruled: a student who was
+  confident and wrong has already had the worse experience of the two, and
+  charging them for it punishes honesty about their own belief rather than the
+  belief itself. The reward side stays (+2 called it, +1 knew more than they
+  thought). **Known consequence, recorded on purpose:** with no downside, "Sure"
+  strictly dominates and an XP-optimising student should always tap it. If that
+  becomes a problem the fix is to flatten the two rewards to one value and let
+  the tap be purely informational, NOT to bring the penalty back.
+- **A take the app cannot use never reaches 02a Captured.** Captured prints a
+  clean, complete transcript and asks the student to confirm it. The scripted
+  mishear fires on term 1, so confirming "Looks right" led straight to "That one
+  didn't come through" — on the first term of the session. The app cannot show
+  you your words and then say it never heard them. An unusable take now goes
+  from Recording to the judging beat directly.
+- **04a Couldn't hear has a mic.** Its whole job is "say it again" and the retry
+  was a text chip inside the result card, with no mic anywhere on the screen
+  recovering from a voice failure. The mic sits in the same fixed region as every
+  other voice screen; the coral chip stays as the state signal, with no handler,
+  so there are not two controls doing one thing.
+- **The mic sits at the top of its fixed region, not centred in it.** The status
+  line belongs under the control it describes, and a centred mic left only 40px
+  beneath it for a 56px caption. Top-aligning frees the bottom 80. Applied to the
+  region itself, so idle and recording still agree to the pixel — the invariant
+  the region exists for.
+- **The session clock starts on 01 Idle, not on 00 Intro.** The doors go straight
+  to `/session/idle/1?door=…`, so a door run never started it and the Recap's
+  Time chip read 0:00 on a session the student had just spent minutes in. Idle is
+  the first screen of every entry path.
+- **Home is the real app's home, not a stand-in.** It had a left-aligned greeting
+  and two grey "Your study plan" / "Recent notes" boxes that appear on no frame.
+  Built to "Home card — where Say It Back lives, native and unmodified"
+  (15674:34093): status bar, app bar with the PRO and streak chips, Knowie over a
+  centred greeting, the tool chips, the composer, the tab bar. The whole point of
+  this screen is that Say It Back is judged where it actually lives, and the
+  chip's competition for attention IS the design question — a placeholder cannot
+  show that.
+- **`Panel Header` is a real ScreenShell slot.** It had been a reserved 48 of
+  nothing, on the reasoning that the real app's status bar is an external
+  component. Home's frame has one, and with no slot it had to go into
+  topNavigation, which is a fixed 56 with `overflow: hidden` — so it pushed the
+  app bar out and the app bar silently vanished.
+- **Mascot poses, three overrides.** 01 Idle and both Captured screens move to
+  `excited`. See `docs/design-system.md` § "Mascot poses" for each one's
+  reasoning; the table there now records them against its own earlier
+  amendments rather than contradicting the tree.
 - **XP is shown only where it is earned.** 05 Miss had "+7" in the same slot and
   style as Pass's earned "+10", while Reveal pays 0 — a promise dressed as a
   balance.

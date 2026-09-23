@@ -3,7 +3,7 @@
 // component's token colour applies. Every svg fills its box: size it from the parent.
 
 import type { ComponentType } from 'react'
-import { X, Mic, RotateCcw, Eye, Check } from 'lucide-react'
+import { X, Mic, RotateCcw, Eye, Check, Menu, Timer, Zap, Flame, Camera, Layers, CircleHelp, FileText, MessageCircleMore, Search, Target, Trophy } from 'lucide-react'
 
 export { LoadingIcon } from './LoadingIcon'
 export { SquareIcon } from './SquareIcon'
@@ -34,6 +34,24 @@ export const RefreshGlyphIcon = lucide(RotateCcw)
 export const EyeIcon = lucide(Eye)
 /** Snackbar variant="Success". Without it the component falls back to `square`. */
 export const CheckIcon = lucide(Check)
+
+/* The host app's home chrome — Figma frame "Home card — where Say It Back lives,
+   native and unmodified" (15674:34093). The frame's own glyphs are bespoke multi-colour
+   artwork exported as rasters and groups; these are the Lucide equivalents, which is
+   the house convention for icons and the only thing reproducible from tokens. The
+   shapes differ from the frame; the slots, sizes and positions do not. */
+export const MenuIcon = lucide(Menu)
+export const TimerIcon = lucide(Timer)
+export const StreakBoltIcon = lucide(Zap)
+export const StreakFlameIcon = lucide(Flame)
+export const ScanIcon = lucide(Camera)
+export const FlashcardsIcon = lucide(Layers)
+export const QuizIcon = lucide(CircleHelp)
+export const SummarizeIcon = lucide(FileText)
+export const NavChatIcon = lucide(MessageCircleMore)
+export const NavSearchIcon = lucide(Search)
+export const NavTargetIcon = lucide(Target)
+export const NavTrophyIcon = lucide(Trophy)
 
 type IconProps = { className?: string }
 const base = { fill: 'none', xmlns: 'http://www.w3.org/2000/svg', 'aria-hidden': true as const, width: '100%', height: '100%' }

@@ -25,31 +25,49 @@
 /* Same fixed region as every other voice screen. Without it the mic sat at y=383 here
    and y=566 on 01 Idle, so it moved 183px on the tap that starts the recording — the
    one tap where the control must not move. The rings are absolute children, so the
-   height comes from the region rather than from them. */
+   height comes from the region rather than from them.
+
+   The mic sits at the TOP of the region, not centred in it — matching ScreenShell's
+   .micRegion, which was moved at the same time so idle and recording still agree to
+   the pixel. That is what frees the bottom of the region for the status. */
 .micWrap {
   height: calc(var(--component-scaffold-mic-region-height) * 1px);
   margin-top: auto;
   flex-shrink: 0;
   position: relative;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-/* The status sits UNDER the mic and out of the flow. Inside the grid it shifted the
-   mic's centre up by 34px, so the control moved on the tap that starts recording —
-   the exact thing the fixed region exists to prevent. Out of the flow it is near the
-   control it describes (it used to be 235px away in the action zone) and the mic stays
-   put. */
-/* ABOVE the mic, clear of the outer ring. Below it the status ran 610-666 against a
-   mic of 506-626 — overlapping the control by 16px and sitting entirely inside the
-   outer ring's 458-674. "Tap to pause" was printed on top of the thing you tap. */
+/* BELOW the mic, which is where it belongs and where the frame has it.
+
+   It has been in three places. In the action zone it was 235px from the control it
+   describes. Centred in the region with the mic it ran 610-666 against a mic of
+   506-626, printing "Tap to pause" on top of the thing you tap. Moved above the mic it
+   was clear of everything and read as a heading for the screen rather than a caption
+   for the control.
+
+   What made below unusable was the mic being centred in a 200 region: there were 40px
+   under it and the caption needs 56. Top-aligning the mic gives the status the bottom
+   80 of the region, so it sits under the control, clear of it, and in the reading
+   order the sentence actually has — the mic, then what it is doing. */
 .micCaption {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: calc(100% + var(--size-primitive-space-600) * 1px);
+  bottom: 0;
   display: flex;
   justify-content: center;
+}
+
+/* Holds the mic and its three rings concentric. Sized by the mic; the rings overflow
+   it on purpose, which is why nothing here clips. */
+.micStack {
+  position: relative;
+  display: grid;
+  place-items: center;
 }
 
 .ring {
