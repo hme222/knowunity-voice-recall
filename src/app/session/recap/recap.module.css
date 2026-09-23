@@ -1,7 +1,12 @@
 /* 07 Recap — Figma frame "07 Recap (refreshed)" (15672:24456). No fraction here, which
-   is why there is no SessionHeader component.
-   Derived, never canned: the buckets, per-term XP, total and score come from the run
-   the student just did. The frame's 1/1/1/1, +22 and 75% are sample content. */
+   is correct: the run is over, so there is no "N of 4" left to report.
+
+   Deduped 2026-09-23. The file was three concatenated copies of an overlapping rule
+   set — 35 selectors in 260 lines, twelve of them defined more than once, and the
+   header comment repeated three times. It came from restoring classes a regex had
+   eaten by appending the recovered block rather than merging it. Nothing rendered
+   wrong, because the cascade takes the last definition, which is exactly what this
+   keeps. */
 
 .stats {
   display: flex;
@@ -62,9 +67,6 @@
   line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
   white-space: nowrap;
 }
-
-
-
 
 /* The XP sum, shown so it can be checked against the rows. Quieter than the chips —
    it explains them, it is not a fourth stat. */
@@ -75,158 +77,6 @@
   font-weight: var(--typography-style-caption-m-regular-font-weight);
   font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
   line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
-}
-
-/* 07 Recap — Figma frame "07 Recap (refreshed)" (15672:24456). No fraction here, which
-   is why there is no SessionHeader component.
-   Derived, never canned: the buckets, per-term XP, total and score come from the run
-   the student just did. The frame's 1/1/1/1, +22 and 75% are sample content. */
-
-.stats {
-  display: flex;
-  gap: calc(var(--size-primitive-space-200) * 1px);
-}
-
-.stats > * { flex: 1; }
-
-.buckets {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
-}
-
-.bucket {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--size-primitive-space-150) * 1px);
-}
-
-.bucketLabel {
-  color: var(--color-semantic-text-tertiary);
-  font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
-  letter-spacing: calc(var(--typography-primitive-tracking-wide) * 0.01em);
-}
-
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: calc(var(--size-primitive-space-200) * 1px);
-  padding: calc(var(--spacing-semantic-card-padding) * 1px);
-  border-radius: calc(var(--size-primitive-radius-400) * 1px);
-  background: var(--color-semantic-background-surface);
-}
-
-.rowTerm {
-  color: var(--color-semantic-text-primary);
-  font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
-}
-
-.rowNote {
-  display: block;
-  color: var(--color-semantic-text-warning);
-  font-weight: var(--typography-style-caption-m-regular-font-weight);
-  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
-}
-
-.rowXp {
-  color: var(--color-semantic-text-secondary);
-  font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
-  white-space: nowrap;
-}
-
-/* text-align centres the text but not the mascot, which is a 120px block. It needs a
-   flex column for .mascotCentred's align-self to have anything to act on. */
-.headline {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: calc(var(--size-primitive-space-300) * 1px);
-  text-align: center;
-}
-
-.actions {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
-}
-
-.empty {
-  color: var(--color-semantic-text-secondary);
-  font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-}
-
-/* 07 Recap — Figma frame "07 Recap (refreshed)" (15672:24456). No fraction here, which
-   is why there is no SessionHeader component.
-   Derived, never canned: the buckets, per-term XP, total and score come from the run
-   the student just did. The frame's 1/1/1/1, +22 and 75% are sample content. */
-
-.stats {
-  display: flex;
-  gap: calc(var(--size-primitive-space-200) * 1px);
-}
-
-.stats > * { flex: 1; }
-
-.buckets {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
-}
-
-.bucket {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--size-primitive-space-150) * 1px);
-}
-
-.bucketLabel {
-  color: var(--color-semantic-text-tertiary);
-  font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
-  letter-spacing: calc(var(--typography-primitive-tracking-wide) * 0.01em);
-}
-
-.row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: calc(var(--size-primitive-space-200) * 1px);
-  padding: calc(var(--spacing-semantic-card-padding) * 1px);
-  border-radius: calc(var(--size-primitive-radius-400) * 1px);
-  background: var(--color-semantic-background-surface);
-}
-
-.rowTerm {
-  color: var(--color-semantic-text-primary);
-  font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
-}
-
-.rowNote {
-  display: block;
-  color: var(--color-semantic-text-warning);
-  font-weight: var(--typography-style-caption-m-regular-font-weight);
-  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
-}
-
-.rowXp {
-  color: var(--color-semantic-text-secondary);
-  font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
-  white-space: nowrap;
 }
 
 /* text-align centres the text but not the mascot, which is a 120px block. It needs a

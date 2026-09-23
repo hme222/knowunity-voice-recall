@@ -13,7 +13,18 @@ import styles from '../../drill.module.css'
 // differ only in their cue and meter value.
 //
 // The meter fills by unaided coverage, not by which pass this is — that is the whole
-// design. Knowie grows a step each pass: within-session muscle, reset per definition.
+// design. The StrengthMeter is the only thing that carries growth here, and that is
+// correct.
+//
+// "Knowie grows a step each pass" used to be the second half of that sentence, stated
+// as fact, and a review flagged it as a claim the screen contradicts — MascotSlot is
+// 2XL on every rung. It IS a recorded intention (sprint-context.md § the drill, "Visual
+// metaphor"), so it is not stray prose; it is unbuilt. Checked against the frames
+// before attempting it: DD 01, 04, 05 and 06 all place `mascotSlot` at 120x120,
+// identical on all four, so the growth was never designed either. And it cannot be
+// built as written from what exists — the slot's next size up is 200px against roughly
+// 48px of headroom here at step 4. sprint-context now carries it as an open question
+// rather than a behaviour; this comment no longer asserts it.
 //
 // REBUILT TO THE FRAME 2026-09-21. This screen had been assembled from its parts in a
 // different order: a full-bleed labelled meter first, the instruction and the cue as

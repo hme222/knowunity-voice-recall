@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon'
 import { CloseIcon } from '../icons'
 import styles from './BottomSheet.module.css'
@@ -24,7 +24,12 @@ export type BottomSheetProps = {
   className?: string
 }
 
+const FOCUSABLE =
+  'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
+
 export function BottomSheet({ Title, subtitle, children, onDismiss, className }: BottomSheetProps) {
+  const sheetRef = useRef<HTMLDivElement>(null)
+
   // A dialog whose only dismissal was a click on a presentational scrim could not be
   // closed by keyboard at all. Escape and a labelled close control, both required.
   useEffect(() => {
@@ -36,6 +41,48 @@ export function BottomSheet({ Title, subtitle, children, onDismiss, className }:
     return () => window.removeEventListener('keydown', onKey)
   }, [onDismiss])
 
+  // Focus moves INTO the sheet and stays there while it is open.
+  //
+  // `aria-modal="true"` says the rest of the page is inert; it does not make it so.
+  // Nothing was removed from the tab order, so on /drill/complete/round four controls
+  // behind the sheet stayed reachable — Tab walked straight out of an open dialog into
+  // a screen the student cannot see, and focus never entered the sheet in the first
+  // place, so a keyboard user was never told a dialog had opened.
+  //
+  // Trapped here rather than by inerting the page, because the sheet renders inside the
+  // screen's own tree rather than through a portal: there is no reliable "everything
+  // else" to mark. The trap is what the student experiences either way.
+  useEffect(() => {
+    const sheet = sheetRef.current
+    if (!sheet) return
+    const returnTo = document.activeElement as HTMLElement | null
+
+    const first = sheet.querySelector<HTMLElement>(FOCUSABLE)
+    ;(first ?? sheet).focus()
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return
+      const items = [...sheet.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(
+        (el) => el.offsetParent !== null || el === document.activeElement,
+      )
+      if (items.length === 0) {
+        e.preventDefault()
+        sheet.focus()
+        return
+      }
+      const edge = e.shiftKey ? items[0] : items[items.length - 1]
+      if (document.activeElement === edge || !sheet.contains(document.activeElement)) {
+        e.preventDefault()
+        ;(e.shiftKey ? items[items.length - 1] : items[0]).focus()
+      }
+    }
+    document.addEventListener('keydown', onKey, true)
+    return () => {
+      document.removeEventListener('keydown', onKey, true)
+      returnTo?.focus?.()
+    }
+  }, [])
+
   return (
     <div
       className={styles.scrim}
@@ -43,6 +90,8 @@ export function BottomSheet({ Title, subtitle, children, onDismiss, className }:
       role="presentation"
     >
       <div
+        ref={sheetRef}
+        tabIndex={-1}
         className={[styles.sheet, className].filter(Boolean).join(' ')}
         role="dialog"
         aria-modal="true"

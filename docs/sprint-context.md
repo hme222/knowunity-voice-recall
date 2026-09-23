@@ -283,6 +283,16 @@ Scaffold state resets **per definition, per session.**
 rep — Knowie grows a step with a spring/overshoot, and the meter fills.
 Deliberately resets per definition; it's not a long-run streak.
 
+**The Knowie half of that is NOT BUILT, and was never designed.** Recorded
+2026-09-23 after a review flagged the code claiming it. Checked against the
+frames: DD 01, 04, 05 and 06 all place `mascotSlot` at 120x120, identical on all
+four — the growth exists in this document and nowhere else. It also cannot be
+built as written from what exists: `MascotSlot` has four sizes and the next one
+up is 200px, against roughly 48px of headroom on the pass screen at step 4. So
+either the slot needs sizes between 120 and 200, or the rep lands somewhere
+other than Knowie's height. **The meter carries the whole metaphor today.**
+Treat this as an open question, not a built behaviour.
+
 ## Skip / Reveal — resolved
 
 Skip is available at every question, not just before the first

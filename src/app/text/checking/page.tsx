@@ -6,7 +6,7 @@ import { AppBar, ConfidenceAsk, ProcessingBeat, ProgressIndicator, ScreenShell, 
 import { processingDwell } from '@/lib/motion'
 import { CloseIcon } from '@/components/icons'
 import { goToExit } from '@/lib/navigation'
-import { progressFor, recordConfidence, revisitsPending, verdictFor, TOTAL_TERMS } from '@/lib/session'
+import { progressFor, recordConfidence, revisitsPending, TOTAL_TERMS } from '@/lib/session'
 
 // The typed path's equivalent of 03 Processing.
 //
@@ -46,8 +46,17 @@ function CheckingScreen() {
       return
     }
     if (sure !== undefined) {
-      // Same call 03 Processing makes, so a typed turn lands in the same ledger.
-      recordConfidence(index, sure, verdictFor(index, len >= 40 ? 6000 : 3000, 1))
+      // Same call 03 Processing makes, so a typed turn lands in the same ledger — but
+      // with THIS path's own verdict, not a duration fed through the spoken mock.
+      //
+      // It used to synthesise a fake take (`verdictFor(index, len >= 40 ? 6000 : 3000, 1)`)
+      // and `verdictFor` returns CouldntHear unconditionally for the scripted mishear
+      // term on attempt 1, while `recordConfidence` drops a CouldntHear on the grounds
+      // that a take nobody heard is not evidence about belief. Both are right on their
+      // own terms and wrong together: on term 1 of every typed run the screen asked how
+      // sure the student was and threw the answer away. A typed answer cannot be
+      // misheard, so this path has no business asking the mishear mock anything.
+      recordConfidence(index, sure, verdict === 'pass' ? 'Pass' : 'Miss')
     }
     const q = new URLSearchParams({ sure: sure ? '1' : '0' })
     router.push(`/session/${verdict}/${index}?${q}`)

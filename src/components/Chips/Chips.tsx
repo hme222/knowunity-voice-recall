@@ -62,10 +62,18 @@ export function Chips({
 }: ChipsProps) {
   const interactive = rest.onClick != null
   const Tag = (interactive ? 'button' : 'span') as 'button'
+  // A chip that does nothing is a LABEL, not a live region. It used to carry
+  // role="status", which was the right instinct — stop announcing it as a button —
+  // aimed at the wrong role: role="status" marks content that CHANGES and should
+  // interrupt, and these never change. The cost showed up when one landed inside a
+  // region that is genuinely live: 04a Couldn't hear puts the coral chip inside
+  // RecallResult's own role="status", so "Try again" was announced as a second status
+  // on top of the result it belongs to. No role: the text is read once, in order, as
+  // part of the thing it labels.
   return (
     <Tag
       {...rest}
-      {...(interactive ? { type } : { role: 'status' })}
+      {...(interactive ? { type } : {})}
       className={[styles.root, className].filter(Boolean).join(' ')}
       data-size={size}
       data-color={color}
