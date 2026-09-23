@@ -171,11 +171,12 @@
   position: relative;
 }
 
+/* Above the mic, as on 02 Recording. */
 .micCaption {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: calc(100% + var(--size-primitive-space-600) * 1px);
   display: flex;
   justify-content: center;
 }

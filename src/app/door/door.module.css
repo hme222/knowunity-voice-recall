@@ -60,3 +60,26 @@
 .doorActions > :last-child {
   min-width: calc(var(--component-button-inline-primary-min-width) * 1px);
 }
+
+/* The four door screens. All are the same shape as the frames: a centred content block
+   in middleContent, and a two-button action row. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+}
+
+/* The frame's `Content` block: gap 24, pt 32, pb 16, centred. */
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: calc(var(--size-primitive-space-600) * 1px);
+  padding-top: calc(var(--size-primitive-space-800) * 1px);
+  padding-bottom: calc(var(--size-primitive-space-400) * 1px);
+}

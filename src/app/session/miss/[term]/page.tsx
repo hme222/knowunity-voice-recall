@@ -16,7 +16,7 @@ import {
   actionRowClass,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { answerFor, calibrationFor, confidenceFor, getTerm, hintFor, nextAfter, progressFor, recordOutcome, revisitsPending, useSession, TOTAL_TERMS } from '@/lib/session'
+import { calibrationFor, confidenceFor, getTerm, hintFor, nextAfter, progressFor, recordOutcome, revisitsPending, shownAnswer, useSession, TOTAL_TERMS } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // 05 Miss + Hint — Figma frame "05 Miss + Hint (refreshed 2)" (15672:26357).
@@ -113,7 +113,7 @@ function MissScreen({ index }: { index: number }) {
           <Chips Text="Partially right" size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} />
           {sureCost ? <p className={styles.calibration}>{`${sureCost} · you were sure`}</p> : null}
         </div>
-        <RecallResult state="Miss" title={current.missTitle} transcript={`“${answerFor(index)}”`} />
+        <RecallResult state="Miss" title={current.missTitle} transcript={`“${shownAnswer(index, 'Miss')}”`} />
         <HintCard body={step?.hint ?? current.hint} />
       </div>
     </ScreenShell>

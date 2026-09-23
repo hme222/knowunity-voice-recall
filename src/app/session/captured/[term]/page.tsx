@@ -14,7 +14,7 @@ import {
   SessionFraction,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, progressFor, revisitsPending, TOTAL_TERMS } from '@/lib/session'
+import { getTerm, progressFor, revisitsPending, shownAnswer, verdictFor, TOTAL_TERMS } from '@/lib/session'
 import styles from './captured.module.css'
 
 // 02a Captured — Figma frame "02a Captured — review before sending" (15785:13098).
@@ -83,11 +83,14 @@ function CapturedScreen({ index }: { index: number }) {
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="determined" />
+        {/* Knowie has just heard you and is holding it up — "here's what I heard".
+            `determined` is the concentrating face and read as odd on the one screen
+            where the listening is already done. */}
+        <MascotSlot size="2XL" expression="excited" />
         <RecallResultCaptured
           className={styles.card}
           title="Here&rsquo;s what I heard. Send it, or say it again."
-          transcript={current.transcript}
+          transcript={shownAnswer(index, verdictFor(index, Number(searchParams.get('ms') ?? '0'), Number(attempt)))}
           /* No `tag` chip. The action zone below already offers "Say it again" and
              "Looks right" — the frame's pair — so an in-card chip repeating one of them
              put two controls with the same label on one screen. One action, one

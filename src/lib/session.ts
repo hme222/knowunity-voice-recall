@@ -20,8 +20,19 @@ export type Term = {
   name: string
   /** Figma `chatBubble` body on 01 Idle. */
   prompt: string
-  /** What the student "said". No STT exists; this is the canned transcript. */
+  /** What the student "said" on a full take. No STT exists; this is canned. */
   transcript: string
+  /**
+   * What a SHORT take produced — the same student, having said less.
+   *
+   * One transcript used to serve both verdicts, and 02a Captured shows it before the
+   * verdict lands. So a student saw a complete, correct answer, tapped "Looks right",
+   * and was then told a piece of it was missing. The words on the miss screen
+   * contradicted the words they had just confirmed.
+   *
+   * Each of these omits exactly what its `missTitle` goes on to name.
+   */
+  partialTranscript: string
   /** Figma `recallResult` title, state=Pass. */
   passTitle: string
   /** Figma `recallResult` title, state=Miss. */
@@ -56,12 +67,19 @@ export const XP = {
    *  penalty. Below sureRight on purpose: if doubting paid as well as knowing, "Not
    *  sure" would be the only rational tap and the signal would die. */
   unsureRight: 1,
-  /** Sure, and wrong first time. The one real cost in the model. -3 is one repeat's
-   *  worth: enough that a 4-term run visibly loses ground, not enough to wipe a term.
-   *  Applied to the session total, not the term, so it bites even when the term itself
-   *  ends on 0 (revealed or skipped). The total is floored at 0. Say "Sure" only when
-   *  you would bet 3:1 on it — the break-even is 75%. */
-  sureWrong: -3,
+  /** Sure, and wrong. COSTS NOTHING, decided 2026-09-23.
+   *
+   *  This was -3, on the reading that "overconfidence has to cost something". The
+   *  designer overruled it: a student who was confident and wrong has already had the
+   *  worse experience of the two, and charging them for it punishes honesty about
+   *  their own belief rather than the belief itself.
+   *
+   *  The reward side stays, so the tap still means something — but note what it now
+   *  implies: with no downside, "Sure" strictly dominates, and a student optimising XP
+   *  should always tap it. If that becomes a problem the answer is to flatten
+   *  sureRight and unsureRight to the same value and let the tap be purely
+   *  informational, NOT to reintroduce a penalty. */
+  sureWrong: 0,
 } as const
 
 export const XP_BY_BUCKET: Record<Bucket, number> = {
@@ -81,6 +99,8 @@ export const TERMS: Term[] = [
     // from the frame — 02a Captured
     transcript:
       "It's the charge on an atom if you split every bond's electrons evenly between the two atoms.",
+    partialTranscript:
+      "It's the charge on an atom, worked out from its bonds.",
     // from the RecallResult stories, which carry the frame's copy
     passTitle: "Nailed it — that's the whole definition.",
     // from the frame — 05 Miss + Hint
@@ -97,7 +117,9 @@ export const TERMS: Term[] = [
     name: 'Cell membrane',
     title: 'Explain: Cell membrane',
     prompt: 'Say what the cell membrane does, in your own words. However you would explain it to a friend.',
-    transcript: 'It is the layer around the cell that decides what gets in and what stays out.',
+    transcript: 'It is a double layer of fatty molecules around the cell, and that is what lets it choose what gets in and what stays out.',
+    partialTranscript:
+      "It is the layer around the cell that decides what gets in and what stays out.",
     passTitle: 'That is it — the job and why it can be selective.',
     // Was "you described the cell wall, not the membrane", which contradicted this
     // term's own answer: the canned transcript says the membrane decides what gets in
@@ -113,7 +135,9 @@ export const TERMS: Term[] = [
     name: 'Cytoskeleton',
     title: 'Explain: Cytoskeleton',
     prompt: 'Say what the cytoskeleton is for, in your own words. However you would explain it to a friend.',
-    transcript: 'It is the scaffolding inside a cell that holds its shape.',
+    transcript: 'It is the scaffolding inside a cell that holds its shape and moves things around inside it.',
+    partialTranscript:
+      "It is the scaffolding inside a cell that holds its shape.",
     passTitle: 'Yes — shape and movement, both.',
     missTitle: 'Partly — you have the shape half, not the movement half.',
     hint: 'It does more than hold the cell up. What moves along it?',
@@ -125,7 +149,9 @@ export const TERMS: Term[] = [
     name: 'Cell transport',
     title: 'Explain: Cell transport',
     prompt: 'Say what cell transport means, in your own words. However you would explain it to a friend.',
-    transcript: 'It is how things move across the membrane, sometimes using energy.',
+    transcript: 'It is how things move across the membrane — some of it just drifts across, and some of it costs the cell energy.',
+    partialTranscript:
+      "It is how things move across the membrane, sometimes using energy.",
     passTitle: 'Nailed it — you split the passive and active cases.',
     missTitle: 'Close — that is diffusion. Cell transport is the wider idea.',
     hint: 'Some of it costs the cell energy and some of it does not.',
@@ -689,6 +715,20 @@ export function shuffledFirstTerm(): number {
 export function setTypedAnswer(index: number, text: string) {
   const state = readSession()
   write({ ...state, typed: { ...(state.typed ?? {}), [index]: text } })
+}
+
+/**
+ * What to SHOW as the student's words, given how the take is about to be judged.
+ *
+ * A short take produced less, so 02a Captured and 05 Miss both show the partial. A
+ * typed answer always wins — those are the student's real words.
+ */
+export function shownAnswer(index: number, verdict: Verdict): string {
+  const typed = readSession().typed?.[index]
+  if (typed && typed.trim()) return typed.trim()
+  const term = getTerm(index)
+  if (!term) return ''
+  return verdict === 'Pass' ? term.transcript : term.partialTranscript
 }
 
 /** The typed answer if there is one, else the term's canned transcript. */

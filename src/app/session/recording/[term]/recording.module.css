@@ -40,11 +40,14 @@
    the exact thing the fixed region exists to prevent. Out of the flow it is near the
    control it describes (it used to be 235px away in the action zone) and the mic stays
    put. */
+/* ABOVE the mic, clear of the outer ring. Below it the status ran 610-666 against a
+   mic of 506-626 — overlapping the control by 16px and sitting entirely inside the
+   outer ring's 458-674. "Tap to pause" was printed on top of the thing you tap. */
 .micCaption {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: calc(100% + var(--size-primitive-space-600) * 1px);
   display: flex;
   justify-content: center;
 }

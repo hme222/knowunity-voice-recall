@@ -1,0 +1,27 @@
+/* 05a Reveal answer.
+
+   This screen is a voice prompt — mascot, what Knowie says, mic — and it had been
+   borrowing result.module.css, which is the *result* stack: intrinsically sized, gap
+   16. That shape sizes to its content and spills, so the screen rendered 558 tall in a
+   554 region, clipped 4px and raised the overflow fade for nothing. It read as cut off
+   because it was.
+
+   Same shape as 01 Idle instead: fill the region, let the mic region's margin-top:auto
+   take the slack, and space at betweenSections like every other prompt screen. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+}
+
+.body > * {
+  flex-shrink: 0;
+}
+
+/* The answer spans the margin; the mascot hugs and centres. */
+.bubble {
+  align-self: stretch;
+}

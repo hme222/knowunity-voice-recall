@@ -1127,6 +1127,15 @@ different kind of moment, or the set reads as one face.
   nothing has been judged yet. Its core-loop twin was already `determined`, so
   one beat wore two faces in two flows.
 
+**Amended 2026-09-23, by the designer.** **02a Captured and DD 02a Captured →
+`excited`.** The 2026-09-22 amendment had reasoned from *what the beat is* — a
+review-before-sending, nothing judged yet — and landed on the working face. On
+the screen that reads wrong: "Here's what I heard" is Knowie showing the student
+it caught them, and the half-lidded face next to a full, correct transcript looks
+unimpressed. The pose set is read as feeling, not as process state, so this one
+follows the feeling. This supersedes the DD 02a line above; the reasoning there
+was sound and the result was not.
+
 `session/blank` stays `determined` on purpose. The student is the one drawing a
 blank there, and a puzzled Knowie would read as puzzled *at them* — the opposite
 of what `dazed` is for. "Say whatever you've got" wants the steady face.

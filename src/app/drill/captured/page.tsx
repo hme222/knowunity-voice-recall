@@ -48,7 +48,7 @@ function DrillCaptured() {
         {/* A review-before-sending beat, not a win — nothing has been judged yet. 02a
             Captured in the core loop is already determined, so the same beat wore two
             different faces in two flows. */}
-        <MascotSlot size="2XL" expression="determined" className={styles.mascotCentred} />
+        <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
         <RecallResultCaptured
           title="Here&rsquo;s what I heard. Send it, or say it again."
           transcript={DRILL_TERM.transcript}
