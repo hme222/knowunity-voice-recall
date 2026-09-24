@@ -296,6 +296,7 @@
 }
 
 .tool {
+  position: relative;
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
@@ -331,6 +332,7 @@
 }
 
 .composerNew {
+  position: relative;
   flex-shrink: 0;
   height: calc(var(--component-button-m-height) * 1px);
   min-width: calc(var(--component-button-m-height) * 1px);
@@ -500,4 +502,47 @@
   flex-direction: column;
   gap: calc(var(--size-primitive-space-200) * 1px);
   width: 100%;
+}
+
+/* The due carousel's gesture surface. The chip and its dots stack inside it. */
+.deck {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+  width: 100%;
+}
+
+/* Hit area to 44pt without changing the paint.
+   These are the host app's chips and they are drawn at the size the frame draws them —
+   32 for a tool chip, 40 for the composer's new button. Growing the boxes would make
+   the row taller than the frame's; an overlay reaches the target size and leaves the
+   layout alone. Widths already clear 44 on every one of them, so only the block axis
+   needs it. */
+.tool::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: calc(var(--spacing-semantic-tap-target) * 1px);
+  transform: translateY(-50%);
+}
+
+/* Hit area to 44pt without changing the paint.
+   These are the host app's chips and they are drawn at the size the frame draws them —
+   32 for a tool chip, 40 for the composer's new button. Growing the boxes would make
+   the row taller than the frame's; an overlay reaches the target size and leaves the
+   layout alone. Widths already clear 44 on every one of them, so only the block axis
+   needs it. */
+/* The only one of these that is narrow as well as short: the composer's new button is a
+   40px circle, so the overlay has to reach on both axes rather than inheriting a width
+   from the box it sits in. */
+.composerNew::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--spacing-semantic-tap-target) * 1px);
+  height: calc(var(--spacing-semantic-tap-target) * 1px);
+  transform: translate(-50%, -50%);
 }

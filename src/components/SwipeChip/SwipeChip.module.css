@@ -3,6 +3,7 @@
    what distinguishes this from the plain composer chip. */
 
 .root {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: calc(var(--size-primitive-space-200) * 1px);
@@ -93,4 +94,17 @@
 .count[data-last='true'] {
   background: var(--color-semantic-accent-green-subtle);
   color: var(--color-semantic-accent-green-on-subtle);
+}
+
+/* The baseline chip is drawn at the tool chips' 32 (see above), so it needs the same
+   44pt hit area they do, and by the same means: an overlay, not a taller box. The due
+   chip is already well over 44 and is left alone. */
+.root:not([data-due='true'])::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: calc(var(--spacing-semantic-tap-target) * 1px);
+  transform: translateY(-50%);
 }

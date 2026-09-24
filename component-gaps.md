@@ -57,3 +57,4 @@ detail.
   promotion bar. Has no Figma counterpart: it is a composition the frames draw three
   times rather than a component they name.
 | Home chrome — status bar, app bar with the PRO and streak chips, tool chips, composer, tab bar | /home, /home/due, /home/unlocked | Inline in `HomeShell`, shared by all three home routes. Built to frame 15674:34093. Not promoted: one consumer, and it is the host app's chrome rather than part of the feature. |
+| Swipe gesture for a card deck | /home/due | **Promoted** → `src/components/SwipeDeck/`. Built as a component rather than inline because the gesture has to suppress the card's own click, and getting that wrong starts a session on every swipe. |

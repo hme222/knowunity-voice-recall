@@ -1,0 +1,39 @@
+/* The due-signal carousel's gesture surface. See SwipeDeck.tsx for why it exists. */
+
+.root {
+  /* Hands the browser the vertical axis and keeps the horizontal one, so the page still
+     scrolls under a finger that starts on the card. */
+  touch-action: pan-y;
+  /* The card is the only thing a drag should move; text selection mid-drag reads as a
+     failed gesture. */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.root:focus-visible {
+  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-100) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+}
+
+.track {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  /* Settles back, or into the next card, when the finger lifts. Removed while dragging
+     so the card tracks the pointer rather than lagging behind it. */
+  transition: transform calc(var(--motion-semantic-duration-standard) * 1ms) var(--motion-semantic-easing-standard);
+}
+
+.track[data-dragging] {
+  transition: none;
+}
+
+/* The deck still changes card on a swipe under reduced motion — only the travel is
+   dropped, because the movement IS the feedback and removing the feature is not what
+   the preference asks for. */
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    transition: none;
+  }
+}

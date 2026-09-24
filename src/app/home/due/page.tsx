@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button, DueSignalCard, SwipeChip, SwipeDots } from '@/components'
+import { DueSignalCard, SwipeChip, SwipeDeck, SwipeDots } from '@/components'
 import { DUE_QUIZZES, dueCountLabel } from '@/lib/session'
 import { HomeShell } from '../HomeShell'
 import styles from '../home.module.css'
@@ -35,20 +35,34 @@ function DueHome() {
             />
           ) : (
             <>
-          <SwipeChip
-            due
-            QuizLabel={`${quiz.term} · due ${quiz.due}`}
-            Count={dueCountLabel(active)}
-            onClick={() => router.push('/session/intro')}
-          />
-          <SwipeDots active={active + 1} total={DUE_QUIZZES.length} />
-          <Button
-            CTA="Swipe to the next due quiz"
-            variant="Tertiary"
-            size="S"
-            fullWidth
-            onClick={() => setActive((a) => (a + 1) % DUE_QUIZZES.length)}
-          />
+              {/* The swipe is real now. It was a tertiary button reading "Swipe to the
+                  next due quiz" — a control that told the student to swipe and then
+                  required a tap, with the card itself inert to a drag. */}
+              <SwipeDeck
+                active={active}
+                total={DUE_QUIZZES.length}
+                onChange={setActive}
+                label="Quizzes due"
+                className={styles.deck}
+              >
+                <SwipeChip
+                  due
+                  QuizLabel={`${quiz.term} · due ${quiz.due}`}
+                  Count={dueCountLabel(active)}
+                  onClick={() => router.push('/session/intro')}
+                />
+                {/* The dots ARE the non-gesture way through, so the swipe is not the
+                    only route and nothing on screen describes a gesture it is not. The
+                    full-width "Swipe to the next due quiz" button they replace was a
+                    third way to do one thing and did not fit — the region's overflow
+                    fade cut it in half. */}
+                <SwipeDots
+                  active={active + 1}
+                  total={DUE_QUIZZES.length}
+                  onSelect={(n) => setActive(n - 1)}
+                  label="Quiz due"
+                />
+              </SwipeDeck>
             </>
           )}
         </div>

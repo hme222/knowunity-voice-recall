@@ -8,6 +8,39 @@
   gap: calc(var(--size-primitive-space-150) * 1px);
 }
 
+/* The hit area around an interactive dot.
+   The dot is 6px by design and the target has to clear 44pt, so the target is an
+   overlay rather than a bigger box: growing the button itself made a 48px row out of a
+   6px dot, which pushed the region into overflow and raised the scroll fade over a row
+   that was not actually cut. The button keeps the dot's footprint; `::after` reaches
+   out to 48 on both axes without touching layout. */
+.target {
+  position: relative;
+  display: grid;
+  place-items: center;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.target::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--spacing-semantic-tap-target) * 1px);
+  height: calc(var(--spacing-semantic-tap-target) * 1px);
+  transform: translate(-50%, -50%);
+}
+
+.target:focus-visible {
+  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * -1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+}
+
 .dot {
   width: calc(var(--size-primitive-space-150) * 1px);
   height: calc(var(--size-primitive-space-150) * 1px);
