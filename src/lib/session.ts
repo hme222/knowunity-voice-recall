@@ -676,8 +676,15 @@ export function nextAfter(index: number): string {
   const alreadyRequeued = state.outcomes.find((o) => o.index === index)?.requeued
   if (alreadyRequeued) return '/session/lock-in/second?answered=1'
   if (index < TOTAL_TERMS) return termHref(index + 1, state)
-  const requeueable = state.outcomes.some((o) => o.bucket === 'Worth revisiting' && !o.requeued)
-  return requeueable ? '/session/lock-in' : '/session/recap'
+  // The term rides in the route, as it does everywhere else in this flow.
+  //
+  // 06 used to re-derive it from the session on every render — "first outcome bucketed
+  // Worth revisiting and not yet requeued" — and then mark it requeued on arrival. The
+  // mark made its own predicate stop matching, so the screen forgot which term it was
+  // asking about between one render and the next and fell through to term 1. Naming it
+  // here makes the screen's identity immutable for the life of the visit.
+  const requeueable = state.outcomes.find((o) => o.bucket === 'Worth revisiting' && !o.requeued)
+  return requeueable ? `/session/lock-in?term=${requeueable.index}` : '/session/recap'
 }
 
 // ---------------------------------------------------------------------------

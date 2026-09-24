@@ -1,6 +1,6 @@
 'use client'
 
-import { use } from 'react'
+import { use, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { goToExit } from '@/lib/navigation'
 import {
@@ -15,7 +15,7 @@ import {
   SessionFraction,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS } from '@/lib/session'
+import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS, useSticky } from '@/lib/session'
 import styles from './reveal.module.css'
 
 // 05a Reveal answer — Figma frame "05a Reveal answer result" (15752:17156), which
@@ -31,6 +31,18 @@ export default function RevealPage({ params }: { params: Promise<{ term: string 
   const router = useRouter()
   const { term } = use(params)
   const index = Number(term)
+  const sticky = useSticky()
+
+  // voice-ux.md §3: a denied mic stays denied for the SESSION, not for one turn. This
+  // screen was mic-only, so a student already moved to typing could reach it from
+  // /text/turn's "I don't know this one" and be handed a microphone they had refused —
+  // the recording screen then rendered "LISTENING" with a running timer on a mic with
+  // no permission. 01 Idle has had this redirect all along; blank and reveal did not.
+  useEffect(() => {
+    if (sticky) router.replace(`/text/turn?term=${index}&sticky=1`)
+  }, [sticky, index, router])
+
+  if (sticky) return null
   const current = getTerm(index)
 
   if (!current) {

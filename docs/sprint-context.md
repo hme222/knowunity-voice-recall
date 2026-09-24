@@ -134,6 +134,36 @@ Added 2026-09-22, resolving the findings in `eval/scorecard-04.md`:
   too-short take goes straight to 04a Couldn't hear. Asking how sure you are
   about an answer that was never heard is a question the screen has not earned.
 
+Added 2026-09-23, from two student roleplays driving the built flow (eval/scorecard-06.md).
+All three were state that did not survive a route change — each typechecked, linted,
+rendered and passed all four hard gates:
+
+- **The requeued term rides in the route.** `nextAfter` now returns
+  `/session/lock-in?term=N`. 06 used to re-derive it every render from "first outcome
+  bucketed Worth revisiting and not yet requeued", then mark it requeued on arrival —
+  and the mark made its own predicate stop matching, so the screen forgot which term it
+  was asking about between one render and the next and fell through to `TERMS[0]`. The
+  student was re-tested on a term they had already passed while the one they actually
+  missed was closed in silence. `session.ts` already warned about this exact shape for
+  06b; 06 had never adopted the fix. 06 also names the term now ("Cytoskeleton was
+  tricky") instead of asking about an unnamed one.
+- **Paused seconds are not speech.** The take was scored as `Date.now() - startedAt`
+  with `startedAt` set once on mount, while `paused` only stopped the display interval.
+  The on-screen timer and the scored duration disagreed the moment anyone paused — 0:12
+  shown against 31690ms logged — so a student who paused to think was graded as though
+  they had been talking. The verdict is taken from un-paused time now, which is what the
+  timer has been counting all along. Note for anyone touching this: the first attempt
+  banked the stretch inside a `setPaused` updater, and React 19's StrictMode
+  double-invokes updaters to catch impurity, so every pause counted twice. Bank outside
+  the updater.
+- **A denied mic stays denied on every screen.** `blank`, `reveal` and `lock-in` were
+  mic-only, so a student already moved to typing could reach them from "I don't know
+  this one" and be handed a microphone they had refused — the recording screen then
+  rendered "LISTENING" with a running timer on a mic with no permission. All three
+  redirect to the typed turn when the session is sticky, and all three now offer "Type
+  instead" when it is not. 01 Idle had had this redirect all along; the rest of the flow
+  never got it.
+
 Added 2026-09-23, from the designer clicking the built prototype:
 
 - **Being sure and wrong costs nothing.** `XP.sureWrong` was -3, on the Design

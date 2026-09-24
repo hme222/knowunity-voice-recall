@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { Suspense, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { goToExit } from '@/lib/navigation'
 import {
   micRegionClass,
@@ -16,7 +16,7 @@ import {
   SessionFraction,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { markRequeued, revisitPlan, TERMS, TOTAL_TERMS, useSession } from '@/lib/session'
+import { markRequeued, revisitPlan, TERMS, TOTAL_TERMS, useSession, useSticky } from '@/lib/session'
 import styles from './lock-in.module.css'
 
 // 06 Lock It In — Figma frame "06 Lock It In (cold re-presentation)" (15672:20688).
@@ -32,17 +32,52 @@ import styles from './lock-in.module.css'
 //
 // Which term returns is derived from the run: the first one bucketed Worth revisiting.
 
-export default function LockInPage() {
+function LockInScreen() {
   const router = useRouter()
   const state = useSession()
-  const missed = state.outcomes.find((o) => o.bucket === 'Worth revisiting' && !o.requeued)
-  const term = TERMS.find((t) => t.index === missed?.index) ?? TERMS[0]
+  const sticky = useSticky()
+  const pending = state.outcomes.find((o) => o.bucket === 'Worth revisiting' && !o.requeued)
+
+  // WHICH term is being locked in, remembered for the life of the screen.
+  //
+  // This used to read `pending` straight through to the mic, with `?? TERMS[0]` as a
+  // defensive fallback, and the fallback was load-bearing by accident: marking on
+  // arrival writes to the session, the write notifies listeners, useSession re-renders,
+  // and `!o.requeued` no longer matches — so the screen marked the missed term as
+  // requeued and in the same breath forgot which term it was, re-asking term 1. The
+  // student was re-tested on something they had already passed while the term they
+  // actually missed was silently closed. session.ts:766 warns about exactly this shape
+  // for 06b; 06 never adopted the fix.
+  //
+  // `requeuedOutcome()` is not the answer here either: with more than one term owed a
+  // revisit it finds the first requeued outcome, not the one this visit marked. So the
+  // index is captured once and held.
+  // `?term=` is the authority; `pending` is only the fallback for a deep link that
+  // arrived without one. Reading it from the route is what makes it immune to the
+  // marking below, which is the whole bug: it changes the session in a way that used to
+  // invalidate the screen's own lookup mid-visit.
+  const routed = Number(useSearchParams().get('term'))
+  const term = TERMS.find((t) => t.index === (Number.isFinite(routed) && routed > 0 ? routed : pending?.index))
+
+  useEffect(() => {
+    // One requeue only. Marking on arrival means the term can't come back again.
+    if (term) markRequeued(term.index)
+  }, [term])
   const plan = revisitPlan()
 
-  // One requeue only. Marking on arrival means the term can't come back again.
+  // A denied mic stays denied here too. This screen was mic-only, so a student who had
+  // already been moved to typing for the whole session hit a wall at the requeue.
   useEffect(() => {
-    if (missed) markRequeued(missed.index)
-  }, [missed])
+    if (sticky && term) router.replace(`/text/turn?term=${term.index}&sticky=1`)
+  }, [sticky, term, router])
+
+  // No term to lock in means there is nothing for this screen to do. It used to show
+  // term 1 rather than say so.
+  useEffect(() => {
+    if (!term) router.replace('/session/recap')
+  }, [term, router])
+
+  if (!term || sticky) return null
 
   return (
     <ScreenShell
@@ -55,7 +90,19 @@ export default function LockInPage() {
         </>
       }
       bottomContent={
-        <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/session/lock-in/second')} />
+        <div className={styles.actions}>
+          {/* The requeue was mic-only. Every other turn in the session offers a way to
+              answer without speaking; the one that asks the student to prove they have
+              learned something did not. */}
+          <Button
+            CTA="Type instead"
+            variant="Secondary"
+            size="M"
+            fullWidth
+            onClick={() => router.push(`/text/turn?term=${term.index}`)}
+          />
+          <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/session/lock-in/second')} />
+        </div>
       }
     >
       <div className={styles.body}>
@@ -64,8 +111,8 @@ export default function LockInPage() {
         </div>
         <ChatBubble
           showTitle
-          title="That one was tricky. Want to lock it in?"
-          body={"Try the full answer once more, unaided this time and you’ll see this one again later in the session. Totally optional."}
+          title={`${term.name} was tricky. Want to lock it in?`}
+          body={"Try the full answer once more, unaided this time. Totally optional."}
         />
         <MascotSlot size="2XL" expression="determined" />
         {/* One fixed mic region, on every voice screen. The control used to sit at
@@ -76,5 +123,14 @@ export default function LockInPage() {
         </div>
       </div>
     </ScreenShell>
+  )
+}
+
+export default function LockInPage() {
+  // useSearchParams needs a Suspense boundary in the App Router.
+  return (
+    <Suspense fallback={null}>
+      <LockInScreen />
+    </Suspense>
   )
 }

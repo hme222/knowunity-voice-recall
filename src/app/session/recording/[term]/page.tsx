@@ -40,19 +40,45 @@ function RecordingScreen({ index }: { index: number }) {
 
   const [seconds, setSeconds] = useState(0)
   const [paused, setPaused] = useState(false)
-  const startedAt = useRef(0)
+  // Start of the CURRENT un-paused stretch, plus everything banked before it.
+  //
+  // The take used to be scored as `Date.now() - startedAt` with `startedAt` set once on
+  // mount, while `paused` only stopped the display interval. So the on-screen timer and
+  // the scored duration disagreed the moment anyone paused: 0:12 on screen against
+  // ms=31690 logged, and a student who paused to think was graded as though they had
+  // been talking the whole time. The timer is the thing they trust, so the timer is the
+  // thing the verdict is now taken from.
+  const segmentStart = useRef(0)
+  const banked = useRef(0)
 
   useEffect(() => {
-    startedAt.current = Date.now()
+    segmentStart.current = Date.now()
+    banked.current = 0
   }, [])
 
   useEffect(() => {
     if (paused) return
+    // Resuming opens a new stretch; the pause handler banked the one before it.
+    segmentStart.current = Date.now()
     const id = window.setInterval(() => {
       setSeconds((s) => s + 1)
     }, 1000)
     return () => window.clearInterval(id)
   }, [paused])
+
+  /** Un-paused milliseconds so far. Matches what the timer has been counting. */
+  function elapsed() {
+    return banked.current + (paused ? 0 : Date.now() - segmentStart.current)
+  }
+
+  function togglePause() {
+    // Bank OUTSIDE the updater. A functional updater must be pure, and React 19's
+    // StrictMode calls it twice in development precisely to catch one that is not —
+    // which this was, so every pause banked its stretch twice and a 3.7s take scored
+    // 10.1s. `paused` here is this render's value and is correct at click time.
+    if (!paused) banked.current += Date.now() - segmentStart.current
+    setPaused((was) => !was)
+  }
 
   if (!current) {
     router.replace('/session/intro')
@@ -60,7 +86,7 @@ function RecordingScreen({ index }: { index: number }) {
   }
 
   function done() {
-    const took = Date.now() - startedAt.current
+    const took = elapsed()
     if (isRepeat) {
       router.push(`/session/repeat/${index}`)
       return
@@ -127,7 +153,7 @@ function RecordingScreen({ index }: { index: number }) {
               and the pulse ring kept animating while the caption said stopped. */}
           <MicButton
             state={paused ? 'Paused' : 'Listening'}
-            onClick={() => setPaused((p) => !p)}
+            onClick={togglePause}
           />
           </div>
           {/* With the mic, not 235px away in the action zone. "Tap to pause" was
