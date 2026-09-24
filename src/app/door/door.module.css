@@ -1,15 +1,31 @@
 /* The four door screens. All are the same shape as the frames: a centred content block
-   in middleContent, and a two-button action row. */
+   in middleContent, and a two-button action row.
 
+   Deduped 2026-09-24. This file carried two `.body` and two `.doorActions` definitions
+   and the header comment twice — the cascade took the later one, so an edit to the
+   first silently did nothing. Found while fixing the door mics, when a gap change had
+   no effect at all. Same shape as recap.module.css, which was three concatenated
+   copies. */
+
+/* Gap at space.400, not betweenSections — the same trade the drill makes, for the same
+   reason. These screens carry a long question bubble above the mic's fixed region, and
+   at 24 they ran 6 to 8px past it, which is enough that margin-top:auto cannot pull the
+   region back: the mic landed at 480 and 482 against 466 everywhere else. The gaps give
+   way so the control does not. */
 .body {
   display: flex;
   flex-direction: column;
   flex: 1;
   min-height: 0;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  gap: calc(var(--size-primitive-space-400) * 1px);
 }
 
-
+/* Wraps the shared mic region so the caption can sit under the control without moving
+   it. The region top-aligns its children, so an in-flow caption landed beside the mic
+   with both at y466 and the caption clipping the button's upper edge. */
+.micWithCaption {
+  position: relative;
+}
 
 .caption {
   color: var(--color-semantic-text-secondary);
@@ -17,6 +33,13 @@
   font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
   line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
   text-align: center;
+}
+
+.micWithCaption .caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 /* The chat door's XP line, above the mascot as on the frame. */
@@ -40,9 +63,6 @@
   justify-content: center;
 }
 
-
-
-
 /* The frame's action row: the dismissal FILLS the leftover width, the primary is a
    fixed 157 pill. Not two hugging pills pushed apart. */
 .doorActions {
@@ -59,17 +79,6 @@
 /* The frame fixes the primary's width while the dismissal flexes. */
 .doorActions > :last-child {
   min-width: calc(var(--component-button-inline-primary-min-width) * 1px);
-}
-
-/* The four door screens. All are the same shape as the frames: a centred content block
-   in middleContent, and a two-button action row. */
-
-.body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
 }
 
 /* The frame's `Content` block: gap 24, pt 32, pb 16, centred. */

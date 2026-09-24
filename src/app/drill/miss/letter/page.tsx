@@ -1,8 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { micRegionClass, Button, Chips, HintCard, MascotSlot, MicButton, RecallResult, ScreenShell } from '@/components'
-import { DRILL_MISSED_FIRST_LETTER, DRILL_MISSED_WORD, DRILL_PARTIAL, STUMBLES } from '@/lib/session'
+import { micRegionClass, Button, ChatBubble, Chips, HintCard, MascotSlot, MicButton, ScreenShell } from '@/components'
+import { DRILL_MISSED_FIRST_LETTER, DRILL_MISSED_WORD, STUMBLES } from '@/lib/session'
 import styles from '../../drill.module.css'
 import { Cue } from '../../Cue'
 import { DrillBar } from '../../DrillBar'
@@ -46,13 +46,10 @@ export default function DrillLetterPage() {
           showLeftIcon={false}
           showRightIcon={false}
         />
-        {/* RecallResult state="Neutral" — promoted from the inline card that three
-            drill screens were duplicating. The drill is practice, not scored
-            performance, so a miss here is not painted as an error. */}
-        {/* The take, quoted as the take. This card's Neutral label is "You said", and
-            it used to carry the string "Starts with" — so the screen rendered
-            "You said / Starts with", attributing a hint to the student. */}
-        <RecallResult className={styles.fullWidth} state="Neutral" title={STUMBLES.second.copy} transcript={`“${DRILL_PARTIAL}”`} />
+        {/* Knowie speaking, not a second copy of the take. DD 07 already shows what
+            the student said; repeating it here said nothing new and cost 156px on a
+            screen that was already overflowing into the mic. */}
+        <ChatBubble className={styles.fullWidth} body={STUMBLES.second.copy} />
         {/* The nudge belongs in the hint card, with the letter it promises. "Starts
             with" appeared on screen with no letter after it. */}
         <HintCard

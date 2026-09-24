@@ -1,8 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { micRegionClass, Button, Chips, HintCard, MascotSlot, MicButton, RecallResult, ScreenShell } from '@/components'
-import { DRILL_MISSED_WORD, DRILL_PARTIAL, STUMBLES } from '@/lib/session'
+import { micRegionClass, Button, ChatBubble, Chips, HintCard, MascotSlot, MicButton, ScreenShell } from '@/components'
+import { DRILL_MISSED_WORD, STUMBLES } from '@/lib/session'
 import styles from '../../drill.module.css'
 import { DrillBar } from '../../DrillBar'
 
@@ -44,12 +44,10 @@ export default function DrillEchoPage() {
           showLeftIcon={false}
           showRightIcon={false}
         />
-        {/* RecallResult state="Neutral" — promoted from the inline card that three
-            drill screens were duplicating. The drill is practice, not scored
-            performance, so a miss here is not painted as an error. */}
-        {/* Same correction as DD 07b: this card is labelled "You said", so putting the
-            word Knowie is ASKING for in it told the student they had already said it. */}
-        <RecallResult className={styles.fullWidth} state="Neutral" title={STUMBLES.third.copy} transcript={`“${DRILL_PARTIAL}”`} />
+        {/* Knowie speaking, not a second copy of the take. DD 07 already shows what
+            the student said; repeating it here said nothing new and cost 156px on a
+            screen that was already overflowing into the mic. */}
+        <ChatBubble className={styles.fullWidth} body={STUMBLES.third.copy} />
         <HintCard
           className={styles.fullWidth}
           label="Say this with me"

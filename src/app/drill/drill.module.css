@@ -73,13 +73,20 @@
    piece of status, then the cards, then the control. */
 
 /* The frames stack a centred column, not a stretched one. */
+/* Gap at space.400, not betweenSections.
+   These screens carry more than a session screen does — mascot, chip, a card, a nudge,
+   a cue, and the mic's fixed region — and at 24 the gaps alone put the content 52 to
+   152px past the region, where the sticky mic rendered on top of the cue text it is
+   meant to sit under. The room has to come from somewhere and the gaps are the cheapest
+   place; the alternative was compressing the mic region, which is what made the control
+   sit at four different heights across this flow. */
 .frameBody {
   display: flex;
   flex-direction: column;
   flex: 1;
   min-height: 0;
   align-items: center;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  gap: calc(var(--size-primitive-space-400) * 1px);
 }
 
 /* Cards still span the margin; only the small status elements hug. */

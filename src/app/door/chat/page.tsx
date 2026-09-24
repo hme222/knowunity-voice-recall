@@ -57,9 +57,10 @@ export default function ChatDoor() {
         {/* A mic, in the shared region, like the exam-plan door. It was a Secondary
             Button — two doors offering the same thing two ways, and the one that opens
             a voice feature did it without showing a mic. */}
-        <div className={micRegionClass}>
-          <p className={styles.caption}>Tap to answer</p>
+        <div className={[micRegionClass, styles.micWithCaption].join(' ')}>
           <MicButton state="Idle" onClick={() => router.push(proveItHref('chat'))} />
+          {/* BELOW the mic, out of the flow — see the exam-plan door. */}
+          <p className={styles.caption}>Tap to answer</p>
         </div>
       </div>
     </ScreenShell>
