@@ -116,17 +116,26 @@ export const TERMS: Term[] = [
     index: 2,
     name: 'Cell membrane',
     title: 'Explain: Cell membrane',
-    prompt: 'Say what the cell membrane does, in your own words. However you would explain it to a friend.',
+    // The prompt asks for BOTH halves, because the marking does.
+    //
+    // It used to ask only "what the cell membrane does", and then mark a correct
+    // what-it-does answer as incomplete for not saying what it is made of — a question
+    // it had not asked. A student who answers the literal question and is told they
+    // were partially wrong stops trusting the verdict, and this screen's whole claim is
+    // that the transcript is proof.
+    prompt: 'Say what the cell membrane is made of and what it does, in your own words. However you would explain it to a friend.',
     transcript: 'It is a double layer of fatty molecules around the cell, and that is what lets it choose what gets in and what stays out.',
+    // The job, with no mention of what it is built from — which is exactly what
+    // `missTitle` goes on to name.
     partialTranscript:
-      "It is the layer around the cell that decides what gets in and what stays out.",
+      "It is the boundary around the cell, and it controls what gets in and out.",
     passTitle: 'That is it — the job and why it can be selective.',
     // Was "you described the cell wall, not the membrane", which contradicted this
     // term's own answer: the canned transcript says the membrane decides what gets in
     // and out, and the answer says it controls what passes in and out. The miss has to
     // point at what is actually missing from the transcript — the mechanism.
-    missTitle: 'The job is right. What it is made of is the part that explains how it chooses.',
-    hint: 'Think about what the membrane is made of, and why that lets it choose.',
+    missTitle: 'The job is right. What the membrane is built from is the piece that is missing.',
+    hint: 'Think about what the membrane is built from, and why that lets it choose.',
     answer:
       'The cell membrane is a phospholipid bilayer around the cell that controls which substances pass in and out.',
   },
@@ -150,11 +159,17 @@ export const TERMS: Term[] = [
     title: 'Explain: Cell transport',
     prompt: 'Say what cell transport means, in your own words. However you would explain it to a friend.',
     transcript: 'It is how things move across the membrane — some of it just drifts across, and some of it costs the cell energy.',
+    // Omits the two-cases distinction entirely, which is what `missTitle` names.
+    //
+    // It used to read "sometimes using energy" — i.e. the student had already made the
+    // active/passive distinction — while the miss said "that is diffusion", a word they
+    // never used, and the hint restated what their own quoted transcript said back to
+    // them. The verdict card contradicted the quote printed underneath it.
     partialTranscript:
-      "It is how things move across the membrane, sometimes using energy.",
+      "It is how substances move in and out of the cell, across the membrane.",
     passTitle: 'Nailed it — you split the passive and active cases.',
-    missTitle: 'Close — that is diffusion. Cell transport is the wider idea.',
-    hint: 'Some of it costs the cell energy and some of it does not.',
+    missTitle: 'That is the right idea. What is missing is that it happens in two different ways.',
+    hint: 'Some ways cost the cell energy. Some do not.',
     answer:
       'Cell transport is the movement of substances across the membrane — passively, by diffusion and osmosis, or actively, using energy.',
   },

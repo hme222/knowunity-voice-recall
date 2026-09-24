@@ -3,7 +3,7 @@
 // component's token colour applies. Every svg fills its box: size it from the parent.
 
 import type { ComponentType } from 'react'
-import { X, Mic, RotateCcw, Eye, Check, Menu, Timer, Zap, Flame, Camera, Layers, CircleHelp, FileText, MessageCircleMore, Search, Target, Trophy } from 'lucide-react'
+import { X, Mic, RotateCcw, Eye, Check, Menu, Timer, Zap, Flame, Camera, Layers, CircleHelp, FileText, MessageCircleMore, Search, Target, Trophy, Wifi } from 'lucide-react'
 
 export { LoadingIcon } from './LoadingIcon'
 export { SquareIcon } from './SquareIcon'
@@ -41,6 +41,7 @@ export const CheckIcon = lucide(Check)
    the house convention for icons and the only thing reproducible from tokens. The
    shapes differ from the frame; the slots, sizes and positions do not. */
 export const MenuIcon = lucide(Menu)
+export const WifiIcon = lucide(Wifi)
 export const TimerIcon = lucide(Timer)
 export const StreakBoltIcon = lucide(Zap)
 export const StreakFlameIcon = lucide(Flame)

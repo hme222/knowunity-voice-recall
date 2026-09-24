@@ -63,17 +63,15 @@
 .signal i:nth-child(3) { height: 78%; }
 .signal i:nth-child(4) { height: 100%; }
 
+/* Lucide's wifi glyph, which is the house convention for icons.
+   It was three stacked radial-gradient masks cut out of a filled box — the arcs did not
+   resolve cleanly at 16x12 and it rendered as a blob rather than a fan. A real glyph
+   costs nothing here and the maths was never worth defending. */
 .wifi {
   width: calc(var(--size-primitive-space-400) * 1px);
-  height: calc(var(--size-primitive-space-300) * 1px);
-  background: var(--color-semantic-background-inverse);
-  /* A wifi fan: three arcs and a dot, cut out of one filled box so the shape carries
-     no colour of its own and inherits the status-bar token like every other glyph. */
-  mask-image: radial-gradient(circle at 50% 100%, black 14%, transparent 15%),
-    radial-gradient(circle at 50% 100%, transparent 38%, black 39%, black 52%, transparent 53%),
-    radial-gradient(circle at 50% 100%, transparent 76%, black 77%, black 92%, transparent 93%);
-  mask-composite: add;
-  -webkit-mask-composite: source-over;
+  height: calc(var(--size-primitive-space-400) * 1px);
+  color: var(--color-semantic-background-inverse);
+  display: block;
 }
 
 .battery {

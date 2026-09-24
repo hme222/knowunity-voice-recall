@@ -57,7 +57,9 @@ function DrillRoundScreen() {
       }
     >
       <div className={styles.body}>
-        <StrengthMeter fill={100} label="You said all of it unaided" />
+        {/* Same label as /drill/complete, and same reason it is not "unaided": the
+            scaffold hands out the missed word, its first letter, then the word to echo. */}
+        <StrengthMeter fill={100} label="The whole definition, start to finish" />
         <div className={styles.centred}>
           <MascotSlot size="XL" expression="laughing" />
         </div>

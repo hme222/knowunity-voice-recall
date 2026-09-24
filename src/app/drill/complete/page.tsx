@@ -44,7 +44,12 @@ export default function DrillCompletePage() {
       }
     >
       <div className={styles.body}>
-        <StrengthMeter fill={100} label="You said all of it unaided" />
+        {/* The meter reads unaided coverage, and the scaffold hands out the missed
+            word, then its first letter, then the word itself to echo — so "all of it
+            unaided" is a claim the drill has just spent four rungs disproving. The
+            drill tracks no per-run help state to qualify it with, so this says what it
+            can stand behind: the definition was completed. */}
+        <StrengthMeter fill={100} label="The whole definition, start to finish" />
         <p className={styles.note}>{DRILL_TERM.drillTitle ?? DRILL_TERM.title}</p>
         <div className={styles.centred}>
           <MascotSlot size="2XL" expression="laughing" />

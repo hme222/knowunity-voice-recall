@@ -58,7 +58,12 @@ export default function RepeatPage({ params }: { params: Promise<{ term: string 
           title="That's it, in your own voice."
           transcript={`“${current.transcript}”`}
         />
-        <Snackbar Text="Said back unaided." variant="Success" icon={<CheckIcon />} chipText={`+${XP.repeat} XP`} />
+        {/* NOT "said back unaided". The student read the answer off 05a ten seconds
+            earlier, so unaided is the one thing this was not, and praise a student
+            knows they did not earn is worse than no praise. The +3 is for saying it
+            back in their own words, which is a real retrieval act and is what this
+            now claims. */}
+        <Snackbar Text="Said it back in your own words." variant="Success" icon={<CheckIcon />} chipText={`+${XP.repeat} XP`} />
       </div>
     </ScreenShell>
   )

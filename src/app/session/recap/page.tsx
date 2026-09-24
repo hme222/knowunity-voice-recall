@@ -64,7 +64,9 @@ export default function RecapPage() {
     (o) => o.bucket === 'Worth revisiting' || o.bucket === 'Revealed' || (o.calibration ?? 0) < 0,
   )
   const order = needsRevisiting ? ORDER_WITH_MISSES : ORDER_SETTLED
-  const rough = outcomes.filter((o) => o.bucket === 'Unaided' || o.bucket === 'Hinted').length <= outcomes.length / 2
+  /** Terms the student got to in the end, with or without a hint. */
+  const resolved = outcomes.filter((o) => o.bucket === 'Unaided' || o.bucket === 'Hinted').length
+  const rough = resolved <= outcomes.length / 2
 
   // "Run it again" re-presents the same terms shuffled. It restarts the session so the Time
   // stat measures this run, not the one before it.
@@ -117,11 +119,17 @@ export default function RecapPage() {
             the evidence there is a direct read of the Quiz complete frame. */}
         <div className="screenTitle">
           <h1 className="screenTitleHeading">Session recap</h1>
+          {/* Leads with where the student ENDED UP, then how much of it was cold.
+              It used to say only "You explained N of 4 without help" — true, and the
+              only thing on the screen, so a student who got three of four right in the
+              end read a flat 1-of-4 as the verdict on the session. Both halves are
+              facts; showing only the deficit is a choice, and it was making an honest
+              screen read as an accusation. `resolved` is the same Unaided+Hinted count
+              the action row already uses to decide what to offer next. */}
           {outcomes.length > 0 && (
             <p className="screenTitleCaption">
-              {complete
-                ? `You explained ${totals.unaided} of ${TOTAL_TERMS} without help.`
-                : `You explained ${totals.unaided} of ${outcomes.length} without help.`}
+              {`You got ${resolved} of ${complete ? TOTAL_TERMS : outcomes.length} in the end. ` +
+                `${totals.unaided} first time, no help.`}
             </p>
           )}
         </div>
@@ -132,7 +140,11 @@ export default function RecapPage() {
           {/* The bonus is only real once the set is finished, which is the whole reason
               it exists. Before that it is still up for grabs, as the exit sheet says. */}
           <StatChip stat="XP" value={`+${complete ? totals.withBonus : totals.earned}`} />
-          <StatChip stat="Score" value={`${totals.score}%`} />
+          {/* Not a percentage, and not called a score. The chip measured
+              first-attempt-with-no-help and printed it as "SCORE 25%", which invites
+              comparison with a test mark — and a count cannot be misread that way.
+              The `Score` variant is unchanged; only its label is. */}
+          <StatChip stat="Score" label="FIRST TRY" value={`${totals.unaided} of ${complete ? TOTAL_TERMS : outcomes.length}`} />
           <StatChip stat="Time" value={totals.elapsed} />
         </div>
       )}

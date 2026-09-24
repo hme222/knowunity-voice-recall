@@ -134,6 +134,41 @@ Added 2026-09-22, resolving the findings in `eval/scorecard-04.md`:
   too-short take goes straight to 04a Couldn't hear. Asking how sure you are
   about an answer that was never heard is a question the screen has not earned.
 
+Added 2026-09-24, from the same two roleplays — the copy half rather than the state half:
+
+- **The Recap does not show a score, so it stops saying it does.** The chip measured
+  first-attempt-with-no-help and printed "SCORE 25%", which invites comparison with a
+  test mark; both students read it as one, on sessions where they had ended up right on
+  three of four. It reads "FIRST TRY · 1 of 4" now — the `Score` variant is unchanged,
+  only its label, via a new optional `label` prop on StatChip so the Figma default is
+  untouched everywhere else. A count cannot be misread as a percentage.
+- **The Recap caption leads with where the student ended up.** It said only "You
+  explained N of 4 without help" — true, and the only sentence on the screen, so the
+  deficit was the whole verdict. Now: "You got 3 of 4 in the end. 1 first time, no
+  help." Both halves are facts; showing only one was a choice, and it made an honest
+  screen read as an accusation. The worst-first bucket ordering stays — that is a
+  recorded decision and it is doing real work.
+- **"Unaided" is not claimed where the student was aided.** 05b said "Said back
+  unaided" about an answer read off the reveal screen ten seconds earlier; it says "Said
+  it back in your own words", which is what the +3 is actually for. The drill's complete
+  screen and its round sheet said "You said all of it unaided" after the scaffold had
+  handed over the missing word, its first letter, and the word to echo; both now say
+  "The whole definition, start to finish". Praise a student knows they did not earn is
+  worse than no praise.
+- **The prompt and the marking ask the same question.** Term 2 asked "what the cell
+  membrane does" and marked a correct what-it-does answer as incomplete for omitting
+  what it is made of — a question it had not asked. Term 4 told a student "that is
+  diffusion", a word they never used, and handed them a hint restating what their own
+  quoted transcript already said. Both prompts and both partial transcripts are rewritten
+  so that on all four terms the prompt asks for X, the partial delivers part of X, the
+  verdict names the missing part of X, and the hint points at it. This is the product's
+  central claim — the transcript is proof — and a verdict that contradicts the quote
+  printed beneath it teaches the student to blame the mic instead.
+- **The baseline Say It Back chip is sized like the tools it sits among**
+  (`--component-button-s-height`, 32), not 68. It read as a banner above the tool row
+  rather than a chip belonging to it. The due chip keeps the taller box: it carries a
+  term, a date and a count on two lines, and a deadline is meant to outweigh a tool.
+
 Added 2026-09-23, from two student roleplays driving the built flow (eval/scorecard-06.md).
 All three were state that did not survive a route change — each typechecked, linted,
 rendered and passed all four hard gates:

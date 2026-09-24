@@ -17,6 +17,7 @@ import {
   StreakFlameIcon,
   SummarizeIcon,
   TimerIcon,
+  WifiIcon,
 } from '@/components/icons'
 import { HOME_GREETING } from '@/lib/session'
 import styles from './home.module.css'
@@ -48,7 +49,7 @@ function StatusBar() {
         <span className={styles.signal}>
           <i /><i /><i /><i />
         </span>
-        <span className={styles.wifi} />
+        <span className={styles.wifi}><WifiIcon /></span>
         <span className={styles.battery}>
           <span className={styles.batteryFill} />
         </span>

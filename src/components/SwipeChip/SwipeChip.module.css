@@ -27,6 +27,22 @@
   outline-offset: calc(var(--size-primitive-space-050) * 1px);
 }
 
+/* The BASELINE chip is one of the composer's tools, so it is sized like them.
+   It was 162x68 against Scan/Flashcards/Quiz at 40, which made "Say It Back" read as a
+   banner sitting above the tool row rather than a chip belonging to it. The due chip
+   keeps the larger box: it carries a term, a date and a count on two lines, and the
+   deadline is supposed to have more weight than a tool. */
+.root:not([data-due='true']) {
+  height: calc(var(--component-button-s-height) * 1px);
+  padding: 0 calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-150) * 1px);
+}
+
+.root:not([data-due='true']) .glyph {
+  width: calc(var(--size-primitive-icon-300) * 1px);
+  height: calc(var(--size-primitive-icon-300) * 1px);
+}
+
 .glyph {
   width: calc(var(--size-primitive-illustration-500) * 1px);
   height: calc(var(--size-primitive-illustration-500) * 1px);
