@@ -187,7 +187,7 @@ export default function RecapPage() {
             <section key={bucket} className={styles.bucket}>
               <h2 className={styles.bucketLabel}>{`${bucket} · ${rows.length}`}</h2>
               {rows.map((row) => (
-                <div key={row.index} className={styles.row}>
+                <div key={row.index} className={styles.row} data-bucket={bucket}>
                   <span className={styles.rowTerm}>
                     {getTerm(row.index)?.name}
                     {/* Any term the student was sure about and did not get first

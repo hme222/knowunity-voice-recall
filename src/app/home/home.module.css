@@ -250,7 +250,14 @@
 
 /* 32/32.651 Greed Condensed Heavy on the frame. headline-l is the nearest size token
    (33); heavy and condensed come from the VF primitives the display style uses, so
-   nothing here is an untokenised literal. */
+   nothing here is an untokenised literal.
+
+   A DELIBERATE DEPARTURE from "one screen-title scale" (sprint-context, 2026-09-22),
+   recorded here because an audit will otherwise read it as drift: every other h1 in the
+   app renders at 21 and this one at 33, and the mascot beside it is 176 against 96
+   everywhere else. Both come from frame 15674:34093. That decision governs the session
+   flow's screen TITLES; this is the host app's home and the line is a greeting, not a
+   title. If the two ever have to agree, the frame is what gives way, not this file. */
 .greeting {
   color: var(--color-semantic-text-primary);
   text-align: center;

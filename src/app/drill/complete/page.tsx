@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Button, MascotSlot, RecallResult, ScreenShell, StrengthMeter, TrainingLog } from '@/components'
+import { actionRowClass, Button, MascotSlot, RecallResult, ScreenShell, StrengthMeter, TrainingLog } from '@/components'
 import { DRILL_TERM } from '@/lib/session'
 import styles from '../drill.module.css'
 
@@ -26,20 +26,20 @@ export default function DrillCompletePage() {
   return (
     <ScreenShell
       bottomContent={
-        <div className={styles.stack}>
-          <Button CTA="Done" variant="Primary" size="M" fullWidth onClick={() => router.push('/picker')} />
-          {/* Secondary, matching 07 Recap's vocabulary for the same shape of choice.
-              This screen had Done Primary / Try again TERTIARY while Recap had the pair
-              as Primary / Secondary — the same two actions with opposite weight, two
-              screens apart in one session. Recap's conditional promotion of the restart
-              on a rough run stays; that one is deliberate. */}
+        // The same SHAPE as 07 Recap, not just the same variants. This matched Recap's
+        // Primary/Secondary vocabulary and then stacked the pair full-width in the
+        // opposite order — Done on top, Run it again beneath — while Recap puts them
+        // side by side with "Run it again" always left. The comment claimed parity; the
+        // position was never part of what got checked. Two screens, identical choice,
+        // same row and same order now.
+        <div className={actionRowClass}>
           <Button
             CTA="Run it again"
             variant="Secondary"
             size="M"
-            fullWidth
             onClick={() => router.push('/drill/intro?returning=1')}
           />
+          <Button CTA="Done" variant="Primary" size="M" onClick={() => router.push('/picker')} />
         </div>
       }
     >

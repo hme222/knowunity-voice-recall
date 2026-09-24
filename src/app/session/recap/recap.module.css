@@ -53,6 +53,28 @@
   padding: calc(var(--spacing-semantic-card-padding) * 1px);
   border-radius: calc(var(--size-primitive-radius-400) * 1px);
   background: var(--color-semantic-background-surface);
+  /* A leading rule, coloured by bucket. Every row rendered identically — same fill,
+     same name colour, same XP colour whether the term paid 10 or 0 — so the only thing
+     separating "nailed it cold" from "flagged for revisit" was a grey section header
+     and the digit itself. The bucket is the one thing the Recap exists to communicate.
+     A left edge, not a card tint: the tint reads as a verdict, and this screen groups
+     rather than grades. */
+  border-left: calc(var(--size-primitive-stroke-heavy-border) * 2px) solid transparent;
+}
+
+/* The same four colours the flow already uses for these outcomes, so the Recap reads
+   as a summary of screens the student has seen rather than a new vocabulary. */
+.row[data-bucket='Unaided'] {
+  border-left-color: var(--color-semantic-feedback-success-bold);
+}
+.row[data-bucket='Hinted'] {
+  border-left-color: var(--color-semantic-feedback-partial-bold);
+}
+.row[data-bucket='Revealed'] {
+  border-left-color: var(--color-semantic-border-strong);
+}
+.row[data-bucket='Worth revisiting'] {
+  border-left-color: var(--color-semantic-feedback-unclear-bold);
 }
 
 .rowTerm {

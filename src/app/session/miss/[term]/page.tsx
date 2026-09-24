@@ -112,7 +112,11 @@ function MissScreen({ index }: { index: number }) {
               was handing over the answer that "Reveal answer" exists to give, except
               Reveal pays 0 XP while this route left the +7 and Try again intact.
               The sheet is still reached from every Recap row. */}
-          <Button CTA="Skip · no XP" variant="Tertiary" size="S" fullWidth onClick={skip} />
+          {/* "Skip", like the other ten. sprint-context: "Skip has one placement and one
+              label… two labels for one escape was the clearer problem." This screen was
+              the one holdout. The cost is disclosed by the Recap's own bucket, not by a
+              label that exists on one screen out of eleven. */}
+          <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={skip} />
         </div>
       }
     >
