@@ -741,6 +741,23 @@ its own color rather than reusing success or error. Two tokens, two
 different jobs, confirmed against a real built screen instead of
 staying a theoretical binding.
 
+> **SUPERSEDED 2026-09-21, recorded here 2026-09-24.** The verdict tag
+> is NOT green. `feedback.partial.bold` exists and binds to `gold.400`
+> / `#F5B53D`, because frame 05 Miss + Hint (15672:26357) binds that
+> chip to `feedback/warning/bold` — read off the frame, after an earlier
+> attempt introduced it as an invented magenta. The token carries the
+> full reasoning in its own `$description`. A review flagged the
+> paragraph above as a claim the build contradicts and proposed
+> rebinding the chip to green to satisfy it; that would walk away from
+> the frame to satisfy a document. The paragraph is the defect, not the
+> binding.
+>
+> The cost is real and worth naming rather than hiding: `#F5B53D` now
+> serves the PRO badge, the due-signal urgency border and a recall
+> verdict, with nothing but context telling them apart. That is a
+> consequence of frame fidelity, and it is what to revisit if the
+> palette is reopened — not by recolouring the verdict.
+
 **`progressIndicator`'s ring is confirmed to pair with a plain "N/4"
 text label next to it, not stand alone.** `IMG_7538` in the App
 Inventory shows both together on a real recall turn screen. An

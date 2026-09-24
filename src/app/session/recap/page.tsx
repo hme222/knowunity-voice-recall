@@ -86,18 +86,24 @@ export default function RecapPage() {
               Three stacked full-width buttons measured 176 against a 136 budget, and
               gave a targeted second pass the same weight as ending the session. Recap's
               conditional promotion on a rough run stays — that one is deliberate. */}
+          {/* FIXED POSITIONS. Promotion moves the emphasis, not the button.
+              Both the label and the variant used to swap, so the white pill stayed on
+              the left and changed meaning with the run — tapping by position got you
+              the opposite action depending on how you had done. Two students hit that
+              independently. "Run it again" is always left, "Done" is always right, and
+              a rough run only changes which one is Primary. */}
           <div className={actionRowClass}>
             <Button
-              CTA={rough ? 'Run it again' : 'Done'}
-              variant="Primary"
+              CTA="Run it again"
+              variant={rough ? 'Primary' : 'Secondary'}
               size="M"
-              onClick={() => (rough ? tryAgain() : router.push('/home/unlocked'))}
+              onClick={tryAgain}
             />
             <Button
-              CTA={rough ? 'Done' : 'Run it again'}
-              variant="Secondary"
+              CTA="Done"
+              variant={rough ? 'Secondary' : 'Primary'}
               size="M"
-              onClick={() => (rough ? router.push('/home/unlocked') : tryAgain())}
+              onClick={() => router.push('/home/unlocked')}
             />
           </div>
           <Button
@@ -186,7 +192,12 @@ export default function RecapPage() {
                 <div key={row.index} className={styles.row}>
                   <span className={styles.rowTerm}>
                     {getTerm(row.index)?.name}
-                    {row.wasSure && bucket === 'Worth revisiting' && (
+                    {/* Any term the student was sure about and did not get first
+                        time, not only the skipped ones. Gated to 'Worth revisiting' it
+                        missed exactly the case the brief cares about: sure, wrong, and
+                        then hinted or revealed — which since sureWrong went to 0 carries
+                        no cost either, so the run showed nothing at all. */}
+                    {row.wasSure && bucket !== 'Unaided' && (
                       <span className={styles.rowNote}>You were sure about this one.</span>
                     )}
                   </span>

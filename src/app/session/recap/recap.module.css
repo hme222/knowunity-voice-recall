@@ -27,7 +27,17 @@
   gap: calc(var(--size-primitive-space-150) * 1px);
 }
 
+/* Pinned. The region's overflow fade used to land on a bucket header — the label faded
+   to nothing and the row under it was invisible with no trace, which is a weaker cue
+   than the half-row the fade exists to replace ("a half-row is not an affordance",
+   ScreenShell). A sticky header cannot be the thing that fades: it holds at the top of
+   the region and the rows travel under it, so whatever the fade catches is always a
+   row. */
 .bucketLabel {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--color-semantic-background-page);
   color: var(--color-semantic-text-tertiary);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
   font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);

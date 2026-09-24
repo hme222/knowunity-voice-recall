@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, use } from 'react'
+import { Suspense, use, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { goToExit } from '@/lib/navigation'
 import {
@@ -16,7 +16,7 @@ import {
   actionRowClass,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { calibrationFor, confidenceFor, getTerm, hintFor, nextAfter, progressFor, recordOutcome, revisitsPending, shownAnswer, useSession, TOTAL_TERMS } from '@/lib/session'
+import { calibrationFor, confidenceFor, getTerm, hintFor, markHinted, nextAfter, progressFor, recordOutcome, revisitsPending, shownAnswer, TOTAL_TERMS, useSession } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // 05 Miss + Hint — Figma frame "05 Miss + Hint (refreshed 2)" (15672:26357).
@@ -25,6 +25,15 @@ import styles from '../../result.module.css'
 // the placement resolved in the Skip/Reveal comparison.
 
 function MissScreen({ index }: { index: number }) {
+  // The hint is on this screen, so the run now contains a hint for this term. Recorded
+  // here rather than forwarded down the URL chain: 04a Couldn't hear's retry rebuilds
+  // the query from scratch and used to lose `hinted`, so a term that was hinted, then
+  // misheard, then answered came back bucketed Unaided and the Recap credited a cold
+  // recall the student had been helped with.
+  useEffect(() => {
+    markHinted(index)
+  }, [index])
+
   const router = useRouter()
   const searchParams = useSearchParams()
   const wasSure = searchParams.get('sure') === '1'

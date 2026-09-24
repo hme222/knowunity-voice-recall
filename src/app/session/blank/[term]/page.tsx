@@ -82,7 +82,16 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
             eight different heights and jump 91px on the very tap that starts
             recording. sprint-context.md, 2026-09-22. */}
         <div className={micRegionClass}>
-          <MicButton state="Idle" label="Say whatever you've got" onClick={() => router.push(`/session/recording/${index}`)} />
+          {/* One encouraged attempt, then the answer — voice-ux.md marks this state Must
+              and specifies exactly that. The mic used to push into the ordinary
+              recording pipeline with no marker, so a mid-length take landed on the
+              standard miss hint-ladder ("Try again", "One more go, then I'll show you
+              the answer") — a retry ladder offered to a student who has just said they
+              know none of it. It also inherited the scripted mishear, so a clean take
+              could come back "That one didn't come through" on the one screen that
+              promises nothing is scored against them. `blank=1` takes the verdict out
+              of it entirely: the take happens, then the answer. */}
+          <MicButton state="Idle" label="Say whatever you've got" onClick={() => router.push(`/session/recording/${index}?blank=1`)} />
         </div>
       </div>
     </ScreenShell>

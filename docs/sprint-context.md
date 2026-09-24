@@ -134,6 +134,62 @@ Added 2026-09-22, resolving the findings in `eval/scorecard-04.md`:
   too-short take goes straight to 04a Couldn't hear. Asking how sure you are
   about an answer that was never heard is a question the screen has not earned.
 
+Added 2026-09-24, closing the rest of eval/scorecard-06.md:
+
+- **The Recap's action row has fixed positions.** Both the label and the variant used to
+  swap on a rough run, so the white pill stayed left and changed meaning with the
+  session — tapping by position got the opposite action depending on how you had done.
+  "Run it again" is always left, "Done" always right; only which is Primary moves.
+- **The drill's stumble mics record.** `/drill/miss/letter` and `/drill/miss/echo` gave
+  their MicButton a push to the NEXT screen, so the rung whose whole point is saying a
+  word out loud with Knowie completed without a take. They route through
+  `/drill/recording?stumble=…`, which also gives them the Done speaking control the
+  student was missing.
+- **A hinted term cannot come back Unaided.** `hinted` rode the query string through
+  four screens and 04a Couldn't hear's retry rebuilt the URL without it, so a term that
+  was hinted, then misheard, then answered was credited as a cold recall. The run now
+  remembers which terms were hinted and `recordOutcome` downgrades on the way in. A fact
+  about the run belongs in the run.
+- **A genuinely blank turn is one attempt, then the answer**, which is what voice-ux.md
+  specified and the build never did. The mic carries `blank=1` and the take goes
+  straight to 05a: no verdict, so no hint ladder offered to someone who just said they
+  know none of it, and no scripted mishear on the screen that promises nothing is scored
+  against them.
+- **The confidently-wrong note is not only for skipped terms.** It was gated to
+  `bucket === 'Worth revisiting'`, so a term the student was sure about, got wrong, and
+  then reached via a hint or reveal showed nothing — and since `sureWrong` went to 0 it
+  carries no cost either, so that run was invisible in both directions.
+- **Bucket headers on the Recap are sticky**, so the overflow fade always lands on a row
+  rather than on a bare label with an invisible row beneath it.
+- **`/permission/prompt` traps focus**, via the same hook BottomSheet uses — pulled out
+  to `src/lib/useFocusTrap.ts` once it turned out to be the app's other real dialog with
+  the same defect.
+- **"Practice what I missed" practises the term you picked.** Every row pushed to
+  `/drill/intro` and the drill only has one definition's ladder, so tapping any term
+  drilled Formal charge; the rows also had a hardcoded `state="Default"` so nothing ever
+  looked chosen. They are a radiogroup now, "Say it back again" follows the selection,
+  and the drill is offered only for the definition whose ladder exists rather than
+  opening one for a term the student did not choose.
+- **A typed draft survives leaving the screen.** It lived in component state only, so
+  Leave → "Keep learning" came back to an empty box on a flow whose exit screen says
+  "Your progress is saved".
+- **The round sheet reports the word the rung actually removed** ("electrons"), read
+  from the fixture instead of a hardcoded "evenly" that contradicted `/drill/miss` one
+  screen away.
+- **Two documents stopped contradicting the build.** `tokens/tokens.json` said the
+  StrengthMeter darkens as it fills in one description and brightens in another, both
+  dated the same day, with the component's own comment repeating the wrong half —
+  settled by rendering, and the record corrected without moving a value.
+  `design-system.md`'s "the verdict tag reuses feedback.success (green)" is marked
+  superseded: the chip is `feedback.partial.bold` / `#F5B53D` because the frame binds it
+  there, and the proposal to recolour it to green would have walked away from the frame
+  to satisfy a document.
+
+**Still open, and deliberately not fixed:** the ⚡2 / 🔥3 counters on home are the host
+app's chrome, fixed values from the frame like the 09:41 clock. Both roleplays read them
+as session XP failing to land. Wiring them to the run would invent a streak model the
+prototype does not have; they stay as chrome, recorded here because the misread is real.
+
 Added 2026-09-24, from the same two roleplays — the copy half rather than the state half:
 
 - **The Recap does not show a score, so it stops saying it does.** The chip measured

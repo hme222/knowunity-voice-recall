@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { goToExit } from '@/lib/navigation'
 import { actionRowClass, AppBar, Button, ChatBubble, ProgressIndicator, ScreenShell, SessionFraction } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, setSticky, setTypedAnswer, TOTAL_TERMS, useSticky } from '@/lib/session'
+import { answerFor, getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, setSticky, setTypedAnswer, TOTAL_TERMS, useSticky } from '@/lib/session'
 import { DrillBar } from '../../drill/DrillBar'
 import styles from '../text.module.css'
 
@@ -30,7 +30,11 @@ function TextTurnScreen() {
   const urlSticky = searchParams.get('sticky') === '1'
   const sticky = urlSticky || sessionSticky
   const current = getTerm(index)
-  const [answer, setAnswer] = useState('')
+  // Seeded from the run, not from nothing. The draft lived in component state only, so
+  // tapping Leave and then "Keep learning" came back to an empty box — on a flow whose
+  // exit screen says "Your progress is saved". It is written on every keystroke, which
+  // is what makes coming back mean anything.
+  const [answer, setAnswer] = useState(() => answerFor(index) ?? '')
 
   // The URL flag and the session flag were two sources of truth that disagreed. This
   // screen treated `?sticky=1` as equal to the stored flag and hid "Use the mic
@@ -122,7 +126,7 @@ function TextTurnScreen() {
           <textarea
             className={styles.field}
             value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
+            onChange={(e) => { setAnswer(e.target.value); setTypedAnswer(index, e.target.value) }}
             placeholder="Type your answer…"
             aria-label="Your answer"
           />

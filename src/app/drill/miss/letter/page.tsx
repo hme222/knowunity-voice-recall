@@ -53,7 +53,9 @@ export default function DrillLetterPage() {
         {/* Drawn blank, same as the thinning passes. */}
         <Cue className={[styles.cueBody, styles.fullWidth].join(' ')} text={`…every bond’s ${blanked} are split evenly…`} />
         <div className={micRegionClass}>
-          <MicButton state="Idle" onClick={() => router.push('/drill/miss/echo')} />
+          {/* Records, then advances. It used to jump straight to the next rung, so the
+              mic was a Next button wearing a microphone. */}
+          <MicButton state="Idle" onClick={() => router.push('/drill/recording?step=2&stumble=letter')} />
         </div>
       </div>
     </ScreenShell>

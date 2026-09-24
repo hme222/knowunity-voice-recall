@@ -402,6 +402,17 @@ export type SessionState = {
    * Recap can compute during render without calling Date.now().
    */
   lastAt: number
+  /**
+   * Terms the student has been SHOWN a hint for, whatever happened afterwards.
+   *
+   * The `hinted` flag used to ride the query string through recording → captured →
+   * processing → the verdict. Every hop carried it except one: 04a Couldn't hear's
+   * retry rebuilt the URL from scratch and dropped it. So a term that was hinted, then
+   * misheard, then answered came back bucketed Unaided — the Recap crediting a cold
+   * recall the student had been helped with. A fact about the run belongs in the run,
+   * not in a URL that five screens have to remember to forward.
+   */
+  hinted?: number[]
   /** What the student typed, by term index. Absent for spoken turns. */
   typed?: Record<number, string>
   /**
@@ -488,6 +499,18 @@ export function startSession() {
  * Called from 01 Idle, which is the first screen of EVERY entry path. Guarded on
  * `startedAt` so terms 2-4 don't restart it.
  */
+/** Record that a hint was shown for a term. Idempotent. */
+export function markHinted(index: number) {
+  const state = readSession()
+  if (state.hinted?.includes(index)) return
+  write({ ...state, hinted: [...(state.hinted ?? []), index] })
+}
+
+/** Whether a hint was ever shown for this term. Pure; pass the state from useSession(). */
+export function wasHinted(state: SessionState, index: number): boolean {
+  return Boolean(state.hinted?.includes(index))
+}
+
 export function ensureSessionStarted() {
   const state = readSession()
   if (state.startedAt) return
@@ -612,12 +635,16 @@ export function recordOutcome(
   const prior = state.outcomes.find((o) => o.index === index)
   const tap = state.confidence?.[index]
   const wasSure = tap?.wasSure ?? opts?.wasSure ?? prior?.wasSure
+  // A term the student was shown a hint for cannot come back Unaided, whatever route it
+  // took to get here. The screens still pass the bucket they believe in; this is the
+  // backstop, because the evidence lives in the run rather than in the caller.
+  const settled: Bucket = bucket === 'Unaided' && wasHinted(state, index) ? 'Hinted' : bucket
   // Reduced when the student chose the keyboard over a working mic.
-  const xp = bucketXp(bucket, typedByChoice(state, index)) + (opts?.repeated ? XP.repeat : 0)
+  const xp = bucketXp(settled, typedByChoice(state, index)) + (opts?.repeated ? XP.repeat : 0)
   const calibration = tap ? calibrationFor(tap.wasSure, tap.right) : 0
   const outcome: TermOutcome = {
     index,
-    bucket,
+    bucket: settled,
     xp,
     repeated: opts?.repeated,
     wasSure,

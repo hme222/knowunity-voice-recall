@@ -1,7 +1,9 @@
 'use client'
 
+import { useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { MascotSlot, ScreenShell } from '@/components'
+import { useFocusTrap } from '@/lib/useFocusTrap'
 import styles from '../permission.module.css'
 
 // The primer with a drawn iOS permission sheet on top. The prototype has no microphone
@@ -11,6 +13,12 @@ import styles from '../permission.module.css'
 
 export default function PromptPage() {
   const router = useRouter()
+  // The other real dialog in the app, and it had the same defect BottomSheet did:
+  // aria-modal="true" with focus left on <body> and the screen behind it still in the
+  // tab order, so nothing announced that a dialog had opened and Tab walked out of it.
+  const dialogRef = useRef<HTMLDivElement>(null)
+  useFocusTrap(dialogRef)
+
   return (
     <ScreenShell>
       <div className={styles.body}>
@@ -20,7 +28,14 @@ export default function PromptPage() {
         </div>
       </div>
 
-      <div className={styles.scrim} role="dialog" aria-modal="true" aria-label="Microphone permission">
+      <div
+        ref={dialogRef}
+        tabIndex={-1}
+        className={styles.scrim}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Microphone permission"
+      >
         <div className={styles.dialog}>
           <div className={styles.dialogBody}>
             <p className={styles.dialogTitle}>&ldquo;Knowunity&rdquo; Would Like to Access the Microphone</p>

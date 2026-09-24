@@ -1,15 +1,15 @@
-/* Figma `strengthMeter` (15808:17668). Track 220x10, fully rounded.
+/* The Definition Drill Down coverage meter.
 
-   ALIGNED TO THE FIGMA RENDER 2026-09-21, on the designer's call. The previous build
-   inverted the ramp — palette teals brightening as the meter filled — on the reasoning
-   that a full meter should be the most present state. Two things were wrong with it:
-   the low band sat at green.900 (#0A2E22) on a near-black track, so an empty meter
-   looked like no meter at all, and the track itself was background.stacking, a 10%
-   white alpha rather than the component's opaque grey.
+   IT BRIGHTENS AS IT FILLS, and that is the inversion of Figma, not a match to it.
+   This comment used to say "ALIGNED TO THE FIGMA RENDER 2026-09-21… Figma's ramp
+   darkens as it fills", which described the decision that was overturned rather than
+   the one that shipped — and the tokens file said both things at once, in two
+   descriptions dated the same day. Settled by rendering: 25% computes rgb(59,109,17),
+   100% computes rgb(192,221,151). Figma's own ramp does darken, which put a full meter
+   at 1.03:1 against the track and made the reward state the invisible one. Every hue
+   is still Figma's; only which rung carries which changed.
 
-   Figma's ramp darkens as it fills: #C0DD97 -> #97C459 -> #639922 -> #3B6D11 on a
-   #615E63 track. Every one of those is now a token; none is written here. See
-   docs/sprint-context.md open question 14. */
+   Every value here is a token. */
 
 .root {
   display: flex;

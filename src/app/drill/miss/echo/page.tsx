@@ -49,10 +49,12 @@ export default function DrillEchoPage() {
             performance, so a miss here is not painted as an error. */}
         <RecallResult className={styles.fullWidth} state="Neutral" title={STUMBLES.third.copy} transcript={`“${DRILL_MISSED_WORD}”`} />
         <div className={micRegionClass}>
+          {/* Records, then advances. This is the rung whose whole point is saying the
+              word out loud with Knowie, and it used to complete without a take. */}
           <MicButton
             state="Idle"
             label={`Say ${DRILL_MISSED_WORD} out loud`}
-            onClick={() => router.push('/drill/pass/3')}
+            onClick={() => router.push('/drill/recording?step=2&stumble=echo')}
           />
         </div>
       </div>

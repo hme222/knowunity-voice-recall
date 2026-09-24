@@ -35,6 +35,7 @@ function RecordingScreen({ index }: { index: number }) {
   const hinted = searchParams.get('hinted') === '1'
   // The say-it-back repeat after a reveal: a real take, then its own result screen.
   const isRepeat = searchParams.get('repeat') === '1'
+  const isBlank = searchParams.get('blank') === '1'
   // Which entry door this run came from, if any. See src/app/door/doors.ts.
   const door = searchParams.get('door')
 
@@ -87,6 +88,14 @@ function RecordingScreen({ index }: { index: number }) {
 
   function done() {
     const took = elapsed()
+    // A blank turn is not judged. The student said they knew none of it, made the
+    // attempt anyway, and voice-ux's rule for this state is "one encouraged attempt,
+    // then reveal" — so there is no verdict to compute and nothing for the mishear
+    // mock to catch.
+    if (isBlank) {
+      router.push(`/session/reveal/${index}`)
+      return
+    }
     if (isRepeat) {
       router.push(`/session/repeat/${index}`)
       return
