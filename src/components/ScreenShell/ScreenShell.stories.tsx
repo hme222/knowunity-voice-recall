@@ -12,7 +12,7 @@ import { CloseIcon } from '../icons'
 import { ScreenShell } from './ScreenShell'
 
 const FIGMA_DESCRIPTION = `
-**WHAT:** The React counterpart of the Figma \`scaffold\` component set (variant \`size=iPhone 13\`). Four fixed chrome regions — Panel Header 48, topNavigation 56, bottomContent 120, bottomSheetOnly 34 — with middleContent flexing to fill the remainder. At an 844-tall viewport the middle computes to 620 and matches the frames; at any other height the middle absorbs the difference so the shell never scrolls itself.
+**WHAT:** The React counterpart of the Figma \`scaffold\` component set (variant \`size=iPhone 13\`). Four fixed chrome regions — Panel Header 48, topNavigation 56, actionZone 136, bottomSheetOnly 34 — with middleContent flexing to fill the remainder. At an 844-tall viewport the middle computes to 570; at any other height the middle absorbs the difference so the shell never scrolls itself.
 
 **WHEN:** Every screen. Screens fill the slots and write no layout values of their own. Heights come from \`component.scaffold.*\`; padding and gaps from \`screenMargin\`, \`space.200\` and \`space.100\`.
 

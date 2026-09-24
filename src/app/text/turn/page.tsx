@@ -3,9 +3,9 @@
 import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { goToExit } from '@/lib/navigation'
-import { actionRowClass, AppBar, Button, ChatBubble, ProgressIndicator, ScreenShell, SessionFraction } from '@/components'
+import { actionRowClass, AppBar, Button, ChatBubble, MascotSlot, ProgressIndicator, ScreenShell, SessionFraction } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { answerFor, getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, setSticky, setTypedAnswer, TOTAL_TERMS, useSticky } from '@/lib/session'
+import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, setSticky, setTypedAnswer, TOTAL_TERMS, typedDraft, useSticky } from '@/lib/session'
 import { DrillBar } from '../../drill/DrillBar'
 import styles from '../text.module.css'
 
@@ -30,11 +30,16 @@ function TextTurnScreen() {
   const urlSticky = searchParams.get('sticky') === '1'
   const sticky = urlSticky || sessionSticky
   const current = getTerm(index)
-  // Seeded from the run, not from nothing. The draft lived in component state only, so
-  // tapping Leave and then "Keep learning" came back to an empty box — on a flow whose
-  // exit screen says "Your progress is saved". It is written on every keystroke, which
-  // is what makes coming back mean anything.
-  const [answer, setAnswer] = useState(() => answerFor(index) ?? '')
+  // Seeded from the student's own draft, and from NOTHING ELSE. The draft lived in
+  // component state only, so Leave → "Keep learning" came back to an empty box on a
+  // flow whose exit screen says "Your progress is saved"; it is written on every
+  // keystroke now, which is what makes coming back mean anything.
+  //
+  // The first version of this seeded from `answerFor`, which falls back to the canned
+  // transcript — so on a first visit the box opened pre-filled with the correct answer.
+  // I verified the round trip (type, leave, return) and never opened the screen cold,
+  // which is the only path where the fallback fires.
+  const [answer, setAnswer] = useState(() => typedDraft(index))
 
   // The URL flag and the session flag were two sources of truth that disagreed. This
   // screen treated `?sticky=1` as equal to the stored flag and hid "Use the mic
@@ -120,7 +125,13 @@ function TextTurnScreen() {
       }
     >
       <div className={styles.body}>
-        <ChatBubble showTitle title={current.title} body={current.prompt} />
+        {/* Knowie and the accented term, as on every voice screen. The typed path rendered
+            the title as one flat white string and had no mascot at all — voice-ux calls
+            text "an equal path, not a downgrade", and it was visibly the lesser one.
+            ChatBubble's own doc records why the accent exists: without it "the one word
+            the screen is about had no emphasis at all". */}
+        <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
+        <ChatBubble showTitle title="Explain: " titleAccent={current.name} body={current.prompt} />
         <label>
           <span className="sr-only">Your answer</span>
           <textarea

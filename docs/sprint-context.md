@@ -134,6 +134,67 @@ Added 2026-09-22, resolving the findings in `eval/scorecard-04.md`:
   too-short take goes straight to 04a Couldn't hear. Asking how sure you are
   about an answer that was never heard is a question the screen has not earned.
 
+Added 2026-09-24, from the second grading run and its two roleplays:
+
+- **Nothing that seeds an input reads `answerFor`.** It falls back to the canned
+  transcript, so using it to keep a typed draft across a route change opened the typing
+  screen PRE-FILLED WITH THE CORRECT ANSWER. A student in testing read it as the app
+  having answered for her. `typedDraft()` reads only the student's own words. The fix
+  that caused it was verified on its round trip and never on a cold open, which is the
+  only path where the fallback fires.
+- **The mic region does not shrink.** `flex-shrink: 1` let a taller content stack claim
+  its space, so the control this region exists to pin sat at 466 in the session and at
+  478, 488 and 526 across the drill. `position: sticky` is what actually protects a
+  short viewport; verified at 844, 667 and 600 with nothing clipped. One value now, on
+  every route.
+- **The drill quotes what the student gave.** DD 07 hardcoded a stumble with an invented
+  "um…" while DD 02a showed the clean transcript and asked them to confirm it — the same
+  contradiction the core loop was fixed for on 2026-09-23, in the drill's own copy of it.
+  One `DRILL_PARTIAL` feeds both. DD 07b's card also put the string "Starts with" under
+  a label reading "You said", and DD 07c put the word Knowie was ASKING for there; both
+  now quote the take and carry the nudge in a HintCard — and 07b finally shows the
+  letter it was promising.
+- **"Try again" lands on an idle beat.** It pushed straight into a live recording, so
+  the timer was running when the screen arrived and the hint vanished at the moment the
+  student meant to use it. Both roleplays named it, in both runs, as the point they
+  would stop.
+- **The stumble ladder's chip escalates with the ladder.** All three rungs printed one
+  literal string, so the chrome built to announce severity said the same sentence from
+  the first nudge to the guaranteed-completable echo.
+- **Captured has its own fill.** It aliased `brand.bold`, the same value as Listening,
+  and under reduced motion the pulse ring is `display: none` — so the two states rendered
+  identically and only an invisible aria attribute separated recording from finished.
+  The component's own token description claimed "the fill alone carries the state".
+- **Practice does not rewrite the run.** 07a re-entered the ordinary session flow, so a
+  clean practice pass overwrote the same outcome with the same bucket and the Recap came
+  back byte-identical: a student did the work the app recommended and nothing it showed
+  her changed. Practice is a flag on the run now, `recordOutcome` leaves the record
+  alone while it is set, and 01 Idle says "Practice · <term>" instead of borrowing the
+  session's "4/4 · last one".
+- **The typed turn is not the flatter version.** It rendered the question as one flat
+  white string and had no mascot at all, against voice-ux's "an equal path, not a
+  downgrade". It gets Knowie and the accented term, like every voice screen.
+- **`session/blank` keeps the ring and the fraction.** It dropped both, so saying "I
+  don't know this one" also cost the student the only answer on screen to how far along
+  they were.
+- **`BottomSheet` is labelled by its heading**, not by a second copy of the same string
+  announced a beat after it. And `useFocusTrap` no longer pretends to restore focus: every
+  sheet here lives on its own route, so the trigger has already unmounted and it was
+  restoring `<body>` to `<body>`. An honest no-op beats a convincing one.
+- **The scaffold's documentation matches the build.** Three surfaces said 120/620 —
+  ScreenShell's header, its Storybook doc, and the tokens file — while it has rendered
+  136/570 since 2026-09-22, and a dead `bottomContent.height` token was still emitted
+  with nothing consuming it. Corrected and removed.
+- Smaller: "Continue" on 05b, which alone read "Next question" for the same call; a real
+  glyph on the offline snackbar instead of the placeholder square.
+
+**Two findings left open on purpose, both the designer's call.** Three independent
+reports now say the typed-by-choice XP reduction contradicts voice-ux Principle 5, which
+puts "can't speak right now — library, shared room, on a bus" in the same bucket as
+"physically can't speak": a student who types by choice pays 7 where speaking pays 10,
+is filed under Unaided anyway, and is never told. And `sureWrong: 0` still means "Sure"
+strictly dominates. Both are recorded decisions and neither was changed.
+
 Added 2026-09-24, closing the rest of eval/scorecard-06.md:
 
 - **The Recap's action row has fixed positions.** Both the label and the variant used to

@@ -1,19 +1,12 @@
 'use client'
 
+import { useEffect } from 'react'
+
 import { useRouter } from 'next/navigation'
 import { openSheet } from '@/lib/navigation'
 import { actionRowClass, AppBar, Button, ButtonIcon, MascotSlot, ScreenShell, StatChip } from '@/components'
 import { CloseIcon, EyeIcon } from '@/components/icons'
-import {
-  Bucket,
-  getTerm,
-  sessionTotals,
-  shuffledFirstTerm,
-  startSession,
-  TOTAL_TERMS,
-  useSession,
-  XP,
-} from '@/lib/session'
+import { Bucket, getTerm, sessionTotals, setPractising, shuffledFirstTerm, startSession, TOTAL_TERMS, useSession, XP } from '@/lib/session'
 import styles from './recap.module.css'
 
 // 07 Recap — Figma frame "07 Recap (refreshed)" (15672:24456).
@@ -56,6 +49,11 @@ export default function RecapPage() {
   // useSession wraps sessionStorage in useSyncExternalStore: a server snapshot means
   // no hydration mismatch, and no setState-in-effect.
   const state = useSession()
+  // Arriving at the summary ends any practice round. Practice is a detour from this
+  // screen and returns to it; leaving the flag set would silence the next real run.
+  useEffect(() => {
+    setPractising(false)
+  }, [])
 
   const outcomes = state.outcomes
   const totals = sessionTotals(state)

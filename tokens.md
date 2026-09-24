@@ -369,7 +369,7 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ## Component tokens
 
-`component.*` — 43 tokens
+`component.*` — 42 tokens
 
 > Component tokens exist only when a component's bindings actually branch by state or variant in a way that benefits from its own indirection layer between it and the semantic tokens, not as documentation-only aliases for a value that never changes. micButton is the only entry here on purpose: its four states each pair with a different semantic token, and these tokens are the real thing its Figma variables are bound to, not a restatement of them. chatBubble and hintCard never branch, they bind straight to semantic tokens with nothing in between, so a component.chatBubble.* or component.hintCard.* entry here would just be a second name for a value already named once. optionRow does branch by state the same way micButton does, four variants, four different fills, but its Figma variants bind straight to the semantic tokens directly rather than through a component-specific layer. That's an inconsistency with micButton's pattern, not a mistake exactly, treat micButton's indirection layer as the older, legacy approach rather than the template: an indirection layer that never diverges from what it aliases is upkeep with no payoff. Don't add one to a new component by default. Add one only when there's a concrete reason a component's own token might need to move independently of the semantic token it currently matches.
 
@@ -381,7 +381,6 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 | `component.button.inlinePrimaryMinWidth` | `157` |  | Minimum width for a primary that shares a row with a filling dismissal. The Quiz complete frame (15672:24061) fixes its 'Prove it' at 157 while 'Not now' flexes; letting the primary hug shrank it to 109 and the row read as a text link beside a small pill. |
 | `component.scaffold.panelHeader.height` | `48` |  | Status-bar region at the top of every screen. A literal: 48 here is the iOS status-bar area, unrelated to size.primitive.space.1200 (a spacing step) or spacing.semantic.tapTarget (a hit-area floor, which its own description says is not a layout rhythm value). |
 | `component.scaffold.topNavigation.height` | `56` |  | Region holding the appBar and the session fraction. A literal: component.button.l.height is also 56, but aliasing across components is how a value silently changes for the wrong reason. |
-| `component.scaffold.bottomContent.height` | `120` |  | The action zone at the foot of a screen. A literal: size.primitive.illustration.1500 is also 120, but that is an illustration box and a footer region is not one. component.micButton.diameter does alias it, legitimately, because a micButton genuinely is a 120 illustration-sized circle. |
 | `component.scaffold.bottomSheetOnly.height` | `34` |  | Home-indicator region, and the slot a bottom sheet occupies on its own branch screen. No primitive of this value exists. |
 | `component.scaffold.micRegionHeight` | `200` |  | The fixed region the mic sits in at the foot of middleContent, on every voice screen. 120 for the control plus 40 clear above and below. It exists because the mic used to sit at EIGHT different heights and moved 91px on the very tap that starts recording — the content above absorbs the difference now, and the control does not move under the finger. |
 | `component.scaffold.scrollFadeHeight` | `40` |  | Height of the fade at the foot of a content region that overflows. Four screens sliced a row mid-height with no cue that more existed; a half-row is not an affordance. |
@@ -390,8 +389,8 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 | `component.micButton.idle.glyph` | `{color.semantic.text.primary}` | `#F4F2FF` | Idle mic circle icon color. |
 | `component.micButton.listening.fill` | `{color.semantic.brand.bold}` | `#9178E6` | Listening mic circle fill; the pulsing ring on top is additive motion, not load-bearing, so it still reads with reduced motion on. |
 | `component.micButton.listening.glyph` | `{color.semantic.brand.onBold}` | `#0E0A18` | Listening mic circle icon color. |
-| `component.micButton.captured.fill` | `{color.semantic.brand.bold}` | `#9178E6` | Captured/ready-to-send mic circle fill. |
-| `component.micButton.captured.glyph` | `{color.semantic.brand.onBold}` | `#0E0A18` | Captured mic circle icon color. Same fill as captured.fill (brand.bold), so it takes the same contrast pairing as listening.glyph. |
+| `component.micButton.captured.fill` | `{color.semantic.feedback.success.bold}` | `#00C386` | Captured, the take held for review. Its own colour as of 2026-09-24. It aliased brand.bold, the same value as listening.fill, and under prefers-reduced-motion the pulse ring is display:none — so Listening and Captured rendered pixel-identically and the only thing separating 'recording right now' from 'finished' was an invisible aria attribute. This component's own $description claims 'the fill alone carries the state, so the rings can stop entirely under reduced motion without the screen becoming ambiguous'; that was untrue while two states shared a fill. Same correction paused.fill already had on 2026-09-21, for the same reason. |
+| `component.micButton.captured.glyph` | `{color.semantic.feedback.success.onBold}` | `#0A1F18` | Captured mic circle icon color. Same fill as captured.fill (brand.bold), so it takes the same contrast pairing as listening.glyph. |
 | `component.micButton.paused.fill` | `{color.semantic.interactive.secondary}` | `#FFFFFF1A` | Paused mic circle fill. Added 2026-09-21 after a render check found Listening and Paused identical: the control kept the listening fill and the pulse ring kept animating while the caption said stopped. A paused recorder must not look like a running one. |
 | `component.micButton.paused.glyph` | `{color.semantic.text.primary}` | `#F4F2FF` | Paused mic circle icon colour, on the quieter paused fill. |
 | `component.micButton.disabled.fill` | `{color.semantic.interactive.disabled}` | `#FFFFFF1A` | Disabled mic circle fill, for permission-denied or mic-unavailable states. |
@@ -421,4 +420,4 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ---
 
-321 tokens across 10 groups.
+320 tokens across 10 groups.

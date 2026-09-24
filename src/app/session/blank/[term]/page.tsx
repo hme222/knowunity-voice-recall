@@ -11,9 +11,11 @@ import {
   MascotSlot,
   MicButton,
   ScreenShell,
+  ProgressIndicator,
+  SessionFraction,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { getTerm, useSticky } from '@/lib/session'
+import { getTerm, progressFor, revisitsPending, TOTAL_TERMS, useSticky } from '@/lib/session'
 import styles from '../../interrupt.module.css'
 
 // A genuinely blank term — not a near-miss, nothing at all. This answers the Design
@@ -49,12 +51,28 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
   return (
     <ScreenShell
       topNavigation={
-        <AppBar
-          variant="leftIconButtonOnly"
-          leftIcon={<CloseIcon />}
-          leftLabel="Leave"
-          onLeft={() => goToExit(router)}
-        />
+        // The ring and the fraction, as on every other session screen. This one dropped
+        // both, so the moment a student said "I don't know this one" they also lost the
+        // only answer on screen to "how far am I and how many are left". Every other
+        // departure from this header in the app is annotated as deliberate; this one was
+        // not, because it was an oversight.
+        <>
+          <AppBar
+            variant="leftIconButtonOnly"
+            leftIcon={<CloseIcon />}
+            leftLabel="Leave"
+            onLeft={() => goToExit(router)}
+          >
+            <ProgressIndicator
+              progress={progressFor(index)}
+              thickness="16"
+              label="Questions"
+              current={index}
+              total={TOTAL_TERMS}
+            />
+          </AppBar>
+          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
+        </>
       }
       bottomContent={
         <div className={styles.actions}>

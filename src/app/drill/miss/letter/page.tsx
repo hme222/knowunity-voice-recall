@@ -1,8 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { micRegionClass, Button, Chips, MascotSlot, MicButton, RecallResult, ScreenShell } from '@/components'
-import { DRILL_MISSED_WORD, STUMBLES } from '@/lib/session'
+import { micRegionClass, Button, Chips, HintCard, MascotSlot, MicButton, RecallResult, ScreenShell } from '@/components'
+import { DRILL_MISSED_FIRST_LETTER, DRILL_MISSED_WORD, DRILL_PARTIAL, STUMBLES } from '@/lib/session'
 import styles from '../../drill.module.css'
 import { Cue } from '../../Cue'
 import { DrillBar } from '../../DrillBar'
@@ -49,7 +49,18 @@ export default function DrillLetterPage() {
         {/* RecallResult state="Neutral" — promoted from the inline card that three
             drill screens were duplicating. The drill is practice, not scored
             performance, so a miss here is not painted as an error. */}
-        <RecallResult className={styles.fullWidth} state="Neutral" title={STUMBLES.second.copy} transcript="Starts with" />
+        {/* The take, quoted as the take. This card's Neutral label is "You said", and
+            it used to carry the string "Starts with" — so the screen rendered
+            "You said / Starts with", attributing a hint to the student. */}
+        <RecallResult className={styles.fullWidth} state="Neutral" title={STUMBLES.second.copy} transcript={`“${DRILL_PARTIAL}”`} />
+        {/* The nudge belongs in the hint card, with the letter it promises. "Starts
+            with" appeared on screen with no letter after it. */}
+        <HintCard
+          className={styles.fullWidth}
+          label="Starts with"
+          tone="missingWord"
+          body={DRILL_MISSED_FIRST_LETTER}
+        />
         {/* Drawn blank, same as the thinning passes. */}
         <Cue className={[styles.cueBody, styles.fullWidth].join(' ')} text={`…every bond’s ${blanked} are split evenly…`} />
         <div className={micRegionClass}>

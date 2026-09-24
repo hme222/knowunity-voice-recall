@@ -9,6 +9,7 @@ import {
   AppBar,
   Button,
   ChatBubble,
+  HintCard,
   MascotSlot,
   MicButton,
   ProgressIndicator,
@@ -16,7 +17,7 @@ import {
   SessionFraction,
 } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { ensureSessionStarted, getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS, useSticky } from '@/lib/session'
+import { ensureSessionStarted, getTerm, isPractising, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS, useSession, useSticky } from '@/lib/session'
 import styles from './idle.module.css'
 
 // 01 Idle / Commit — Figma frame "01 Idle (refreshed 2)" (15672:26255).
@@ -27,12 +28,23 @@ function IdleScreen({ index }: { index: number }) {
   const router = useRouter()
   // `door` marks a run that arrived from an entry door rather than from the chip. It
   // rides the whole take so the run can land on the door's own result.
-  const door = useSearchParams().get('door')
-  const doorQuery = door ? `?door=${door}` : ''
+  const params = useSearchParams()
+  const door = params.get('door')
+  // A retry after a hint arrives HERE rather than straight into a live mic. The hint
+  // rides along so it is still on screen while the student composes, and the attempt
+  // number so the ladder does not reset.
+  const retryAttempt = params.get('attempt')
+  const hinted = params.get('hinted') === '1'
+  const forward = new URLSearchParams()
+  if (door) forward.set('door', door)
+  if (retryAttempt) forward.set('attempt', retryAttempt)
+  if (hinted) forward.set('hinted', '1')
+  const onward = forward.toString() ? `?${forward}` : ''
   const current = getTerm(index)
   // voice-ux.md §3: a denied mic stays denied for the session. It used to survive one
   // turn — /text/turn then Continue handed the student straight back to a mic screen.
   const sticky = useSticky()
+  const practising = isPractising(useSession())
   useEffect(() => {
     if (sticky) router.replace(`/text/turn?term=${index}&sticky=1`)
   }, [sticky, index, router])
@@ -75,7 +87,14 @@ function IdleScreen({ index }: { index: number }) {
               total={TOTAL_TERMS}
             />
           </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
+          {/* A practice round says so. It used to render "4/4 · last one" — the header
+              of the session's final question — on a detour the student took from the
+              summary, so remedial work was dressed as the run it was remediating. */}
+          {practising ? (
+            <SessionFraction label={`Practice · ${current.name}`} />
+          ) : (
+            <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
+          )}
         </>
       }
       bottomContent={
@@ -120,11 +139,14 @@ function IdleScreen({ index }: { index: number }) {
           titleAccent={current.name}
           body={current.prompt}
         />
+        {/* The hint stays on screen for the retry it was given for. It used to vanish at
+            the exact moment the student acted on it. */}
+        {hinted && <HintCard className={styles.bubble} body={current.hint} />}
         {/* One fixed mic region, on every voice screen. The control used to sit at
             eight different heights and jump 91px on the very tap that starts
             recording. sprint-context.md, 2026-09-22. */}
         <div className={micRegionClass}>
-          <MicButton state="Idle" onClick={() => router.push(`/session/recording/${index}${doorQuery}`)} />
+          <MicButton state="Idle" onClick={() => router.push(`/session/recording/${index}${onward}`)} />
         </div>
       </div>
     </ScreenShell>

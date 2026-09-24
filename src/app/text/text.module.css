@@ -46,3 +46,9 @@
   from { transform: scale(0.98); }
   to { transform: scale(1.02); }
 }
+
+/* The mascot is a fixed illustration box in a column that stretches its children, so
+   without this it spans the margin instead of sitting over the question. */
+.mascotCentred {
+  align-self: center;
+}

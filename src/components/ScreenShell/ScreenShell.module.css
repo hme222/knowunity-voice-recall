@@ -1,7 +1,7 @@
 /* Mirrors the Figma `scaffold` component set (variant size=iPhone 13), whose regions
-   are Panel Header 48 / topNavigation 56 / middleContent 620 / bottomContent 120 /
+   are Panel Header 48 / topNavigation 56 / middleContent 570 / actionZone 136 /
    bottomSheetOnly 34 = 844. The four chrome regions are fixed from tokens; the middle
-   flexes, so at an 844-tall viewport it computes to 620 and matches the frames, and at
+   flexes, so at an 844-tall viewport it computes to 570, and at
    any other height it absorbs the difference rather than the shell scrolling itself.
    `flex: 1` on .middle is a sanctioned exception — see SPEC.md § Conventions. */
 
@@ -75,7 +75,16 @@
   height: calc(var(--component-scaffold-mic-region-height) * 1px);
   /* Never smaller than the control plus a step of breathing room. */
   min-height: calc((var(--component-mic-button-diameter) + var(--size-primitive-space-400)) * 1px);
-  flex-shrink: 1;
+  /* DOES NOT SHRINK. It used to, so that a short viewport could reclaim the clear space
+     around the control — but shrink is not viewport-aware, and the drill's taller stack
+     (mascot + meter + term pill + cue card) claimed it at full height too. Measured at
+     390x844: the mic sat at 466 on every session screen and on /drill/recording, and at
+     478, 488 and 526 on /drill/pass/4, /drill/miss/letter and /drill/pass/1 — four
+     heights for the one control this region exists to pin. `position: sticky` below is
+     what actually protects a short window: the content above scrolls and the mic stays
+     against the foot of the region either way, which is the behaviour the shrink was
+     reaching for without the cost of moving on a normal screen. */
+  flex-shrink: 0;
   margin-top: auto;
   /* PINNED to the foot of the content region. At 844 there is slack and this changes
      nothing; on a shorter screen — 390x667 is an iPhone SE, not a hypothetical — the

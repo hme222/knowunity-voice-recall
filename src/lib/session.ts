@@ -336,6 +336,23 @@ export const DRILL_RUNGS: DrillRung[] = [
  */
 export const DRILL_MISSED_WORD = 'electrons'
 
+/**
+ * What the drill's stumbled take actually produced — the definition with the missed
+ * word simply absent.
+ *
+ * DD 07 used to hardcode a different string with an invented "um…" in it, while
+ * /drill/captured showed the student the CLEAN transcript and had them tap "Looks
+ * right". So the drill showed you your words, had you confirm them, then quoted you
+ * back saying something worse that you never said, and marked you down on it. The core
+ * loop had the same defect and was fixed on 2026-09-23; the drill kept its own copy.
+ * One string, used by the screen that shows the take and by the screen that judges it.
+ */
+export const DRILL_PARTIAL =
+  "It's the charge on an atom if you split every bond's… evenly between the two atoms."
+
+/** The first letter of the missed word, for DD 07b's nudge. */
+export const DRILL_MISSED_FIRST_LETTER = DRILL_MISSED_WORD[0]
+
 export const DRILL_TOTAL_RUNGS = DRILL_RUNGS.length
 
 export function drillRung(step: number): DrillRung | undefined {
@@ -348,9 +365,13 @@ export function drillRung(step: number): DrillRung | undefined {
  * per session.
  */
 export const STUMBLES = {
+  // The verdict escalates with the rung. All three used to be the same literal string,
+  // so the one piece of chrome built to announce severity said the same sentence from
+  // the first gentle nudge to the guaranteed-completable echo — the copy below escalated
+  // three times and the chip above it never moved.
   first: { verdict: '\u2713 Partially correct, one missed', copy: "One word off. It's below, then take it again." },
-  second: { verdict: '\u2713 Partially correct, one missed', copy: "Still tricky? Here's a nudge." },
-  third: { verdict: '\u2713 Partially correct, one missed', copy: "Let's say this one together." },
+  second: { verdict: '\u2713 Same word again', copy: "Still tricky? Here's a nudge." },
+  third: { verdict: '\u2713 Let\u2019s do this one together', copy: "Let's say this one together." },
 } as const
 
 // ---------------------------------------------------------------------------
@@ -402,6 +423,16 @@ export type SessionState = {
    * Recap can compute during render without calling Date.now().
    */
   lastAt: number
+  /**
+   * True while the student is in a practice round from 07a, not the graded session.
+   *
+   * "Practice what I missed" used to re-enter the ordinary session flow, so a clean
+   * practice pass rewrote the same outcome with the same bucket and the Recap came back
+   * byte-identical — a student did the remedial work the app recommended and nothing it
+   * showed her changed. Practice is practice: it does not rewrite the run, and it says
+   * so rather than dressing itself as the last question of the session.
+   */
+  practising?: boolean
   /**
    * Terms the student has been SHOWN a hint for, whatever happened afterwards.
    *
@@ -509,6 +540,18 @@ export function markHinted(index: number) {
 /** Whether a hint was ever shown for this term. Pure; pass the state from useSession(). */
 export function wasHinted(state: SessionState, index: number): boolean {
   return Boolean(state.hinted?.includes(index))
+}
+
+/** Enter or leave a practice round from 07a. */
+export function setPractising(on: boolean) {
+  const state = readSession()
+  if (Boolean(state.practising) === on) return
+  write({ ...state, practising: on || undefined })
+}
+
+/** Whether the student is practising rather than running the graded set. */
+export function isPractising(state: SessionState = readSession()): boolean {
+  return Boolean(state.practising)
 }
 
 export function ensureSessionStarted() {
@@ -633,6 +676,9 @@ export function recordOutcome(
 ): TermOutcome {
   const state = readSession()
   const prior = state.outcomes.find((o) => o.index === index)
+  // A practice round does not rewrite the run it is practising. Returning the existing
+  // outcome keeps every caller's contract without touching the record.
+  if (state.practising && prior) return prior
   const tap = state.confidence?.[index]
   const wasSure = tap?.wasSure ?? opts?.wasSure ?? prior?.wasSure
   // A term the student was shown a hint for cannot come back Unaided, whatever route it
@@ -801,6 +847,20 @@ export function shownAnswer(index: number, verdict: Verdict): string {
 }
 
 /** The typed answer if there is one, else the term's canned transcript. */
+/**
+ * The student's own typed draft for a term, or '' if they have not typed one.
+ *
+ * Distinct from `answerFor`, which falls back to the canned transcript — correct for
+ * "show what was said", catastrophic for seeding an input. Reusing `answerFor` to keep
+ * a draft across a route change opened the typing screen PRE-FILLED WITH THE CORRECT
+ * ANSWER on a recall app, because with no draft stored the fallback fired. A student
+ * in testing read it as the app having answered for her and Send passing it off as her
+ * own. Anything that seeds an input reads this, never `answerFor`.
+ */
+export function typedDraft(index: number): string {
+  return readSession().typed?.[index]?.trim() ?? ''
+}
+
 export function answerFor(index: number): string {
   const typed = readSession().typed?.[index]
   if (typed && typed.trim()) return typed.trim()

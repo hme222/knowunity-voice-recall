@@ -90,12 +90,19 @@ function MissScreen({ index }: { index: number }) {
               size="M"
               onClick={() => router.push(`/session/reveal/${index}`)}
             />
+            {/* Try again goes to an IDLE beat, not a live mic. It used to push straight
+                to /session/recording, so the timer was already running when the screen
+                arrived — no chance to gather yourself right after being told you were
+                wrong, and the hint you were about to use vanished with the screen. Two
+                students in testing named it as the moment they would put the phone
+                down, and one lost a 19-second take to it, mostly silence. 01 Idle
+                carries the hint through and starts when the student taps. */}
             {step?.canRetry && (
               <Button
                 CTA="Try again"
                 variant="Primary"
                 size="M"
-                onClick={() => router.push(`/session/recording/${index}?attempt=${step.nextAttempt}&hinted=1`)}
+                onClick={() => router.push(`/session/idle/${index}?attempt=${step.nextAttempt}&hinted=1`)}
               />
             )}
           </div>

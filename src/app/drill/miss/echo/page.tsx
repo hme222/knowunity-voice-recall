@@ -1,8 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { micRegionClass, Button, Chips, MascotSlot, MicButton, RecallResult, ScreenShell } from '@/components'
-import { DRILL_MISSED_WORD, STUMBLES } from '@/lib/session'
+import { micRegionClass, Button, Chips, HintCard, MascotSlot, MicButton, RecallResult, ScreenShell } from '@/components'
+import { DRILL_MISSED_WORD, DRILL_PARTIAL, STUMBLES } from '@/lib/session'
 import styles from '../../drill.module.css'
 import { DrillBar } from '../../DrillBar'
 
@@ -47,7 +47,15 @@ export default function DrillEchoPage() {
         {/* RecallResult state="Neutral" — promoted from the inline card that three
             drill screens were duplicating. The drill is practice, not scored
             performance, so a miss here is not painted as an error. */}
-        <RecallResult className={styles.fullWidth} state="Neutral" title={STUMBLES.third.copy} transcript={`“${DRILL_MISSED_WORD}”`} />
+        {/* Same correction as DD 07b: this card is labelled "You said", so putting the
+            word Knowie is ASKING for in it told the student they had already said it. */}
+        <RecallResult className={styles.fullWidth} state="Neutral" title={STUMBLES.third.copy} transcript={`“${DRILL_PARTIAL}”`} />
+        <HintCard
+          className={styles.fullWidth}
+          label="Say this with me"
+          tone="missingWord"
+          body={DRILL_MISSED_WORD}
+        />
         <div className={micRegionClass}>
           {/* Records, then advances. This is the rung whose whole point is saying the
               word out loud with Knowie, and it used to complete without a take. */}

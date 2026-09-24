@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useId, useRef, type ReactNode } from 'react'
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon'
 import { CloseIcon } from '../icons'
 import { useFocusTrap } from '../../lib/useFocusTrap'
@@ -26,6 +26,7 @@ export type BottomSheetProps = {
 }
 
 export function BottomSheet({ Title, subtitle, children, onDismiss, className }: BottomSheetProps) {
+  const titleId = useId()
   const sheetRef = useRef<HTMLDivElement>(null)
 
   // A dialog whose only dismissal was a click on a presentational scrim could not be
@@ -54,12 +55,17 @@ export function BottomSheet({ Title, subtitle, children, onDismiss, className }:
         className={[styles.sheet, className].filter(Boolean).join(' ')}
         role="dialog"
         aria-modal="true"
-        aria-label={Title}
+        // Labelled BY the visible heading, not a second copy of the same string. With
+        // aria-label AND an <h2> carrying identical text, a screen reader announced
+        // "dialog, What you said" and then "heading level 2, What you said" a beat
+        // later. Snackbar already solved this for its own duplicate chip; the fix had
+        // not reached here.
+        aria-labelledby={titleId}
         onClick={(e) => e.stopPropagation()}
       >
         <span className={styles.grabber} aria-hidden="true" />
         <div className={styles.titleRow}>
-          <h2 className={styles.title}>{Title}</h2>
+          <h2 id={titleId} className={styles.title}>{Title}</h2>
           {onDismiss && (
             <ButtonIcon
               variant="Tertiary"

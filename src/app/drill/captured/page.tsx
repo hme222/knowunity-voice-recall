@@ -3,7 +3,7 @@
 import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button, MascotSlot, RecallResultCaptured, ScreenShell, StrengthMeter } from '@/components'
-import { drillRung, DRILL_TERM } from '@/lib/session'
+import { DRILL_PARTIAL, DRILL_TERM, drillRung } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
 
@@ -51,7 +51,10 @@ function DrillCaptured() {
         <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
         <RecallResultCaptured
           title="Here&rsquo;s what I heard. Send it, or say it again."
-          transcript={DRILL_TERM.transcript}
+          // Step 2 is the scripted stumble, so this shows the take that screen will quote.
+          // It used to show the clean transcript, have the student tap "Looks right",
+          // and then DD 07 quoted them saying something worse.
+          transcript={step === 2 ? DRILL_PARTIAL : DRILL_TERM.transcript}
           /* No `tag` chip. The action zone below already offers "Say it again" and
              "Looks right" — the frame's pair — so an in-card chip repeating one of them
              put two controls with the same label on one screen. One action, one

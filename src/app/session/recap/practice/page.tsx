@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { returnBack } from '@/lib/navigation'
 import { actionRowClass, AppBar, Button, ChatBubble, OptionRow, ScreenShell } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { DRILL_TERM, getTerm, useSession } from '@/lib/session'
+import { DRILL_TERM, getTerm, setPractising, useSession } from '@/lib/session'
 import styles from '../recap.module.css'
 
 // 07a Practice what I missed — Figma frame "07a Practice what I missed — choose how"
@@ -49,16 +49,16 @@ export default function PracticePage() {
               which is what it did. */}
           <div className={actionRowClass}>
             {canDrill && (
-              <Button CTA="Drill it out loud" variant="Secondary" size="M" onClick={() => router.push('/drill/intro')} />
+              <Button CTA="Drill it out loud" variant="Secondary" size="M" onClick={() => { setPractising(true); router.push('/drill/intro') }} />
             )}
             <Button
               CTA="Say it back again"
               variant="Secondary"
               size="M"
-              onClick={() => router.push(`/session/idle/${selected ?? 1}`)}
+              onClick={() => { setPractising(true); router.push(`/session/idle/${selected ?? 1}`) }}
             />
           </div>
-          <Button CTA="Not now" variant="Tertiary" size="S" fullWidth onClick={() => router.push('/session/recap')} />
+          <Button CTA="Not now" variant="Tertiary" size="S" fullWidth onClick={() => { setPractising(false); router.push('/session/recap') }} />
         </div>
       }
     >

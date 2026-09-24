@@ -48,7 +48,9 @@ export default function RepeatPage({ params }: { params: Promise<{ term: string 
         </>
       }
       bottomContent={
-        <Button CTA="Next question" variant="Primary" size="M" fullWidth onClick={() => router.push(nextAfter(index))} />
+        // "Continue", as on 04 Pass and 06b — the same nextAfter(index) call, and these
+        // screens are near-twins. It read "Next question" here alone.
+        <Button CTA="Continue" variant="Primary" size="M" fullWidth onClick={() => router.push(nextAfter(index))} />
       }
     >
       <div className={styles.body}>

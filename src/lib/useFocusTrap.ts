@@ -24,7 +24,15 @@ export function useFocusTrap(ref: RefObject<HTMLElement | null>) {
   useEffect(() => {
     const root = ref.current
     if (!root) return
-    const returnTo = document.activeElement as HTMLElement | null
+    // NO focus restore on unmount.
+    //
+    // It used to capture document.activeElement here and refocus it on cleanup, which
+    // reads correctly and does nothing: every sheet in this app lives on its own route
+    // (session/transcript/[bucket], drill/complete/round, permission/prompt), so by the
+    // time this mounts the triggering control has already unmounted and activeElement
+    // is <body>. Restoring <body> to <body> is not a restore. Honest no-op beats a
+    // convincing one — a real fix has to hand the trigger's identity across the
+    // navigation, which is the routing layer's job, not this hook's.
 
     const first = root.querySelector<HTMLElement>(FOCUSABLE)
     ;(first ?? root).focus()
@@ -48,7 +56,6 @@ export function useFocusTrap(ref: RefObject<HTMLElement | null>) {
     document.addEventListener('keydown', onKey, true)
     return () => {
       document.removeEventListener('keydown', onKey, true)
-      returnTo?.focus?.()
     }
   }, [ref])
 }

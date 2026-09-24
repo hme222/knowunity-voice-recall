@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { goToExit } from '@/lib/navigation'
 import { Button, MascotSlot, ScreenShell, Snackbar } from '@/components'
+import { RefreshGlyphIcon } from '@/components/icons'
 import styles from '../interrupt.module.css'
 
 // Network dropped mid-take. The take is held and retried on reconnect rather than
@@ -56,7 +57,7 @@ function OfflineScreen() {
           <h1 className="screenTitleHeading">Saving your answer</h1>
           <p className="screenTitleCaption">You’ve lost connection, so this one is waiting rather than lost. It’ll send as soon as you’re back.</p>
         </div>
-        <Snackbar Text="No connection — your answer is held." variant="Error" chipText="Waiting" />
+        <Snackbar Text="No connection — your answer is held." variant="Error" icon={<RefreshGlyphIcon />} chipText="Waiting" />
       </div>
     </ScreenShell>
   )
