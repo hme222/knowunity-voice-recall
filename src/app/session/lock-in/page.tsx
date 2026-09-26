@@ -106,6 +106,14 @@ function LockInScreen() {
       }
     >
       <div className={styles.body}>
+        {/* Mascot FIRST, then the badge and the bubble — the order every sibling in this
+            family uses (01 Idle, blank, reveal, 06b Lock It In second). 06 was the one
+            screen that put Knowie underneath the text, which is the exact arrangement
+            01 Idle's own comment describes as a bug it already fixed: "the build had the
+            bubble first and the mascot pushed to the bottom, which left a 170px hole
+            between them and put Knowie beside the mic instead of over the question."
+            Nothing marked 06 as an intentional exception, because it was not one. */}
+        <MascotSlot size="2XL" expression="determined" />
         <div className={styles.badge}>
           <Chips Text="Back for round two" size="S" color="Primary" active showLeftIcon={false} showRightIcon={false} />
         </div>
@@ -114,7 +122,6 @@ function LockInScreen() {
           title={`${term.name} was tricky. Want to lock it in?`}
           body={"Try the full answer once more, unaided this time. Totally optional."}
         />
-        <MascotSlot size="2XL" expression="determined" />
         {/* One fixed mic region, on every voice screen. The control used to sit at
             eight different heights and jump 91px on the very tap that starts
             recording. sprint-context.md, 2026-09-22. */}

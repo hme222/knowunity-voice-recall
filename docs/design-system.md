@@ -753,10 +753,14 @@ staying a theoretical binding.
 > binding.
 >
 > The cost is real and worth naming rather than hiding: `#F5B53D` now
-> serves the PRO badge, the due-signal urgency border and a recall
-> verdict, with nothing but context telling them apart. That is a
-> consequence of frame fidelity, and it is what to revisit if the
-> palette is reopened — not by recolouring the verdict.
+> serves the PRO badge, the due-signal urgency border, a recall verdict,
+> and — found 2026-09-26, and the reason this list says four rather than
+> three — `pickerRow`'s "Worth a drill" pill, which had been binding
+> `feedback.warning.bold` since it was built with nothing anywhere
+> recording it. Nothing but context tells the four apart. Three are
+> frame-bound; the fourth is now written into that token's own
+> `$description` rather than left as drift. This is what to revisit if
+> the palette is reopened — not by recolouring the verdict.
 
 **`progressIndicator`'s ring is confirmed to pair with a plain "N/4"
 text label next to it, not stand alone.** `IMG_7538` in the App
