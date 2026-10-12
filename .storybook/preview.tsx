@@ -38,6 +38,9 @@ const preview: Preview = {
     viewport: {
       options: {
         mobile390: { name: 'iPhone 13 (390)', styles: { width: '390px', height: '844px' } },
+        // The short phone the designer tests on. Where content stops fitting and
+        // ScreenShell's give-way takes Knowie out (added 2026-10-09).
+        mobileShort: { name: 'Short phone (390×668)', styles: { width: '390px', height: '668px' } },
       },
     },
 

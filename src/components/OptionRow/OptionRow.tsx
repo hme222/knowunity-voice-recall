@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes } from 'react'
+import { CheckIcon } from '../icons'
 import styles from './OptionRow.module.css'
 
 // Mirrors the Figma component set `optionRow` (15651:10687): one `state` variant, one `label` text.
@@ -35,6 +36,13 @@ export function OptionRow({ label, state = 'Default', inGroup = false, className
       aria-disabled={verdict || undefined}
     >
       <span className={styles.label}>{label}</span>
+      {/* Selected is not colour alone (designer, 2026-10-12, from the critic panel): a
+          check mark carries it too. */}
+      {state === 'Selected' && (
+        <span className={styles.check} aria-hidden="true">
+          <CheckIcon />
+        </span>
+      )}
     </button>
   )
 }

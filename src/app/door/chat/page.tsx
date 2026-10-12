@@ -2,13 +2,13 @@
 
 import { useRouter } from 'next/navigation'
 import {
-  actionRowClass,
   micRegionClass,
   AppBar,
   Button,
   ChatBubble,
   MascotSlot,
   MicButton,
+  MicCaption,
   ProgressIndicator,
   ScreenShell,
 } from '@/components'
@@ -27,21 +27,20 @@ export default function ChatDoor() {
 
   return (
     <ScreenShell
+      mic={
+        <div className={micRegionClass}>
+          <MicButton state="Idle" onClick={() => router.push(proveItHref('chat'))} />
+          {/* BELOW the mic, out of the flow — see the exam-plan door. */}
+          <MicCaption body="Tap to answer" />
+        </div>
+      }
       topNavigation={
-        <AppBar variant="leftIconButtonOnly" leftLabel="Back" onLeft={() => router.push('/home')}>
+        <AppBar variant="leftAndRightButton" leftLabel="Back" onLeft={() => router.push('/home/unlock')} rightText="Skip" onRightText={() => router.push('/home/unlock')}>
           <ProgressIndicator progress="25" thickness="16" label="Chat" current={1} total={4} />
         </AppBar>
       }
       bottomContent={
-        <div className={actionRowClass}>
-          <Button
-            CTA="Type instead"
-            variant="Secondary"
-            size="M"
-            onClick={() => router.push('/text/turn?term=1')}
-          />
-          <Button CTA="Skip" variant="Tertiary" size="M" onClick={() => router.push('/home/unlock')} />
-        </div>
+        <Button CTA="Type instead" variant="Secondary" size="M" fullWidth onClick={() => router.push('/text/turn?term=1')} />
       }
     >
       <div className={styles.body}>
@@ -51,17 +50,12 @@ export default function ChatDoor() {
         </div>
         <ChatBubble
           showTitle
-          title="Chat, content-aware"
-          body="Placeholder — prefilled off a real conversation."
+          title="You were just asking about formal charge"
+          body="Want to say it back in your own words? It's the quickest way to know it stuck."
         />
         {/* A mic, in the shared region, like the exam-plan door. It was a Secondary
             Button — two doors offering the same thing two ways, and the one that opens
             a voice feature did it without showing a mic. */}
-        <div className={[micRegionClass, styles.micWithCaption].join(' ')}>
-          <MicButton state="Idle" onClick={() => router.push(proveItHref('chat'))} />
-          {/* BELOW the mic, out of the flow — see the exam-plan door. */}
-          <p className={styles.caption}>Tap to answer</p>
-        </div>
       </div>
     </ScreenShell>
   )

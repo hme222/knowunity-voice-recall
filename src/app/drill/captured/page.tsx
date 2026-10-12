@@ -2,8 +2,8 @@
 
 import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Button, MascotSlot, RecallResultCaptured, ScreenShell, StrengthMeter } from '@/components'
-import { DRILL_PARTIAL, DRILL_TERM, drillRung } from '@/lib/session'
+import { Button, MascotSlot, RecallResultCaptured, ScreenShell } from '@/components'
+import { drillRung, useDrillTerm } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
 
@@ -13,8 +13,9 @@ import styles from '../drill.module.css'
 
 function DrillCaptured() {
   const router = useRouter()
+  const drillTerm = useDrillTerm()
   const step = Number(useSearchParams().get('step') ?? '1')
-  const rung = drillRung(step)
+  const rung = drillRung(drillTerm, step)
 
   if (!rung) {
     router.replace('/drill/intro')
@@ -44,7 +45,6 @@ function DrillCaptured() {
       }
     >
       <div className={styles.body}>
-        <StrengthMeter fill={rung.coverage} label="How much you can say unaided" />
         {/* A review-before-sending beat, not a win — nothing has been judged yet. 02a
             Captured in the core loop is already determined, so the same beat wore two
             different faces in two flows. */}
@@ -54,7 +54,7 @@ function DrillCaptured() {
           // Step 2 is the scripted stumble, so this shows the take that screen will quote.
           // It used to show the clean transcript, have the student tap "Looks right",
           // and then DD 07 quoted them saying something worse.
-          transcript={step === 2 ? DRILL_PARTIAL : DRILL_TERM.transcript}
+          transcript={step === 2 ? drillTerm.drill.partial : drillTerm.transcript}
           /* No `tag` chip. The action zone below already offers "Say it again" and
              "Looks right" — the frame's pair — so an in-card chip repeating one of them
              put two controls with the same label on one screen. One action, one

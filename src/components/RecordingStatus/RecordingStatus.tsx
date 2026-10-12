@@ -27,11 +27,16 @@ export type RecordingStatusProps = {
 export function RecordingStatus({ seconds, paused = false, className }: RecordingStatusProps) {
   return (
     <div className={[styles.root, className].filter(Boolean).join(' ')} data-paused={paused}>
-      <span className={styles.label} role="status" aria-live="polite">
+      {/* Paused: no visible word — the mic's pause symbol is enough (designer,
+          2026-10-09). It stays for screen readers, since this is the live status and
+          the only announcement that recording stopped. */}
+      <span className={paused ? 'sr-only' : styles.label} role="status" aria-live="polite">
         {paused ? 'Paused' : 'Listening'}
       </span>
       <span className={styles.timer}>{formatElapsed(seconds * 1000)}</span>
-      <span className={styles.caption}>{paused ? 'Tap to resume' : 'Tap to pause'}</span>
+      {/* Gone while paused: the mic shows the pause symbol, which says it on its own
+          (designer, 2026-10-08). */}
+      {!paused && <span className={styles.caption}>Tap to pause</span>}
     </div>
   )
 }

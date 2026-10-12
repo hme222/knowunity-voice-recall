@@ -2,20 +2,17 @@
 
 import { use, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { goToExit } from '@/lib/navigation'
+import { SessionBar } from '../../SessionBar'
 import {
   micRegionClass,
-  AppBar,
   Button,
   ChatBubble,
   MascotSlot,
   MicButton,
+  MicCaption,
   ScreenShell,
-  ProgressIndicator,
-  SessionFraction,
 } from '@/components'
-import { CloseIcon } from '@/components/icons'
-import { getTerm, progressFor, revisitsPending, TOTAL_TERMS, useSticky } from '@/lib/session'
+import { getTerm, useSticky } from '@/lib/session'
 import styles from '../../interrupt.module.css'
 
 // A genuinely blank term — not a near-miss, nothing at all. This answers the Design
@@ -50,30 +47,23 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
 
   return (
     <ScreenShell
-      topNavigation={
-        // The ring and the fraction, as on every other session screen. This one dropped
-        // both, so the moment a student said "I don't know this one" they also lost the
-        // only answer on screen to "how far am I and how many are left". Every other
-        // departure from this header in the app is annotated as deliberate; this one was
-        // not, because it was an oversight.
-        <>
-          <AppBar
-            variant="leftIconButtonOnly"
-            leftIcon={<CloseIcon />}
-            leftLabel="Leave"
-            onLeft={() => goToExit(router)}
-          >
-            <ProgressIndicator
-              progress={progressFor(index)}
-              thickness="16"
-              label="Questions"
-              current={index}
-              total={TOTAL_TERMS}
-            />
-          </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
-        </>
+      mic={
+        <div className={micRegionClass}>
+          {/* One encouraged attempt, then the answer — voice-ux.md marks this state Must
+              and specifies exactly that. The mic used to push into the ordinary
+              recording pipeline with no marker, so a mid-length take landed on the
+              standard miss hint-ladder ("Try again", "One more go, then I'll show you
+              the answer") — a retry ladder offered to a student who has just said they
+              know none of it. It also inherited the scripted mishear, so a clean take
+              could come back "That one didn't come through" on the one screen that
+              promises nothing is scored against them. `blank=1` takes the verdict out
+              of it entirely: the take happens, then the answer. */}
+          <MicButton state="Idle" label="Say whatever you've got" onClick={() => router.push(`/session/recording/${index}?blank=1`)} />
+          {/* The encouragement moved under the mic so the question can stay on screen. */}
+          <MicCaption label="Drawing a blank?" body="Say whatever you’ve got, even half of it. Nothing here is scored." />
+        </div>
       }
+      topNavigation={<SessionBar index={index} />}
       bottomContent={
         <div className={styles.actions}>
           {/* This screen removed the typing option at the exact moment a student said
@@ -90,27 +80,14 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="determined" />
-        <ChatBubble
-          showTitle
-          title="Drawing a blank?"
-          body="Say whatever you've got — even half of it. Getting it wrong out loud sticks better than reading the answer, and nothing here is scored against you."
-        />
-        {/* One fixed mic region, on every voice screen. The control used to sit at
-            eight different heights and jump 91px on the very tap that starts
-            recording. sprint-context.md, 2026-09-22. */}
-        <div className={micRegionClass}>
-          {/* One encouraged attempt, then the answer — voice-ux.md marks this state Must
-              and specifies exactly that. The mic used to push into the ordinary
-              recording pipeline with no marker, so a mid-length take landed on the
-              standard miss hint-ladder ("Try again", "One more go, then I'll show you
-              the answer") — a retry ladder offered to a student who has just said they
-              know none of it. It also inherited the scripted mishear, so a clean take
-              could come back "That one didn't come through" on the one screen that
-              promises nothing is scored against them. `blank=1` takes the verdict out
-              of it entirely: the take happens, then the answer. */}
-          <MicButton state="Idle" label="Say whatever you've got" onClick={() => router.push(`/session/recording/${index}?blank=1`)} />
-        </div>
+        {/* `laughing`, not `determined`, from 2026-10-07 by the designer: the half-lidded
+            face read as frustrated at a student who had just said they were stuck.
+            design-system.md § Knowie expressions. */}
+        <MascotSlot size="2XL" expression="laughing" />
+        {/* The question stays in context — designer, 2026-10-08. The bubble used to be
+            replaced by the encouragement, so a student who said "I don't know this one"
+            lost sight of what "this one" was. Same bubble as 01 Idle. */}
+        <ChatBubble className={styles.bubble} showTitle title="Explain: " titleAccent={current.name} body={current.prompt} />
       </div>
     </ScreenShell>
   )

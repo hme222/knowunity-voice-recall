@@ -3,7 +3,7 @@
 import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button, ChatBubble, MascotSlot, ScreenShell } from '@/components'
-import { DRILL_TERM } from '@/lib/session'
+import { advancePractice, isPractising, useDrillTerm } from '@/lib/session'
 import styles from '../drill.module.css'
 
 // DD 00 / 00b — drill intro. Figma frames "DD 00 Entry framing (first time ever)"
@@ -17,6 +17,7 @@ import styles from '../drill.module.css'
 
 function DrillIntro() {
   const router = useRouter()
+  const drillTerm = useDrillTerm()
   const returning = useSearchParams().get('returning') === '1'
 
   return (
@@ -24,7 +25,7 @@ function DrillIntro() {
       bottomContent={
         <div className={styles.stack}>
           <Button CTA="Let’s go" variant="Primary" size="M" fullWidth onClick={() => router.push('/drill/pass/1')} />
-          <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/picker')} />
+          <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={() => router.push(isPractising() ? advancePractice() : '/picker')} />
         </div>
       }
     >
@@ -33,7 +34,7 @@ function DrillIntro() {
         {returning ? (
           <ChatBubble
             showTitle
-            title={DRILL_TERM.drillTitle ?? DRILL_TERM.title}
+            title={drillTerm.drillTitle ?? drillTerm.title}
             body="Say it, miss a word, keep going. That's the whole thing."
           />
         ) : (

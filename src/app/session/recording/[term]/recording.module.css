@@ -17,9 +17,12 @@
 
 .body {
   display: flex;
+  flex-direction: column;
   flex: 1;
-  align-items: center;
-  justify-content: center;
+}
+
+.bubble {
+  align-self: stretch;
 }
 
 /* Same fixed region as every other voice screen. Without it the mic sat at y=383 here
@@ -32,7 +35,7 @@
    the pixel. That is what frees the bottom of the region for the status. */
 .micWrap {
   height: calc(var(--component-scaffold-mic-region-height) * 1px);
-  margin-top: auto;
+  width: 100%;
   flex-shrink: 0;
   position: relative;
   display: flex;

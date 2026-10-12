@@ -2,19 +2,16 @@
 
 import { use, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { goToExit } from '@/lib/navigation'
+import { SessionBar } from '../../SessionBar'
 import {
-  AppBar,
   Button,
   MascotSlot,
-  ProgressIndicator,
   RecallResult,
   ScreenShell,
-  SessionFraction,
   Snackbar,
 } from '@/components'
-import { CheckIcon, CloseIcon } from '@/components/icons'
-import { getTerm, nextAfter, progressFor, recordOutcome, TOTAL_TERMS, XP } from '@/lib/session'
+import { CheckIcon } from '@/components/icons'
+import { getTerm, nextAfter, recordOutcome, XP } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // Say-it-back result — the optional repeat after a reveal. No Figma frame; behaviour
@@ -39,14 +36,7 @@ export default function RepeatPage({ params }: { params: Promise<{ term: string 
 
   return (
     <ScreenShell
-      topNavigation={
-        <>
-          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => goToExit(router)}>
-            <ProgressIndicator progress={progressFor(index)} thickness="16" label="Questions" current={index} total={TOTAL_TERMS} />
-          </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} />
-        </>
-      }
+      topNavigation={<SessionBar index={index} />}
       bottomContent={
         // "Continue", as on 04 Pass and 06b — the same nextAfter(index) call, and these
         // screens are near-twins. It read "Next question" here alone.

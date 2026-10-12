@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { returnBack } from '@/lib/navigation'
 import { Button, OptionRow, ScreenShell } from '@/components'
-import { setSticky, XP } from '@/lib/session'
+import { setSticky, useSession, XP } from '@/lib/session'
 import styles from './exit.module.css'
 
 // 01b Exit confirmation. Eight real reasons, matching IMG_7511. Tone stays light, no
@@ -32,6 +32,7 @@ const TYPING_ANSWERS = new Set([REASONS[0], REASONS[1]])
 export default function ExitPage() {
   const router = useRouter()
   const [picked, setPicked] = useState<string | null>(null)
+  const started = useSession().outcomes.length > 0
   // "I can't speak out loud right now" and "I'd rather type" both have an answer one
   // tap away, and the sheet used to collect them and route to the mic anyway — it
   // asked and ignored. Picking either turns the primary into the thing they asked for.
@@ -68,8 +69,12 @@ export default function ExitPage() {
             and it used to sit under eight reason buttons, 110px below the fold on a
             390x844 screen — so the answer to "what do I lose if I stop" was the one
             thing you could not see. */}
+        {/* Only once there is progress to save (critic panel, 2026-10-12): leaving from
+            the intro used to promise saved progress and kept XP before any answer. */}
         <p className={styles.note}>
-          {`Your progress is saved. You'll keep the XP you've earned — only the +${XP.completionBonus} finishing bonus goes.`}
+          {started
+            ? `Your progress is saved. You'll keep the XP you've earned — only the +${XP.completionBonus} finishing bonus goes.`
+            : "You haven't answered anything yet, so there's nothing to lose."}
         </p>
         {/* One question, one answer, so it announces as one group. It was eight
             independent aria-pressed toggles with nothing tying them together.

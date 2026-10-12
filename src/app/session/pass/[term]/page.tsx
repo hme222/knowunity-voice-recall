@@ -2,10 +2,10 @@
 
 import { Suspense, use, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { goToExit } from '@/lib/navigation'
-import { AppBar, Button, MascotSlot, ProgressIndicator, RecallResult, ScreenShell, SessionFraction } from '@/components'
-import { CloseIcon } from '@/components/icons'
-import { answerFor, getTerm, nextAfter, outcomeFor, progressFor, recordOutcome, revisitsPending, useSession, TOTAL_TERMS, XP } from '@/lib/session'
+import { SessionBar } from '../../SessionBar'
+import { Button, Chips, MascotSlot, RecallResult, ScreenShell } from '@/components'
+import { CheckIcon } from '@/components/icons'
+import { answerFor, getTerm, nextAfter, outcomeFor, recordOutcome, useSession, XP } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // 04 Pass — Figma frame "04 Pass" (15672:24247). Knowie's in-character reaction, not a
@@ -33,33 +33,34 @@ function PassScreen({ index }: { index: number }) {
 
   return (
     <ScreenShell
-      topNavigation={
-        <>
-          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => goToExit(router)}>
-            <ProgressIndicator progress={progressFor(index)} thickness="16" label="Questions" current={index} total={TOTAL_TERMS} />
-          </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
-        </>
-      }
+      topNavigation={<SessionBar index={index} />}
       bottomContent={
         <div className={styles.actions}>
-          <p className={styles.xp}>{`\u26a1 +${outcome?.xp ?? (hinted ? XP.hinted : XP.unaided)}`}</p>
-          {/* What the confidence tap was worth. Without this the tap is asked for and
-              then never mentioned again. */}
-          {calibration !== 0 && (
-            <p className={styles.calibration}>
-              {calibration > 0
-                ? `+${calibration} · ${outcome?.wasSure ? 'called it' : 'knew more than you thought'}`
-                : `${calibration} · you were sure`}
-            </p>
-          )}
           <Button CTA="Continue" variant="Primary" size="M" fullWidth onClick={() => router.push(nextAfter(index))} />
         </div>
       }
     >
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
+        {/* A "Correct" chip, matching the partial's "Partially right": the verdict is
+            not carried by the green card alone (designer, 2026-10-12). */}
+        <div className={styles.verdictRow}>
+          <Chips Text="Correct" size="S" color="Primary" active showLeftIcon leftIcon={<CheckIcon />} showRightIcon={false} />
+        </div>
         <RecallResult state="Pass" title={current.passTitle} transcript={`“${answerFor(index)}”`} />
+        {/* The XP and the confidence line live here, in the content, not in the action
+            zone: there they pushed Continue 14px below every other single button
+            (critic panel, 2026-10-12). */}
+        <p className={styles.xp}>{`\u26a1 +${outcome?.xp ?? (hinted ? XP.hinted : XP.unaided)}`}</p>
+        {/* What the confidence tap was worth. Without this the tap is asked for and
+            then never mentioned again. */}
+        {calibration !== 0 && (
+          <p className={styles.calibration}>
+            {calibration > 0
+              ? `+${calibration} · ${outcome?.wasSure ? 'called it' : 'knew more than you thought'}`
+              : `${calibration} · you were sure`}
+          </p>
+        )}
         {/* Removed for the same reason as 05 Miss: the card above already shows "You
             said" and the transcript, and the `passed` sheet renders that one string and
             nothing else. No leak here, just a control spent on nothing. */}

@@ -14,7 +14,9 @@ export type RecallResultState = (typeof RECALL_RESULT_STATES)[number]
 const LABELS: Record<RecallResultState, string> = {
   Pass: 'You said',
   Miss: 'You said',
-  CouldntHear: 'Try explaining',
+  // Was "Try explaining", which read as "your explanation was wrong, explain better".
+  // CouldntHear is the app's failure, not the student's (designer, 2026-10-08).
+  CouldntHear: 'Not a wrong answer',
   Neutral: 'You said',
 }
 
@@ -25,20 +27,33 @@ export type RecallResultProps = {
   title: string
   /** Figma `transcript`: what the student said (Pass/Miss), or the prompt to retry (CouldntHear). */
   transcript: string
+  /**
+   * Show the label and transcript under the title (default true). Off on a second
+   * Miss, where the student has just heard their own take and the hint is what they
+   * need on screen without scrolling (designer, 2026-10-08).
+   */
+  showTranscript?: boolean
   /** Tap on the CouldntHear retry tag. */
   onRetry?: () => void
   className?: string
 }
 
-export function RecallResult({ state = 'Pass', title, transcript, onRetry, className }: RecallResultProps) {
+export function RecallResult({ state = 'Pass', title, transcript, showTranscript = true, onRetry, className }: RecallResultProps) {
   return (
     <div className={[styles.root, className].filter(Boolean).join(' ')} data-state={state} role="status">
       {state === 'CouldntHear' && (
-        <Chips size="S" color="Coral" active Text="Try again" leftIcon={<RetryIcon />} showRightIcon={false} onClick={onRetry} />
+        // "Say it again" in Primary, not "Try again" in Coral: coral is the error colour
+        // and "try again" is what you say after a wrong answer. This screen means the mic
+        // missed it (designer, 2026-10-08).
+        <Chips size="S" color="Primary" active Text="Say it again" leftIcon={<RetryIcon />} showRightIcon={false} onClick={onRetry} />
       )}
       <p className={styles.title}>{title}</p>
-      <p className={styles.label}>{LABELS[state]}</p>
-      <p className={styles.body}>{transcript}</p>
+      {showTranscript && (
+        <>
+          <p className={styles.label}>{LABELS[state]}</p>
+          <p className={styles.body}>{transcript}</p>
+        </>
+      )}
     </div>
   )
 }

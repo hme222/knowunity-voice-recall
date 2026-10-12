@@ -33,6 +33,6 @@ export const DrillWorth: Story = {
 }
 export const DrillSharp: Story = {
   name: 'Drill — keep it sharp',
-  args: { variant: 'drill', label: 'Cell membrane', state: 'sharp' },
+  args: { variant: 'drill', label: 'Covalent bond', state: 'sharp' },
 }
 export const Raised: Story = { name: 'On a raised surface', args: { raised: true } }

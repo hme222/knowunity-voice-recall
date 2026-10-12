@@ -72,6 +72,96 @@ above.
 
 ## Core loop, decided
 
+- **Decided 2026-10-08 by the designer, from a walkthrough:**
+  - **No requeue.** A missed term no longer comes back at the end of the set
+    (06 Lock It In is deleted). The run goes straight to the Recap, which leads
+    with "Practice what I missed". This supersedes "a miss requeues later in the
+    same session" wherever it appears below.
+  - **Recap** emphasises what was learned ("You learned something new", with the
+    term and its definition), then offers the misses, then home. "Run it again"
+    and "Done" are gone.
+  - **Skip is top right**, beside the progress bar, on every screen that offers
+    it; the N/4 sits under the bar, not on it. Controls land in the same spot on
+    every screen.
+  - **Recording keeps the question on screen**, and its CTA is "Submit".
+    Paused shows the pause symbol on the mic and drops the "Tap to…" line, and
+    (2026-10-09) the visible "Paused" word too: the symbol and timer are enough.
+  - **Couldn't hear (attempt 1) is a say-again, not a retry:** "I didn't catch
+    that", labelled "Not a wrong answer", tag "Say it again" in Primary, not
+    coral.
+  - **Second Miss** drops "You said" so the hint shows without scrolling.
+  - **Blank term keeps the question** on screen; the encouragement moves under
+    the mic as a `MicCaption`.
+  - **Knowie is full size or absent.** When content does not fit, Knowie steps
+    out (any screen); there is no shrunk size.
+  - **One subject, decided 2026-10-09:** the whole set is Chemistry: bonding —
+    formal charge, covalent bond, electronegativity, octet rule — replacing three
+    Biology terms. The due quizzes and picker topics are Chemistry too. The intro
+    names it in its title, the way the explain screen names the term.
+  - **Decided 2026-10-09:**
+    - **"How sure are you?" is optional.** Unanswered, Processing moves on after
+      10s (`motion.semantic.duration.confidenceGrace`) and records no confidence —
+      no reward, no cost. Supersedes "the verdict waits indefinitely for the tap".
+    - **The Recap keeps Knowie** (`ScreenShell mascotGivesWay={false}`: its term
+      list is meant to scroll) and **ends on "You learned something new!"** with the
+      term's definition; the headline is "Session recap" again.
+    - **The drill works for every term**, not only formal charge: each term has
+      its own rungs, missed word and stumbled take (`Term.drill`).
+    - **07a is "Go back over what you missed".** Each missed term is a row that
+      says why it is there and recommends a method — Drill it if the student
+      skipped or needed the answer, Say it again if they needed a hint — with the
+      other method as a link. "Practise all N" runs the rows in order and comes
+      back to the Recap once. Replaces the frame's which-term-then-which-method
+      screen, where a preselected row was easy to miss and the two methods were
+      unexplained equals.
+  - **The prototype opens on a journey map** (`/`), then the quiz door, the mic
+    primer, and the session. The quiz door names the subject (Chemistry), and so
+    does the intro's title. The line under the progress bar reads "Chemistry ·
+    N/4" in a session and just "Chemistry" on a run from a door (2026-10-12).
+  - **From the critic panel, decided 2026-10-12 (designer interview):**
+    - Typing after a mishear pays full XP (`micFault`); typing by choice still
+      pays the hinted rate. The "can't speak" exit already did, via sticky.
+    - The confidence tap pays the same either way: sure-right = unsure-right = +1,
+      sure-wrong 0. Informational, never the losing tap.
+    - Skip after the mic failed is "mic trouble", not a miss: left out of the
+      Recap's "of N", noted on its row, still offered for practice. Reveal's
+      top-right action reads "Continue", not "Skip".
+    - The offline screen and its "Having connection trouble?" link are removed;
+      "still thinking" stays as an in-place state.
+    - The typed path's confidence ask uses the same 10s grace as voice.
+    - A partial looks one way: amber "Partially right" chip over a neutral card,
+      in the session and the drill; no ✓ on any miss chip.
+    - The selected exit reason carries a check mark; the pass card a "Correct"
+      chip. Pass's XP and confidence lines sit in the content, so Continue is at
+      the shared height.
+    - A typed answer under 15 characters gets "Nothing to check yet", not
+      claimed partial credit. The exit sheet only promises saved progress once
+      there is some. Scaffold copy is gone from the chat door and home.
+    - "Practice" (US) everywhere. A darker `background.scrimStrong` behind the
+      drawn mic-permission sheet. The Recap's Knowie is laughing on a clean run,
+      determined on a mixed one.
+    - **Unlock is home, not a modal:** every door's back arrow lands on
+      /home/unlock — home with the chip in the tool row and a "Say It Back
+      feature unlocked" note. Home's Knowie is 3XL, 2XL or out by fit, and the
+      greeting-to-content gap is 32.
+    - **The start screen** gives the path in three steps and what a reviewer
+      needs to drive it: hold-time decides the result, question 1 misses once.
+  - **Definition Drill Down, decided 2026-10-12:** no StrengthMeter (the green
+    coverage bar) on any drill screen — progress is the top bar's alone. Each step's
+    instruction ("Say the whole thing…", the nudge, "Let's say this one together")
+    sits under the mic as a `MicCaption`, and DD 08 shows the climb as a four-step
+    meter instead of the TrainingLog list, so every drill screen fits at 390×668
+    with nothing faded.
+  - **One phrase for the action, decided 2026-10-12:** "say it back" wherever a
+    title, button or prompt names what the student does ("Ready to say it back?",
+    "Now say it back", "Want to say one back?"). "Out loud" is retired from the
+    feature's own copy; it survives only in the exit sheet's "I can't speak out
+    loud right now", which is the student's words, not the feature's.
+- **The retry hint sits under the mic, not above it. Decided 2026-10-07 by the
+  designer.** On 01 Idle after a hint, the hint is a `MicCaption` ("Hint" label +
+  one or two lines, no card) in the bottom 80 of the mic region. As a card above
+  the mic it was pushed out of sight at 390x668, where the question alone fills the
+  space above the control. The doors' "Tap to answer" uses the same component.
 - Result states are Knowie's in-character text reaction, not a graded
   badge/icon.
 - **"Commit" describes the Idle screen, it is not a second state.**

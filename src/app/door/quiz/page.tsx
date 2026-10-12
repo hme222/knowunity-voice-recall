@@ -3,7 +3,6 @@
 import { useRouter } from 'next/navigation'
 import { AppBar, Button, MascotSlot, ProgressIndicator, ScreenShell } from '@/components'
 import { MicGlyphIcon } from '@/components/icons'
-import { proveItHref } from '../doors'
 import styles from '../door.module.css'
 
 // Door 1, Quiz complete — Figma frame "Quiz complete — Prove It Again, Option 1
@@ -22,7 +21,7 @@ export default function QuizCompleteDoor() {
   return (
     <ScreenShell
       topNavigation={
-        <AppBar variant="leftIconButtonOnly" leftLabel="Back" onLeft={() => router.push('/home')}>
+        <AppBar variant="leftIconButtonOnly" leftLabel="Back" onLeft={() => router.push('/home/unlock')}>
           {/* The frame's bar is at 25% — the quiz behind this screen, not our session. */}
           <ProgressIndicator progress="25" thickness="16" label="Quiz" current={1} total={4} />
         </AppBar>
@@ -36,7 +35,9 @@ export default function QuizCompleteDoor() {
             size="M"
             showLeftIcon
             leftIcon={<MicGlyphIcon />}
-            onClick={() => router.push(proveItHref('quiz'))}
+            // Through the mic primer: this is the first time the guided path meets the
+            // mic, and voice-ux Principle 3 says never fire the OS ask cold.
+            onClick={() => router.push('/permission/primer?door=quiz')}
           />
         </div>
       }
@@ -50,7 +51,7 @@ export default function QuizCompleteDoor() {
               Regular, not as a textBlock. TextBlock's L renders 44px. */}
           <div className="screenTitle">
             <h1 className="screenTitleHeading">Quiz complete!</h1>
-            <p className="screenTitleCaption">9/10 correct. Want to prove one sticks?</p>
+            <p className="screenTitleCaption">9/10 on your Chemistry quiz. Want to say one back?</p>
           </div>
         </div>
       </div>

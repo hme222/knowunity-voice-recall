@@ -39,6 +39,8 @@ Two things this does **not** override:
 
 ## Conventions
 
+- **Session chrome, 2026-10-08.** Every numbered-term screen uses `src/app/session/SessionBar.tsx`: X left, the progress bar, **Skip top right** (AppBar `leftAndRightButton`) on any screen that offers Skip, and the N/4 fraction under the bar. Skip is never in an action zone. "Type instead" is a full-width Secondary M, first in the action zone, on every voice screen.
+
 - **Routing.** Next.js 16 App Router. One folder per route under `src/app/`,
   each with a `page.tsx` default-exporting a component. Navigation uses
   `Link` from `next/link` for taps that are plain navigation, and
@@ -148,10 +150,10 @@ Two things this does **not** override:
   the fraction in to prevent an empty header, but 07 Recap legitimately has no
   fraction — a component that forces one would change that screen's design to
   suit the component.
-- **Requeue lives outside the term numbering.** `[term]` means 1–4, the
-  original set. A requeued term is `/session/lock-in`, its own screen with its
-  own copy and its own progress value (75%), matching the built frame. It is
-  not `/session/idle/5`.
+- ~~**Requeue lives outside the term numbering.**~~ **Superseded 2026-10-08 —
+  there is no requeue.** After term 4 the run goes straight to `/session/recap`,
+  whose "Practice what I missed" is the student's choice to go back to a miss.
+  `/session/lock-in` and `/session/lock-in/second` are deleted.
 - **Recap is derived, never canned.** 07 Recap computes its buckets, per-term
   XP, total and score from what the reviewer actually did. The frame's
   pre-baked 1 unaided / 1 hinted / 1 revealed / 1 worth-revisiting, +22, 75%
@@ -212,7 +214,8 @@ the completing, so both of a door's actions lead to `/home/unlock`.
 | 0b | `/door/quiz/result` | Prove It Again — term result | `15672:19827` | one | `MascotSlot size="2XL"`; `RecallResult state="Pass"`; `Button CTA="Continue" variant="Primary"` (centred, not full width) | Continue | → `/home/unlock` |
 | 0c | `/door/exam-plan` | Exam plan | `15672:23959` | one (placeholder) | `ChatBubble`; `MicButton state="Idle"`; `Button CTA="Type instead" variant="Secondary"` + `Button CTA="Skip" variant="Tertiary"` | Answer aloud; type; skip | Mic → `/session/idle/1?door=exam-plan`. Type → `/text/turn`. Skip → `/home/unlock` |
 | 0d | `/door/chat` | Chat, content-aware | `15672:24166` | one (placeholder) | `ChatBubble showTitle`; `MascotSlot size="2XL"`; XP line; `Button` ×3 | Say it back; type; skip | Say it back → `/session/idle/1?door=chat`. Skip → `/home/unlock` |
-| 0e | `/` | Home, baseline | none — this state is in no frame | one | `HomeShell`; `Button variant="Tertiary"` ×3, one per door | Reach a door | → the three door routes |
+| 0e | `/home` | Home, baseline | none — this state is in no frame | one | `HomeShell`; `Button variant="Tertiary"` ×3, one per door | Reach a door | → the three door routes |
+| 0f | `/` | Start screen (reviewer-facing, not product) | none | one | `MascotSlot size="2XL" expression="laughing"`; title + one-line caption; `Button variant="Primary" CTA="Start"` | Start | → `/permission/primer` |
 
 A run that arrives through a door carries `?door=<id>` from `/session/idle`
 through recording and captured to processing. On a Pass, the quiz door lands on
@@ -225,15 +228,15 @@ and a door run that goes wrong should not be a dead end.
 | # | Route | Screen | States | Components | Student can | Leads to |
 |---|---|---|---|---|---|---|
 | 1 | `/session/intro` | 00 Intro | one | `AppBar variant="leftIconButtonOnly"` wrapping `ProgressIndicator progress="25" thickness="16"`; `ChatBubble showTitle`; `MascotSlot size="2XL"`; `Button CTA="Let's go" variant="Primary" size="M"` | Start the session; exit | Start → `/session/idle`. Exit → `/session/exit` |
-| 2 | `/session/idle/[term]` | 01 Idle / Commit | one | `AppBar` + `ProgressIndicator progress="25"`; `ChatBubble showTitle` (term prompt); `MicButton state="Idle"`; `MascotSlot size="2XL"`; `Button variant="Secondary"` (type instead); `Button variant="Tertiary"` (skip) | Tap the mic to record; switch to typing; skip; exit | Mic → `/session/recording/[term]`. Type → `/text/turn`. Skip → next term or `/session/recap`. Exit → `/session/exit` |
-| 3 | `/session/recording/[term]` | 02 Recording | recording | `AppBar` + `ProgressIndicator`; `MicButton state="Listening"`; **`RecordingStatus`** (to build: the `LISTENING` label and the elapsed timer, both on the frame); `Button variant="Primary" CTA="Done speaking"` | Tap the mic to stop | Stop → `/session/captured/[term]` |
+| 2 | `/session/idle/[term]` | 01 Idle / Commit | one; with `?hinted=1` the retry hint shows as `MicCaption label="Hint"` under the mic, never as a card above it (locked 2026-10-07) | `AppBar` + `ProgressIndicator progress="25"`; `ChatBubble showTitle` (term prompt); `MicButton state="Idle"`; `MicCaption` (hinted retry only); `MascotSlot size="2XL"`; `Button variant="Secondary"` (type instead); `Button variant="Tertiary"` (skip) | Tap the mic to record; switch to typing; skip; exit | Mic → `/session/recording/[term]`. Type → `/text/turn`. Skip → next term or `/session/recap`. Exit → `/session/exit` |
+| 3 | `/session/recording/[term]` | 02 Recording | recording; paused (MicButton `Paused` shows the pause glyph, no "Tap to…" line) | the question stays on screen as `ChatBubble`; CTA "Submit" (was "Done speaking"), 2026-10-08; `AppBar` + `ProgressIndicator`; `MicButton state="Listening"`; **`RecordingStatus`** (to build: the `LISTENING` label and the elapsed timer, both on the frame); `Button variant="Primary" CTA="Done speaking"` | Tap the mic to stop | Stop → `/session/captured/[term]` |
 | 4 | `/session/pass` | 04 Pass | one | `RecallResult state="Pass"` with `title` + `transcript`; `MascotSlot size="2XL"`; `Button variant="Primary" CTA="Next"` | Continue; open the transcript | Next → next term or `/session/recap`. Transcript → `/session/transcript/passed` |
 | 5 | `/session/miss` | 05 Miss + Hint | one | `RecallResult state="Miss"`; `HintCard`; `Chips size="S" color="Partial" active`; `Button variant="Primary" CTA="Try again"`; `Button variant="Secondary" CTA="Reveal answer"`; `Button variant="Tertiary" CTA="Skip"` | Retry; reveal; skip; open transcript | Try again → `/session/idle`. Reveal → `/session/reveal`. Skip → next term. Transcript → `/session/transcript/revealed` |
 | 6 | `/session/reveal` | 05a Reveal answer | one | `ChatBubble` (the answer, no verdict badge); `MicButton state="Idle"`; `MascotSlot size="2XL"` | Repeat it unaided; move on | Repeat → `/session/recording` then `/session/repeat`. Next → next term |
-| 7 | `/session/processing` | 03 Processing + confidence | waiting-for-tap; escalated (judge slow) | `AppBar` + `ProgressIndicator`; `MascotSlot size="2XL"` animating; `Button variant="Secondary"` ×2 as the sure / not-sure pair | Answer "how sure are you?" | Tap → `/session/pass`, `/session/miss` or `/session/unclear` per the mock |
-| 8 | `/session/lock-in` | 06 Lock It In | one | `AppBar` + `ProgressIndicator progress="100"` (NOT the frame's 75 — see the note in the page file: at 75 the bar ran 100 → 75 → 100 and moved backwards); `SessionFraction label="Revisit N of M"`; `Chips size="S" color="Primary" active`; `MascotSlot`; `Button variant="Primary"`; `Button variant="Tertiary"` | Answer the requeued term cold; skip | Mic → `/session/recording`. Second miss → `/session/lock-in/second` |
-| 9 | `/session/lock-in/second` | 06b Lock It In, 2nd pass | one | `RecallResult state="Pass"`; `ProgressIndicator progress="100"`; `Button variant="Primary"` | Continue | → `/session/recap` |
-| 10 | `/session/recap` | 07 Recap | solid session; rough session (CTA order flips) | `StatChip stat="XP"`, `stat="Score"`, `stat="Time"`; `ButtonIcon variant="Overlay" size="S"` ×4 (per-row transcript); `Button variant="Primary"`; `Button variant="Secondary"` | Open any term's transcript; try again; continue; accept the drill offer | Row → `/session/transcript/[bucket]`. Try again → `/session/idle` (same terms, shuffled). Continue → `/home/unlocked`. Drill → `/drill/intro` |
+| 7 | `/session/processing` | 03 Processing + confidence | waiting-for-tap; escalated (judge slow, copy only — the offline link was removed 2026-10-12) | `AppBar` + `ProgressIndicator`; `MascotSlot size="2XL"` animating; `Button variant="Secondary"` ×2 as the sure / not-sure pair | Answer "how sure are you?" — optional: unanswered, the turn advances after `confidenceGrace` (10s) with no confidence recorded (2026-10-09) | Tap → `/session/pass`, `/session/miss` or `/session/unclear` per the mock |
+| 8 | ~~`/session/lock-in`~~ | ~~06 Lock It In~~ — **deleted 2026-10-08** (no requeue) | | | | |
+| 9 | ~~`/session/lock-in/second`~~ | ~~06b Lock It In, 2nd pass~~ — **deleted 2026-10-08** (no requeue) | | | | |
+| 10 | `/session/recap` | 07 Recap | one. Headline "You learned something new" + `HintCard label="New today · <term>"` when a term was got with help; "Practice what I missed" (Primary, only with misses) then "Back to home". No "Run it again", no "Done" (2026-10-08) | `StatChip stat="XP"`, `stat="Score"`, `stat="Time"`; `ButtonIcon variant="Overlay" size="S"` ×4 (per-row transcript); `Button variant="Primary"`; `Button variant="Secondary"` | Open any term's transcript; try again; continue; accept the drill offer | Row → `/session/transcript/[bucket]`. Try again → `/session/idle` (same terms, shuffled). Continue → `/home/unlocked`. Drill → `/drill/intro` |
 | 11 | `/session/exit` | 01b Exit confirmation | one | `OptionRow state="Default"` ×8; `Button variant="Primary" CTA="Keep learning"`; `Button variant="Secondary" CTA="Leave anyway"` | Pick a reason; stay; leave | Keep → back to the previous screen. Leave → `/home/unlocked` |
 
 ### Phase 2 — Branches. Needs components that exist in Figma but not in code.
@@ -245,7 +248,7 @@ and a door run that goes wrong should not be a dead end.
 | 14 | `/session/transcript/[bucket]` | Transcript sheet | passed; revealed; skipped | **`BottomSheet`** (to build, 3 content states); `OptionRow` rows | Read; dismiss | Dismiss → back |
 | 15 | `/session/repeat` | Say-it-back result | one | `RecallResult state="Pass"`; `Snackbar variant="Success" chipText="+1 XP"`; `Button variant="Primary"` | Continue | → next term |
 | 16 | `/session/blank` | Blank term | one | `ChatBubble`; `MicButton state="Idle"`; `Button variant="Tertiary"` | Attempt anyway; reveal | Attempt → `/session/recording`. Reveal → `/session/reveal` |
-| 17 | `/session/recap/practice` | 07a Practice what I missed | one | `OptionRow` ×2; `ChatBubble`; `Button variant="Tertiary"` ×2 | Choose how to practise | → `/session/idle` or `/drill/intro` |
+| 17 | `/session/recap/practice` | 07a Go back over what you missed (redesigned 2026-10-09) | one; none-missed | `MascotSlot size="2XL" expression="laughing"`; title + caption; one outlined row per missed term (term, reason, `Button variant="Tertiary" size="S"` alternative method, `Button variant="Secondary" size="S"` recommended method — **screen-local**); `Button variant="Primary" CTA="Practise all N"` when N > 1 | Practise one term (recommended or alternative method); practise all | Drill → `/drill/intro` for that term; Say → `/session/idle/[term]`. A round runs in order and returns to `/session/recap` once |
 
 ### Phase 3 — Permission, text and interruption. All new.
 
@@ -256,14 +259,14 @@ and a door run that goes wrong should not be a dead end.
 | 20 | `/permission/denied` | Denied — session choice | one | `TextBlock`; `Button variant="Primary" CTA="Type this session"`; `Button variant="Secondary" CTA="How to turn the mic on"` | Choose text for the session; read how to re-enable | Type → `/text/turn`. How-to → stays, expands |
 | 21 | `/text/turn` | Text fallback turn | empty; filled | `ChatBubble`; **text input** (to build); `Button variant="Primary" CTA="Send"` | Type an answer; send; switch back to voice | Send → `/text/checking`. Voice → `/session/idle` |
 | 22 | `/text/checking` | Text checking beat | one | `MascotSlot` animating | Wait | → `/session/pass` / `/session/miss` |
-| 23 | `/session/offline` | Network held take | one | `Snackbar variant="Error"`; `MascotSlot` | Wait; retry | Reconnect → `/session/processing` |
+| 23 | ~~`/session/offline`~~ | ~~Network held take~~ — **removed 2026-10-12** (designer: irrelevant to the mockup) | | | | |
 | 24 | `/session/resume` | Session resume | one | `TextBlock`; `StatChip stat="XP"`; `Button variant="Primary" CTA="Pick up where you left off"` | Resume; start fresh | Resume → `/session/idle` |
 
 ### Phase 4 — Home and picker. Needs the five home components.
 
 | # | Route | Screen | States | Components | Student can | Leads to |
 |---|---|---|---|---|---|---|
-| 25 | `/` | Home — pre-unlock | one | Home shell, **no Say It Back chip** | Nothing Say-It-Back related | — |
+| 25 | `/home` | Home — pre-unlock | one | Home shell, **no Say It Back chip** | Nothing Say-It-Back related | — |
 | 26 | `/home/unlock` | Unlock reveal | one | Home shell dimmed; **`SwipeChip`** spotlighted; `MascotSlot size="3XL" expression="excited"` | Acknowledge | → `/home/unlocked` |
 | 27 | `/home/unlocked` | Home — chip | one | Home shell + **`SwipeChip`** in the composer | Open the picker | → `/picker` |
 | 28 | `/home/due` | Home — due-signal | swipe 1 / 2 / 3, in-page | **`DueSignalCard`**, **`SwipeChip`**, **`SwipeDots active="1\|2\|3"`** | Swipe; tap a due quiz; use the chip | Card → `/session/intro` for that lesson. Chip → `/picker` |
@@ -339,12 +342,13 @@ the states, not building the engine.
 3. **Transcripts are canned per term** — hand-written prose that reads like a
    plausible student answer. In the real product a model transcribes and judges;
    here the words are fixture data.
-4. **The confidence tap advances the turn.** `/session/processing` waits
-   indefinitely for it, with Knowie animating so the screen never reads as stuck.
+4. ~~**The confidence tap advances the turn.**~~ **Superseded 2026-10-09:** the tap
+   is optional. `/session/processing` advances on its own after `confidenceGrace`
+   (10s, past the 6s slow threshold so "still thinking" shows first).
    The verdict is already decided by step 1 before the tap is taken.
-5. **A miss requeues once.** The term returns cold at `/session/lock-in`. A
-   second miss ends at `/session/lock-in/second` and the drill is offered on
-   Recap — never entered mid-session.
+5. ~~**A miss requeues once.**~~ **Superseded 2026-10-08:** no requeue. A miss
+   is offered back on the Recap; the drill is still offered there and never
+   entered mid-session.
 6. **Fixture data lives in one place**, `src/lib/session.ts`: the term list,
    canned transcripts, hints, answers, XP values and the scripted
    couldn't-hear index. No screen hardcodes its own copy. The four terms come
@@ -383,7 +387,8 @@ test script.
 Open http://localhost:3000 and reach `/session/recap` **without typing a URL
 and without using browser back**. The path is: home → unlock reveal → home with
 chip → picker → intro → idle → recording → captured → processing → a verdict →
-through the remaining terms → lock-in → recap.
+through the remaining terms → recap. (The start screen's guided path is `/` →
+`/door/quiz` → `/permission/primer` → `/permission/prompt` → idle.)
 
 **Per-screen checks**
 

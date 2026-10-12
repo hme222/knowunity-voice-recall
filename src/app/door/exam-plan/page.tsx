@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { actionRowClass, micRegionClass, AppBar, Button, ChatBubble, MascotSlot, MicButton, ProgressIndicator, ScreenShell } from '@/components'
+import { micRegionClass, AppBar, Button, ChatBubble, MascotSlot, MicButton, MicCaption, ProgressIndicator, ScreenShell } from '@/components'
 import { proveItHref } from '../doors'
 import styles from '../door.module.css'
 
@@ -17,29 +17,8 @@ export default function ExamPlanDoor() {
 
   return (
     <ScreenShell
-      topNavigation={
-        <AppBar variant="leftIconButtonOnly" leftLabel="Back" onLeft={() => router.push('/home')}>
-          <ProgressIndicator progress="25" thickness="16" label="Plan steps" current={1} total={4} />
-        </AppBar>
-      }
-      bottomContent={
-        <div className={actionRowClass}>
-          <Button
-            CTA="Type instead"
-            variant="Secondary"
-            size="M"
-            onClick={() => router.push('/text/turn?term=1')}
-          />
-          <Button CTA="Skip" variant="Tertiary" size="M" onClick={() => router.push('/home/unlock')} />
-        </div>
-      }
-    >
-      <div className={styles.body}>
-        <div className={styles.content}>
-          <MascotSlot size="2XL" expression="determined" />
-        </div>
-        <ChatBubble body="Let's test your understanding of organic foundations with some active-recall. To begin, please explain the concept of formal charge and the formula used to calculate it for an atom in a molecule." />
-        <div className={[micRegionClass, styles.micWithCaption].join(' ')}>
+      mic={
+        <div className={micRegionClass}>
           {/* No "Skip question" here. The action row below already carries "Skip" to
               the same destination, so this screen offered one escape twice under two
               names, 109px apart. */}
@@ -48,8 +27,23 @@ export default function ExamPlanDoor() {
               so the control sits at one height on every voice screen, which laid this
               caption out BESIDE the button — both starting at y466, the caption clipping
               its upper edge. Same placement the recording screens use. */}
-          <p className={styles.caption}>Tap to answer</p>
+          <MicCaption body="Tap to answer" />
         </div>
+      }
+      topNavigation={
+        <AppBar variant="leftAndRightButton" leftLabel="Back" onLeft={() => router.push('/home/unlock')} rightText="Skip" onRightText={() => router.push('/home/unlock')}>
+          <ProgressIndicator progress="25" thickness="16" label="Plan steps" current={1} total={4} />
+        </AppBar>
+      }
+      bottomContent={
+        <Button CTA="Type instead" variant="Secondary" size="M" fullWidth onClick={() => router.push('/text/turn?term=1')} />
+      }
+    >
+      <div className={styles.body}>
+        <div className={styles.content}>
+          <MascotSlot size="2XL" expression="determined" />
+        </div>
+        <ChatBubble body="Let's test your understanding of organic foundations with some active-recall. To begin, please explain the concept of formal charge and the formula used to calculate it for an atom in a molecule." />
       </div>
     </ScreenShell>
   )

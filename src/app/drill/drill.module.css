@@ -142,14 +142,6 @@
   background: var(--color-semantic-background-surface);
 }
 
-.cueTitle {
-  margin: 0;
-  color: var(--color-semantic-text-primary);
-  font-weight: var(--typography-style-headline-s-font-weight);
-  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
-  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
-}
-
 .cueBody {
   margin: 0;
   color: var(--color-semantic-text-secondary);
@@ -188,4 +180,106 @@
   bottom: 0;
   display: flex;
   justify-content: center;
+}
+
+/* DD 08's climb: four steps on one line, joined by a rule, each a button into that
+   round. Replaced the TrainingLog list on 2026-10-12 (designer) so the finish fits at
+   390x668. Done steps in feedback.success, the stumble in feedback.warning with a "!"
+   so it is not colour alone, the final step filled. */
+.climb {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.climbHeading {
+  margin: 0;
+  color: var(--color-semantic-feedback-success-on-subtle);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+}
+
+.climbSteps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The rule joining the dots, through their centres, from the first to the last. */
+.climbSteps::before {
+  content: '';
+  position: absolute;
+  /* Half a column of the four-column grid on each side: dot centre to dot centre. */
+  left: calc(100% / 8);
+  right: calc(100% / 8);
+  top: calc((var(--spacing-semantic-tap-target) - var(--size-primitive-icon-400)) / 2 * 1px + var(--size-primitive-icon-400) / 2 * 1px);
+  height: calc(var(--size-primitive-stroke-heavy-border) * 1px);
+  background: var(--color-semantic-border-success);
+}
+
+.climbStep {
+  display: flex;
+  justify-content: center;
+}
+
+.climbButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  min-width: calc(var(--spacing-semantic-tap-target) * 1px);
+  padding: calc((var(--spacing-semantic-tap-target) - var(--size-primitive-icon-400)) / 2 * 1px) 0 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+.climbButton:focus-visible {
+  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * 1px);
+  border-radius: calc(var(--size-primitive-radius-200) * 1px);
+}
+
+.climbDot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: calc(var(--size-primitive-icon-400) * 1px);
+  height: calc(var(--size-primitive-icon-400) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  border: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-success);
+  background: var(--color-semantic-background-page);
+  color: var(--color-semantic-feedback-success-on-subtle);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+}
+
+.climbButton[data-stumbled] .climbDot {
+  border-color: var(--color-semantic-feedback-warning-border);
+  color: var(--color-semantic-feedback-warning-on-subtle);
+}
+
+.climbButton[data-final] .climbDot {
+  background: var(--color-semantic-feedback-success-bold);
+  border-color: var(--color-semantic-feedback-success-bold);
+  color: var(--color-semantic-feedback-success-on-bold);
+}
+
+.climbLabel {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+  text-align: center;
+}
+
+.climbButton[data-final] .climbLabel {
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
 }

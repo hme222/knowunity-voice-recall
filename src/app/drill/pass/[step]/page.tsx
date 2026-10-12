@@ -2,8 +2,8 @@
 
 import { use } from 'react'
 import { useRouter } from 'next/navigation'
-import { actionRowClass, micRegionClass, Button, MascotSlot, MicButton, ScreenShell, StrengthMeter } from '@/components'
-import { drillRung, DRILL_TERM } from '@/lib/session'
+import { micRegionClass, Button, MascotSlot, MicButton, MicCaption, ScreenShell } from '@/components'
+import { drillRung, useDrillTerm } from '@/lib/session'
 import { Cue } from '../../Cue'
 import { DrillBar } from '../../DrillBar'
 import styles from '../../drill.module.css'
@@ -12,9 +12,9 @@ import styles from '../../drill.module.css'
 // 12259. One route with a [step] rather than four near-identical files: the screens
 // differ only in their cue and meter value.
 //
-// The meter fills by unaided coverage, not by which pass this is — that is the whole
-// design. The StrengthMeter is the only thing that carries growth here, and that is
-// correct.
+// No StrengthMeter (designer, 2026-10-12): the green coverage bar under Knowie was a
+// second progress signal beside the top bar's, and it cost the cue its room — the cue
+// faded at 390x668. Progress is the top bar and its N/4.
 //
 // "Knowie grows a step each pass" used to be the second half of that sentence, stated
 // as fact, and a review flagged it as a claim the screen contradicts — MascotSlot is
@@ -34,9 +34,10 @@ import styles from '../../drill.module.css'
 
 export default function DrillPassPage({ params }: { params: Promise<{ step: string }> }) {
   const router = useRouter()
+  const drillTerm = useDrillTerm()
   const { step } = use(params)
   const n = Number(step)
-  const rung = drillRung(n)
+  const rung = drillRung(drillTerm, n)
 
   if (!rung) {
     router.replace('/drill/intro')
@@ -45,21 +46,24 @@ export default function DrillPassPage({ params }: { params: Promise<{ step: stri
 
   return (
     <ScreenShell
-      topNavigation={<DrillBar step={n} onExit={() => router.push('/picker')} />}
-      bottomContent={
-        <div className={actionRowClass}>
-          <Button CTA="Type instead" variant="Secondary" size="M" onClick={() => router.push(`/text/turn?term=1&drill=${n}`)} />
-          <Button CTA="Skip" variant="Tertiary" size="M" onClick={() => router.push('/picker')} />
+      mic={
+        <div className={micRegionClass}>
+          <MicButton state="Idle" onClick={() => router.push(`/drill/recording?step=${n}`)} />
+          {/* The instruction is about the mic, so it sits under it — the locked
+              MicCaption pattern (2026-10-07). In the card it cost the cue its room and
+              the definition faded at 390x668 (designer, 2026-10-12). */}
+          <MicCaption body="Say the whole thing. However it comes out." />
         </div>
+      }
+      topNavigation={<DrillBar step={n} onExit={() => router.push('/picker')} onSkip={() => router.push('/picker')} />}
+      bottomContent={
+        <Button CTA="Type instead" variant="Secondary" size="M" fullWidth onClick={() => router.push(`/text/turn?term=${drillTerm.index}&drill=${n}`)} />
       }
     >
       <div className={styles.frameBody}>
         <MascotSlot size="2XL" expression="determined" />
-        {/* No caption. The frame runs the meter bare at 220 centred — the label
-            "How much you can say unaided" was an addition. */}
-        <StrengthMeter fill={rung.coverage} />
         <p className={styles.termPill}>
-          Define: <span className={styles.termPillName}>{DRILL_TERM.name}</span>
+          Define: <span className={styles.termPillName}>{drillTerm.name}</span>
         </p>
         {/* One card, not two elements. The frame puts the instruction in the card's
             title and the thinning cue in its body. */}
@@ -67,11 +71,7 @@ export default function DrillPassPage({ params }: { params: Promise<{ step: stri
             takes a string, so the bubble carries the instruction and the thinned
             definition sits directly under it in the same card shape. */}
         <div className={[styles.cueCard, styles.fullWidth].join(' ')}>
-          <p className={styles.cueTitle}>Say the whole thing. However it comes out.</p>
           <Cue className={styles.cueBody} text={rung.cue} />
-        </div>
-        <div className={micRegionClass}>
-          <MicButton state="Idle" onClick={() => router.push(`/drill/recording?step=${n}`)} />
         </div>
       </div>
     </ScreenShell>

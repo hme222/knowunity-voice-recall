@@ -25,6 +25,9 @@ detail.
 | Pulse rings around the mic | 02 Recording | Inline, but sized from `component.micButton.pulse.ring.*`. **This claim was FALSE until 2026-09-22** — the CSS referenced those tokens from the day it was written, the `pulse` group was added later with only the scale and opacity values, and all three rings rendered 2x2px. `npm run check:vars` now fails on a var() that resolves to nothing rather than literals |
 | Home surround (greeting, plan cards, composer chip row) | Home ×3 | Inline in `src/app/home/HomeShell.tsx` — the real app's home isn't ours to reproduce |
 | Drill top bar (ring + fraction + Drill chip) | Drill ×9 | Inline in `src/app/drill/DrillBar.tsx` — drill-only, and it's the piece that goes if the coverage judge is confirmed |
+| Session top bar (X + progress + fraction + Skip) | Every numbered-term screen, 13 of them | **Extracted 2026-10-08** to `src/app/session/SessionBar.tsx`, app-local like `DrillBar` — it composes AppBar, ProgressIndicator and SessionFraction and adds no visual of its own. Built when Skip moved top right, so the controls land in one place everywhere. |
+| Practice row (term, reason, alternative-method link, recommended-method button) | 07a Go back over what you missed | Inline in `src/app/session/recap/practice/practice.module.css`. One consumer. Not `PickerRow`: its pill copy is fixed and it has no reason line or second action. |
+| Climb step meter (four steps on a rule, stumble marked, each opens its round) | DD 08 Complete (`/drill/complete`) | Inline in `src/app/drill/drill.module.css`. Replaces `TrainingLog` on that screen (designer, 2026-10-12); `TrainingLog` itself is untouched and still in the catalog. One consumer. |
 | Transcript sheet content, three bucket variants | Transcript sheet, DD 08a | Uses `BottomSheet` + `PickerRow raised`; the per-bucket copy is screen-local |
 
 ## 2026-09-21 — the DD frame rebuild
@@ -58,3 +61,4 @@ detail.
   times rather than a component they name.
 | Home chrome — status bar, app bar with the PRO and streak chips, tool chips, composer, tab bar | /home, /home/due, /home/unlocked | Inline in `HomeShell`, shared by all three home routes. Built to frame 15674:34093. Not promoted: one consumer, and it is the host app's chrome rather than part of the feature. |
 | Swipe gesture for a card deck | /home/due | **Promoted** → `src/components/SwipeDeck/`. Built as a component rather than inline because the gesture has to suppress the card's own click, and getting that wrong starts a session on every swipe. |
+| Caption pinned under the mic, in the mic region's bottom 80 (label + body, no card) | 01 Idle with a hint; the chat and exam-plan doors' "Tap to answer" | **Promoted 2026-10-07** → `src/components/MicCaption/`, with stories. Three consumers; the doors' copy had never been logged. Format locked by the designer. |

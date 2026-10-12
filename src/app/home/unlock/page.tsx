@@ -1,33 +1,30 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Button, MascotSlot, SwipeChip } from '@/components'
+import { Button, ChatBubble, SwipeChip } from '@/components'
 import { HomeShell } from '../HomeShell'
 import styles from '../home.module.css'
 
-// Home, first-time reveal — Figma frame "Home unlock — Say It Back revealed (first
-// time)" (15810:13020). Home dims and the composer chip is spotlighted with an earned
-// "you've unlocked Say It Back". Shown once.
+// Home, first-time reveal. Was Figma frame "Home unlock — Say It Back revealed (first
+// time)" (15810:13020): home dimmed under a scrim, a floating chip, a coach card.
 //
-// It fires on the first encounter by any door — Prove It shown on quiz complete, the
-// exam-plan step, or chat. It is the showing that unlocks, not the completing.
+// Rebuilt 2026-10-12 (designer): home as it is, with the Say It Back chip already in
+// its place in the tool row, and a note above it saying the feature is unlocked and
+// why. The dimmed modal hid the very home it was introducing, and its floating chip
+// pointed at nowhere the chip actually lives. Reached by the back arrow on every door
+// and by a door's "Not now": showing Say It Back is what unlocks it, not completing it.
 
 export default function UnlockPage() {
   const router = useRouter()
   return (
-    <HomeShell>
-      <div className={styles.spotlightScrim}>
-        <div className={styles.spotlit}>
-          <SwipeChip onClick={() => router.push('/home/unlocked')} />
-        </div>
-        <div className={styles.coachCard}>
-          <MascotSlot size="3XL" expression="excited" />
-          <div className="screenTitle">
-          <h1 className="screenTitleHeading">You’ve unlocked Say It Back</h1>
-          <p className="screenTitleCaption">Nice work finishing your quiz. Now you can practice a definition out loud, right from here. Knowie listens and helps you lock it in.</p>
-        </div>
-          <Button CTA="Got it" variant="Primary" size="M" fullWidth onClick={() => router.push('/home/unlocked')} />
-        </div>
+    <HomeShell toolChip={<SwipeChip onClick={() => router.push('/picker')} />}>
+      <div className={styles.unlockNote}>
+        <ChatBubble
+          showTitle
+          title="Say It Back feature unlocked"
+          body="Saying a definition back in your own words is the quickest way to know it stuck. Tap the chip below anytime."
+        />
+        <Button CTA="Got it" variant="Secondary" size="M" fullWidth onClick={() => router.push('/home/unlocked')} />
       </div>
     </HomeShell>
   )

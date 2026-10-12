@@ -2,7 +2,8 @@
 
 import { AppBar, ProgressIndicator, SessionFraction } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { DRILL_TOTAL_RUNGS, progressFor } from '@/lib/session'
+import { useRouter } from 'next/navigation'
+import { DRILL_TOTAL_RUNGS, isPractising, progressFor, setPractising } from '@/lib/session'
 
 // The drill's top region. Carries the progress ring and fraction — the fixed-ladder
 // fallback that the built frames show, shipped by decision. The doc's variable-length
@@ -12,10 +13,26 @@ import { DRILL_TOTAL_RUNGS, progressFor } from '@/lib/session'
 /** The frame shows no fraction on the first rung, only the ring. Neither DD 01
     (15782:11696) nor DD 07 (15782:12362) carries a "Drill" chip under the bar; it was
     an addition and is removed. */
-export function DrillBar({ step, onExit }: { step: number; onExit: () => void }) {
+export function DrillBar({ step, onExit, onSkip }: { step: number; onExit: () => void; onSkip?: () => void }) {
+  const router = useRouter()
+  // Leaving a drill inside a practice round goes back to the Recap it came from, and
+  // ends the round, rather than to the picker.
+  const leave = () => {
+    if (!isPractising()) return onExit()
+    setPractising(false)
+    router.push('/session/recap')
+  }
   return (
     <>
-      <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={onExit}>
+      {/* Skip top right when the screen offers it, as in the session's SessionBar. */}
+      <AppBar
+        variant={onSkip ? 'leftAndRightButton' : 'leftIconButtonOnly'}
+        leftIcon={<CloseIcon />}
+        leftLabel="Leave"
+        onLeft={leave}
+        rightText="Skip"
+        onRightText={onSkip}
+      >
         <ProgressIndicator
           progress={progressFor(step)}
           thickness="16"

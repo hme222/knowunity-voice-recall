@@ -31,4 +31,4 @@ export const Baseline: Story = {
   args: { due: false, QuizLabel: undefined, Count: undefined },
 }
 export const LastOne: Story = { name: 'Last of the batch', args: { Count: 'last one' } }
-export const OneLeft: Story = { name: 'One left', args: { Count: '+1', QuizLabel: 'Kinematics · due 9/19' } }
+export const OneLeft: Story = { name: 'One left', args: { Count: '+1', QuizLabel: 'Electronegativity · due 9/19' } }

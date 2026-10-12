@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef } from 'react'
-import { useRouter } from 'next/navigation'
+import { Suspense, useRef } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { MascotSlot, ScreenShell } from '@/components'
 import { useFocusTrap } from '@/lib/useFocusTrap'
 import styles from '../permission.module.css'
@@ -11,8 +11,9 @@ import styles from '../permission.module.css'
 // is an asserted fork rather than one a reviewer can take, and the denied path (a Must
 // state) stays unreachable.
 
-export default function PromptPage() {
+function Prompt() {
   const router = useRouter()
+  const door = useSearchParams().get('door')
   // The other real dialog in the app, and it had the same defect BottomSheet did:
   // aria-modal="true" with focus left on <body> and the screen behind it still in the
   // tab order, so nothing announced that a dialog had opened and Tab walked out of it.
@@ -24,7 +25,7 @@ export default function PromptPage() {
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="determined" />
         <div className="screenTitle">
-          <h1 className="screenTitleHeading">Ready to say it out loud?</h1>
+          <h1 className="screenTitleHeading">Ready to say it back?</h1>
         </div>
       </div>
 
@@ -47,12 +48,20 @@ export default function PromptPage() {
             <button className={styles.dialogButton} onClick={() => router.push('/permission/denied')}>
               Don&rsquo;t Allow
             </button>
-            <button className={styles.dialogButton} onClick={() => router.push('/session/idle/1')}>
+            <button className={styles.dialogButton} onClick={() => router.push(door ? `/session/idle/1?door=${door}` : '/session/idle/1')}>
               Allow
             </button>
           </div>
         </div>
       </div>
     </ScreenShell>
+  )
+}
+
+export default function PromptPage() {
+  return (
+    <Suspense fallback={null}>
+      <Prompt />
+    </Suspense>
   )
 }

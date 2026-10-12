@@ -2,11 +2,10 @@
 
 import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { AppBar, ConfidenceAsk, ProcessingBeat, ProgressIndicator, ScreenShell, SessionFraction } from '@/components'
-import { processingDwell } from '@/lib/motion'
-import { CloseIcon } from '@/components/icons'
-import { goToExit } from '@/lib/navigation'
-import { progressFor, recordConfidence, revisitsPending, TOTAL_TERMS } from '@/lib/session'
+import { ConfidenceAsk, ProcessingBeat, ScreenShell } from '@/components'
+import { confidenceGrace, processingDwell } from '@/lib/motion'
+import { SessionBar } from '../../session/SessionBar'
+import { recordConfidence } from '@/lib/session'
 
 // The typed path's equivalent of 03 Processing.
 //
@@ -34,6 +33,10 @@ function CheckingScreen() {
   // can only ever pass isn't a judged path at all.
   const len = Number(searchParams.get('len') ?? '0')
   const verdict = len >= 40 ? 'pass' : 'miss'
+  // Too short to have said anything checkable ("idk lol"). The miss screen then says so
+  // instead of crediting part of a definition the student never wrote (designer,
+  // 2026-10-12, from the critic panel).
+  const thin = len < 15
   // A drill turn returns to the drill. It used to land in /session/pass and the
   // student continued into a 4-term session they never started.
   const drillStep = searchParams.get('drill')
@@ -58,7 +61,9 @@ function CheckingScreen() {
       // misheard, so this path has no business asking the mishear mock anything.
       recordConfidence(index, sure, verdict === 'pass' ? 'Pass' : 'Miss')
     }
-    const q = new URLSearchParams({ sure: sure ? '1' : '0' })
+    const q = new URLSearchParams()
+    if (sure !== undefined) q.set('sure', sure ? '1' : '0')
+    if (verdict === 'miss' && thin) q.set('thin', '1')
     router.push(`/session/${verdict}/${index}?${q}`)
   }
 
@@ -68,30 +73,18 @@ function CheckingScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, router, verdict, drillStep])
 
+  // The ask is optional here too, as on 03 Processing (designer, 2026-10-12): after
+  // confidenceGrace with no tap, move on and record no confidence.
+  useEffect(() => {
+    if (!asking) return
+    const id = window.setTimeout(() => onward(), confidenceGrace())
+    return () => window.clearTimeout(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [asking])
+
   return (
     <ScreenShell
-      topNavigation={
-        // It used to render NO top navigation, so the header vanished between
-        // /text/turn and the verdict and reappeared one screen later — the chrome
-        // blinked mid-flow. Same bar as every other numbered-term screen.
-        <>
-          <AppBar
-            variant="leftIconButtonOnly"
-            leftIcon={<CloseIcon />}
-            leftLabel="Leave"
-            onLeft={() => goToExit(router)}
-          >
-            <ProgressIndicator
-              progress={progressFor(index)}
-              thickness="16"
-              label="Questions"
-              current={index}
-              total={TOTAL_TERMS}
-            />
-          </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
-        </>
-      }
+      topNavigation={<SessionBar index={index} />}
       // Reserve the action zone before the question arrives. ScreenShell's own doc
       // says this flag exists so "a region that is on still reserves its height even
       // with nothing in it, which is what keeps the action zone in the same place from

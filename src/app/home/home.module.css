@@ -192,7 +192,10 @@
      alignment the moment the content stops fitting, which is what makes the overflow
      reachable and the shell's fade honest. */
   justify-content: safe center;
-  gap: calc(var(--size-primitive-space-1600) * 1px);
+  /* 32, not the frame's 64 (designer, 2026-10-12: "fix overall home spacing"). At 64
+     the hero and Say It Back's surface read as two unrelated blocks, and on
+     /home/unlocked one button floated alone in the gap. */
+  gap: calc(var(--size-primitive-space-800) * 1px);
   padding-block: calc(var(--size-primitive-space-200) * 1px);
   /* This region scrolls, the chrome does not. The tool chips, the composer and the tab
      bar are the host app's furniture and pinning them is the whole point of a tab bar.
@@ -227,12 +230,29 @@
   align-items: center;
   gap: calc(var(--size-primitive-space-300) * 1px);
   width: 100%;
+  flex-shrink: 0;
 }
 
+/* KNOWIE GIVES WAY, NOT THE CHIP — in one step, not a slide (2026-10-12). When the
+   middle would not fit with Knowie at the frame's 3XL, HomeShell sets data-compact and
+   Knowie is 2XL, the size it is on every other screen; past that the region scrolls.
+   The shrink used to be continuous flex: the hero was allowed to shrink below its own
+   content, so at 390x668 the greeting spilled into the slot and printed over the
+   doors on /home, and Knowie came out a different size on every home state. */
 .mascotGroup {
   position: relative;
   display: flex;
   justify-content: center;
+}
+
+.middle[data-compact='1'] .mascotGroup > .mascot[data-size] {
+  width: calc(var(--size-primitive-illustration-1500) * 1px);
+  height: calc(var(--size-primitive-illustration-1500) * 1px);
+}
+
+/* Still too tall at 2XL: Knowie steps out and the greeting stays. */
+.middle[data-compact='2'] .mascotGroup {
+  display: none;
 }
 
 /* The frame's ground ellipse: 134 x 24, at the foot of the 200 box.
@@ -280,6 +300,7 @@
   align-items: center;
   gap: calc(var(--size-primitive-space-300) * 1px);
   width: 100%;
+  flex-shrink: 0;
 }
 
 /* -------------------------------------------------------------- bottomContent */
@@ -296,10 +317,23 @@
   gap: calc(var(--size-primitive-space-200) * 1px);
   overflow-x: auto;
   scrollbar-width: none;
+  /* Room for the chips' 48 hit areas INSIDE the scroller. overflow-x: auto clips the
+     block axis too, so the ::after overlays below were cut back to the 32 the chips
+     paint at — measured 32 tall, a failed touch-target gate on the product's own entry
+     chip. Padding the row by (tapTarget - chip) / 2 and pulling it back with the same
+     negative margin keeps the layout exactly where the frame has it. */
+  padding-block: calc((var(--spacing-semantic-tap-target) - var(--component-button-s-height)) / 2 * 1px);
+  margin-block: calc((var(--spacing-semantic-tap-target) - var(--component-button-s-height)) / -2 * 1px);
 }
 
 .tools::-webkit-scrollbar {
   display: none;
+}
+
+/* Every chip in the row keeps its own width and the row scrolls. The Say It Back chip
+   comes from outside (HomeShell's toolChip) and shrank to "It" without this. */
+.tools > * {
+  flex-shrink: 0;
 }
 
 .tool {
@@ -423,16 +457,22 @@
   cursor: pointer;
 }
 
-/* The frame's avatar is the student's photo in a 24 ring. Knowie stands in for it —
-   there is no student photo in this prototype and inventing one would be a fiction the
-   screen does not need. */
-.avatarPose {
+/* The profile tab is the student's initial in a ring, as the live app draws it
+   (reference/screenshots/54). It was Knowie in a circle, which rendered at 64 rather
+   than 24 — MascotSlot's size rule out-specified this one — and read as a second
+   mascot chip in the tab bar. */
+.avatarInitial {
+  display: grid;
+  place-items: center;
   width: calc(var(--size-primitive-icon-400) * 1px);
   height: calc(var(--size-primitive-icon-400) * 1px);
-  padding: 0;
   border-radius: calc(var(--size-primitive-radius-full) * 1px);
   border: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default);
-  overflow: hidden;
+  background: var(--color-semantic-background-surface);
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
 }
 
 .homeIndicator {
@@ -466,32 +506,12 @@
   width: 100%;
 }
 
-/* The unlock reveal dims home and spotlights the chip. Shown once. */
-.spotlightScrim {
-  position: fixed;
-  inset: 0;
-  background: var(--color-semantic-background-scrim);
+/* The unlock note: Knowie's line above the tool row, with its dismissal. */
+.unlockNote {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
-  padding: calc(var(--spacing-semantic-screen-margin) * 1px);
-  padding-bottom: calc(var(--size-primitive-space-1200) * 1px);
-  text-align: center;
-}
-
-.coachCard {
-  border-radius: calc(var(--size-primitive-radius-400) * 1px);
-  background: var(--color-semantic-background-surface);
-  padding: calc(var(--spacing-semantic-card-padding) * 1px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: calc(var(--size-primitive-space-300) * 1px);
-}
-
-.spotlit {
-  align-self: center;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+  width: 100%;
 }
 
 /* Baseline home only: the three doors, standing in for arriving at one in the real

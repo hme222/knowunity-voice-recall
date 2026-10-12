@@ -1,5 +1,5 @@
 import type { ButtonHTMLAttributes } from 'react'
-import { MicIcon } from '../icons'
+import { MicIcon, PauseIcon } from '../icons'
 import styles from './MicButton.module.css'
 
 // Mirrors the Figma component set `micButton` (15648:10629): one `state` variant.
@@ -39,7 +39,9 @@ export function MicButton({ state = 'Idle', label, className, type = 'button', .
       aria-pressed={state === 'Listening' ? true : state === 'Paused' ? false : undefined}
     >
       {state === 'Listening' && <span className={styles.pulse} aria-hidden="true" />}
-      <span className={styles.glyph}><MicIcon /></span>
+      {/* Paused swaps the mic for the pause symbol, so the state reads from the control
+          itself with no caption needed — designer, 2026-10-08. */}
+      <span className={styles.glyph}>{state === 'Paused' ? <PauseIcon /> : <MicIcon />}</span>
     </button>
   )
 }

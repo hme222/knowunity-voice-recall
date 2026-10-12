@@ -1,37 +1,32 @@
 /* The "N/4" label that sits under the appBar inside the scaffold's topNavigation slot.
    In Figma it is a plain text node beside the progress ring, not part of appBar. */
 
-/* Overlaid on the progress ring inside topNavigation, per sprint-context.md § Screens.
-   Absolute so it costs the region no height: a 56px box cannot hold the app bar and a
-   stacked caption row. */
+/* UNDER the progress bar, left-aligned with its start — decided 2026-10-08 by the
+   designer, who found the count overlaid on the ring hard to read. It used to sit on
+   the ring in a page-coloured pill so the fill could pass under it. Here it is clear of
+   the bar, so the pill has nothing to cut out of.
+
+   Placement, all from tokens: the bar is the AppBar slot's centred 16 (y 16-32 of the
+   56 region), so this starts space.100 under it at 36 and ends at 52, inside the region
+   without changing its height. The left edge is the AppBar's space.100 inset, the
+   tap-target close button, and the bar's space.100 gap. */
 .root {
   position: absolute;
-  /* It is aria-hidden decoration stretched across the whole region, so without this it
-     sits on top of the app bar and eats every tap on the X. That is exactly what it
-     did: the exit control did nothing on all 18 session screens. Nothing that cannot
-     be clicked should ever be able to absorb a click. */
+  /* It is aria-hidden decoration inside the app bar's region, so without this it
+     would eat taps meant for the controls. Nothing that cannot be clicked should ever
+     be able to absorb a click. */
   pointer-events: none;
-  left: 0;
-  right: 0;
-  top: calc(var(--size-primitive-space-600) * 1px);
-  transform: translateY(-50%);
+  left: calc((var(--size-primitive-space-100) * 2 + var(--spacing-semantic-tap-target)) * 1px);
+  top: calc((var(--size-primitive-space-800) + var(--size-primitive-space-100)) * 1px);
   display: block;
   margin: 0;
-  text-align: center;
-  color: var(--color-semantic-text-primary);
+  color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
   font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
   line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
   letter-spacing: calc(var(--typography-style-caption-m-bold-letter-spacing) * 0.01em);
 }
 
-/* The readable backing. The ring's fill passes under the text as the session advances,
-   and text.primary fell to 3.15:1 on brand.bold. A background.page pill exactly one
-   line tall (captionMBold's 16, the same as the 16 track) reads as a cut-out in the
-   bar, and the text is on the page colour whatever the progress. */
 .pill {
-  display: inline-block;
-  padding-inline: calc(var(--size-primitive-space-200) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
-  background: var(--color-semantic-background-page);
+  display: inline;
 }

@@ -44,3 +44,16 @@
   line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
   letter-spacing: calc(var(--typography-style-body-m-regular-letter-spacing) * 0.01em);
 }
+
+/* Selected carries a check, not only the highlight tint (2026-10-12). */
+.label {
+  flex: 1;
+}
+
+.check {
+  flex-shrink: 0;
+  width: calc(var(--size-primitive-icon-300) * 1px);
+  height: calc(var(--size-primitive-icon-300) * 1px);
+  margin-left: calc(var(--size-primitive-space-200) * 1px);
+  color: var(--color-semantic-highlight-border);
+}

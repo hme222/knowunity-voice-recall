@@ -24,7 +24,8 @@
 .scrim {
   position: fixed;
   inset: 0;
-  background: var(--color-semantic-background-scrim);
+  /* Strong, so only the alert reads — the primer's title showed through at 50%. */
+  background: var(--color-semantic-background-scrim-strong);
   display: grid;
   place-items: center;
   padding: calc(var(--spacing-semantic-screen-margin) * 1px);

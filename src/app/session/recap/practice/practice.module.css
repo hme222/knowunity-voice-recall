@@ -1,0 +1,78 @@
+/* 07a Practice what I missed, redesigned 2026-10-09. Knowie and the title centred as
+   on every screen-title screen; the rows full width, like every card in the column. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  align-self: stretch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* One term: what it is and why it is here on the left, the recommended action on the
+   right. Built inline — see component-gaps.md. */
+.row {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+  padding: calc(var(--size-primitive-space-200) * 1px) calc(var(--spacing-semantic-card-padding) * 1px);
+  border-radius: calc(var(--size-primitive-radius-200) * 1px);
+  /* Outlined on the page, not filled with surface: a Secondary button's fill IS the
+     surface colour, so on a filled card the recommended action read as plain text. */
+  border: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default);
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  min-width: 0;
+}
+
+.rowTerm,
+.rowReason {
+  margin: 0;
+}
+
+.rowMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.rowTerm {
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-m-bold-font-weight);
+  font-size: calc(var(--typography-style-body-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-bold-line-height) * 1px);
+}
+
+.rowReason {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-s-regular-font-weight);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
+}
+
+/* The other method: a quiet link under the reason, flush left with the text. Two
+   classes so it outranks the catalog Button's own padding. */
+.rowText .rowAlt {
+  padding-inline: 0;
+}
+
+.empty {
+  margin: 0;
+  color: var(--color-semantic-text-secondary);
+  text-align: center;
+}

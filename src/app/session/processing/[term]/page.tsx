@@ -1,13 +1,12 @@
 'use client'
 
-import { Suspense, use, useEffect, useState } from 'react'
+import { Suspense, use, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { goToExit } from '@/lib/navigation'
-import { AppBar, Button, ConfidenceAsk, ProcessingBeat, ProgressIndicator, ScreenShell, SessionFraction } from '@/components'
-import { CloseIcon } from '@/components/icons'
-import { getTerm, progressFor, recordConfidence, revisitsPending, verdictFor, TOTAL_TERMS } from '@/lib/session'
+import { SessionBar } from '../../SessionBar'
+import { ConfidenceAsk, ProcessingBeat, ScreenShell } from '@/components'
+import { getTerm, recordConfidence, verdictFor } from '@/lib/session'
 import { doorResultHref } from '@/app/door/doors'
-import { processingDwell, slowThreshold } from '@/lib/motion'
+import { confidenceGrace, processingDwell, slowThreshold } from '@/lib/motion'
 import styles from './processing.module.css'
 
 // 03 Processing — Figma frame "03 Processing" (15672:20190), plus the confidence tap
@@ -49,17 +48,33 @@ function ProcessingScreen({ index }: { index: number }) {
     return () => window.clearTimeout(id)
   }, [unusable, index, attempt, router])
 
+  // Not a gate any more. If the ask goes unanswered, move on once the student has had a
+  // fair chance — after the slow threshold, so "still thinking" still shows first. Through a ref, so the re-render at the slow threshold does not
+  // restart the clock.
+  const answerRef = useRef<(sure?: boolean) => void>(() => {})
+  useEffect(() => {
+    answerRef.current = answer
+  })
+  useEffect(() => {
+    if (unusable) return
+    const id = window.setTimeout(() => answerRef.current(), confidenceGrace())
+    return () => window.clearTimeout(id)
+  }, [unusable])
+
   if (!current) {
     router.replace('/session/intro')
     return null
   }
 
-  function answer(sure: boolean) {
+  // `sure` is undefined when the student never answered: the ask is optional (designer,
+  // 2026-10-09), so after confidenceGrace the turn moves on with no confidence recorded
+  // — no reward and no cost, rather than guessing one for them.
+  function answer(sure?: boolean) {
     const verdict = verdictFor(index, ms, attempt)
-    // The tap the screen has been blocking on now costs something. It was asked for,
-    // waited for, and discarded — the Design Brief's own test is "overconfidence has to
-    // cost something", and sure/not-sure produced identical screens and identical XP.
-    recordConfidence(index, sure, verdict)
+    // A tap that is given costs or pays something — the Design Brief's own test is
+    // "overconfidence has to cost something", and sure/not-sure used to produce
+    // identical screens and identical XP.
+    if (sure !== undefined) recordConfidence(index, sure, verdict)
     // A run that came through a door and landed a Pass goes to that door's own result
     // rather than into the session, which it was never part of. A Miss or a mishear
     // falls through to the normal verdict screens: the help they offer is the same
@@ -71,7 +86,8 @@ function ProcessingScreen({ index }: { index: number }) {
     }
     const route =
       verdict === 'Pass' ? 'pass' : verdict === 'Miss' ? 'miss' : 'unclear'
-    const q = new URLSearchParams({ sure: sure ? '1' : '0', attempt: String(attempt) })
+    const q = new URLSearchParams({ attempt: String(attempt) })
+    if (sure !== undefined) q.set('sure', sure ? '1' : '0')
     if (hinted) q.set('hinted', '1')
     router.push(`/session/${route}/${index}?${q}`)
   }
@@ -79,25 +95,7 @@ function ProcessingScreen({ index }: { index: number }) {
   return (
     <ScreenShell
       className={styles.root}
-      topNavigation={
-        <>
-          <AppBar
-            variant="leftIconButtonOnly"
-            leftIcon={<CloseIcon />}
-            leftLabel="Leave"
-            onLeft={() => goToExit(router)}
-          >
-            <ProgressIndicator
-              progress={progressFor(index)}
-              thickness="16"
-              label="Questions"
-              current={index}
-              total={TOTAL_TERMS}
-            />
-          </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
-        </>
-      }
+      topNavigation={<SessionBar index={index} door={door} />}
       // Reserve the action zone before the question arrives. ScreenShell's own doc
       // says this flag exists so "a region that is on still reserves its height even
       // with nothing in it, which is what keeps the action zone in the same place from
@@ -107,24 +105,6 @@ function ProcessingScreen({ index }: { index: number }) {
       bottomContent={
         <div className={styles.confidence}>
           {!unusable && <ConfidenceAsk onAnswer={answer} />}
-          {slow && (
-            <Button
-              CTA="Having connection trouble?"
-              variant="Tertiary"
-              size="S"
-              fullWidth
-              onClick={() => {
-                // The take goes WITH the student. Sending only `term` meant the
-                // retry came back with no duration, the mock read that as unusable,
-                // and a held answer resolved as "that one didn't come through" — a
-                // connection fault returned as the student's speech.
-                const held = new URLSearchParams({ term: String(index), ms: String(ms), attempt: String(attempt) })
-                if (hinted) held.set('hinted', '1')
-                if (door) held.set('door', door)
-                router.push(`/session/offline?${held}`)
-              }}
-            />
-          )}
         </div>
       }
     >

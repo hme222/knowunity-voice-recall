@@ -1,8 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { AppBar } from '../AppBar/AppBar'
+import { ProgressIndicator } from '../ProgressIndicator/ProgressIndicator'
+import { CloseIcon } from '../icons'
 import { SessionFraction } from './SessionFraction'
 
 const DESCRIPTION = `
-**WHAT:** The "N/4" label under the app bar, inside the scaffold's \`topNavigation\` slot. A plain centred text node in Figma, not part of \`appBar\`.
+**WHAT:** The "N/4" label in the scaffold's \`topNavigation\` slot. **Under the progress bar, left-aligned with its start** (designer, 2026-10-08) — it used to sit on the ring in a page-coloured pill, which read poorly. It fits inside the 56 region, so nothing below moves. Not part of \`appBar\`.
 
 **WHEN:** Every session and drill screen that shows progress. Pair it with a \`ProgressIndicator\` in the same slot — the ring is the visual, this is the count.
 
@@ -19,7 +22,24 @@ const meta = {
   tags: ['autodocs'],
   parameters: { docs: { description: { component: DESCRIPTION } } },
   args: { current: 1, total: 4 },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  // In place: it is positioned against the top-navigation region, under the bar, so it
+  // only reads correctly beside the AppBar and ProgressIndicator it labels.
+  decorators: [
+    (Story, ctx) => (
+      <div style={{ position: 'relative', height: 'calc(var(--component-scaffold-top-navigation-height) * 1px)' }}>
+        <AppBar variant="leftAndRightButton" leftIcon={<CloseIcon />} leftLabel="Leave" rightText="Skip">
+          <ProgressIndicator
+            progress={ctx.args.current === 4 ? '100' : ctx.args.current === 2 ? '50' : '25'}
+            thickness="16"
+            label="Questions"
+            current={ctx.args.current}
+            total={ctx.args.total}
+          />
+        </AppBar>
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof SessionFraction>
 
 export default meta

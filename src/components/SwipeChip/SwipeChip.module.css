@@ -37,6 +37,11 @@
   height: calc(var(--component-button-s-height) * 1px);
   padding: 0 calc(var(--size-primitive-space-300) * 1px);
   gap: calc(var(--size-primitive-space-150) * 1px);
+  /* Matched to the tools beside it, not just measured like them. The transparent due
+     border made this 4 wider, and without the tools' inset foot its whole 32 read as
+     surface while theirs read as 28 — so it looked a size up in the row. */
+  border-width: 0;
+  box-shadow: inset 0 calc(var(--size-primitive-space-100) * -1px) 0 0 var(--color-semantic-background-scrim);
 }
 
 .root:not([data-due='true']) .glyph {

@@ -11,6 +11,8 @@ const FIGMA_DESCRIPTION = `
 
 ---
 
+**Changed 2026-10-08, by the designer:** CouldntHear's tag reads "Say it again" in Chips Primary (was "Try again" in Coral) and its label reads "Not a wrong answer" (was "Try explaining"). Both old forms told the student their answer was wrong on a screen whose whole point is that the mic missed it. This departs from IMG_7512 and from the Figma component on purpose.
+
 Built 2026-09-16. Fully bound in Figma; nothing added. The tag is the real Chips component (S, Coral, active) with the retry glyph exported from this set. The Miss label uses \`feedback.error.onSubtle\` (bound in Figma too): \`text.tertiary\` measured 3.8:1 on the error tint. Pass and CouldntHear keep \`text.tertiary\` at 4.22 / 4.34:1, an accepted eyebrow-label ratio, see design-system.md open question 11.
 
 **Neutral added 2026-09-21.** A fourth state for the drill (DD 07, 15782:12362), where a stumble is practice, not a scored miss: \`background.surface\` with a \`text.primary\` title, no tag, "You said" label. Until now the drill screens rebuilt this card inline (\`component-gaps.md\`).
@@ -38,7 +40,7 @@ export const Miss: Story = {
   args: { state: 'Miss', title: 'Close — you described the octet rule, not formal charge.' },
 }
 export const CouldntHear: Story = {
-  args: { state: 'CouldntHear', title: "We couldn't catch that.", transcript: "formal charge once more, whenever you're ready." },
+  args: { state: 'CouldntHear', title: 'I didn’t catch that.', transcript: 'The mic didn’t pick you up. Say the same answer again, a little closer.' },
 }
 export const Neutral: Story = {
   name: 'Neutral — the drill’s ungraded miss',
@@ -46,5 +48,15 @@ export const Neutral: Story = {
     state: 'Neutral',
     title: 'Close. One word is missing.',
     transcript: '“Formal charge is the charge on an atom when every bond’s… um…”',
+  },
+}
+
+/** A second Miss: verdict only, no "You said" — the hint below carries the screen. */
+export const MissWithoutTranscript: Story = {
+  args: {
+    state: 'Miss',
+    title: 'You’ve got the “charge on an atom” part right. The “evenly split” piece is what’s missing.',
+    transcript: '“It’s the charge on an atom, worked out from its bonds.”',
+    showTranscript: false,
   },
 }

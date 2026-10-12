@@ -1,87 +1,109 @@
 'use client'
 
-import { useState } from 'react'
-
 import { useRouter } from 'next/navigation'
 import { returnBack } from '@/lib/navigation'
-import { actionRowClass, AppBar, Button, ChatBubble, OptionRow, ScreenShell } from '@/components'
+import { AppBar, Button, MascotSlot, ScreenShell } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { DRILL_TERM, getTerm, setPractising, useSession } from '@/lib/session'
-import styles from '../recap.module.css'
+import { type Bucket, getTerm, type PracticeItem, recommendedMode, startPractice, type TermOutcome, useSession } from '@/lib/session'
+import styles from './practice.module.css'
 
-// 07a Practice what I missed — Figma frame "07a Practice what I missed — choose how"
-// (15785:13615). The hinge between the core loop and the drill: where Recap's
-// "worth revisiting" bucket becomes an action.
+// 07a Practice what I missed. Redesigned 2026-10-09 with the designer, replacing the
+// Figma frame "07a Practice what I missed — choose how" (15785:13615).
 //
-// The drill is OFFERED here, never entered mid-session (decided 2026-09-20), so
-// DD 00's opt-in framing stands.
+// The frame asked "How do you want to practice?" over a list of terms, so the student
+// made two choices (which term, which method) with one of them hidden: a row was
+// preselected, and both methods were equal-weight Secondary buttons with nothing to say
+// how they differed. Now each row IS the action. The app recommends the method from
+// what happened to the term (recommendedMode), says why the term is there, and offers
+// the other method as a quiet alternative. "Practice all" runs every row in order and
+// comes back to the Recap once.
+//
+// The drill is still OFFERED here, never entered mid-session (decided 2026-09-20).
+
+/** Why the term is on this list, in the student's terms. */
+const REASON: Record<Exclude<Bucket, 'Unaided'>, string> = {
+  Revealed: 'Needed the answer',
+  'Worth revisiting': 'Skipped',
+  Hinted: 'Needed a hint',
+}
+
+/** Same order the Recap uses when there are misses: the least-known first. */
+const ORDER: Bucket[] = ['Worth revisiting', 'Revealed', 'Hinted']
+
+const CTA: Record<PracticeItem['mode'], string> = { drill: 'Drill it', say: 'Say it again' }
+const ALT: Record<PracticeItem['mode'], string> = { drill: 'or say it', say: 'or drill it' }
 
 export default function PracticePage() {
   const router = useRouter()
   const state = useSession()
+  const missed: TermOutcome[] = state.outcomes
+    .filter((o) => o.bucket !== 'Unaided')
+    .sort(
+      (a, b) =>
+        ORDER.indexOf(a.bucket) - ORDER.indexOf(b.bucket) ||
+        // Sure-and-wrong first within a bucket, as on the Recap.
+        Number(b.wasSure ?? false) - Number(a.wasSure ?? false),
+    )
+  const plan: PracticeItem[] = missed.map((o) => ({ index: o.index, mode: recommendedMode(o.bucket, o.micTrouble) }))
 
-  const missed = state.outcomes.filter((o) => o.bucket !== 'Unaided')
-  // WHICH term. Every control on this screen used to ignore the list it sat under:
-  // the rows all pushed to /drill/intro, and the drill only has one definition's ladder
-  // built, so tapping "Cytoskeleton" drilled Formal charge. The rows had a hardcoded
-  // state="Default" too, so nothing ever looked chosen.
-  // `useState(() => missed[0]?.index)` looked right and was wrong: the initialiser runs
-  // once, on the first render, and the session is read from storage after that — so it
-  // captured undefined and nothing was ever selected until the student tapped. The
-  // default is resolved at render instead, which is also what makes it follow the list
-  // if the list arrives late.
-  const [picked, setPicked] = useState<number | undefined>(undefined)
-  const selected = picked ?? missed[0]?.index
-  const canDrill = selected === DRILL_TERM.index
+  const go = (items: PracticeItem[]) => router.push(startPractice(items))
 
   return (
     <ScreenShell
       topNavigation={
         <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Back" onLeft={() => returnBack(router, '/session/recap')} />
       }
+      // "Practice all" only when there is more than one; with one, its row is the action.
+      // No "Not now": the X already does that.
       bottomContent={
-        <div className={styles.actions}>
-          {/* The two ways to practise share the row; the dismissal is the link. Three
-              stacked measured 176 against a 136 budget. */}
-          {/* The drill is offered only for the definition whose ladder exists. It is
-              built from Formal-charge-specific cues, so a "Drill it out loud" button on
-              any other term would open a drill for a term the student did not pick —
-              which is what it did. */}
-          <div className={actionRowClass}>
-            {canDrill && (
-              <Button CTA="Drill it out loud" variant="Secondary" size="M" onClick={() => { setPractising(true); router.push('/drill/intro') }} />
-            )}
-            <Button
-              CTA="Say it back again"
-              variant="Secondary"
-              size="M"
-              onClick={() => { setPractising(true); router.push(`/session/idle/${selected ?? 1}`) }}
-            />
-          </div>
-          <Button CTA="Not now" variant="Tertiary" size="S" fullWidth onClick={() => { setPractising(false); router.push('/session/recap') }} />
-        </div>
+        plan.length > 1 ? (
+          <Button CTA={`Practice all ${plan.length}`} variant="Primary" size="M" fullWidth onClick={() => go(plan)} />
+        ) : undefined
       }
     >
-      <ChatBubble
-        showTitle
-        title="How do you want to practice?"
-        body={
-          missed.length === 1
-            ? `One term to go back over: ${getTerm(missed[0].index)?.name}.`
-            : `${missed.length} terms to go back over.`
-        }
-      />
-      <div className={styles.buckets}>
-        {missed.map((o) => (
-          <OptionRow
-            key={o.index}
-            label={getTerm(o.index)?.name ?? ''}
-            state={selected === o.index ? 'Selected' : 'Default'}
-            inGroup
-            onClick={() => setPicked(o.index)}
-          />
-        ))}
-        {missed.length === 0 && state && <p className={styles.empty}>You got everything unaided. Nothing to practise.</p>}
+      <div className={styles.body}>
+        <MascotSlot size="2XL" expression="laughing" />
+        <div className="screenTitle">
+          <h1 className="screenTitleHeading">Go back over what you missed</h1>
+          {plan.length > 0 && (
+            <p className="screenTitleCaption">
+              {plan.length > 1 ? 'Knowie picked a way for each.' : 'Knowie picked a way to practice it.'}
+            </p>
+          )}
+        </div>
+
+        {plan.length === 0 && state && <p className={styles.empty}>You got everything unaided. Nothing to practice.</p>}
+
+        <ul className={styles.rows}>
+          {missed.map((o, i) => {
+            const mode = plan[i].mode
+            const other = mode === 'drill' ? 'say' : 'drill'
+            const term = getTerm(o.index)
+            return (
+              <li key={o.index} className={styles.row}>
+                <div className={styles.rowText}>
+                  <p className={styles.rowTerm}>{term?.name}</p>
+                  {/* The reason, then the other method as a quiet link on the same line:
+                      one line instead of two keeps three rows and Knowie on a phone. */}
+                  <div className={styles.rowMeta}>
+                    <p className={styles.rowReason}>
+                      {o.micTrouble ? 'The mic missed it' : REASON[o.bucket as Exclude<Bucket, 'Unaided'>]}
+                      {o.wasSure ? ' · you were sure' : ''}
+                    </p>
+                    <Button
+                      CTA={ALT[mode]}
+                      variant="Tertiary"
+                      size="S"
+                      className={styles.rowAlt}
+                      onClick={() => go([{ index: o.index, mode: other }])}
+                    />
+                  </div>
+                </div>
+                <Button CTA={CTA[mode]} variant="Secondary" size="S" onClick={() => go([{ index: o.index, mode }])} />
+              </li>
+            )
+          })}
+        </ul>
       </div>
     </ScreenShell>
   )

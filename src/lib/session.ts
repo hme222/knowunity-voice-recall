@@ -43,6 +43,24 @@ export type Term = {
   answer: string
   /** The drill uses "Define:", the recall loop uses "Explain:". From the frames. */
   drillTitle?: string
+  /**
+   * Definition Drill Down's material for this term. Every term has one since
+   * 2026-10-09 (designer: "Drill it out loud" for each term, not only formal charge).
+   */
+  drill: TermDrill
+}
+
+/**
+ * One term's drill. `cues` are rungs 1-3, the definition thinning one rung at a time,
+ * blanks written as underscores (Cue draws them as rules); rung 2 blanks exactly
+ * `missedWord`, the word the stumble scaffold escalates on. `partial` is the stumbled
+ * take — the definition with `missedWord` simply absent — used by both the screen that
+ * shows the take and the screen that judges it, so the two can never disagree.
+ */
+export type TermDrill = {
+  cues: [string, string, string]
+  missedWord: string
+  partial: string
 }
 
 /** XP curve — docs/sprint-context.md § "XP model", revised 2026-09-20. */
@@ -61,11 +79,16 @@ export const XP = {
   // rewarded, or the screen is just flattery." These three make it mechanical. They
   // are judged on the FIRST tap that got a real verdict (a couldn't-hear does not
   // count), so a hint or a reveal can never launder the original call.
-  /** Sure, and right first time. Called it. */
-  sureRight: 2,
-  /** Not sure, and right first time. Knew more than they thought — a little, never a
-   *  penalty. Below sureRight on purpose: if doubting paid as well as knowing, "Not
-   *  sure" would be the only rational tap and the signal would die. */
+  /** Sure, and right first time. Called it.
+   *
+   *  FLATTENED 2026-10-12 (designer, from the critic panel): sureRight and unsureRight
+   *  pay the same. At 2 against 1, with sureWrong at 0, "Sure" strictly dominated and
+   *  the tap stopped measuring anything — the remedy this block's own note below
+   *  prescribed. The tap is now informational: it pays a little for a right answer
+   *  either way, costs nothing, and the Recap still marks "you were sure" on a miss. */
+  sureRight: 1,
+  /** Not sure, and right first time. Knew more than they thought. Equal to sureRight
+   *  since 2026-10-12, so doubting is never the losing tap. */
   unsureRight: 1,
   /** Sure, and wrong. COSTS NOTHING, decided 2026-09-23.
    *
@@ -111,71 +134,104 @@ export const TERMS: Term[] = [
     answer:
       "Formal charge is the charge on an atom when every bond's electrons are split evenly between the two atoms.",
     drillTitle: 'Define: Formal charge',
+    drill: {
+      cues: [
+        "Formal charge is the charge on an atom when every bond's electrons are split evenly between the two atoms.",
+        "Formal charge is the charge on an atom when every bond's _________ are split evenly between the two atoms.",
+        "Formal charge is the ______ on an atom when every bond's _________ are split ______ between the two atoms.",
+      ],
+      // `electrons` on every stumble frame — the whole scaffold hangs off one word.
+      missedWord: 'electrons',
+      // DD 07 used to hardcode a different string with an invented "um…" in it, while
+      // /drill/captured showed the CLEAN transcript; one string now feeds both.
+      partial: "It's the charge on an atom if you split every bond's… evenly between the two atoms.",
+    },
   },
+  // Terms 2-4 are Chemistry: bonding, the same topic as formal charge — decided
+  // 2026-10-09 by the designer: one subject, like a normal Say It Back session. They
+  // were three Biology terms, so a "Chemistry quiz" door led into a mixed set.
+  //
+  // The rules the Biology set learned the hard way still hold: the prompt asks for
+  // every part the marking checks, and `partialTranscript` leaves out exactly what
+  // `missTitle` names, so the verdict never contradicts the quote printed under it.
   {
     index: 2,
-    name: 'Cell membrane',
-    title: 'Explain: Cell membrane',
-    // The prompt asks for BOTH halves, because the marking does.
-    //
-    // It used to ask only "what the cell membrane does", and then mark a correct
-    // what-it-does answer as incomplete for not saying what it is made of — a question
-    // it had not asked. A student who answers the literal question and is told they
-    // were partially wrong stops trusting the verdict, and this screen's whole claim is
-    // that the transcript is proof.
-    prompt: 'Say what the cell membrane is made of and what it does, in your own words. However you would explain it to a friend.',
-    transcript: 'It is a double layer of fatty molecules around the cell, and that is what lets it choose what gets in and what stays out.',
-    // The job, with no mention of what it is built from — which is exactly what
-    // `missTitle` goes on to name.
-    partialTranscript:
-      "It is the boundary around the cell, and it controls what gets in and out.",
-    passTitle: 'That is it — the job and why it can be selective.',
-    // Was "you described the cell wall, not the membrane", which contradicted this
-    // term's own answer: the canned transcript says the membrane decides what gets in
-    // and out, and the answer says it controls what passes in and out. The miss has to
-    // point at what is actually missing from the transcript — the mechanism.
-    missTitle: 'The job is right. What the membrane is built from is the piece that is missing.',
-    hint: 'Think about what the membrane is built from, and why that lets it choose.',
+    name: 'Covalent bond',
+    title: 'Explain: Covalent bond',
+    prompt: 'Say what a covalent bond is and what holds it together, in your own words. However you would explain it to a friend.',
+    transcript: 'It is when two atoms share a pair of electrons, and both nuclei pulling on that shared pair is what holds them together.',
+    // Names the atoms, says nothing about the electrons — which is what `missTitle` names.
+    partialTranscript: 'It is a bond between two atoms, usually two non-metals.',
+    passTitle: 'That is it — shared electrons, and why they hold.',
+    missTitle: 'Right atoms. What they do with their electrons is the piece that is missing.',
+    hint: 'Think about what the two atoms do with their electrons.',
     answer:
-      'The cell membrane is a phospholipid bilayer around the cell that controls which substances pass in and out.',
+      'A covalent bond is a pair of electrons shared between two atoms, held together by both nuclei attracting the shared pair.',
+    drillTitle: 'Define: Covalent bond',
+    drill: {
+      cues: [
+        'A covalent bond is a pair of electrons shared between two atoms, held together by both nuclei attracting the shared pair.',
+        'A covalent bond is a pair of electrons shared between two atoms, held together by both ______ attracting the shared pair.',
+        'A covalent bond is a pair of _________ ______ between two atoms, held together by both ______ attracting the shared pair.',
+      ],
+      missedWord: 'nuclei',
+      partial: "It's a pair of electrons shared between two atoms, held together by both… attracting the shared pair.",
+    },
   },
   {
     index: 3,
-    name: 'Cytoskeleton',
-    title: 'Explain: Cytoskeleton',
-    prompt: 'Say what the cytoskeleton is for, in your own words. However you would explain it to a friend.',
-    transcript: 'It is the scaffolding inside a cell that holds its shape and moves things around inside it.',
-    partialTranscript:
-      "It is the scaffolding inside a cell that holds its shape.",
-    passTitle: 'Yes — shape and movement, both.',
-    missTitle: 'Partly — you have the shape half, not the movement half.',
-    hint: 'It does more than hold the cell up. What moves along it?',
+    name: 'Electronegativity',
+    title: 'Explain: Electronegativity',
+    prompt: 'Say what electronegativity means, in your own words. However you would explain it to a friend.',
+    transcript: 'It is how strongly an atom pulls shared electrons toward itself in a bond, so the more electronegative atom gets more than its share.',
+    // Where you look it up, not what it measures.
+    partialTranscript: 'It is a number each element has on the periodic table.',
+    passTitle: 'Yes — the pull on shared electrons, and what it does.',
+    missTitle: 'True, but that is where you look it up. What it measures is the piece that is missing.',
+    hint: 'In a bond, which atom gets more of the shared electrons?',
     answer:
-      'The cytoskeleton is a network of protein filaments that gives a cell its shape and moves structures around inside it.',
+      'Electronegativity is how strongly an atom attracts the shared electrons in a bond toward itself.',
+    drillTitle: 'Define: Electronegativity',
+    drill: {
+      cues: [
+        'Electronegativity is how strongly an atom attracts the shared electrons in a bond toward itself.',
+        'Electronegativity is how strongly an atom ________ the shared electrons in a bond toward itself.',
+        'Electronegativity is how ________ an atom ________ the ______ electrons in a bond toward itself.',
+      ],
+      missedWord: 'attracts',
+      partial: "It's how strongly an atom… the shared electrons in a bond toward itself.",
+    },
   },
   {
     index: 4,
-    name: 'Cell transport',
-    title: 'Explain: Cell transport',
-    prompt: 'Say what cell transport means, in your own words. However you would explain it to a friend.',
-    transcript: 'It is how things move across the membrane — some of it just drifts across, and some of it costs the cell energy.',
-    // Omits the two-cases distinction entirely, which is what `missTitle` names.
-    //
-    // It used to read "sometimes using energy" — i.e. the student had already made the
-    // active/passive distinction — while the miss said "that is diffusion", a word they
-    // never used, and the hint restated what their own quoted transcript said back to
-    // them. The verdict card contradicted the quote printed underneath it.
-    partialTranscript:
-      "It is how substances move in and out of the cell, across the membrane.",
-    passTitle: 'Nailed it — you split the passive and active cases.',
-    missTitle: 'That is the right idea. What is missing is that it happens in two different ways.',
-    hint: 'Some ways cost the cell energy. Some do not.',
+    name: 'Octet rule',
+    title: 'Explain: Octet rule',
+    prompt: 'Say what the octet rule is, in your own words. However you would explain it to a friend.',
+    transcript: 'Atoms tend to bond until they have eight electrons in their outer shell, by sharing, gaining or losing electrons.',
+    // The number, with neither where the eight are nor how an atom gets them.
+    partialTranscript: 'Atoms want to have eight electrons.',
+    passTitle: 'Nailed it — eight in the outer shell, and how they get there.',
+    missTitle: 'That is the right number. Where the eight are, and how atoms get them, is what is missing.',
+    hint: 'Eight electrons where? And how does an atom reach it?',
     answer:
-      'Cell transport is the movement of substances across the membrane — passively, by diffusion and osmosis, or actively, using energy.',
+      'The octet rule says atoms tend to gain, lose or share electrons until they have eight in their outer shell.',
+    drillTitle: 'Define: Octet rule',
+    drill: {
+      cues: [
+        'The octet rule says atoms tend to gain, lose or share electrons until they have eight in their outer shell.',
+        'The octet rule says atoms tend to gain, lose or share electrons until they have eight in their _____ shell.',
+        'The octet rule says atoms tend to gain, lose or _____ electrons until they have _____ in their _____ shell.',
+      ],
+      missedWord: 'outer',
+      partial: 'Atoms tend to gain, lose or share electrons until they have eight in their… shell.',
+    },
   },
 ]
 
 export const TOTAL_TERMS = TERMS.length
+
+/** The set's subject, named on every session screen so the run never loses it. */
+export const SUBJECT = 'Chemistry'
 
 /**
  * Quizzes due, for the plan-active home. Three because the built flow shows three
@@ -184,8 +240,8 @@ export const TOTAL_TERMS = TERMS.length
  */
 export const DUE_QUIZZES = [
   { term: 'Formal charge', subject: 'Chemistry', due: '9/15' },
-  { term: 'Photosynthesis', subject: 'Biology', due: '9/17' },
-  { term: 'Kinematics', subject: 'Physics', due: '9/19' },
+  { term: 'Covalent bond', subject: 'Chemistry', due: '9/17' },
+  { term: 'Electronegativity', subject: 'Chemistry', due: '9/19' },
 ]
 
 export function dueCountLabel(indexFromZero: number) {
@@ -197,23 +253,25 @@ export function dueCountLabel(indexFromZero: number) {
 /**
  * The picker's topics. Gated to material the student has revised, and seeded from
  * whichever session unlocked the chip — so a student who arrived via the chat door,
- * having revised nothing, still has something to practise on their first visit.
+ * having revised nothing, still has something to practice on their first visit.
  */
 export const PICKER_TOPICS = [
   { label: 'Chemistry: bonding', seeded: true },
-  { label: 'Chemistry: acids and bases', seeded: false },
-  { label: 'Biology: cell transport', seeded: false },
+  { label: 'Chemistry: molecular shape', seeded: false },
+  { label: 'Chemistry: intermolecular forces', seeded: false },
 ]
 
 /** The drill list on the picker, from the frame. Amber = needs the most work. */
 export const PICKER_DRILLS = [
-  { label: 'Formal charge', state: 'drill' as const },
-  { label: 'Hybridisation', state: 'drill' as const },
-  { label: 'Resonance', state: 'sharp' as const },
+  { term: 1, label: 'Formal charge', state: 'drill' as const },
+  { term: 2, label: 'Covalent bond', state: 'drill' as const },
+  { term: 3, label: 'Electronegativity', state: 'sharp' as const },
 ]
 
 /** The home greeting, from the frame. */
 export const HOME_GREETING = 'Evening study session, Harry?'
+/** The profile tab's initial, as the live app draws it (reference/screenshots/54). */
+export const STUDENT_INITIAL = 'H'
 
 export function getTerm(index: number): Term | undefined {
   return TERMS.find((t) => t.index === index)
@@ -308,55 +366,54 @@ export function hintFor(term: Term, attempt: number): HintStep {
 
 export type DrillRung = { step: number; cue: string; coverage: number }
 
-/** The definition the drill works, thinning one rung at a time. */
-export const DRILL_TERM = TERMS[0]
+/** Coverage per rung, the meter's fill. The same on every term. */
+const RUNG_COVERAGE = [25, 50, 75, 100] as const
 
-export const DRILL_RUNGS: DrillRung[] = [
-  {
-    step: 1,
-    cue: "Formal charge is the charge on an atom when every bond's electrons are split evenly between the two atoms.",
-    coverage: 25,
-  },
-  {
-    step: 2,
-    cue: "Formal charge is the charge on an atom when every bond's _________ are split evenly between the two atoms.",
-    coverage: 50,
-  },
-  {
-    step: 3,
-    cue: "Formal charge is the ______ on an atom when every bond's _________ are split ______ between the two atoms.",
-    coverage: 75,
-  },
-  { step: 4, cue: '______ ______ \u2014 all of it, no cues.', coverage: 100 },
-]
+/** The drill's rungs for a term: its three cues, then the no-cue rung. */
+export function drillRungs(term: Term): DrillRung[] {
+  return [
+    ...term.drill.cues.map((cue, i) => ({ step: i + 1, cue, coverage: RUNG_COVERAGE[i] })),
+    { step: 4, cue: '______ ______ \u2014 all of it, no cues.', coverage: RUNG_COVERAGE[3] },
+  ]
+}
+
+export const DRILL_TOTAL_RUNGS = RUNG_COVERAGE.length
+
+export function drillRung(term: Term, step: number): DrillRung | undefined {
+  return drillRungs(term).find((r) => r.step === step)
+}
 
 /**
- * The word the scaffold escalates on. `electrons` on every stumble frame — the whole
- * scaffold hangs off one word, so this lives here rather than being repeated.
+ * The few words around a term's missed word, from its full definition, with the word
+ * itself replaced — DD 07b's "…every bond's e_____ are split evenly…". It was that
+ * formal-charge string, hardcoded, on every term.
  */
-export const DRILL_MISSED_WORD = 'electrons'
+export function missedWordContext(term: Term, replacement: string): string {
+  const words = term.drill.cues[0].split(' ')
+  const at = words.findIndex((w) => w.replace(/[^\p{L}]/gu, '') === term.drill.missedWord)
+  if (at < 0) return `…${replacement}…`
+  const before = words.slice(Math.max(0, at - 2), at)
+  const after = words.slice(at + 1, at + 4)
+  // No closing ellipsis when the fragment runs to the end of the sentence.
+  const tail = at + 4 >= words.length ? '' : '…'
+  return `…${[...before, replacement, ...after].join(' ')}${tail}`
+}
+
+/** Choose which term the drill works. Set by whoever opens /drill/intro. */
+export function setDrillTerm(index: number) {
+  const state = readSession()
+  if (state.drillTerm === index) return
+  write({ ...state, drillTerm: index })
+}
 
 /**
- * What the drill's stumbled take actually produced — the definition with the missed
- * word simply absent.
- *
- * DD 07 used to hardcode a different string with an invented "um…" in it, while
- * /drill/captured showed the student the CLEAN transcript and had them tap "Looks
- * right". So the drill showed you your words, had you confirm them, then quoted you
- * back saying something worse that you never said, and marked you down on it. The core
- * loop had the same defect and was fixed on 2026-09-23; the drill kept its own copy.
- * One string, used by the screen that shows the take and by the screen that judges it.
+ * The term the drill is working — formal charge until something picks another. A
+ * hook over the session store, so the server render (formal charge) hydrates cleanly
+ * and the picked term arrives with the store, like every other session fact.
  */
-export const DRILL_PARTIAL =
-  "It's the charge on an atom if you split every bond's… evenly between the two atoms."
-
-/** The first letter of the missed word, for DD 07b's nudge. */
-export const DRILL_MISSED_FIRST_LETTER = DRILL_MISSED_WORD[0]
-
-export const DRILL_TOTAL_RUNGS = DRILL_RUNGS.length
-
-export function drillRung(step: number): DrillRung | undefined {
-  return DRILL_RUNGS.find((r) => r.step === step)
+export function useDrillTerm(): Term {
+  const state = useSession()
+  return getTerm(state.drillTerm ?? 1) ?? TERMS[0]
 }
 
 /**
@@ -369,9 +426,12 @@ export const STUMBLES = {
   // so the one piece of chrome built to announce severity said the same sentence from
   // the first gentle nudge to the guaranteed-completable echo — the copy below escalated
   // three times and the chip above it never moved.
-  first: { verdict: '\u2713 Partially correct, one missed', copy: "One word off. It's below, then take it again." },
-  second: { verdict: '\u2713 Same word again', copy: "Still tricky? Here's a nudge." },
-  third: { verdict: '\u2713 Let\u2019s do this one together', copy: "Let's say this one together." },
+  // No ✓ on any of these (designer, 2026-10-12): a check mark on a miss contradicted
+  // the screen, and the first one now reads the same as the session's partial,
+  // "Partially right", so one verdict has one name in both flows.
+  first: { verdict: 'Partially right', copy: "One word off. It's below, then take it again." },
+  second: { verdict: 'Same word again', copy: "Still tricky? Here's a nudge." },
+  third: { verdict: 'Let\u2019s do this one together', copy: "Let's say this one together." },
 } as const
 
 // ---------------------------------------------------------------------------
@@ -405,6 +465,11 @@ export type TermOutcome = {
   calibration?: number
   /** Set once the term has come back at 06 Lock It In. There is no second requeue. */
   requeued?: boolean
+  /**
+   * Skipped after the mic failed on it (2026-10-12). Still offered for practice, but
+   * the Recap does not count it as a miss: the app failed, not the student.
+   */
+  micTrouble?: boolean
 }
 
 /** The first judged confidence tap for a term. Set at 03 Processing, read at record time. */
@@ -433,6 +498,19 @@ export type SessionState = {
    * so rather than dressing itself as the last question of the session.
    */
   practising?: boolean
+  /**
+   * Terms the mic failed on (a couldn't-hear), whatever happened next. Typing one of
+   * these is not "typing by choice", so it pays in full (designer, 2026-10-12).
+   */
+  micFault?: number[]
+  /** Which term Definition Drill Down is working (index into TERMS). Absent = term 1. */
+  drillTerm?: number
+  /**
+   * The practice round still to run, head first: the term being practiced now, then
+   * the rest. Set by 07a ("Practice all 3" or one row); each finished term shifts it,
+   * and the Recap comes back once, at the end — not after every term.
+   */
+  practiceQueue?: PracticeItem[]
   /**
    * Terms the student has been SHOWN a hint for, whatever happened afterwards.
    *
@@ -542,11 +620,55 @@ export function wasHinted(state: SessionState, index: number): boolean {
   return Boolean(state.hinted?.includes(index))
 }
 
+/** One term in a practice round, and how to practice it. */
+export type PracticeItem = { index: number; mode: 'drill' | 'say' }
+
+/**
+ * The method 07a recommends, from what happened to the term (designer, 2026-10-09).
+ * Shown the answer or skipped: the student did not have it, so rebuild it a piece at a
+ * time in the drill. Got it with a hint: they nearly had it, so say it again.
+ */
+export function recommendedMode(bucket: Bucket, micTrouble = false): PracticeItem['mode'] {
+  // A term the mic missed was never judged, so the first try is just saying it again.
+  if (micTrouble) return 'say'
+  return bucket === 'Hinted' ? 'say' : 'drill'
+}
+
+/** Where a practice item starts. */
+function practiceItemHref(item: PracticeItem, state: SessionState): string {
+  return item.mode === 'drill' ? '/drill/intro' : termHref(item.index, state)
+}
+
+/** Start a practice round on these items, in order. Returns where to go first. */
+export function startPractice(items: PracticeItem[]): string {
+  const state = readSession()
+  if (!items.length) return '/session/recap'
+  const next = { ...state, practising: true, practiceQueue: items, drillTerm: items[0].mode === 'drill' ? items[0].index : state.drillTerm }
+  write(next)
+  return practiceItemHref(items[0], next)
+}
+
+/**
+ * The term at the head of the round is done: drop it and go to the next one, or back
+ * to the Recap when the round is finished. Call from a tap handler, never in render.
+ */
+export function advancePractice(): string {
+  const state = readSession()
+  const rest = (state.practiceQueue ?? []).slice(1)
+  if (!rest.length) {
+    write({ ...state, practiceQueue: undefined })
+    return '/session/recap'
+  }
+  const next = { ...state, practiceQueue: rest, drillTerm: rest[0].mode === 'drill' ? rest[0].index : state.drillTerm }
+  write(next)
+  return practiceItemHref(rest[0], next)
+}
+
 /** Enter or leave a practice round from 07a. */
 export function setPractising(on: boolean) {
   const state = readSession()
   if (Boolean(state.practising) === on) return
-  write({ ...state, practising: on || undefined })
+  write({ ...state, practising: on || undefined, ...(on ? {} : { practiceQueue: undefined }) })
 }
 
 /** Whether the student is practising rather than running the graded set. */
@@ -625,7 +747,14 @@ function firstAttemptRight(bucket: Bucket): boolean {
  * those apart.
  */
 export function typedByChoice(state: SessionState, index: number): boolean {
-  return Boolean(state.typed?.[index]?.trim()) && !isSticky(state)
+  return Boolean(state.typed?.[index]?.trim()) && !isSticky(state) && !state.micFault?.includes(index)
+}
+
+/** Mark that the mic failed on this term. Called by 04a Couldn't hear on arrival. */
+export function markMicFault(index: number) {
+  const state = readSession()
+  if (state.micFault?.includes(index)) return
+  write({ ...state, micFault: [...(state.micFault ?? []), index] })
 }
 
 /**
@@ -672,7 +801,7 @@ export function outcomeFor(state: SessionState, index: number): TermOutcome | un
 export function recordOutcome(
   index: number,
   bucket: Bucket,
-  opts?: { repeated?: boolean; wasSure?: boolean },
+  opts?: { repeated?: boolean; wasSure?: boolean; micTrouble?: boolean },
 ): TermOutcome {
   const state = readSession()
   const prior = state.outcomes.find((o) => o.index === index)
@@ -696,6 +825,7 @@ export function recordOutcome(
     wasSure,
     calibration,
     requeued: prior?.requeued,
+    micTrouble: opts?.micTrouble || undefined,
   }
   const outcomes = state.outcomes.filter((o) => o.index !== index)
   outcomes.push(outcome)
@@ -721,8 +851,9 @@ export function sessionTotals(state: SessionState) {
   const termXp = state.outcomes.reduce((sum, o) => sum + o.xp, 0)
   const calibration = state.outcomes.reduce((sum, o) => sum + (o.calibration ?? 0), 0)
   const sureWrong = state.outcomes.filter((o) => (o.calibration ?? 0) < 0).length
-  const unsureRight = state.outcomes.filter((o) => o.calibration === XP.unsureRight).length
-  const sureRight = state.outcomes.filter((o) => o.calibration === XP.sureRight).length
+  // By the tap, not the amount: the two pay the same since 2026-10-12.
+  const unsureRight = state.outcomes.filter((o) => (o.calibration ?? 0) > 0 && !o.wasSure).length
+  const sureRight = state.outcomes.filter((o) => (o.calibration ?? 0) > 0 && o.wasSure).length
   const earned = Math.max(0, termXp + calibration)
   const unaided = state.outcomes.filter((o) => o.bucket === 'Unaided').length
   const elapsedMs = state.startedAt ? Math.max(0, state.lastAt - state.startedAt) : 0
@@ -746,33 +877,18 @@ export function formatElapsed(ms: number) {
 }
 
 /**
- * Next step after a term resolves.
+ * Next step after a term resolves: the following term, or the Recap after the last.
  *
- * Within the set, the following term. At the end of the set, a missed term is
- * requeued once — it comes back cold at /session/lock-in rather than resolving
- * permanently on one attempt (docs/sprint-context.md § Concept). Requeue sits outside
- * the [term] numbering by decision: its own screen, its own copy, its own progress
- * value. A term already requeued once is not requeued again; 06b closes it.
+ * Decided 2026-10-08 by the designer: no requeue. A missed term used to come back once,
+ * cold, at /session/lock-in after the set. Now the run goes straight to the Recap, and
+ * the Recap's "Practice what I missed" is the student's choice to go back to it.
  */
 export function nextAfter(index: number): string {
   const state = readSession()
-  // A term that has already come back at 06 Lock It In closes there, whatever the
-  // verdict — "no further requeue". Without this it re-enters the normal sequence and
-  // the student re-runs terms they already finished. The flag is read from the run, not
-  // the query string: 06 marks the term on arrival, and recordOutcome now keeps the
-  // mark when the term is re-recorded, so no screen has to carry `requeued=1` along.
-  const alreadyRequeued = state.outcomes.find((o) => o.index === index)?.requeued
-  if (alreadyRequeued) return '/session/lock-in/second?answered=1'
+  // In a practice round, the next practice item — or the Recap once, at the end.
+  if (state.practising) return advancePractice()
   if (index < TOTAL_TERMS) return termHref(index + 1, state)
-  // The term rides in the route, as it does everywhere else in this flow.
-  //
-  // 06 used to re-derive it from the session on every render — "first outcome bucketed
-  // Worth revisiting and not yet requeued" — and then mark it requeued on arrival. The
-  // mark made its own predicate stop matching, so the screen forgot which term it was
-  // asking about between one render and the next and fell through to term 1. Naming it
-  // here makes the screen's identity immutable for the life of the visit.
-  const requeueable = state.outcomes.find((o) => o.bucket === 'Worth revisiting' && !o.requeued)
-  return requeueable ? `/session/lock-in?term=${requeueable.index}` : '/session/recap'
+  return '/session/recap'
 }
 
 // ---------------------------------------------------------------------------
@@ -865,45 +981,4 @@ export function answerFor(index: number): string {
   const typed = readSession().typed?.[index]
   if (typed && typed.trim()) return typed.trim()
   return getTerm(index)?.transcript ?? ''
-}
-
-/** True while any term is still owed its one requeue. Pass the state from useSession() in render. */
-export function revisitsPending(state: SessionState = readSession()): boolean {
-  return state.outcomes.some((o) => o.bucket === 'Worth revisiting' && !o.requeued)
-}
-
-/**
- * The term that has come back at 06 Lock It In, whatever it resolved to since. 06b must
- * look this up by the `requeued` mark, not by bucket: a requeued term that is answered
- * is re-recorded as Unaided or Hinted, so a bucket search finds nothing and falls back
- * to term 1. Pure; pass the state from useSession().
- */
-export function requeuedOutcome(state: SessionState): TermOutcome | undefined {
-  return state.outcomes.find((o) => o.requeued)
-}
-
-/** Whether the requeued term was actually answered — passed, not skipped or revealed. */
-export function requeuePassed(state: SessionState): boolean {
-  const o = requeuedOutcome(state)
-  return !!o && (o.bucket === 'Unaided' || o.bucket === 'Hinted')
-}
-
-/**
- * How many terms are still owed a revisit. The requeue rounds use this to say where
- * they are ("Revisit 1 of 2") instead of borrowing a term number they do not have.
- */
-export function revisitPlan(state: SessionState = readSession()): { index: number; total: number } {
-  // A requeued term keeps counting as owed after it is re-recorded into another bucket.
-  const owed = state.outcomes.filter((o) => o.bucket === 'Worth revisiting' || o.requeued)
-  const done = owed.filter((o) => o.requeued).length
-  return { index: Math.max(1, done), total: Math.max(1, owed.length) }
-}
-
-/** Marks the requeued term so it can't come back a second time. */
-export function markRequeued(index: number) {
-  const state = readSession()
-  write({
-    ...state,
-    outcomes: state.outcomes.map((o) => (o.index === index ? { ...o, requeued: true } : o)),
-  })
 }

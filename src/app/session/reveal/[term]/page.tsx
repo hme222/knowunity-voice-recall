@@ -2,20 +2,15 @@
 
 import { use, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { goToExit } from '@/lib/navigation'
+import { SessionBar } from '../../SessionBar'
 import {
   micRegionClass,
-  AppBar,
-  Button,
   ChatBubble,
   MascotSlot,
   MicButton,
-  ProgressIndicator,
   ScreenShell,
-  SessionFraction,
 } from '@/components'
-import { CloseIcon } from '@/components/icons'
-import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS, useSticky } from '@/lib/session'
+import { getTerm, nextAfter, recordOutcome, useSticky } from '@/lib/session'
 import styles from './reveal.module.css'
 
 // 05a Reveal answer — Figma frame "05a Reveal answer result" (15752:17156), which
@@ -57,17 +52,15 @@ export default function RevealPage({ params }: { params: Promise<{ term: string 
 
   return (
     <ScreenShell
-      topNavigation={
-        <>
-          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => goToExit(router)}>
-            <ProgressIndicator progress={progressFor(index)} thickness="16" label="Questions" current={index} total={TOTAL_TERMS} />
-          </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
-        </>
+      mic={
+        <div className={micRegionClass}>
+          <MicButton state="Idle" label="Say it back" onClick={() => router.push(`/session/recording/${index}?repeat=1`)} />
+        </div>
       }
-      bottomContent={
-        <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={moveOn} />
-      }
+      topNavigation={<SessionBar index={index} onSkip={moveOn} skipLabel="Continue" />}
+      // Skip moved to the SessionBar. The zone stays reserved so the mic lands where it
+      // does on every other voice screen.
+      showBottomNavSlot
     >
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="determined" />
@@ -81,12 +74,6 @@ export default function RevealPage({ params }: { params: Promise<{ term: string 
           body={current.answer}
           className={styles.bubble}
         />
-        {/* One fixed mic region, on every voice screen. The control used to sit at
-            eight different heights and jump 91px on the very tap that starts
-            recording. sprint-context.md, 2026-09-22. */}
-        <div className={micRegionClass}>
-          <MicButton state="Idle" label="Say it back" onClick={() => router.push(`/session/recording/${index}?repeat=1`)} />
-        </div>
       </div>
     </ScreenShell>
   )

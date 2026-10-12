@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { actionRowClass, Button, Chips, HintCard, MascotSlot, RecallResult, ScreenShell } from '@/components'
-import { DRILL_MISSED_WORD, DRILL_PARTIAL, STUMBLES } from '@/lib/session'
+import { STUMBLES, useDrillTerm } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
 
@@ -26,10 +26,11 @@ import styles from '../drill.module.css'
 
 export default function DrillMissPage() {
   const router = useRouter()
+  const drillTerm = useDrillTerm()
 
   return (
     <ScreenShell
-      topNavigation={<DrillBar step={2} onExit={() => router.push('/picker')} />}
+      topNavigation={<DrillBar step={2} onExit={() => router.push('/picker')} onSkip={() => router.push('/picker')} />}
       bottomContent={
         <div className={styles.stack}>
           <div className={actionRowClass}>
@@ -46,7 +47,6 @@ export default function DrillMissPage() {
               onClick={() => router.push('/drill/miss/letter')}
             />
           </div>
-          <Button CTA="Skip" variant="Tertiary" size="S" fullWidth onClick={() => router.push('/picker')} />
         </div>
       }
     >
@@ -63,12 +63,12 @@ export default function DrillMissPage() {
         {/* RecallResult state="Neutral" — promoted from the inline card that three
             drill screens were duplicating. The drill is practice, not scored
             performance, so a miss here is not painted as an error. */}
-        <RecallResult className={styles.fullWidth} state="Neutral" title={STUMBLES.first.copy} transcript={`“${DRILL_PARTIAL}”`} />
+        <RecallResult className={styles.fullWidth} state="Neutral" title={STUMBLES.first.copy} transcript={`“${drillTerm.drill.partial}”`} />
         <HintCard
           className={styles.fullWidth}
           label="The missing word"
           tone="missingWord"
-          body={DRILL_MISSED_WORD}
+          body={drillTerm.drill.missedWord}
         />
       </div>
     </ScreenShell>

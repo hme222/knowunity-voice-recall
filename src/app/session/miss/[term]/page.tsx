@@ -2,21 +2,17 @@
 
 import { Suspense, use, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { goToExit } from '@/lib/navigation'
+import { SessionBar } from '../../SessionBar'
 import {
-  AppBar,
   Button,
   Chips,
   HintCard,
   MascotSlot,
-  ProgressIndicator,
   RecallResult,
   ScreenShell,
-  SessionFraction,
   actionRowClass,
 } from '@/components'
-import { CloseIcon } from '@/components/icons'
-import { calibrationFor, confidenceFor, getTerm, hintFor, markHinted, nextAfter, progressFor, recordOutcome, revisitsPending, shownAnswer, TOTAL_TERMS, useSession } from '@/lib/session'
+import { calibrationFor, confidenceFor, getTerm, hintFor, markHinted, nextAfter, recordOutcome, shownAnswer, useSession } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // 05 Miss + Hint — Figma frame "05 Miss + Hint (refreshed 2)" (15672:26357).
@@ -39,6 +35,9 @@ function MissScreen({ index }: { index: number }) {
   const wasSure = searchParams.get('sure') === '1'
   const current = getTerm(index)
   const attempt = Number(searchParams.get('attempt') ?? '1')
+  // A typed answer too short to check (/text/checking sets it). No partial credit is
+  // claimed for words the student never wrote.
+  const thin = searchParams.get('thin') === '1'
   const state = useSession()
   // The ladder now ends. "Try again" was offered at attempt 10 with byte-identical
   // copy; past REVEAL_AT_ATTEMPT the only way on is the reveal.
@@ -58,14 +57,7 @@ function MissScreen({ index }: { index: number }) {
 
   return (
     <ScreenShell
-      topNavigation={
-        <>
-          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => goToExit(router)}>
-            <ProgressIndicator progress={progressFor(index)} thickness="16" label="Questions" current={index} total={TOTAL_TERMS} />
-          </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
-        </>
-      }
+      topNavigation={<SessionBar index={index} onSkip={skip} />}
       bottomContent={
         <div className={styles.actions}>
           {/* Attempts 1 and 2 were byte-identical: one hint, same copy, same buttons.
@@ -116,7 +108,6 @@ function MissScreen({ index }: { index: number }) {
               label… two labels for one escape was the clearer problem." This screen was
               the one holdout. The cost is disclosed by the Recap's own bucket, not by a
               label that exists on one screen out of eleven. */}
-          <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={skip} />
         </div>
       }
     >
@@ -130,10 +121,20 @@ function MissScreen({ index }: { index: number }) {
             settled, not a promise, and hiding it would mean the one screen where that
             cost is incurred never mentions it. */}
         <div className={styles.verdictRow}>
-          <Chips Text="Partially right" size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} />
+          <Chips Text={thin ? 'Not enough to check' : 'Partially right'} size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} />
           {sureCost ? <p className={styles.calibration}>{`${sureCost} · you were sure`}</p> : null}
         </div>
-        <RecallResult state="Miss" title={current.missTitle} transcript={`“${shownAnswer(index, 'Miss')}”`} />
+        {/* Attempt 2 drops "You said" so the hint is on screen without scrolling —
+            designer, 2026-10-08. The first miss still echoes the take. */}
+        {/* Neutral card, amber chip: "partially right" is not "wrong", and the red Miss
+            card said it was. One look for a partial in both flows (designer,
+            2026-10-12); the chip carries the verdict. */}
+        <RecallResult
+          state="Neutral"
+          title={thin ? 'Nothing to check yet. Want a hint?' : current.missTitle}
+          transcript={`“${shownAnswer(index, 'Miss')}”`}
+          showTranscript={attempt < 2}
+        />
         <HintCard body={step?.hint ?? current.hint} />
       </div>
     </ScreenShell>

@@ -15,7 +15,7 @@ export type MascotSlotProps = {
 
 export function MascotSlot({ size = 'XL', expression = 'determined', className }: MascotSlotProps) {
   return (
-    <div className={[styles.root, className].filter(Boolean).join(' ')} data-size={size}>
+    <div className={[styles.root, className].filter(Boolean).join(' ')} data-size={size} data-mascot>
       {/* eslint-disable-next-line @next/next/no-img-element -- static SVG from public/, no optimisation needed */}
       <img className={styles.pose} src={`/knowie/${expression}.svg`} /* Decorative. The state is carried by the title a screen reader reaches next;
          announcing the internal prop name before every card is noise. */

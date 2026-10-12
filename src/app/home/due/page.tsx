@@ -23,7 +23,7 @@ function DueHome() {
   const quiz = DUE_QUIZZES[active]
 
   return (
-    <HomeShell>
+    <HomeShell toolChip={<SwipeChip onClick={() => router.push('/picker')} />}>
       <>
         <div className={styles.due}>
           {/* One quiz due needs no pager, which is the case DueSignalCard was built
@@ -66,12 +66,9 @@ function DueHome() {
             </>
           )}
         </div>
-
-        {/* Tools, composer and tab bar are HomeShell's.
-
-            The always-present chip. The card above is a layer on top of it, and a
-            student who ignores the deadline can still start from here. */}
-        <SwipeChip onClick={() => router.push('/picker')} />
+        {/* The always-present chip is in HomeShell's tool row. The card above is a
+            layer on top of it, and a student who ignores the deadline can still start
+            from there. */}
       </>
     </HomeShell>
   )

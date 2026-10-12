@@ -2,22 +2,17 @@
 
 import { Suspense, use, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { goToExit } from '@/lib/navigation'
+import { SessionBar } from '../../SessionBar'
 import {
-  actionRowClass,
   micRegionClass,
-  AppBar,
   Button,
   ChatBubble,
-  HintCard,
   MascotSlot,
   MicButton,
-  ProgressIndicator,
+  MicCaption,
   ScreenShell,
-  SessionFraction,
 } from '@/components'
-import { CloseIcon } from '@/components/icons'
-import { ensureSessionStarted, getTerm, isPractising, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS, useSession, useSticky } from '@/lib/session'
+import { ensureSessionStarted, getTerm, isPractising, nextAfter, recordOutcome, useSession, useSticky } from '@/lib/session'
 import styles from './idle.module.css'
 
 // 01 Idle / Commit — Figma frame "01 Idle (refreshed 2)" (15672:26255).
@@ -71,32 +66,17 @@ function IdleScreen({ index }: { index: number }) {
 
   return (
     <ScreenShell
-      topNavigation={
-        <>
-          <AppBar
-            variant="leftIconButtonOnly"
-            leftIcon={<CloseIcon />}
-            leftLabel="Leave"
-            onLeft={() => goToExit(router)}
-          >
-            <ProgressIndicator
-              progress={progressFor(index)}
-              thickness="16"
-              label="Questions"
-              current={index}
-              total={TOTAL_TERMS}
-            />
-          </AppBar>
-          {/* A practice round says so. It used to render "4/4 · last one" — the header
-              of the session's final question — on a detour the student took from the
-              summary, so remedial work was dressed as the run it was remediating. */}
-          {practising ? (
-            <SessionFraction label={`Practice · ${current.name}`} />
-          ) : (
-            <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
-          )}
-        </>
+      mic={
+        <div className={micRegionClass}>
+          <MicButton state="Idle" onClick={() => router.push(`/session/recording/${index}${onward}`)} />
+          {/* The hint lives UNDER the mic, not as a card above it — locked by the
+              designer 2026-10-07. As a card it could not fit: at 390x668 the question
+              alone fills the content box, and the hint scrolled out of sight. Here it
+              is on screen at every height, beside the control it is for. */}
+          {hinted && <MicCaption label="Hint" body={current.hint} />}
+        </div>
       }
+      topNavigation={<SessionBar index={index} door={door} onSkip={skip} label={practising ? `Practice · ${current.name}` : undefined} />}
       bottomContent={
         <div className={styles.actions}>
           {/* Two buttons, not three. The frame has no "I don't know this one"; the
@@ -104,6 +84,15 @@ function IdleScreen({ index }: { index: number }) {
           {/* The typed turn has offered this since it was built; the spoken turn only
               had Skip, so a student who genuinely did not know had to record nothing
               or take the no-XP exit. Same escape, both paths. */}
+          {/* Type instead first, full width, in the same place on every voice screen;
+              Skip is top right in the SessionBar (designer, 2026-10-08). */}
+          <Button
+            CTA="Type instead"
+            variant="Secondary"
+            size="M"
+            fullWidth
+            onClick={() => router.push(`/text/turn?term=${index}`)}
+          />
           <Button
             CTA="I don't know this one"
             variant="Tertiary"
@@ -111,15 +100,6 @@ function IdleScreen({ index }: { index: number }) {
             fullWidth
             onClick={() => router.push(`/session/blank/${index}`)}
           />
-          <div className={actionRowClass}>
-            <Button
-              CTA="Type instead"
-              variant="Secondary"
-              size="M"
-              onClick={() => router.push(`/text/turn?term=${index}`)}
-            />
-            <Button CTA="Skip" variant="Tertiary" size="M" onClick={skip} />
-          </div>
         </div>
       }
     >
@@ -139,15 +119,6 @@ function IdleScreen({ index }: { index: number }) {
           titleAccent={current.name}
           body={current.prompt}
         />
-        {/* The hint stays on screen for the retry it was given for. It used to vanish at
-            the exact moment the student acted on it. */}
-        {hinted && <HintCard className={styles.bubble} body={current.hint} />}
-        {/* One fixed mic region, on every voice screen. The control used to sit at
-            eight different heights and jump 91px on the very tap that starts
-            recording. sprint-context.md, 2026-09-22. */}
-        <div className={micRegionClass}>
-          <MicButton state="Idle" onClick={() => router.push(`/session/recording/${index}${onward}`)} />
-        </div>
       </div>
     </ScreenShell>
   )

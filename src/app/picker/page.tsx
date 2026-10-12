@@ -3,11 +3,11 @@
 import { useRouter } from 'next/navigation'
 import { AppBar, PickerRow, ScreenShell } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { PICKER_DRILLS, PICKER_TOPICS } from '@/lib/session'
+import { PICKER_DRILLS, PICKER_TOPICS, setDrillTerm } from '@/lib/session'
 import styles from './picker.module.css'
 
 // Picker — Figma frame "Picker page — Say It Back + drill down" (15810:11285).
-// Where a student chooses what to practise: a topic for a full recall session, or a
+// Where a student chooses what to practice: a topic for a full recall session, or a
 // single definition to drill out loud.
 //
 // Gated, decided 2026-09-20: topic rows offer only revised material, drill rows only
@@ -27,7 +27,7 @@ export default function PickerPage() {
       <div className={styles.body}>
         <div className="screenTitle">
           <h1 className="screenTitleHeading">Say It Back</h1>
-          <p className="screenTitleCaption">Run a recall session, or drill one definition out loud.</p>
+          <p className="screenTitleCaption">Run a recall session, or drill one definition.</p>
         </div>
         <input className={styles.search} type="search" placeholder="Search your topics" aria-label="Search your topics" />
 
@@ -55,7 +55,10 @@ export default function PickerPage() {
               variant="drill"
               label={d.label}
               state={d.state}
-              onClick={() => router.push('/drill/intro')}
+              onClick={() => {
+                setDrillTerm(d.term)
+                router.push('/drill/intro')
+              }}
             />
           ))}
         </section>

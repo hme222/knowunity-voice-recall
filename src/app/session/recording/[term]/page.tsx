@@ -2,22 +2,19 @@
 
 import { Suspense, use, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { goToExit } from '@/lib/navigation'
+import { SessionBar } from '../../SessionBar'
 import {
-  AppBar,
   Button,
+  ChatBubble,
   MicButton,
-  ProgressIndicator,
   RecordingStatus,
   ScreenShell,
-  SessionFraction,
 } from '@/components'
-import { CloseIcon } from '@/components/icons'
-import { getTerm, progressFor, revisitsPending, TOTAL_TERMS, verdictFor } from '@/lib/session'
+import { getTerm, verdictFor } from '@/lib/session'
 import styles from './recording.module.css'
 
 // 02 Recording — Figma frame "02 Recording" (15672:20100).
-// Tap the mic to pause or resume; "Done speaking" ends the take and goes to review.
+// Tap the mic to pause or resume; "Submit" ends the take and goes to review.
 // There is no cancel here — 02a Captured already offers Re-record, so discarding a
 // take is one tap through a screen that exists (SPEC.md § "Explicitly out of scope").
 //
@@ -121,32 +118,9 @@ function RecordingScreen({ index }: { index: number }) {
   return (
     <ScreenShell
       className={styles.root}
-      topNavigation={
-        <>
-          <AppBar
-            variant="leftIconButtonOnly"
-            leftIcon={<CloseIcon />}
-            leftLabel="Leave"
-            onLeft={() => goToExit(router)}
-          >
-            <ProgressIndicator
-              progress={progressFor(index)}
-              thickness="16"
-              label="Questions"
-              current={index}
-              total={TOTAL_TERMS}
-            />
-          </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
-        </>
-      }
-      bottomContent={
-        <div className={styles.actions}>
-          <Button CTA="Done speaking" variant="Primary" size="M" fullWidth onClick={done} />
-        </div>
-      }
-    >
-      <div className={styles.body}>
+      // In ScreenShell's mic slot, like every idle voice screen, so the control is at
+      // the same height on the tap that starts the recording.
+      mic={
         <div className={styles.micWrap} data-paused={paused || undefined}>
           {/* The rings are centred on the MIC, not on the region. They are absolute
               with no offsets, so they take their static position from this stack —
@@ -172,6 +146,19 @@ function RecordingScreen({ index }: { index: number }) {
             <RecordingStatus seconds={seconds} paused={paused} />
           </div>
         </div>
+      }
+      topNavigation={<SessionBar index={index} door={door} />}
+      bottomContent={
+        <div className={styles.actions}>
+          <Button CTA="Submit" variant="Primary" size="M" fullWidth onClick={done} />
+        </div>
+      }
+    >
+      {/* The question stays on screen while the student answers it — decided 2026-10-08
+          by the designer. The frame's full-screen mic takeover dropped it, so the
+          student was explaining a term they could no longer see. */}
+      <div className={styles.body}>
+        {current && <ChatBubble className={styles.bubble} showTitle title="Explain: " titleAccent={current.name} body={current.prompt} />}
       </div>
     </ScreenShell>
   )

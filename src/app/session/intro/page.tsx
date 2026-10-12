@@ -2,9 +2,8 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { goToExit } from '@/lib/navigation'
-import { AppBar, Button, ChatBubble, MascotSlot, ProgressIndicator, ScreenShell, SessionFraction } from '@/components'
-import { CloseIcon } from '@/components/icons'
+import { SessionBar } from '../SessionBar'
+import { Button, ChatBubble, MascotSlot, ScreenShell } from '@/components'
 import { startSession, TOTAL_TERMS } from '@/lib/session'
 import styles from './intro.module.css'
 
@@ -22,21 +21,7 @@ export default function IntroPage() {
 
   return (
     <ScreenShell
-      topNavigation={
-        <>
-          <AppBar
-            variant="leftIconButtonOnly"
-            leftIcon={<CloseIcon />}
-            leftLabel="Leave"
-            onLeft={() => goToExit(router)}
-          >
-            {/* Nothing answered yet, so the bar is empty and the label states the
-                size of the thing rather than claiming you are already on term 1. */}
-            <ProgressIndicator progress="0" thickness="16" label="Questions" current={0} total={TOTAL_TERMS} />
-          </AppBar>
-          <SessionFraction label={`${TOTAL_TERMS} definitions`} />
-        </>
-      }
+      topNavigation={<SessionBar index={0} label={`${TOTAL_TERMS} definitions`} />}
       bottomContent={
         <Button
           CTA="Let's go"
@@ -54,8 +39,12 @@ export default function IntroPage() {
         <MascotSlot size="2XL" expression="excited" />
         <ChatBubble
           showTitle
-          title="Say It Back"
-          body={`After you study a section, explain the key ideas out loud, in your own words. Speaking proves you actually know it, not just recognize it. Knowie listens and tells you how it landed.\n\n${TOTAL_TERMS} definitions. Anything you miss comes back once at the end.`}
+          title="Say It Back: "
+          titleAccent="Chemistry bonding"
+          // The subject is named before anything starts — designer, 2026-10-08; one
+          // subject for the whole set from 2026-10-09. The
+          // "anything you miss comes back once at the end" line went with the requeue.
+          body={`After you study a section, say the key ideas back in your own words. Speaking proves you actually know it, not just recognize it. Knowie listens and tells you how it landed.\n\n${TOTAL_TERMS} definitions, starting with formal charge.`}
         />
       </div>
     </ScreenShell>

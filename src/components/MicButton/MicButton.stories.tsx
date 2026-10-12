@@ -12,6 +12,8 @@ const FIGMA_DESCRIPTION = `
 
 ---
 
+**Paused shows the pause glyph** (Lucide pause), not the mic — designer, 2026-10-08 — so the state reads from the control itself and \`RecordingStatus\` drops its "Tap to…" line while paused.
+
 Built 2026-09-16. Glyph box is \`component.micButton.glyph.size\` (48), added and bound in Figma the same day. The Listening pulse ring is additive motion on \`duration.ambient\`, off under reduced motion; the fill alone carries the state.
 `
 
@@ -44,9 +46,13 @@ export const Paused: Story = {
   // play context threw "expect is not a function" — this story had never actually run.
   play: async ({ canvas }) => {
     const btn = canvas.getByRole('button')
-    // The two claims the gate failure rested on: it must not look Listening, and it
-    // must not report itself as pressed while stopped.
+    // It must not look Listening, and it must not report itself as pressed while
+    // stopped. It IS still a toggle, so aria-pressed is "false", not absent — the
+    // component's own rule ("both recording states are the SAME toggle"). This line
+    // used to assert no attribute at all and failed against the component as built.
     await expect(btn).toHaveAttribute('aria-label', 'Paused, tap to resume')
-    await expect(btn).not.toHaveAttribute('aria-pressed')
+    await expect(btn).toHaveAttribute('aria-pressed', 'false')
+    // The pause glyph, not the mic (designer, 2026-10-08): Lucide draws pause as two rects.
+    await expect(btn.querySelectorAll('svg rect').length).toBe(2)
   },
 }

@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { expect } from 'storybook/test'
 import { RecordingStatus } from './RecordingStatus'
 
 const DESCRIPTION = `
-**WHAT:** The three text elements on a recording screen — the \`LISTENING\` label, the elapsed timer, and the pause caption. Loose text nodes on the Figma frame; one component here because all three describe the same state and must never disagree.
+**WHAT:** The text under the mic on a recording screen — the \`LISTENING\` label, the elapsed timer, and "Tap to pause". **Paused shows only the timer** (designer, 2026-10-08/09): the mic's pause symbol says the rest. The word "Paused" stays in the DOM, visually hidden, as the live status for screen readers. Loose text nodes on the Figma frame; one component here because all three describe the same state and must never disagree.
 
 **WHEN:** 02 Recording and DD 02 Recording, in the bottom region beneath the mic.
 
@@ -26,5 +27,14 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Listening: Story = { name: 'Listening — 0:04', args: { seconds: 4 } }
-export const Paused: Story = { args: { seconds: 12, paused: true } }
+export const Paused: Story = {
+  args: { seconds: 12, paused: true },
+  play: async ({ canvas }) => {
+    // Announced, not shown.
+    const status = canvas.getByRole('status')
+    await expect(status).toHaveTextContent('Paused')
+    await expect(status).toHaveClass('sr-only')
+    await expect(canvas.queryByText('Tap to pause')).toBeNull()
+  },
+}
 export const LongTake: Story = { name: 'Long take — 1:07', args: { seconds: 67 } }

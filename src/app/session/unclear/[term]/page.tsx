@@ -1,11 +1,10 @@
 'use client'
 
-import { Suspense, use } from 'react'
+import { Suspense, use, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { goToExit } from '@/lib/navigation'
-import { micRegionClass, AppBar, Button, MascotSlot, MicButton, ProgressIndicator, RecallResult, ScreenShell, SessionFraction } from '@/components'
-import { CloseIcon } from '@/components/icons'
-import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, TOTAL_TERMS } from '@/lib/session'
+import { SessionBar } from '../../SessionBar'
+import { micRegionClass, Button, MascotSlot, MicButton, RecallResult, ScreenShell } from '@/components'
+import { getTerm, nextAfter, recordOutcome, markMicFault } from '@/lib/session'
 import styles from './unclear.module.css'
 
 // 04a Couldn't hear — Figma frame "04a Couldn't hear (refreshed)" (15672:24583).
@@ -25,6 +24,11 @@ function UnclearScreen({ index }: { index: number }) {
   // voice-ux Principle 4: a mishear is the app's problem, so the escalation offers the
   // way out rather than blaming the student.
   const repeated = attempt >= 2
+  // The mic failed on this term, so typing it from here is not typing by choice: it
+  // pays in full (designer, 2026-10-12).
+  useEffect(() => {
+    markMicFault(index)
+  }, [index])
 
   if (!current) {
     router.replace('/session/intro')
@@ -36,20 +40,19 @@ function UnclearScreen({ index }: { index: number }) {
   }
 
   function skip() {
-    recordOutcome(index, 'Worth revisiting', { wasSure })
+    // Mic trouble, not a miss: the app failed here (designer, 2026-10-12).
+    recordOutcome(index, 'Worth revisiting', { wasSure, micTrouble: true })
     router.push(nextAfter(index))
   }
 
   return (
     <ScreenShell
-      topNavigation={
-        <>
-          <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => goToExit(router)}>
-            <ProgressIndicator progress={progressFor(index)} thickness="16" label="Questions" current={index} total={TOTAL_TERMS} />
-          </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
-        </>
+      mic={
+        <div className={micRegionClass}>
+          <MicButton state="Idle" label="Say it again" onClick={retry} />
+        </div>
       }
+      topNavigation={<SessionBar index={index} onSkip={skip} />}
       bottomContent={
         <div className={styles.actions}>
           {/* On a repeat mishear typing leads, because the mic has now failed twice. */}
@@ -60,7 +63,6 @@ function UnclearScreen({ index }: { index: number }) {
             fullWidth
             onClick={() => router.push(`/text/turn?term=${index}`)}
           />
-          <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={skip} />
         </div>
       }
     >
@@ -73,21 +75,20 @@ function UnclearScreen({ index }: { index: number }) {
         <RecallResult
           className={styles.card}
           state="CouldntHear"
-          title={repeated ? 'Still not coming through.' : 'That one didn’t come through.'}
+          title={repeated ? 'Still not coming through.' : 'I didn’t catch that.'}
           transcript={
             repeated
               // Was "…Type X instead, or try once more", which narrated the two
               // controls already on the screen. The line's job is to say whose fault
               // it is; the mic and "Type instead" say what to do about it.
               ? `That is twice now, so it is probably the mic and not you.`
-              : `Say the definition of ${current.name.toLowerCase()} again, a little closer to the mic.`
+              // Attempt 1 is a say-again, not a retry of the answer: the mic missed it, so
+              // the same answer is fine (designer, 2026-10-08).
+              : `The mic didn’t pick you up. Say the same answer again, a little closer.`
           }
         />
         {/* The same fixed region as every other voice screen, so the control the
             student is being asked to use again is exactly where they last used it. */}
-        <div className={micRegionClass}>
-          <MicButton state="Idle" label="Say it again" onClick={retry} />
-        </div>
       </div>
     </ScreenShell>
   )

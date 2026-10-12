@@ -72,6 +72,10 @@
      region exists to prevent. Raising it here raises it everywhere, together. */
   align-items: flex-start;
   justify-content: center;
+  /* Full width and a positioning context, so MicCaption can pin itself to the foot of
+     the region and run the full column. The mic stays centred either way. */
+  position: relative;
+  width: 100%;
   height: calc(var(--component-scaffold-mic-region-height) * 1px);
   /* Never smaller than the control plus a step of breathing room. */
   min-height: calc((var(--component-mic-button-diameter) + var(--size-primitive-space-400)) * 1px);
@@ -80,21 +84,40 @@
      (mascot + meter + term pill + cue card) claimed it at full height too. Measured at
      390x844: the mic sat at 466 on every session screen and on /drill/recording, and at
      478, 488 and 526 on /drill/pass/4, /drill/miss/letter and /drill/pass/1 — four
-     heights for the one control this region exists to pin. `position: sticky` below is
-     what actually protects a short window: the content above scrolls and the mic stays
-     against the foot of the region either way, which is the behaviour the shrink was
-     reaching for without the cost of moving on a normal screen. */
+     heights for the one control this region exists to pin. A short window is handled
+     by the content above scrolling in its own box, not by this region giving way. */
   flex-shrink: 0;
-  margin-top: auto;
-  /* PINNED to the foot of the content region. At 844 there is slack and this changes
-     nothing; on a shorter screen — 390x667 is an iPhone SE, not a hypothetical — the
-     prompt above scrolls and the mic stays where the thumb expects it. Without this the
-     control left the viewport entirely and the fade masked the empty space above it,
-     so nothing on screen said a mic existed. */
-  position: sticky;
-  bottom: 0;
-  /* The prompt must not show through the control it sits under. */
-  background: var(--color-semantic-background-page);
+  /* No longer pinned with sticky inside the scroller: it lives in ScreenShell's own
+     mic slot now (the `mic` prop), so content scrolls in its own box above it and can
+     never run underneath. Sticky was protecting the control at the content's expense —
+     at 390x668 it sat over the text on nine screens. */
+}
+
+/* The mic's own slot: between middleContent and the action zone, never inside the
+   scroller. The bottom inset matches middleContent's own padding so the control lands
+   exactly where it did when it sat at the foot of that region — 466 at 390x844 — and
+   where 02 Recording, which pins its own, still puts it. */
+.micSlot {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  padding-bottom: calc(var(--size-primitive-space-200) * 1px);
+}
+
+/* With the mic outside, the content needs its own clear space above the control; the
+   region's 8 of padding would put a scrolled card edge right against it. */
+.middle[data-has-mic] {
+  padding-bottom: calc(var(--spacing-semantic-between-sections) * 1px);
+}
+
+/* Knowie gives way before the words do. Set by the shell's measure, on any screen, only
+   while the content would otherwise not fit. */
+.middle[data-mascot-stage='2'] [data-mascot],
+/* A wrapper that exists only to hold Knowie goes with it. The doors' `.content` block
+   kept its 32/16 padding and both flex gaps — 80 of nothing between the chat door's XP
+   line and its bubble, on the screen with the least room to spare. */
+.middle[data-mascot-stage='2'] :has(> [data-mascot]:only-child) {
+  display: none;
 }
 
 /* The control itself never shrinks — only the room around it. */

@@ -4,9 +4,9 @@ import { useEffect } from 'react'
 
 import { useRouter } from 'next/navigation'
 import { openSheet } from '@/lib/navigation'
-import { actionRowClass, AppBar, Button, ButtonIcon, MascotSlot, ScreenShell, StatChip } from '@/components'
+import { AppBar, Button, ButtonIcon, HintCard, MascotSlot, ScreenShell, StatChip } from '@/components'
 import { CloseIcon, EyeIcon } from '@/components/icons'
-import { Bucket, getTerm, sessionTotals, setPractising, shuffledFirstTerm, startSession, TOTAL_TERMS, useSession, XP } from '@/lib/session'
+import { Bucket, getTerm, sessionTotals, setPractising, TOTAL_TERMS, useSession, XP } from '@/lib/session'
 import styles from './recap.module.css'
 
 // 07 Recap — Figma frame "07 Recap (refreshed)" (15672:24456).
@@ -64,52 +64,44 @@ export default function RecapPage() {
   const order = needsRevisiting ? ORDER_WITH_MISSES : ORDER_SETTLED
   /** Terms the student got to in the end, with or without a hint. */
   const resolved = outcomes.filter((o) => o.bucket === 'Unaided' || o.bucket === 'Hinted').length
-  const rough = resolved <= outcomes.length / 2
+  // Terms the mic failed on and the student skipped are not counted against them
+  // (designer, 2026-10-12): they leave the "of N" as well as the misses.
+  const micTrouble = outcomes.filter((o) => o.micTrouble).length
+  const counted = (complete ? TOTAL_TERMS : outcomes.length) - micTrouble
 
-  // "Run it again" re-presents the same terms shuffled. It restarts the session so the Time
-  // stat measures this run, not the one before it.
-  function tryAgain() {
-    startSession()
-    router.push(`/session/idle/${shuffledFirstTerm()}`)
-  }
+  // Something the student did not have cold and has now: got with a hint, or shown the
+  // answer. That is what this session taught; an unaided pass they already knew.
+  const learned = outcomes.find((o) => o.bucket === 'Hinted') ?? outcomes.find((o) => o.bucket === 'Revealed')
+  const learnedTerm = learned ? getTerm(learned.index) : undefined
 
   return (
     <ScreenShell
+      // The term list scrolls by design; Knowie stays as the headline's face.
+      mascotGivesWay={false}
       topNavigation={
         <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => router.push('/home/unlocked')} />
       }
       bottomContent={
         <div className={styles.actions}>
-          {/* The two real choices share a row; the practice offer is the link beneath.
-              Three stacked full-width buttons measured 176 against a 136 budget, and
-              gave a targeted second pass the same weight as ending the session. Recap's
-              conditional promotion on a rough run stays — that one is deliberate. */}
-          {/* FIXED POSITIONS. Promotion moves the emphasis, not the button.
-              Both the label and the variant used to swap, so the white pill stayed on
-              the left and changed meaning with the run — tapping by position got you
-              the opposite action depending on how you had done. Two students hit that
-              independently. "Run it again" is always left, "Done" is always right, and
-              a rough run only changes which one is Primary. */}
-          <div className={actionRowClass}>
+          {/* Decided 2026-10-08 by the designer: no "Run it again", no "Done". The one
+              choice worth offering is the misses, so it leads; then the session ends at
+              home. The requeue that used to bring a miss back automatically is gone —
+              this is the student choosing to. */}
+          {needsRevisiting && (
             <Button
-              CTA="Run it again"
-              variant={rough ? 'Primary' : 'Secondary'}
+              CTA="Practice what I missed"
+              variant="Primary"
               size="M"
-              onClick={tryAgain}
+              fullWidth
+              onClick={() => router.push('/session/recap/practice')}
             />
-            <Button
-              CTA="Done"
-              variant={rough ? 'Secondary' : 'Primary'}
-              size="M"
-              onClick={() => router.push('/home/unlocked')}
-            />
-          </div>
+          )}
           <Button
-            CTA="Practice what I missed"
-            variant="Tertiary"
-            size="S"
+            CTA="Back to home"
+            variant={needsRevisiting ? 'Tertiary' : 'Primary'}
+            size="M"
             fullWidth
-            onClick={() => router.push('/session/recap/practice')}
+            onClick={() => router.push('/home/unlocked')}
           />
         </div>
       }
@@ -117,7 +109,10 @@ export default function RecapPage() {
       {/* design-system.md § "Mascot poses" assigns laughing to 07 Recap. Its absence
           was found independently in both scorecards. */}
       <div className={styles.headline}>
-        <MascotSlot size="2XL" expression="laughing" className={styles.mascotCentred} />
+        {/* Knowie reads the run (designer, 2026-10-12, from the Reach critic): laughing
+            when nothing needs revisiting, determined — "let's go", never dazed — when
+            something does. It laughed over a 2-of-4 recap whose job is not to flatter. */}
+        <MascotSlot size="2XL" expression={needsRevisiting ? 'determined' : 'laughing'} className={styles.mascotCentred} />
         {/* Headline S over Body M Regular, as the frames set a screen title — not
             TextBlock's L, which renders 44px. See door.module.css for the same note;
             the evidence there is a direct read of the Quiz complete frame. */}
@@ -132,7 +127,7 @@ export default function RecapPage() {
               the action row already uses to decide what to offer next. */}
           {outcomes.length > 0 && (
             <p className="screenTitleCaption">
-              {`You got ${resolved} of ${complete ? TOTAL_TERMS : outcomes.length} in the end. ` +
+              {`You got ${resolved} of ${counted} in the end. ` +
                 `${totals.unaided} first time, no help.`}
             </p>
           )}
@@ -195,8 +190,12 @@ export default function RecapPage() {
                         missed exactly the case the brief cares about: sure, wrong, and
                         then hinted or revealed — which since sureWrong went to 0 carries
                         no cost either, so the run showed nothing at all. */}
-                    {row.wasSure && bucket !== 'Unaided' && (
-                      <span className={styles.rowNote}>You were sure about this one.</span>
+                    {row.micTrouble ? (
+                      <span className={styles.rowNote}>The mic missed it. Not counted.</span>
+                    ) : (
+                      row.wasSure && bucket !== 'Unaided' && (
+                        <span className={styles.rowNote}>You were sure about this one.</span>
+                      )
                     )}
                   </span>
                   <span className={styles.rowXp}>{`+${row.xp} XP`}</span>
@@ -216,6 +215,17 @@ export default function RecapPage() {
           )
         })}
       </div>
+
+      {/* THE RECAP ENDS ON WHAT WAS LEARNED — designer, 2026-10-09. The numbers and the
+          term list are the working; this is the takeaway, so it is the last thing the
+          student reads before "Practice what I missed" or home. It sat at the top as the
+          headline on 2026-10-08. */}
+      {learnedTerm && (
+        <section className={styles.learned} aria-labelledby="learned-heading">
+          <h2 id="learned-heading" className="screenTitleHeading">You learned something new!</h2>
+          <HintCard className={styles.learnedCard} label={`New today · ${learnedTerm.name}`} body={learnedTerm.answer} />
+        </section>
+      )}
     </ScreenShell>
   )
 }

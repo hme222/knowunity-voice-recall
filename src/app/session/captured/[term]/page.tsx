@@ -2,19 +2,15 @@
 
 import { use } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { goToExit } from '@/lib/navigation'
+import { SessionBar } from '../../SessionBar'
 import { Suspense } from 'react'
 import {
-  AppBar,
   Button,
   MascotSlot,
-  ProgressIndicator,
   RecallResultCaptured,
   ScreenShell,
-  SessionFraction,
 } from '@/components'
-import { CloseIcon } from '@/components/icons'
-import { getTerm, progressFor, revisitsPending, shownAnswer, verdictFor, TOTAL_TERMS } from '@/lib/session'
+import { getTerm, shownAnswer, verdictFor } from '@/lib/session'
 import styles from './captured.module.css'
 
 // 02a Captured — Figma frame "02a Captured — review before sending" (15785:13098).
@@ -44,25 +40,7 @@ function CapturedScreen({ index }: { index: number }) {
 
   return (
     <ScreenShell
-      topNavigation={
-        <>
-          <AppBar
-            variant="leftIconButtonOnly"
-            leftIcon={<CloseIcon />}
-            leftLabel="Leave"
-            onLeft={() => goToExit(router)}
-          >
-            <ProgressIndicator
-              progress={progressFor(index)}
-              thickness="16"
-              label="Questions"
-              current={index}
-              total={TOTAL_TERMS}
-            />
-          </AppBar>
-          <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
-        </>
-      }
+      topNavigation={<SessionBar index={index} door={door} />}
       bottomContent={
         <div className={styles.actions}>
           <Button

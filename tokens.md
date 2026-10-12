@@ -10,7 +10,7 @@ through.
 
 ## Colour primitives
 
-`color.primitive.*` — 60 tokens
+`color.primitive.*` — 61 tokens
 
 Raw values. Never referenced directly by a component.
 
@@ -71,6 +71,7 @@ Raw values. Never referenced directly by a component.
 | `color.primitive.alpha.light-06` | `#FFFFFF0F` |  | Raw value, not for direct use. 6% white, for a raised surface composited over a darker one. |
 | `color.primitive.alpha.dark-10` | `#0A0A0A1A` |  | Raw value, not for direct use. |
 | `color.primitive.alpha.dark-50` | `#0A0A0A80` |  | Raw value, not for direct use. |
+| `color.primitive.alpha.dark-80` | `#0A0A0ACC` |  | Raw value, not for direct use. Added 2026-10-12 for background.scrimStrong. |
 | `color.primitive.alpha.glass-60` | `#3D3D3D99` |  | Raw value, not for direct use. |
 | `color.primitive.moss.200` | `#C0DD97` |  | Raw value, not for direct use. Sampled from the Figma component render of `strengthMeter` (15808:17668). The meter at 0 and 25. |
 | `color.primitive.moss.400` | `#97C459` |  | Raw value, not for direct use. Sampled from the Figma component render of `strengthMeter` (15808:17668). The meter at 50. |
@@ -79,7 +80,7 @@ Raw values. Never referenced directly by a component.
 
 ## Colour semantics
 
-`color.semantic.*` — 94 tokens
+`color.semantic.*` — 95 tokens
 
 Roles. These are what components bind to.
 
@@ -90,6 +91,7 @@ Roles. These are what components bind to.
 | `color.semantic.background.raised` | `{color.primitive.alpha.light-06}` | `#FFFFFF0F` | A surface sitting on top of another surface. Use when a card or row needs to separate from a container that is itself background.surface — the confirmed case is an optionRow inside a bottomSheet, where both would otherwise resolve to the same value and the row would vanish. Translucent on purpose so it composites correctly over any surface beneath it. Not a replacement for background.surface; only reach for it when there is a genuine second layer. |
 | `color.semantic.background.inverse` | `{color.primitive.violet.50}` | `#F4F2FF` | Light fill for dark surfaces. Confirmed live use is status bar icon glyphs only; other uses unconfirmed. |
 | `color.semantic.background.scrim` | `{color.primitive.alpha.dark-50}` | `#0A0A0A80` | Semi-transparent overlay dimming content behind a modal. |
+| `color.semantic.background.scrimStrong` | `{color.primitive.alpha.dark-80}` | `#0A0A0ACC` | A heavier dim for a system sheet that should be the only thing that reads, like the drawn iOS mic-permission alert. Added 2026-10-12 (designer, from the critic panel): at scrim's 50% the primer's title read through behind the alert. |
 | `color.semantic.background.floating` | `{color.primitive.alpha.glass-60}` | `#3D3D3D99` | Elevated floating surface with translucency, for dropdowns, tooltips, popovers. |
 | `color.semantic.background.stacking` | `{color.primitive.alpha.light-10}` | `#FFFFFF1A` | Additive white layer for stacking elevation on dark surfaces, e.g. toasts. RISK: resolves to the same value as interactive.secondary, interactive.disabled and interactive.pressed — coincidental, this token is a static elevation layer, not an interaction state, so the overlap is lower-risk here than for the other three. |
 | `color.semantic.background.input` | `{color.primitive.navy.900}` | `#1A1C26` | Fill of an editable field at rest; use text.primary for filled text, text.disabled for placeholders. |
@@ -316,7 +318,7 @@ The composed text styles. Each resolves to a family, weight, size, line height a
 
 ## Motion primitives
 
-`motion.primitive.*` — 7 tokens
+`motion.primitive.*` — 8 tokens
 
 Durations in milliseconds, and easing curves.
 
@@ -328,11 +330,12 @@ Durations in milliseconds, and easing curves.
 | `motion.primitive.duration.1100` | `1100` |  | 1100ms, loops. Mic-pulse timing, matched to iOS dictation / WhatsApp voice-note comparables. |
 | `motion.primitive.duration.1400` | `1400` |  | 1400ms. The judging dwell: how long a Processing beat holds before resolving. UNCONFIRMED against a real round trip, like the 300ms swipe. |
 | `motion.primitive.duration.6000` | `6000` |  | 6000ms. When a judge counts as slow and Processing escalates its copy in place. Past the Design Brief's <4s target with headroom, so an ordinary wait never trips it. |
+| `motion.primitive.duration.10000` | `10000` |  | 10000ms. How long the confidence ask waits before Processing moves on without it. Added 2026-10-09: the designer decided the ask must not be required. Longer than the 6000 slow threshold on purpose, so 'still thinking' shows before the screen advances. |
 | `motion.primitive.easing.standard` | `cubic-bezier(0.4, 0, 0.2, 1)` |  | Standard ease-out, decelerates into rest. |
 
 ## Motion semantics
 
-`motion.semantic.*` — 9 tokens
+`motion.semantic.*` — 10 tokens
 
 Named timings.
 
@@ -342,7 +345,8 @@ Named timings.
 | `motion.semantic.duration.standard` | `{motion.primitive.duration.250}` | `250` | State transitions: idle to recording, processing to result, the Voice UX Reference's Must-state beats. |
 | `motion.semantic.duration.swipe` | `{motion.primitive.duration.300}` | `300` | Card-to-card transition when the student swipes between due quizzes on the plan-active home. Longer than standard because the card travels a full screen-width and the count badge and dots update with it; the motion has to read as one continuous movement, not a state flip. |
 | `motion.semantic.duration.processingDwell` | `{motion.primitive.duration.1400}` | `1400` | How long Processing and the typed checking beat hold before resolving. One token because they are the same designed beat: they were previously written as 1400 and 1200, two numbers for one decision. |
-| `motion.semantic.duration.slowThreshold` | `{motion.primitive.duration.6000}` | `6000` | When Processing escalates to "still thinking" in place, and offers the connection path. |
+| `motion.semantic.duration.slowThreshold` | `{motion.primitive.duration.6000}` | `6000` | When Processing escalates to "still thinking" in place. (It also offered a connection path until 2026-10-12, when the offline screen was removed.) |
+| `motion.semantic.duration.confidenceGrace` | `{motion.primitive.duration.10000}` | `10000` | How long "How sure are you?" waits for a tap before Processing advances without one — the tap is optional, not a gate (designer, 2026-10-09). An unanswered ask records no confidence: no reward, no cost. |
 | `motion.semantic.duration.ambient` | `{motion.primitive.duration.1100}` | `1100` | Looping ambient timing, e.g. the mic listening-state pulse. |
 | `motion.semantic.easing.standard` | `{motion.primitive.easing.standard}` | `cubic-bezier(0.4, 0, 0.2, 1)` | The curve fast, standard and ambient durations all use. |
 | `motion.semantic.easing.ambient` | `cubic-bezier(0.4, 0, 0.6, 1)` |  | Symmetric ease for motion that loops back to where it started — the mic pulse, Knowie's breathe, the processing dots. `standard` is asymmetric and made a looping animation read as a sawtooth, which is why `ease-in-out` had been typed directly into six stylesheets. |
@@ -420,4 +424,4 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ---
 
-320 tokens across 10 groups.
+324 tokens across 10 groups.

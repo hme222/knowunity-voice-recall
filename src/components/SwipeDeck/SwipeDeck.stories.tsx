@@ -29,8 +29,8 @@ type Story = StoryObj<typeof meta>
 
 const QUIZZES = [
   { term: 'Formal charge', due: '9/15', count: '+2' },
-  { term: 'Photosynthesis', due: '9/17', count: '+1' },
-  { term: 'Kinematics', due: '9/19', count: 'last one' },
+  { term: 'Covalent bond', due: '9/17', count: '+1' },
+  { term: 'Electronegativity', due: '9/19', count: 'last one' },
 ]
 
 function Deck() {

@@ -25,14 +25,27 @@
   line-height: 0;
 }
 
+/* Each target is a tapTarget-wide slot, edge to edge, so the hit areas TILE.
+   They used to be 6px dots 6px apart, each with a 48 overlay — so every overlay covered
+   its neighbours, the last one painted on top, and tapping dot 1 or 2 selected dot 3
+   (measured 2026-10-12). Centres 48 apart is the price of three real targets; the
+   non-interactive dots (one quiz, no pager) keep the frame's tight gap. */
+.root:has(.target) {
+  gap: 0;
+}
+
+.target {
+  width: calc(var(--spacing-semantic-tap-target) * 1px);
+}
+
 .target::after {
   content: '';
   position: absolute;
   top: 50%;
-  left: 50%;
-  width: calc(var(--spacing-semantic-tap-target) * 1px);
+  left: 0;
+  right: 0;
   height: calc(var(--spacing-semantic-tap-target) * 1px);
-  transform: translate(-50%, -50%);
+  transform: translateY(-50%);
 }
 
 .target:focus-visible {

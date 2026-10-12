@@ -2,8 +2,8 @@
 
 import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { BottomSheet, MascotSlot, PickerRow, ScreenShell, StrengthMeter, TrainingLog } from '@/components'
-import { DRILL_MISSED_WORD, DRILL_TERM } from '@/lib/session'
+import { BottomSheet, MascotSlot, PickerRow, ScreenShell, TrainingLog } from '@/components'
+import { useDrillTerm } from '@/lib/session'
 import styles from '../../drill.module.css'
 
 // DD 08a — a round tapped on Complete raises the transcript sheet.
@@ -26,6 +26,7 @@ const ROUNDS = [
 
 function DrillRoundScreen() {
   const router = useRouter()
+  const drillTerm = useDrillTerm()
   // Which row was tapped. DD 08's caption says "Tap any round to see all 4 takes" and
   // every row opened this sheet in an identical state, so the tap was real but its
   // target never acknowledged it. The subtitle names the round now.
@@ -52,17 +53,14 @@ function DrillRoundScreen() {
           {/* The word comes from the fixture, not a string typed here. This said
               "evenly" while /drill/miss said the missing word was "electrons" — the
               same round reporting two different words, one screen apart. */}
-          <PickerRow raised variant="drill" label={`Round 2 · Stumbled on “${DRILL_MISSED_WORD}”`} state="drill" />
+          <PickerRow raised variant="drill" label={`Round 2 · Stumbled on “${drillTerm.drill.missedWord}”`} state="drill" />
           <PickerRow raised variant="drill" label="Round 3 · Several gone" state="sharp" />
           <PickerRow raised variant="drill" label="Round 4 · All you" state="sharp" />
-          <p className={styles.note}>&ldquo;{DRILL_TERM.transcript}&rdquo;</p>
+          <p className={styles.note}>&ldquo;{drillTerm.transcript}&rdquo;</p>
         </BottomSheet>
       }
     >
       <div className={styles.body}>
-        {/* Same label as /drill/complete, and same reason it is not "unaided": the
-            scaffold hands out the missed word, its first letter, then the word to echo. */}
-        <StrengthMeter fill={100} label="The whole definition, start to finish" />
         <div className={styles.centred}>
           <MascotSlot size="XL" expression="laughing" />
         </div>

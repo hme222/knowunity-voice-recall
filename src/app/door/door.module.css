@@ -20,28 +20,6 @@
   gap: calc(var(--size-primitive-space-400) * 1px);
 }
 
-/* Wraps the shared mic region so the caption can sit under the control without moving
-   it. The region top-aligns its children, so an in-flow caption landed beside the mic
-   with both at y466 and the caption clipping the button's upper edge. */
-.micWithCaption {
-  position: relative;
-}
-
-.caption {
-  color: var(--color-semantic-text-secondary);
-  font-weight: var(--typography-style-caption-m-regular-font-weight);
-  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
-  text-align: center;
-}
-
-.micWithCaption .caption {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
 /* The chat door's XP line, above the mascot as on the frame. */
 .xp {
   text-align: center;

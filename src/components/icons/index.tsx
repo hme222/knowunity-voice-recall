@@ -3,7 +3,7 @@
 // component's token colour applies. Every svg fills its box: size it from the parent.
 
 import type { ComponentType } from 'react'
-import { X, Mic, RotateCcw, Eye, Check, Menu, Timer, Zap, Flame, Camera, Layers, CircleHelp, FileText, MessageCircleMore, Search, Target, Trophy, Wifi } from 'lucide-react'
+import { X, Mic, RotateCcw, Eye, Check, Menu, Timer, Zap, Flame, Camera, Layers, CircleHelp, FileText, MessageCircleMore, Search, Target, Trophy, Wifi, Pause } from 'lucide-react'
 
 export { LoadingIcon } from './LoadingIcon'
 export { SquareIcon } from './SquareIcon'
@@ -27,6 +27,9 @@ function lucide(Glyph: ComponentType<{ className?: string }>) {
 export const CloseIcon = lucide(X)
 /** Figma micGlyph_lucide. The outline mic, not micButton's filled artwork. */
 export const MicGlyphIcon = lucide(Mic)
+/** MicButton's Paused glyph — Lucide pause. The designer's call, 2026-10-08: a paused
+    recorder shows the pause symbol rather than the mic. */
+export const PauseIcon = lucide(Pause)
 /** Figma refreshGlyph_lucide — Lucide rotate-ccw. */
 export const RefreshGlyphIcon = lucide(RotateCcw)
 /** The transcript affordance on Recap rows and the Miss result. Was rendering as the

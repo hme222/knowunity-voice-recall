@@ -15,9 +15,9 @@ export default function UnlockedHomePage() {
   const state = useSession()
   const partway = state.outcomes.length > 0 && state.outcomes.length < TOTAL_TERMS
   return (
-    <HomeShell>
+    <HomeShell toolChip={<SwipeChip onClick={() => router.push('/picker')} />}>
       <>
-        {/* Tools, composer and tab bar are HomeShell's. This route supplies the chip. */}
+        {/* Tools, composer and tab bar are HomeShell's. The chip rides in the tool row. */}
         {partway && (
           <Button
             CTA="Pick up where you left off"
@@ -27,9 +27,8 @@ export default function UnlockedHomePage() {
             onClick={() => router.push('/session/resume')}
           />
         )}
-        <SwipeChip onClick={() => router.push('/picker')} />
         <Button
-          CTA="Add a quiz due date (demo: plan active)"
+          CTA="Add a quiz due date"
           variant="Tertiary"
           size="M"
           fullWidth

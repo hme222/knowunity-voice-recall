@@ -2,10 +2,9 @@
 
 import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { goToExit } from '@/lib/navigation'
-import { actionRowClass, AppBar, Button, ChatBubble, MascotSlot, ProgressIndicator, ScreenShell, SessionFraction } from '@/components'
-import { CloseIcon } from '@/components/icons'
-import { getTerm, nextAfter, progressFor, recordOutcome, revisitsPending, setSticky, setTypedAnswer, TOTAL_TERMS, typedDraft, useSticky } from '@/lib/session'
+import { SessionBar } from '../../session/SessionBar'
+import { actionRowClass, Button, ChatBubble, MascotSlot, ScreenShell } from '@/components'
+import { getTerm, nextAfter, recordOutcome, setSticky, setTypedAnswer, typedDraft, useSticky } from '@/lib/session'
 import { DrillBar } from '../../drill/DrillBar'
 import styles from '../text.module.css'
 
@@ -70,17 +69,9 @@ function TextTurnScreen() {
     <ScreenShell
       topNavigation={
         drillStep ? (
-          // A drill turn borrows this screen, and it was wearing the session's chrome:
-          // a "1/4" fraction and a Questions bar, on a screen reached from a drill the
-          // student is one definition into. The drill's own bar says where they are.
-          <DrillBar step={Number(drillStep)} onExit={() => router.push('/picker')} />
+          <DrillBar step={Number(drillStep)} onExit={() => router.push('/picker')} onSkip={skip} />
         ) : (
-          <>
-            <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Leave" onLeft={() => goToExit(router)}>
-              <ProgressIndicator progress={progressFor(index)} thickness="16" label="Questions" current={index} total={TOTAL_TERMS} />
-            </AppBar>
-            <SessionFraction current={index} total={TOTAL_TERMS} moreToCome={revisitsPending()} />
-          </>
+          <SessionBar index={index} onSkip={skip} />
         )
       }
       bottomContent={
@@ -119,7 +110,6 @@ function TextTurnScreen() {
               size="S"
               onClick={() => router.push(`/session/blank/${index}`)}
             />
-            <Button CTA="Skip" variant="Tertiary" size="S" onClick={skip} />
           </div>
         </div>
       }

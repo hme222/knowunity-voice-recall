@@ -2,8 +2,8 @@
 
 import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { micRegionClass, Button, MicButton, RecordingStatus, ScreenShell, StrengthMeter } from '@/components'
-import { drillRung } from '@/lib/session'
+import { micRegionClass, Button, MicButton, RecordingStatus, ScreenShell } from '@/components'
+import { drillRung, useDrillTerm } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
 
@@ -13,6 +13,7 @@ import styles from '../drill.module.css'
 
 function DrillRecording() {
   const router = useRouter()
+  const drillTerm = useDrillTerm()
   const step = Number(useSearchParams().get('step') ?? '1')
   // Where Done speaking goes. The scaffold's own screens used to hand their mic a
   // `router.push` to the NEXT screen — /drill/miss/letter's mic went to
@@ -23,7 +24,7 @@ function DrillRecording() {
   const stumble = useSearchParams().get('stumble')
   const afterTake =
     stumble === 'letter' ? '/drill/miss/echo' : stumble === 'echo' ? '/drill/pass/3' : `/drill/captured?step=${step}`
-  const rung = drillRung(step)
+  const rung = drillRung(drillTerm, step)
   const [seconds, setSeconds] = useState(0)
   const [paused, setPaused] = useState(false)
 
@@ -40,22 +41,7 @@ function DrillRecording() {
 
   return (
     <ScreenShell
-      topNavigation={<DrillBar step={step} onExit={() => router.push('/picker')} />}
-      bottomContent={
-        <div className={styles.actions}>
-          <Button
-            CTA="Done speaking"
-            variant="Primary"
-            size="M"
-            fullWidth
-            onClick={() => router.push(afterTake)}
-          />
-        </div>
-      }
-    >
-      <div className={styles.body}>
-        <StrengthMeter fill={rung.coverage} label="How much you can say unaided" />
-        <p className={styles.cue}>{rung.cue}</p>
+      mic={
         <div className={[micRegionClass, styles.micWithCaption].join(' ')}>
           {/* A real Paused state as of 2026-09-21. The accepted risk that "nothing on
               screen changes when paused" failed its own gate: the fill was identical
@@ -69,6 +55,22 @@ function DrillRecording() {
             <RecordingStatus seconds={seconds} paused={paused} />
           </div>
         </div>
+      }
+      topNavigation={<DrillBar step={step} onExit={() => router.push('/picker')} />}
+      bottomContent={
+        <div className={styles.actions}>
+          <Button
+            CTA="Submit"
+            variant="Primary"
+            size="M"
+            fullWidth
+            onClick={() => router.push(afterTake)}
+          />
+        </div>
+      }
+    >
+      <div className={styles.body}>
+        <p className={styles.cue}>{rung.cue}</p>
       </div>
     </ScreenShell>
   )

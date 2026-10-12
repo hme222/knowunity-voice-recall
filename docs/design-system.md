@@ -1126,9 +1126,9 @@ different kind of moment, or the set reads as one face.
 
 | `expression` | What it is | The kind of moment | Screens |
 | --- | --- | --- | --- |
-| `determined` | Half-lidded, focused | **Working or waiting.** Knowie is busy, or it is the student's turn. | 01 Idle, 02a Captured, 03 Processing, the typed checking beat, 05 Miss, 05a Reveal, 06 Lock It In, blank term, the drill's rungs and stumbles, DD 02a Captured, DD 03, the chat and exam-plan doors, the OS permission sheet |
+| `determined` | Half-lidded, focused | **Working or waiting.** Knowie is busy, or it is the student's turn. | 01 Idle, 02a Captured, 03 Processing, the typed checking beat, 05 Miss, 05a Reveal, 06 Lock It In, the drill's rungs and stumbles, DD 02a Captured, DD 03, the chat and exam-plan doors, the OS permission sheet |
 | `excited` | Open, alert | **A win, or an invitation with energy.** Something good just happened, or is being offered. | 04 Pass, 06b Lock It In 2nd pass (when it actually passed), the say-it-back repeat, the quiz door's result, the unlock reveal, **00 Intro**, **the mic primer**, **session resume** |
-| `laughing` | Eyes curved shut, warm | **Completion, or warmth while helping.** Something has finished, or Knowie is carrying the student through. | 07 Recap, DD 08 Complete, DD 08a Round, DD 07c echo, DD 00b returning intro, **the quiz-complete door** |
+| `laughing` | Eyes curved shut, warm | **Completion, or warmth while helping.** Something has finished, or Knowie is carrying the student through. | 07 Recap on a clean run (a run with anything to revisit is `determined`, 2026-10-12), DD 08 Complete, DD 08a Round, DD 07c echo, DD 00b returning intro, **the quiz-complete door**, **blank term** |
 | `dazed` | Wide, big pupils | **The APP failed, not the student.** | 04a Couldn't hear, mic denied, **offline** |
 
 **Amended 2026-09-22.** Six screens moved, because `determined` had drifted onto
@@ -1165,9 +1165,13 @@ unimpressed. The pose set is read as feeling, not as process state, so this one
 follows the feeling. This supersedes the DD 02a line above; the reasoning there
 was sound and the result was not.
 
-`session/blank` stays `determined` on purpose. The student is the one drawing a
-blank there, and a puzzled Knowie would read as puzzled *at them* — the opposite
-of what `dazed` is for. "Say whatever you've got" wants the steady face.
+**Amended 2026-10-07, by the designer.** **`session/blank` → `laughing`.** It had
+been kept `determined` on purpose, as "the steady face" for "Say whatever you've
+got". On the screen the half-lidded face read as frustrated at a student who had
+just admitted they were stuck — the same misreading that moved 01 Idle and 02a
+Captured. `dazed` is still wrong for the reason given before (it would read as
+puzzled *at them*); `laughing` is this table's "warmth while helping", which is
+what the screen is doing.
 
 **Reverted 2026-09-21, the same day as the remap it undoes.** For one day
 `approving` and `excited` both pointed at `laughing`, because `excited`'s head

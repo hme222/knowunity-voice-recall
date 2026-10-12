@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { MascotSlot, ScreenShell } from '@/components'
 import {
   FlashcardsIcon,
@@ -19,7 +19,7 @@ import {
   TimerIcon,
   WifiIcon,
 } from '@/components/icons'
-import { HOME_GREETING } from '@/lib/session'
+import { HOME_GREETING, STUDENT_INITIAL } from '@/lib/session'
 import styles from './home.module.css'
 
 // The host app's home, built to Figma frame "Home card — where Say It Back lives,
@@ -101,23 +101,55 @@ const TABS = [
   { label: 'Awards', Glyph: NavTrophyIcon },
 ]
 
-export function HomeShell({ children }: { children: ReactNode }) {
+export function HomeShell({ children, toolChip }: {
+  children: ReactNode
+  /**
+   * Say It Back's composer chip, once unlocked. It lives in the tool row, first, per
+   * sprint-context § "Where it lives": "among Scan/Summarize/Flashcards/Quiz in the
+   * existing home composer". It used to render in the middle slot under the greeting,
+   * where a short viewport pushed it below the fold and home looked chipless.
+   */
+  toolChip?: ReactNode
+}) {
   // The middle scrolls and the chrome does not, so the shell's own overflow measurement
   // never sees this region. Same ResizeObserver, same data attribute, same fade.
   const midRef = useRef<HTMLDivElement>(null)
   const [overflowing, setOverflowing] = useState(false)
+  // Knowie at 3XL if the middle fits as designed; 2XL if that is enough; out if not —
+  // the unlock note and Say It Back's surfaces are what home is for. Decided from the
+  // layout as designed, with the flag lifted for one synchronous read, so it cannot
+  // flip-flop.
+  const [compact, setCompact] = useState<0 | 1 | 2>(0)
   const measure = useCallback(() => {
     const el = midRef.current
-    if (el) setOverflowing(el.scrollHeight - el.clientHeight > 1)
+    if (!el) return
+    const applied = el.getAttribute('data-compact')
+    if (applied) el.removeAttribute('data-compact')
+    const overAsDesigned = el.scrollHeight - el.clientHeight
+    const mascot = el.querySelector<HTMLElement>('[data-mascot]')
+    const full = mascot?.offsetHeight ?? 0
+    if (applied) el.setAttribute('data-compact', applied)
+    const root = getComputedStyle(document.documentElement)
+    const small = parseFloat(root.getPropertyValue('--size-primitive-illustration-1500'))
+    setCompact(overAsDesigned <= 1 ? 0 : overAsDesigned <= full - small + 1 ? 1 : 2)
+    setOverflowing(el.scrollTop + el.clientHeight < el.scrollHeight - 1)
   }, [])
-  useEffect(() => {
+  useLayoutEffect(() => {
     measure()
     const el = midRef.current
     if (!el || typeof ResizeObserver === 'undefined') return
     const ro = new ResizeObserver(measure)
     ro.observe(el)
-    for (const child of Array.from(el.children)) ro.observe(child)
-    return () => ro.disconnect()
+    for (const child of Array.from(el.children)) {
+      ro.observe(child)
+      for (const grandchild of Array.from(child.children)) ro.observe(grandchild)
+    }
+    let live = true
+    document.fonts?.ready.then(() => live && measure())
+    return () => {
+      live = false
+      ro.disconnect()
+    }
   }, [measure, children])
 
   return (
@@ -128,12 +160,18 @@ export function HomeShell({ children }: { children: ReactNode }) {
       <div className={styles.body}>
         {/* middleContent on the frame: centred, gap 64 between the greeting group and
             whatever Say It Back surface this route is showing. */}
-        <div ref={midRef} className={styles.middle} data-overflowing={overflowing || undefined}>
+        <div
+          ref={midRef}
+          className={styles.middle}
+          data-overflowing={overflowing || undefined}
+          data-compact={compact || undefined}
+          onScroll={measure}
+        >
           <div className={styles.hero}>
             <div className={styles.mascotGroup}>
               {/* The frame's ground ellipse under Knowie. Decorative. */}
               <span className={styles.groundShadow} aria-hidden="true" />
-              <MascotSlot size="3XL" expression="excited" />
+              <MascotSlot size="3XL" expression="excited" className={styles.mascot} />
             </div>
             <h1 className={styles.greeting}>{HOME_GREETING}</h1>
           </div>
@@ -145,6 +183,7 @@ export function HomeShell({ children }: { children: ReactNode }) {
             flow and has never used the zone, so the invariant is untouched. */}
         <div className={styles.chrome}>
           <div className={styles.tools}>
+            {toolChip}
             {TOOLS.map(({ label, Glyph }) => (
               <button type="button" key={label} className={styles.tool}>
                 <span className={styles.toolGlyph}><Glyph /></span>
@@ -170,7 +209,7 @@ export function HomeShell({ children }: { children: ReactNode }) {
               </button>
             ))}
             <button type="button" className={styles.avatar} aria-label="Profile">
-              <MascotSlot size="XL" expression="excited" className={styles.avatarPose} />
+              <span className={styles.avatarInitial} aria-hidden="true">{STUDENT_INITIAL}</span>
             </button>
           </nav>
           <div className={styles.homeIndicator} aria-hidden="true">

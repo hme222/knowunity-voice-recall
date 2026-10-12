@@ -1,0 +1,34 @@
+/* micCaption — no Figma counterpart. Pinned to the foot of the mic region (which is
+   position: relative and full width, see ScreenShell .micRegion). The label and body
+   mirror HintCard's label and body roles without the card: the region's own clear
+   space does what the card's padding would, and a card does not fit in 80. */
+
+.root {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-inline: calc(var(--spacing-semantic-screen-margin) * 1px);
+  text-align: center;
+}
+
+.label,
+.body {
+  margin: 0;
+}
+
+.label {
+  color: var(--color-semantic-text-tertiary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+}
+
+/* Two lines is the budget. pre-line honours a fixture's deliberate break. */
+.body {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-s-regular-font-weight);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
+  white-space: pre-line;
+}

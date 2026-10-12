@@ -4,7 +4,7 @@
 
 Voice-in / text-out active-recall prototype for Knowunity. Next.js 16, React 19, Tailwind 4, TypeScript.
 
-**Concept:** a conversational, not quiz-graded, recall check — a clean pass echoes the student's own transcript back as proof, a miss requeues later in the same session.
+**Concept:** a conversational, not quiz-graded, recall check — a clean pass echoes the student's own transcript back as proof; a miss is offered back on the Recap ("Practice what I missed") rather than requeued automatically (changed 2026-10-08).
 
 ## Hard rules
 

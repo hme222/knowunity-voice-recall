@@ -140,3 +140,18 @@
 .mascotCentred {
   align-self: center;
 }
+
+/* The closing takeaway: heading over the "New today" card, centred like the screen
+   title, the card full width like every card in the 390 column. */
+.learned {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+  text-align: center;
+}
+
+.learnedCard {
+  width: 100%;
+  text-align: left;
+}

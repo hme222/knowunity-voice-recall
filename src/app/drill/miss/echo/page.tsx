@@ -1,8 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { micRegionClass, Button, ChatBubble, Chips, HintCard, MascotSlot, MicButton, ScreenShell } from '@/components'
-import { DRILL_MISSED_WORD, STUMBLES } from '@/lib/session'
+import { micRegionClass, Button, Chips, HintCard, MascotSlot, MicButton, MicCaption, ScreenShell } from '@/components'
+import { STUMBLES, useDrillTerm } from '@/lib/session'
 import styles from '../../drill.module.css'
 import { DrillBar } from '../../DrillBar'
 
@@ -21,8 +21,22 @@ import { DrillBar } from '../../DrillBar'
 
 export default function DrillEchoPage() {
   const router = useRouter()
+  const drillTerm = useDrillTerm()
   return (
     <ScreenShell
+      mic={
+        <div className={micRegionClass}>
+          {/* Records, then advances. This is the rung whose whole point is saying the
+              word out loud with Knowie, and it used to complete without a take. */}
+          <MicButton
+            state="Idle"
+            label={`Say ${drillTerm.drill.missedWord}`}
+            onClick={() => router.push('/drill/recording?step=2&stumble=echo')}
+          />
+          {/* Knowie's line, under the mic it is asking the student to use (2026-10-12). */}
+          <MicCaption body={STUMBLES.third.copy} />
+        </div>
+      }
       topNavigation={<DrillBar step={2} onExit={() => router.push('/picker')} />}
       bottomContent={
         <Button
@@ -44,25 +58,12 @@ export default function DrillEchoPage() {
           showLeftIcon={false}
           showRightIcon={false}
         />
-        {/* Knowie speaking, not a second copy of the take. DD 07 already shows what
-            the student said; repeating it here said nothing new and cost 156px on a
-            screen that was already overflowing into the mic. */}
-        <ChatBubble className={styles.fullWidth} body={STUMBLES.third.copy} />
         <HintCard
           className={styles.fullWidth}
           label="Say this with me"
           tone="missingWord"
-          body={DRILL_MISSED_WORD}
+          body={drillTerm.drill.missedWord}
         />
-        <div className={micRegionClass}>
-          {/* Records, then advances. This is the rung whose whole point is saying the
-              word out loud with Knowie, and it used to complete without a take. */}
-          <MicButton
-            state="Idle"
-            label={`Say ${DRILL_MISSED_WORD} out loud`}
-            onClick={() => router.push('/drill/recording?step=2&stumble=echo')}
-          />
-        </div>
       </div>
     </ScreenShell>
   )

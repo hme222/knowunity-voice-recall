@@ -1,0 +1,112 @@
+/* The start screen: Knowie, the title, the path as a numbered list, and the prototype
+   notes a reviewer needs to drive it. Not a product screen, so no frame; built from the
+   same title classes and tokens as the session screens so it reads as the same app. */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: safe center;
+  flex: 1;
+  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * 1px);
+  align-self: stretch;
+}
+
+.blockHeading {
+  margin: 0;
+  color: var(--color-semantic-text-tertiary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+}
+
+.path,
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+  margin: 0;
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  list-style: none;
+  border-radius: calc(var(--size-primitive-radius-200) * 1px);
+  background: var(--color-semantic-background-surface);
+}
+
+/* The prototype notes: outlined rather than filled, so they read as notes about the
+   prototype, not part of the student's path. */
+.notes {
+  background: transparent;
+  border: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default);
+}
+
+/* The path: three numbered steps across, one per column — the same language as the
+   drill's climb meter. */
+.path {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.pathStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  text-align: center;
+}
+
+.pathLabel {
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+}
+
+.notes {
+  gap: calc(var(--size-primitive-space-200) * 1px);
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+}
+
+.number {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: calc(var(--size-primitive-icon-300) * 1px);
+  height: calc(var(--size-primitive-icon-300) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  background: var(--color-semantic-interactive-primary);
+  color: var(--color-semantic-interactive-on-primary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+}
+
+.stepTitle {
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+}
+
+.stepBody {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-s-regular-font-weight);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
+}
