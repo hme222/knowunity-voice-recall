@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: safe center;
   flex: 1;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  gap: calc(var(--size-primitive-space-400) * 1px);
 }
 
 .block {
@@ -26,7 +26,7 @@
   line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
 }
 
-.path,
+.story,
 .notes {
   display: flex;
   flex-direction: column;
@@ -38,45 +38,6 @@
   background: var(--color-semantic-background-surface);
 }
 
-/* The prototype notes: outlined rather than filled, so they read as notes about the
-   prototype, not part of the student's path. */
-.notes {
-  background: transparent;
-  border: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default);
-}
-
-/* The path: three numbered steps across, one per column — the same language as the
-   drill's climb meter. */
-.path {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: calc(var(--size-primitive-space-200) * 1px);
-}
-
-.pathStep {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: calc(var(--size-primitive-space-100) * 1px);
-  text-align: center;
-}
-
-.pathLabel {
-  color: var(--color-semantic-text-primary);
-  font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
-}
-
-.notes {
-  gap: calc(var(--size-primitive-space-200) * 1px);
-}
-
-.step {
-  display: flex;
-  align-items: flex-start;
-  gap: calc(var(--size-primitive-space-300) * 1px);
-}
 
 .number {
   display: grid;
@@ -92,19 +53,52 @@
   line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
 }
 
-.text {
-  display: flex;
-  flex-direction: column;
+.eyebrow {
+  margin: 0;
+  color: var(--color-semantic-text-tertiary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
 }
 
-.stepTitle {
+/* The story: a number, then the step's name and its one line, reading left to right —
+   not squeezed into thirds, where step 2's explanation ran to three tiny lines. */
+.storyStep {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+}
+
+.storyTitle {
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-body-s-bold-font-weight);
   font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
   line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
 }
 
-.stepBody {
+.storyBody {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-s-regular-font-weight);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
+}
+
+/* Name and line on one run of text, with a space between. */
+.storyTitle::after {
+  content: ' \00b7  ';
+}
+
+/* The testing notes: outlined rather than filled, so they read as notes about the
+   prototype, not the student's story — and a real bulleted list. */
+.notes {
+  gap: calc(var(--size-primitive-space-200) * 1px);
+  padding-left: calc((var(--spacing-semantic-card-padding) + var(--size-primitive-space-300)) * 1px);
+  list-style: disc;
+  background: transparent;
+  border: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default);
+}
+
+.note {
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-s-regular-font-weight);
   font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);

@@ -12,7 +12,7 @@ import {
   MicCaption,
   ScreenShell,
 } from '@/components'
-import { getTerm, useSticky } from '@/lib/session'
+import { getTerm, useSticky, SUBJECT } from '@/lib/session'
 import styles from '../../interrupt.module.css'
 
 // A genuinely blank term — not a near-miss, nothing at all. This answers the Design
@@ -87,7 +87,7 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
         {/* The question stays in context — designer, 2026-10-08. The bubble used to be
             replaced by the encouragement, so a student who said "I don't know this one"
             lost sight of what "this one" was. Same bubble as 01 Idle. */}
-        <ChatBubble className={styles.bubble} showTitle title="Explain: " titleAccent={current.name} body={current.prompt} />
+        <ChatBubble className={styles.bubble} showTitle title={`${SUBJECT} · Explain: `} titleAccent={current.name} body={current.prompt} />
       </div>
     </ScreenShell>
   )

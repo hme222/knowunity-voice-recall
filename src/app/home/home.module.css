@@ -507,11 +507,40 @@
 }
 
 /* The unlock note: Knowie's line above the tool row, with its dismissal. */
+/* A popup over home (HomeShell `popup`): the screen dims, the card sits centred, and
+   only the Say It Back chip in the tool row stays lit above the dim — designer,
+   2026-10-12. Fixed to the device frame, which contains fixed layers. */
+.popupScrim {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--spacing-semantic-screen-margin) * 1px);
+  background: var(--color-semantic-background-scrim-strong);
+}
+
+.toolChipSlot {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.body[data-popup] .toolChipSlot {
+  position: relative;
+  z-index: 2;
+}
+
+/* The unlock popup's card. */
 .unlockNote {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-300) * 1px);
   width: 100%;
+  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  background: var(--color-semantic-background-surface);
+  text-align: center;
 }
 
 /* Baseline home only: the three doors, standing in for arriving at one in the real
@@ -535,7 +564,6 @@
 .deck {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-300) * 1px);
   width: 100%;
 }
 

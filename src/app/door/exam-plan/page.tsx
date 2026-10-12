@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { micRegionClass, AppBar, Button, ChatBubble, MascotSlot, MicButton, MicCaption, ProgressIndicator, ScreenShell } from '@/components'
+import { startSession } from '@/lib/session'
 import { proveItHref } from '../doors'
 import styles from '../door.module.css'
 
@@ -22,7 +23,10 @@ export default function ExamPlanDoor() {
           {/* No "Skip question" here. The action row below already carries "Skip" to
               the same destination, so this screen offered one escape twice under two
               names, 109px apart. */}
-          <MicButton state="Idle" onClick={() => router.push(proveItHref('exam-plan'))} />
+          <MicButton state="Idle" onClick={() => {
+            startSession({ door: 'exam-plan' })
+            router.push(proveItHref('exam-plan'))
+          }} />
           {/* BELOW the mic, out of the flow. The region aligns its children to the top
               so the control sits at one height on every voice screen, which laid this
               caption out BESIDE the button — both starting at y466, the caption clipping

@@ -10,7 +10,7 @@ import {
   RecordingStatus,
   ScreenShell,
 } from '@/components'
-import { getTerm, verdictFor } from '@/lib/session'
+import { getTerm, verdictFor, SUBJECT } from '@/lib/session'
 import styles from './recording.module.css'
 
 // 02 Recording — Figma frame "02 Recording" (15672:20100).
@@ -158,7 +158,7 @@ function RecordingScreen({ index }: { index: number }) {
           by the designer. The frame's full-screen mic takeover dropped it, so the
           student was explaining a term they could no longer see. */}
       <div className={styles.body}>
-        {current && <ChatBubble className={styles.bubble} showTitle title="Explain: " titleAccent={current.name} body={current.prompt} />}
+        {current && <ChatBubble className={styles.bubble} showTitle title={`${SUBJECT} · Explain: `} titleAccent={current.name} body={current.prompt} />}
       </div>
     </ScreenShell>
   )

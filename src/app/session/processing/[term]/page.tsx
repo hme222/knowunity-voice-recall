@@ -42,11 +42,12 @@ function ProcessingScreen({ index }: { index: number }) {
   useEffect(() => {
     if (!unusable) return
     const id = window.setTimeout(
-      () => router.push(`/session/unclear/${index}?attempt=${attempt}`),
+      // The door rides through a mishear too, so a quiz run stays a quiz run.
+      () => router.push(`/session/unclear/${index}?attempt=${attempt}${door ? `&door=${door}` : ''}`),
       processingDwell(),
     )
     return () => window.clearTimeout(id)
-  }, [unusable, index, attempt, router])
+  }, [unusable, index, attempt, router, door])
 
   // Not a gate any more. If the ask goes unanswered, move on once the student has had a
   // fair chance — after the slow threshold, so "still thinking" still shows first. Through a ref, so the re-render at the slow threshold does not

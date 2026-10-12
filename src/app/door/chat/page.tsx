@@ -12,6 +12,7 @@ import {
   ProgressIndicator,
   ScreenShell,
 } from '@/components'
+import { startSession } from '@/lib/session'
 import { proveItHref } from '../doors'
 import styles from '../door.module.css'
 
@@ -29,7 +30,10 @@ export default function ChatDoor() {
     <ScreenShell
       mic={
         <div className={micRegionClass}>
-          <MicButton state="Idle" onClick={() => router.push(proveItHref('chat'))} />
+          <MicButton state="Idle" onClick={() => {
+            startSession({ door: 'chat' })
+            router.push(proveItHref('chat'))
+          }} />
           {/* BELOW the mic, out of the flow — see the exam-plan door. */}
           <MicCaption body="Tap to answer" />
         </div>

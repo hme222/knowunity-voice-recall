@@ -47,11 +47,16 @@
 .root:not([data-due='true']) .glyph {
   width: calc(var(--size-primitive-icon-300) * 1px);
   height: calc(var(--size-primitive-icon-300) * 1px);
+  /* White like the tool chips' glyphs beside it (designer, 2026-10-12): in purple it
+     read as a size up in the row. The due chip keeps its accent. */
+  color: var(--color-semantic-text-primary);
 }
 
 .glyph {
-  width: calc(var(--size-primitive-illustration-500) * 1px);
-  height: calc(var(--size-primitive-illustration-500) * 1px);
+  /* 24, the icon size used everywhere else. The due chip's glyph was illustration.500
+     and read as huge beside every other icon on home (designer, 2026-10-12). */
+  width: calc(var(--size-primitive-icon-300) * 1px);
+  height: calc(var(--size-primitive-icon-300) * 1px);
   display: grid;
   place-items: center;
   flex-shrink: 0;

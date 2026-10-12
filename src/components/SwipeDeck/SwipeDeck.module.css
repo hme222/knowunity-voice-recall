@@ -20,6 +20,9 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  /* Room between the card and its pager dots. With none, the dots sat on the chip's
+     edge (measured 0px, designer, 2026-10-12). */
+  gap: calc(var(--size-primitive-space-400) * 1px);
   /* Settles back, or into the next card, when the finger lifts. Removed while dragging
      so the card tracks the pointer rather than lagging behind it. */
   transition: transform calc(var(--motion-semantic-duration-standard) * 1ms) var(--motion-semantic-easing-standard);

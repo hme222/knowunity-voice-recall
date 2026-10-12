@@ -12,7 +12,7 @@ import {
   MicCaption,
   ScreenShell,
 } from '@/components'
-import { ensureSessionStarted, getTerm, isPractising, nextAfter, recordOutcome, useSession, useSticky } from '@/lib/session'
+import { ensureSessionStarted, getTerm, isPractising, nextAfter, recordOutcome, useSession, useSticky, SUBJECT } from '@/lib/session'
 import styles from './idle.module.css'
 
 // 01 Idle / Commit — Figma frame "01 Idle (refreshed 2)" (15672:26255).
@@ -115,7 +115,7 @@ function IdleScreen({ index }: { index: number }) {
         <ChatBubble
           className={styles.bubble}
           showTitle
-          title="Explain: "
+          title={`${SUBJECT} · Explain: `}
           titleAccent={current.name}
           body={current.prompt}
         />

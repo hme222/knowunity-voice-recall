@@ -18,6 +18,7 @@ function UnclearScreen({ index }: { index: number }) {
   const wasSure = searchParams.get('sure') === '1'
   const current = getTerm(index)
   const attempt = Number(searchParams.get('attempt') ?? '1')
+  const door = searchParams.get('door')
   // A second mishear is a different situation from the first. It used to render
   // byte-identically — same "a little closer to the mic" after the mic had already
   // failed once — so the screen kept asking for the thing that was not working.
@@ -36,7 +37,7 @@ function UnclearScreen({ index }: { index: number }) {
   }
 
   function retry() {
-    router.push(`/session/recording/${index}?attempt=${attempt + 1}`)
+    router.push(`/session/recording/${index}?attempt=${attempt + 1}${door ? `&door=${door}` : ''}`)
   }
 
   function skip() {
@@ -52,7 +53,7 @@ function UnclearScreen({ index }: { index: number }) {
           <MicButton state="Idle" label="Say it again" onClick={retry} />
         </div>
       }
-      topNavigation={<SessionBar index={index} onSkip={skip} />}
+      topNavigation={<SessionBar index={index} door={door} onSkip={skip} />}
       bottomContent={
         <div className={styles.actions}>
           {/* On a repeat mishear typing leads, because the mic has now failed twice. */}

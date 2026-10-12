@@ -503,6 +503,12 @@ export type SessionState = {
    * these is not "typing by choice", so it pays in full (designer, 2026-10-12).
    */
   micFault?: number[]
+  /**
+   * The door a one-definition run started from. A door run is ONE definition, however
+   * it goes (designer, 2026-10-12): when that term resolves, the run ends on home
+   * rather than carrying on into the full set. Absent for a full session.
+   */
+  door?: string
   /** Which term Definition Drill Down is working (index into TERMS). Absent = term 1. */
   drillTerm?: number
   /**
@@ -589,10 +595,10 @@ function write(state: SessionState) {
   }
 }
 
-export function startSession() {
+export function startSession(opts?: { door?: string }) {
   const now = Date.now()
   const { sticky } = readSession()
-  write({ outcomes: [], startedAt: now, lastAt: now, ...(sticky ? { sticky } : {}) })
+  write({ outcomes: [], startedAt: now, lastAt: now, ...(sticky ? { sticky } : {}), ...(opts?.door ? { door: opts.door } : {}) })
 }
 
 /**
@@ -887,6 +893,8 @@ export function nextAfter(index: number): string {
   const state = readSession()
   // In a practice round, the next practice item — or the Recap once, at the end.
   if (state.practising) return advancePractice()
+  // A door run is one definition: done, back to home with the chip.
+  if (state.door) return '/home/unlock'
   if (index < TOTAL_TERMS) return termHref(index + 1, state)
   return '/session/recap'
 }

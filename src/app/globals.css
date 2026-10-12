@@ -39,6 +39,10 @@ body {
      makes the content region absorb the difference, which is what the scaffold is for. */
   height: 100dvh;
   overflow: hidden;
+  /* The frame is the containing block for fixed layers (the transcript BottomSheet,
+     the mic-permission dim). Without it they were fixed to the browser window, so on a
+     desktop the sheet ran the full window width, wider than the phone (2026-10-12). */
+  contain: layout;
   display: flex;
   flex-direction: column;
   background: var(--color-semantic-background-page);

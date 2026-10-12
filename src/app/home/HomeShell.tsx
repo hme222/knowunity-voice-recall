@@ -101,7 +101,7 @@ const TABS = [
   { label: 'Awards', Glyph: NavTrophyIcon },
 ]
 
-export function HomeShell({ children, toolChip }: {
+export function HomeShell({ children, toolChip, popup }: {
   children: ReactNode
   /**
    * Say It Back's composer chip, once unlocked. It lives in the tool row, first, per
@@ -110,6 +110,11 @@ export function HomeShell({ children, toolChip }: {
    * where a short viewport pushed it below the fold and home looked chipless.
    */
   toolChip?: ReactNode
+  /**
+   * A popup over home: the whole screen dims under it, except the Say It Back chip,
+   * which stays lit in the tool row so the popup can point at it (designer, 2026-10-12).
+   */
+  popup?: ReactNode
 }) {
   // The middle scrolls and the chrome does not, so the shell's own overflow measurement
   // never sees this region. Same ResizeObserver, same data attribute, same fade.
@@ -157,7 +162,7 @@ export function HomeShell({ children, toolChip }: {
       panelHeader={<StatusBar />}
       topNavigation={<HomeAppBar />}
     >
-      <div className={styles.body}>
+      <div className={styles.body} data-popup={popup ? '' : undefined}>
         {/* middleContent on the frame: centred, gap 64 between the greeting group and
             whatever Say It Back surface this route is showing. */}
         <div
@@ -183,7 +188,7 @@ export function HomeShell({ children, toolChip }: {
             flow and has never used the zone, so the invariant is untouched. */}
         <div className={styles.chrome}>
           <div className={styles.tools}>
-            {toolChip}
+            {toolChip && <span className={styles.toolChipSlot}>{toolChip}</span>}
             {TOOLS.map(({ label, Glyph }) => (
               <button type="button" key={label} className={styles.tool}>
                 <span className={styles.toolGlyph}><Glyph /></span>
@@ -216,6 +221,7 @@ export function HomeShell({ children, toolChip }: {
             <span />
           </div>
         </div>
+        {popup && <div className={styles.popupScrim}>{popup}</div>}
       </div>
     </ScreenShell>
   )

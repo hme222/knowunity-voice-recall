@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { returnBack } from '@/lib/navigation'
 import { Button, OptionRow, ScreenShell } from '@/components'
-import { setSticky, useSession, XP } from '@/lib/session'
+import { setSticky, useSession, XP, setPractising } from '@/lib/session'
 import styles from './exit.module.css'
 
 // 01b Exit confirmation. Eight real reasons, matching IMG_7511. Tone stays light, no
@@ -56,7 +56,17 @@ export default function ExitPage() {
           ) : (
             <Button CTA="Keep learning" variant="Primary" size="M" fullWidth onClick={() => returnBack(router, '/session/idle/1')} />
           )}
-          <Button CTA="Leave anyway" variant="Secondary" size="M" fullWidth onClick={() => router.push('/home/unlocked')} />
+          <Button
+            CTA="Leave anyway"
+            variant="Secondary"
+            size="M"
+            fullWidth
+            onClick={() => {
+              // Leaving ends a practice round, or it outlives the visit.
+              setPractising(false)
+              router.push('/home/unlocked')
+            }}
+          />
         </div>
       }
     >

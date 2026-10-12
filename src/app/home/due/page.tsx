@@ -23,7 +23,7 @@ function DueHome() {
   const quiz = DUE_QUIZZES[active]
 
   return (
-    <HomeShell toolChip={<SwipeChip onClick={() => router.push('/picker')} />}>
+    <HomeShell>
       <>
         <div className={styles.due}>
           {/* One quiz due needs no pager, which is the case DueSignalCard was built
@@ -47,7 +47,7 @@ function DueHome() {
               >
                 <SwipeChip
                   due
-                  QuizLabel={`${quiz.term} · due ${quiz.due}`}
+                  QuizLabel={`${quiz.subject} · ${quiz.term} · due ${quiz.due}`}
                   Count={dueCountLabel(active)}
                   onClick={() => router.push('/session/intro')}
                 />
@@ -66,9 +66,9 @@ function DueHome() {
             </>
           )}
         </div>
-        {/* The always-present chip is in HomeShell's tool row. The card above is a
-            layer on top of it, and a student who ignores the deadline can still start
-            from there. */}
+        {/* One Say It Back, not two (designer, 2026-10-12): with a plan, the due chip —
+            subject, term and date — is the entry point, and the tool row does not repeat
+            it. This replaces the earlier "card is a layer on top of the chip" rule. */}
       </>
     </HomeShell>
   )

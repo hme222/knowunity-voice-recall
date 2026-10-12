@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { AppBar, Button, MascotSlot, ProgressIndicator, ScreenShell } from '@/components'
+import { startSession } from '@/lib/session'
 import { MicGlyphIcon } from '@/components/icons'
 import styles from '../door.module.css'
 
@@ -30,14 +31,17 @@ export default function QuizCompleteDoor() {
         <div className={styles.doorActions}>
           <Button CTA="Not now" variant="Tertiary" size="M" onClick={() => router.push('/home/unlock')} />
           <Button
-            CTA="Prove it"
+            CTA="Say It Back"
             variant="Primary"
             size="M"
             showLeftIcon
             leftIcon={<MicGlyphIcon />}
             // Through the mic primer: this is the first time the guided path meets the
             // mic, and voice-ux Principle 3 says never fire the OS ask cold.
-            onClick={() => router.push('/permission/primer?door=quiz')}
+            onClick={() => {
+              startSession({ door: 'quiz' })
+              router.push('/permission/primer?door=quiz')
+            }}
           />
         </div>
       }
@@ -51,7 +55,7 @@ export default function QuizCompleteDoor() {
               Regular, not as a textBlock. TextBlock's L renders 44px. */}
           <div className="screenTitle">
             <h1 className="screenTitleHeading">Quiz complete!</h1>
-            <p className="screenTitleCaption">9/10 on your Chemistry quiz. Want to say one back?</p>
+            <p className="screenTitleCaption">9/10 on your Chemistry quiz. Say one definition back: formal charge.</p>
           </div>
         </div>
       </div>

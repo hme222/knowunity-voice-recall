@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { AppBar, PickerRow, ScreenShell } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { PICKER_DRILLS, PICKER_TOPICS, setDrillTerm } from '@/lib/session'
+import { PICKER_DRILLS, PICKER_TOPICS, setDrillTerm, setPractising } from '@/lib/session'
 import styles from './picker.module.css'
 
 // Picker — Figma frame "Picker page — Say It Back + drill down" (15810:11285).
@@ -56,6 +56,7 @@ export default function PickerPage() {
               label={d.label}
               state={d.state}
               onClick={() => {
+                setPractising(false)
                 setDrillTerm(d.term)
                 router.push('/drill/intro')
               }}

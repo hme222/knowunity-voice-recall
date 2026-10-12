@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../session/SessionBar'
 import { actionRowClass, Button, ChatBubble, MascotSlot, ScreenShell } from '@/components'
-import { getTerm, nextAfter, recordOutcome, setSticky, setTypedAnswer, typedDraft, useSticky } from '@/lib/session'
+import { getTerm, nextAfter, recordOutcome, setSticky, setTypedAnswer, typedDraft, useSticky, SUBJECT } from '@/lib/session'
 import { DrillBar } from '../../drill/DrillBar'
 import styles from '../text.module.css'
 
@@ -121,7 +121,7 @@ function TextTurnScreen() {
             ChatBubble's own doc records why the accent exists: without it "the one word
             the screen is about had no emphasis at all". */}
         <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
-        <ChatBubble showTitle title="Explain: " titleAccent={current.name} body={current.prompt} />
+        <ChatBubble showTitle title={`${SUBJECT} · Explain: `} titleAccent={current.name} body={current.prompt} />
         <label>
           <span className="sr-only">Your answer</span>
           <textarea

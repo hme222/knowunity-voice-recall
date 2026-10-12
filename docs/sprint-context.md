@@ -146,6 +146,24 @@ above.
       greeting-to-content gap is 32.
     - **The start screen** gives the path in three steps and what a reviewer
       needs to drive it: hold-time decides the result, question 1 misses once.
+  - **Later on 2026-10-12 (designer):**
+    - **A door run is one definition, always.** Started from the quiz, chat or
+      exam plan, the run ends after its one term — on the door's result if it
+      passed, otherwise on home — never carrying on into the full set. The quiz
+      says so: "Say one definition back: formal charge." The button is "Say It
+      Back", not "Prove it". The full Chemistry set is the home chip's.
+    - **Every new run starts clean** (`startSession` on the start screen and every
+      door): a stale practice round used to carry in, showing "+0" on a correct
+      answer, opening the old round's drill, and running the old clock.
+    - **Unlock is a popup over home:** the screen dims under a "Say It Back
+      feature unlocked" card and only the Say It Back chip stays lit.
+    - **The home chip's glyph is white** like the tools'; the due chip's glyph is
+      24, not 40, and `/home/due` shows one Say It Back (subject, term, date).
+    - **Every question card names the subject**: "Chemistry · Explain: …".
+    - **Fixed layers stay in the phone frame** (`contain: layout` on
+      `.device-frame`); the transcript sheet used to span a desktop window.
+    - **The start screen is a prototype brief**: eyebrow, the three-step story,
+      "To test it · about 2 minutes" with the hold-time rules, "Start at the quiz".
   - **Definition Drill Down, decided 2026-10-12:** no StrengthMeter (the green
     coverage bar) on any drill screen — progress is the top bar's alone. Each step's
     instruction ("Say the whole thing…", the nudge, "Let's say this one together")

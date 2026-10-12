@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { Button, MascotSlot, ScreenShell } from '@/components'
+import { startSession } from '@/lib/session'
 import styles from './start.module.css'
 
 // THE FIRST SCREEN IS A START SCREEN: what this is, the path, and what to know before
@@ -17,12 +18,19 @@ import styles from './start.module.css'
 // Start goes where a student meets the feature: the quiz-complete door, then the mic
 // primer, then the session. Baseline home is at /home.
 
-const PATH = ['Finish a Chemistry quiz', 'Say it back', 'See what you learned']
+// Rewritten 2026-10-12 after a UX and copy review: the screen is a prototype brief, so
+// it says so; the story steps match what the reader actually does (the quiz is already
+// done); and the testing notes are plain sentences, not shorthand.
+const STORY = [
+  { title: 'Quiz done', body: 'Chemistry, just finished' },
+  { title: 'Say It Back', body: 'Explain one definition' },
+  { title: 'See how it landed', body: 'What stuck, what’s next' },
+]
 
-const GOOD_TO_KNOW = [
-  'No speech recognition: hold the mic 5s+ for correct, 2–5s for partly right.',
-  'Under 2s it misses you, and question 1 always does once.',
-  'No mic? Type instead. X leaves anytime.',
+const TO_TEST = [
+  'Hold the mic 5+ seconds for a correct answer, 2–5 for partly right.',
+  'Under 2 seconds it can’t hear you. Question 1 does this once on purpose.',
+  'No mic? Every question has Type instead.',
 ]
 
 export default function StartPage() {
@@ -30,33 +38,43 @@ export default function StartPage() {
   return (
     <ScreenShell
       bottomContent={
-        <Button CTA="Start" variant="Primary" size="M" fullWidth onClick={() => router.push('/door/quiz')} />
+        <Button CTA="Start at the quiz" variant="Primary" size="M" fullWidth onClick={() => {
+            // A fresh run. State from a previous visit (a practice round, the old clock)
+            // used to carry straight in: a correct answer showed +0 and the next step
+            // opened the old round's drill (2026-10-12).
+            startSession()
+            router.push('/door/quiz')
+          }} />
       }
     >
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="laughing" />
         <div className="screenTitle">
+          <p className={styles.eyebrow}>Prototype · Knowunity</p>
           <h1 className="screenTitleHeading">Say It Back</h1>
-          <p className="screenTitleCaption">A Knowunity prototype. Say a definition back; Knowie checks it.</p>
+          <p className="screenTitleCaption">Explain a definition in your own words to prove it stuck.</p>
         </div>
 
-        <section className={styles.block} aria-labelledby="path-heading">
-          <h2 id="path-heading" className={styles.blockHeading}>What you’ll do</h2>
-          <ol className={styles.path}>
-            {PATH.map((step, i) => (
-              <li key={step} className={styles.pathStep}>
+        {/* No visible heading: the numbered steps say what they are. */}
+        <section className={styles.block} aria-label="The story">
+          <ol className={styles.story}>
+            {STORY.map((step, i) => (
+              <li key={step.title} className={styles.storyStep}>
                 <span className={styles.number} aria-hidden="true">{i + 1}</span>
-                <span className={styles.pathLabel}>{step}</span>
+                <span>
+                  <span className={styles.storyTitle}>{step.title}</span>
+                  <span className={styles.storyBody}>{step.body}</span>
+                </span>
               </li>
             ))}
           </ol>
         </section>
 
-        <section className={styles.block} aria-labelledby="know-heading">
-          <h2 id="know-heading" className={styles.blockHeading}>Good to know</h2>
+        <section className={styles.block} aria-labelledby="test-heading">
+          <h2 id="test-heading" className={styles.blockHeading}>To test it · about 2 minutes</h2>
           <ul className={styles.notes}>
-            {GOOD_TO_KNOW.map((note) => (
-              <li key={note} className={styles.stepBody}>{note}</li>
+            {TO_TEST.map((note) => (
+              <li key={note} className={styles.note}>{note}</li>
             ))}
           </ul>
         </section>
