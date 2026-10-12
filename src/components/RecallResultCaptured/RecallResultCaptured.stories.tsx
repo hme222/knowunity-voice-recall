@@ -20,7 +20,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: { docs: { description: { component: DESCRIPTION } } },
   args: {
-    title: "Here's what I heard. Send it, or say it again.",
+    title: "Here's what I heard. Did I get it?",
     transcript:
       "It's the charge on an atom if you split every bond's electrons evenly between the two atoms.",
   },

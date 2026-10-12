@@ -45,6 +45,19 @@ function MissScreen({ index }: { index: number }) {
   // The ladder now ends. "Try again" was offered at attempt 10 with byte-identical
   // copy; past REVEAL_AT_ATTEMPT the only way on is the reveal.
   const step = current ? hintFor(current, attempt) : undefined
+  // Where the student is on the ladder, as the card's headline (designer, 2026-10-12,
+  // from the usability review). The second miss's warning was a faint caption in the
+  // action zone that read as a footnote, and the third miss withdrew "Try again"
+  // without a word. One hint by decision, so the rungs differ by what they SAY: the
+  // second warns, the third says why the reveal is the only way on.
+  const lastRung = step ? !step.canRetry : false
+  const missHeadline = lastRung
+    ? 'That’s three tries. Let’s look at the answer.'
+    : attempt >= 2
+      ? 'One more go, then I’ll show you the answer.'
+      : thin
+        ? 'Start from the hint, then have another go.'
+        : current?.missTitle ?? ''
   // Already incurred, not promised: the tap happened and the answer was wrong.
   const sureCost = confidenceFor(state, index)?.wasSure ? calibrationFor(true, false) : 0
 
@@ -62,15 +75,6 @@ function MissScreen({ index }: { index: number }) {
       topNavigation={<SessionBar index={index} onSkip={skip} />}
       bottomContent={
         <div className={styles.actions}>
-          {/* Attempts 1 and 2 were byte-identical: one hint, same copy, same buttons.
-              A second hint is out of scope (sprint-context § "Not building this
-              sprint"), so this invents none — it says where the student is on the
-              ladder. It lives in the action zone because at the end of the body it
-              rendered below the fold, which differentiates a DOM dump and nothing a
-              student can see. */}
-          {step?.canRetry && attempt >= 2 && (
-            <p className={styles.ladderNote}>One more go, then I&rsquo;ll show you the answer.</p>
-          )}
           {/* The frame's `primaryRow`: two buttons side by side, with Skip as plain
               text beneath. The XP line moves up into the content region, where the
               frame puts it in the app bar area rather than the action zone. */}
@@ -133,7 +137,7 @@ function MissScreen({ index }: { index: number }) {
             2026-10-12); the chip carries the verdict. */}
         <RecallResult
           state="Neutral"
-          title={thin ? 'Nothing to check yet. Want a hint?' : current.missTitle}
+          title={missHeadline}
           transcript={`“${shownAnswer(index, 'Miss', state)}”`}
           showTranscript={attempt < 2}
         />

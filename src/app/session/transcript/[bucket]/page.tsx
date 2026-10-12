@@ -30,6 +30,11 @@ const COPY = {
     title: 'The answer',
     subtitle: "You skipped this one, so there's no take to play back.",
   },
+  // A typed pass: nothing was heard, so the sheet does not say it was.
+  typed: {
+    title: 'What you typed',
+    subtitle: 'Word for word, as you typed it.',
+  },
   // A skip after the mic failed: the app's fault, not a choice (dev review, 2026-10-12).
   mic: {
     title: 'The answer',
@@ -49,7 +54,12 @@ function TranscriptScreen({ bucket }: { bucket: string }) {
   const params = useSearchParams()
   const index = Number(params.get('term') ?? '1')
   const term = getTerm(index) ?? TERMS[0]
-  const key: Bucket = asked === 'skipped' && params.get('mic') === '1' ? 'mic' : asked
+  const key: Bucket =
+    asked === 'skipped' && params.get('mic') === '1'
+      ? 'mic'
+      : asked === 'passed' && params.get('typed') === '1'
+        ? 'typed'
+        : asked
   const copy = COPY[key]
 
   return (
@@ -67,7 +77,7 @@ function TranscriptScreen({ bucket }: { bucket: string }) {
               <p className={styles.quote}>{`“${key === 'revealed' ? shownAnswer(term.index, 'Miss', state) : answerFor(term.index, state)}”`}</p>
             </>
           )}
-          {key !== 'passed' && <p className={styles.quote}>{term.answer}</p>}
+          {key !== 'passed' && key !== 'typed' && <p className={styles.quote}>{term.answer}</p>}
           <p className={styles.note}>{term.title}</p>
         </BottomSheet>
       }

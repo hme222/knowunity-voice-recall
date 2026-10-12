@@ -68,8 +68,11 @@ function CheckingScreen() {
     router.push(`/session/${verdict}/${index}?${q}`)
   }
 
+  // Too short to check means no confidence question either (usability review,
+  // 2026-10-12): asking how sure someone is about "a charge", then saying there was
+  // nothing to check, is the question 03 Processing already declines for an unusable take.
   useEffect(() => {
-    const id = window.setTimeout(() => (drillStep ? onward() : setAsking(true)), processingDwell())
+    const id = window.setTimeout(() => (drillStep || thin ? onward() : setAsking(true)), processingDwell())
     return () => window.clearTimeout(id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, router, verdict, drillStep])

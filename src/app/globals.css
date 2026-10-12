@@ -94,3 +94,17 @@ body {
   align-items: flex-start;
   text-align: left;
 }
+
+/* A screen's h1 when its visible title lives in a component that is not a heading
+   (ChatBubble, RecallResult). Read by screen readers, not drawn. The session, drill and
+   door screens had no h1 at all (UX critic, 2026-10-12, axe page-has-heading-one), so
+   a screen-reader user landing on one had no heading to say where they were. Same
+   technique as Button's hidden label. */
+.srOnly {
+  position: absolute;
+  width: calc(var(--size-primitive-stroke-border) * 1px);
+  height: calc(var(--size-primitive-stroke-border) * 1px);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

@@ -61,6 +61,8 @@ function DrillRoundScreen() {
       }
     >
       <div className={styles.body}>
+        {/* The screen's h1, for screen readers. */}
+        <h1 className="srOnly">{`Drill rounds: ${drillTerm.name}`}</h1>
         <div className={styles.centred}>
           <MascotSlot size="XL" expression="laughing" />
         </div>

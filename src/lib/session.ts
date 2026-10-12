@@ -464,6 +464,11 @@ export type TermOutcome = {
    */
   calibration?: number
   /**
+   * The answer that resolved it was typed, not said aloud. The Recap tags the row and
+   * the transcript sheet stops claiming it was "heard" (usability review, 2026-10-12).
+   */
+  typed?: boolean
+  /**
    * Skipped after the mic failed on it (2026-10-12). Still offered for practice, but
    * the Recap does not count it as a miss: the app failed, not the student.
    */
@@ -758,7 +763,8 @@ function firstAttemptRight(bucket: Bucket): boolean {
  * those apart.
  */
 export function typedByChoice(state: SessionState, index: number): boolean {
-  return Boolean(state.typed?.[index]?.trim()) && !isSticky(state) && !state.micFault?.includes(index)
+  // What was SENT, not what sits in the box: an unsent draft answered nothing.
+  return Boolean(state.sentTyped?.[index]) && !isSticky(state) && !state.micFault?.includes(index)
 }
 
 /** Count a judged miss for a term. Call from the tap handler that routes to 05 Miss. */
@@ -858,6 +864,7 @@ export function recordOutcome(
     repeated: opts?.repeated,
     wasSure,
     calibration,
+    typed: Boolean(state.sentTyped?.[index]) || undefined,
     micTrouble: opts?.micTrouble || undefined,
   }
   const outcomes = state.outcomes.filter((o) => o.index !== index)
@@ -920,8 +927,13 @@ export function nextAfter(index: number): string {
   const state = readSession()
   // In a practice round, the next practice item — or the Recap once, at the end.
   if (state.practising) return advancePractice()
-  // A door run is one definition: done, back to home with the chip.
-  if (state.door) return '/home/unlock'
+  // A door run is one definition: done, back to home with the chip — via its own
+  // result when it ended without a pass, so a skip or a reveal is not met with a
+  // celebration and nothing about the definition (designer, 2026-10-12, option 1a).
+  if (state.door) {
+    const bucket = state.outcomes.find((o) => o.index === index)?.bucket
+    return bucket === 'Revealed' || bucket === 'Worth revisiting' ? '/door/missed' : '/home/unlock'
+  }
   if (index < TOTAL_TERMS) return termHref(index + 1, state)
   return '/session/recap'
 }
@@ -1011,6 +1023,22 @@ export function shownAnswer(index: number, verdict: Verdict, state: SessionState
 export function typedDraft(state: SessionState, index: number): string {
   const draft = state.typed?.[index]?.trim() ?? ''
   return draft && draft === state.sentTyped?.[index] ? '' : draft
+}
+
+/**
+ * A spoken take on this term is being judged: forget any typed answer for it. Call from
+ * 03 Processing's tap handler. Without this, a typed miss followed by a spoken pass kept
+ * the typed text, so the pass echoed the old typed words, paid the typed-by-choice rate,
+ * and the Recap called it typed (usability review, 2026-10-12).
+ */
+export function markSpokenTake(index: number) {
+  const state = readSession()
+  if (!state.typed?.[index] && !state.sentTyped?.[index]) return
+  const typed = { ...(state.typed ?? {}) }
+  const sentTyped = { ...(state.sentTyped ?? {}) }
+  delete typed[index]
+  delete sentTyped[index]
+  write({ ...state, typed, sentTyped })
 }
 
 /** Record a typed answer as sent for judging. Call from Send, before routing. */

@@ -1186,6 +1186,14 @@ All four now use `#9178E6`, which is what Figma binds the mascot to
 (`--homie-inkwell`), so the remap is no longer needed and the poses are distinct
 again.
 
+**Re-exported from Figma 2026-10-12.** The four files are now straight exports of
+the `Knowie` frame on "🎨 Mascot & components" (3:5): `laughing` 05, `dazed` 08,
+`excited` 09, `determined` 14, cropped to the 200×217 pose. The old files had
+hand-edited, padded viewBoxes (`-94 2 662 713`), so Knowie drew visibly smaller than
+the 96px Figma's `mascotSlot` gives it inside the 120 box, and `determined`'s whites
+were `#E5E5E5` where Figma has `#FFFCF4`. The artwork otherwise matched. Re-export
+rather than hand-edit if a pose changes.
+
 `dazed` maps to no Figma pose. It is **reserved for 04a Couldn't hear**, and
 used nowhere else — a puzzled Knowie there reads as the app being confused
 rather than the student having failed, which is the whole point of that state

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { AppBar, PickerRow, ScreenShell } from '@/components'
 import { CloseIcon } from '@/components/icons'
@@ -18,6 +19,13 @@ import styles from './picker.module.css'
 
 export default function PickerPage() {
   const router = useRouter()
+  // The search filters both lists (usability review, 2026-10-12). It had no handler, so
+  // typing changed nothing — a control on a screen of gated material that did nothing.
+  const [query, setQuery] = useState('')
+  const q = query.trim().toLowerCase()
+  const topics = PICKER_TOPICS.filter((t) => t.label.toLowerCase().includes(q))
+  const drills = PICKER_DRILLS.filter((d) => d.label.toLowerCase().includes(q))
+  const empty = topics.length === 0 && drills.length === 0
   return (
     <ScreenShell
       topNavigation={
@@ -29,40 +37,54 @@ export default function PickerPage() {
           <h1 className="screenTitleHeading">Say It Back</h1>
           <p className="screenTitleCaption">Run a recall session, or drill one definition.</p>
         </div>
-        <input className={styles.search} type="search" placeholder="Search your topics" aria-label="Search your topics" />
+        <input
+          className={styles.search}
+          type="search"
+          placeholder="Search your topics"
+          aria-label="Search your topics"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        {/* Announced, so a screen-reader user hears that the lists emptied. */}
+        <p className={empty ? styles.note : 'srOnly'} role="status">
+          {empty ? `Nothing matches \u201c${query.trim()}\u201d.` : ''}
+        </p>
 
-        <section className={styles.group}>
-          <h2 className={styles.groupLabel}>Or pick a topic</h2>
-          {PICKER_TOPICS.map((topic) => (
-            <PickerRow
-              key={topic.label}
-              variant="topic"
-              label={topic.label}
-              onClick={() => router.push('/session/intro')}
-            />
-          ))}
+        {topics.length > 0 && (
+          <section className={styles.group}>
+            <h2 className={styles.groupLabel}>Or pick a topic</h2>
+            {topics.map((topic) => (
+              <PickerRow
+                key={topic.label}
+                variant="topic"
+                label={topic.label}
+                onClick={() => router.push('/session/intro')}
+              />
+            ))}
+          </section>
+        )}
 
-        </section>
-
-        <section className={styles.group}>
-          <h2 className={styles.groupLabel}>Drill a definition</h2>
-          <p className={styles.note}>
-            Definitions you&rsquo;ve attempted. Amber ones need the most work.
-          </p>
-          {PICKER_DRILLS.map((d) => (
-            <PickerRow
-              key={d.label}
-              variant="drill"
-              label={d.label}
-              state={d.state}
-              onClick={() => {
-                setPractising(false)
-                setDrillTerm(d.term)
-                router.push('/drill/intro')
-              }}
-            />
-          ))}
-        </section>
+        {drills.length > 0 && (
+          <section className={styles.group}>
+            <h2 className={styles.groupLabel}>Drill a definition</h2>
+            <p className={styles.note}>
+              Definitions you&rsquo;ve attempted. Amber ones need the most work.
+            </p>
+            {drills.map((d) => (
+              <PickerRow
+                key={d.label}
+                variant="drill"
+                label={d.label}
+                state={d.state}
+                onClick={() => {
+                  setPractising(false)
+                  setDrillTerm(d.term)
+                  router.push('/drill/intro')
+                }}
+              />
+            ))}
+          </section>
+        )}
       </div>
     </ScreenShell>
   )

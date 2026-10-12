@@ -12,7 +12,7 @@ import {
   ProgressIndicator,
   ScreenShell,
 } from '@/components'
-import { startSession } from '@/lib/session'
+import { getTerm, startSession, SUBJECT } from '@/lib/session'
 import { proveItHref } from '../doors'
 import styles from '../door.module.css'
 
@@ -35,7 +35,10 @@ export default function ChatDoor() {
             router.push(proveItHref('chat'))
           }} />
           {/* BELOW the mic, out of the flow — see the exam-plan door. */}
-          <MicCaption body="Tap to answer" />
+          {/* The mic's accessible name, word for word (UX critic, 2026-10-12): "Tap to answer"
+              beside a control named "Start speaking" gave a voice-control user a label
+              to say that matched nothing (WCAG 2.5.3). */}
+          <MicCaption body="Start speaking" />
         </div>
       }
       topNavigation={
@@ -54,6 +57,8 @@ export default function ChatDoor() {
       <div className={styles.body}>
         <p className={styles.xp}>{'⚡ 2 XP'}</p>
         <div className={styles.content}>
+          {/* The screen's h1, for screen readers; the visible title is in the bubble. */}
+          <h1 className="srOnly">{`${SUBJECT}: ${getTerm(1)?.name}`}</h1>
           <MascotSlot size="2XL" expression="determined" />
         </div>
         <ChatBubble

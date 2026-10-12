@@ -5,7 +5,7 @@ import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import { ConfidenceAsk, ProcessingBeat, ScreenShell } from '@/components'
-import { getTerm, recordConfidence, verdictFor, recordMiss } from '@/lib/session'
+import { getTerm, markSpokenTake, recordConfidence, verdictFor, recordMiss } from '@/lib/session'
 import { doorResultHref } from '@/app/door/doors'
 import { confidenceGrace, processingDwell, slowThreshold } from '@/lib/motion'
 import styles from './processing.module.css'
@@ -72,6 +72,8 @@ function ProcessingScreen({ index }: { index: number }) {
   // — no reward and no cost, rather than guessing one for them.
   function answer(sure?: boolean) {
     const verdict = verdictFor(index, ms, attempt)
+    // This take was spoken: a typed answer from an earlier try no longer speaks for it.
+    markSpokenTake(index)
     // A tap that is given costs or pays something — the Design Brief's own test is
     // "overconfidence has to cost something", and sure/not-sure used to produce
     // identical screens and identical XP.

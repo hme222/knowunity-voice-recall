@@ -152,6 +152,20 @@ above.
       passed, otherwise on home — never carrying on into the full set. The quiz
       says so: "Say one definition back: formal charge." The button is "Say It
       Back", not "Prove it". The full Chemistry set is the home chip's.
+    - **A door run that ends without a pass gets its own result** (option 1a from
+      the usability review, same day). A reveal or a skip used to go straight to the
+      "unlocked" popup, a celebration with nothing about the definition, against the
+      start screen's own step 3, "See how it landed". It now goes to `/door/missed`:
+      the definition, "Continue" on to the unlock, or "Try it again". A pass is
+      unchanged (the quiz door's result, or 04 Pass).
+    - **The miss ladder says where you are, in the card** (options 2a and 2b, same
+      day). Still one hint. The second miss's headline is "One more go, then I'll
+      show you the answer." (it was a faint caption in the action zone); the third
+      is "That's three tries. Let's look at the answer." (Try again used to vanish
+      without a word).
+    - **02a Captured asks a question** (option 3b, same day): "Here's what I heard.
+      Did I get it?" over the frame's "Looks right" / "Say it again". The frame's
+      "Send it, or say it again." disagreed with its own button. Same in the drill.
     - **Every new run starts clean** (`startSession` on the start screen and every
       door): a stale practice round used to carry in, showing "+0" on a correct
       answer, opening the old round's drill, and running the old clock.

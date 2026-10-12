@@ -59,6 +59,8 @@ export default function DrillCompletePage() {
       <div className={styles.body}>
         <p className={styles.note}>{drillTerm.drillTitle ?? drillTerm.title}</p>
         <div className={styles.centred}>
+          {/* The screen's h1, for screen readers; the visible title is in the card. */}
+          <h1 className="srOnly">{`Drill complete: ${drillTerm.name}`}</h1>
           <MascotSlot size="2XL" expression="laughing" />
         </div>
         <RecallResult

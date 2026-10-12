@@ -212,6 +212,7 @@ the completing, so both of a door's actions lead to `/home/unlock`.
 |---|---|---|---|---|---|---|---|
 | 0a | `/door/quiz` | Quiz complete | `15672:24061` | one | `AppBar variant="leftIconButtonOnly"` (back arrow) wrapping `ProgressIndicator progress="25"`; `MascotSlot size="2XL"`; `TextBlock`; `Button CTA="Prove it" variant="Primary" showLeftIcon` + `Button CTA="Not now" variant="Tertiary"` in an action row | Prove one term; decline | Prove it → `/session/idle/1?door=quiz`. Not now → `/home/unlock` |
 | 0b | `/door/quiz/result` | Prove It Again — term result | `15672:19827` | one | `MascotSlot size="2XL"`; `RecallResult state="Pass"`; `Button CTA="Continue" variant="Primary"` (centred, not full width) | Continue | → `/home/unlock` |
+| 0b′ | `/door/missed` | Door run, no pass (added 2026-10-12, no frame) | — | not this one yet; mic trouble | `AppBar` (X → `/home/unlock`); `MascotSlot size="2XL"` (`determined`, `dazed` on mic trouble); screen title; `HintCard` with the term's definition; `Button variant="Primary" CTA="Continue"` + `Button variant="Secondary" CTA="Try it again"` | Continue; try again | Continue → `/home/unlock`. Try it again → a fresh door run at `/session/idle/1?door=…`. Reached from `nextAfter` when a door run's term is Revealed or Worth revisiting |
 | 0c | `/door/exam-plan` | Exam plan | `15672:23959` | one (placeholder) | `ChatBubble`; `MicButton state="Idle"`; `Button CTA="Type instead" variant="Secondary"` + `Button CTA="Skip" variant="Tertiary"` | Answer aloud; type; skip | Mic → `/session/idle/1?door=exam-plan`. Type → `/text/turn`. Skip → `/home/unlock` |
 | 0d | `/door/chat` | Chat, content-aware | `15672:24166` | one (placeholder) | `ChatBubble showTitle`; `MascotSlot size="2XL"`; XP line; `Button` ×3 | Say it back; type; skip | Say it back → `/session/idle/1?door=chat`. Skip → `/home/unlock` |
 | 0e | `/home` | Home, baseline | none — this state is in no frame | one | `HomeShell`; `Button variant="Tertiary"` ×3, one per door | Reach a door | → the three door routes |
@@ -244,7 +245,7 @@ and a door run that goes wrong should not be a dead end.
 | # | Route | Screen | States | Components | Student can | Leads to |
 |---|---|---|---|---|---|---|
 | 12 | `/session/unclear` | 04a Couldn't hear | one | `RecallResult state="CouldntHear"` with `onRetry`; `Chips size="S" color="Unclear" active` ⚠️; `MicButton state="Idle"`; `Button variant="Secondary"`, `variant="Tertiary"` | Re-record immediately; skip | Retry → `/session/recording`. Skip → next term |
-| 13 | `/session/captured` | 02a Captured | one | **`RecallResultCaptured`** (to build); `Chips color="Unclear"` ⚠️; `Button variant="Primary" CTA="Send"`; `Button variant="Secondary" CTA="Re-record"` | Send; re-record | Send → `/session/processing`. Re-record → `/session/recording` |
+| 13 | `/session/captured` | 02a Captured | one | **`RecallResultCaptured`** (to build); `Chips color="Unclear"` ⚠️; `Button variant="Primary" CTA="Send"`; `Button variant="Secondary" CTA="Re-record"` | Send; re-record; type instead (2026-10-12) | Send → `/session/processing`. Re-record → `/session/recording`. Type instead (`Button variant="Tertiary"`, in a row with re-record) → `/text/turn`, marked as mic trouble so the typed answer keeps full XP |
 | 14 | `/session/transcript/[bucket]` | Transcript sheet | passed; revealed; skipped | **`BottomSheet`** (to build, 3 content states); `OptionRow` rows | Read; dismiss | Dismiss → back |
 | 15 | `/session/repeat` | Say-it-back result | one | `RecallResult state="Pass"`; `Snackbar variant="Success" chipText="+1 XP"`; `Button variant="Primary"` | Continue | → next term |
 | 16 | `/session/blank` | Blank term | one | `ChatBubble`; `MicButton state="Idle"`; `Button variant="Tertiary"` | Attempt anyway; reveal | Attempt → `/session/recording`. Reveal → `/session/reveal` |
@@ -270,7 +271,7 @@ and a door run that goes wrong should not be a dead end.
 | 26 | `/home/unlock` | Unlock reveal | one | Home shell dimmed; **`SwipeChip`** spotlighted; `MascotSlot size="3XL" expression="excited"` | Acknowledge | → `/home/unlocked` |
 | 27 | `/home/unlocked` | Home — chip | one | Home shell + **`SwipeChip`** in the composer | Open the picker | → `/picker` |
 | 28 | `/home/due` | Home — due-signal | swipe 1 / 2 / 3, in-page | **`DueSignalCard`**, **`SwipeChip`**, **`SwipeDots active="1\|2\|3"`** | Swipe; tap a due quiz; use the chip | Card → `/session/intro` for that lesson. Chip → `/picker` |
-| 29 | `/picker` | Picker | seeded first run; populated | **`PickerTopicRow`**, **`PickerDrillRow`**, **`DrillListItem`** | Choose a topic; choose a definition to drill | Topic → `/session/intro`. Definition → `/drill/intro` |
+| 29 | `/picker` | Picker | seeded first run; populated | **`PickerTopicRow`**, **`PickerDrillRow`**, **`DrillListItem`** | Search (filters both lists; "Nothing matches" when empty, 2026-10-12); choose a topic; choose a definition to drill | Topic → `/session/intro`. Definition → `/drill/intro` |
 
 ### Phase 5 — Definition Drill Down. Needs the drill components.
 
@@ -358,8 +359,9 @@ the states, not building the engine.
    - 00 Intro title "Say It Back", CTA "Let's go"
    - 01 Idle title "Explain: Formal charge", body "Say what formal charge
      means, in your own words. However you'd explain it to a friend."
-   - 02a Captured "Here's what I heard. Send it, or say it again." with
-     `Re-record` / `Looks right`
+   - 02a Captured "Here's what I heard. Did I get it?" with `Looks right` /
+     `Say it again` (copy changed 2026-10-12 so it asks what the buttons answer; the
+     frame read "Send it, or say it again.")
 
 7. **Verdicts accumulate in `sessionStorage`** as each term resolves, so Recap
    can report the actual run. Cleared when a session starts from 00 Intro.

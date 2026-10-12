@@ -23,6 +23,14 @@ function PassScreen({ index }: { index: number }) {
   const outcome = outcomeFor(state, index)
   const practising = isPractising(state)
   const calibration = outcome?.calibration ?? 0
+  // The chip says how it was got, not only that it was (usability review, 2026-10-12):
+  // a hinted or typed pass and a clean spoken one read identically but for the XP. The
+  // bucket is the store's (it backstops a hint the URL dropped), except in practice,
+  // where the stored outcome is the original run's, not this attempt's. Typed reads the
+  // current attempt, which a spoken take clears.
+  const withHint = hinted || (!practising && outcome?.bucket === 'Hinted')
+  const typed = Boolean(state.sentTyped?.[index])
+  const verdict = ['Correct', typed && 'typed', withHint && 'with a hint'].filter(Boolean).join(', ')
 
   useEffect(() => {
     recordOutcome(index, hinted ? 'Hinted' : 'Unaided', { wasSure })
@@ -46,7 +54,7 @@ function PassScreen({ index }: { index: number }) {
         {/* A "Correct" chip, matching the partial's "Partially right": the verdict is
             not carried by the green card alone (designer, 2026-10-12). */}
         <div className={styles.verdictRow}>
-          <Chips Text="Correct" size="S" color="Primary" active showLeftIcon leftIcon={<CheckIcon />} showRightIcon={false} />
+          <Chips Text={verdict} size="S" color="Primary" active showLeftIcon leftIcon={<CheckIcon />} showRightIcon={false} />
         </div>
         <RecallResult state="Pass" title={current.passTitle} transcript={`“${answerFor(index, state)}”`} />
         {/* The XP and the confidence line live here, in the content, not in the action

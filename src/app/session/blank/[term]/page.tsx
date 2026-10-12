@@ -59,7 +59,7 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
               of it entirely: the take happens, then the answer. */}
           <MicButton state="Idle" label="Say whatever you've got" onClick={() => router.push(`/session/recording/${index}?blank=1`)} />
           {/* The encouragement moved under the mic so the question can stay on screen. */}
-          <MicCaption label="Drawing a blank?" body="Say whatever you’ve got, even half of it. Nothing here is scored." />
+          <MicCaption label="Drawing a blank?" body="Say whatever you’ve got, even half of it." />
         </div>
       }
       topNavigation={<SessionBar index={index} />}

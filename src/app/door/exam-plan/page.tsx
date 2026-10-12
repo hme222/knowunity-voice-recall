@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { micRegionClass, AppBar, Button, ChatBubble, MascotSlot, MicButton, MicCaption, ProgressIndicator, ScreenShell } from '@/components'
-import { startSession } from '@/lib/session'
+import { getTerm, startSession, SUBJECT } from '@/lib/session'
 import { proveItHref } from '../doors'
 import styles from '../door.module.css'
 
@@ -31,7 +31,10 @@ export default function ExamPlanDoor() {
               so the control sits at one height on every voice screen, which laid this
               caption out BESIDE the button — both starting at y466, the caption clipping
               its upper edge. Same placement the recording screens use. */}
-          <MicCaption body="Tap to answer" />
+          {/* The mic's accessible name, word for word (UX critic, 2026-10-12): "Tap to answer"
+              beside a control named "Start speaking" gave a voice-control user a label
+              to say that matched nothing (WCAG 2.5.3). */}
+          <MicCaption body="Start speaking" />
         </div>
       }
       topNavigation={
@@ -49,6 +52,8 @@ export default function ExamPlanDoor() {
     >
       <div className={styles.body}>
         <div className={styles.content}>
+          {/* The screen's h1, for screen readers; the visible title is in the bubble. */}
+          <h1 className="srOnly">{`${SUBJECT}: ${getTerm(1)?.name}`}</h1>
           <MascotSlot size="2XL" expression="determined" />
         </div>
         <ChatBubble body="Let's test your understanding of organic foundations with some active-recall. To begin, please explain the concept of formal charge and the formula used to calculate it for an atom in a molecule." />

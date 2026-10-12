@@ -197,6 +197,9 @@ export default function RecapPage() {
                         <span className={styles.rowNote}>You were sure about this one.</span>
                       )
                     )}
+                    {/* Typed, said so: "Unaided" on its own read as said aloud
+                        (usability review, 2026-10-12). */}
+                    {row.typed && !row.micTrouble && <span className={styles.rowNote}>Typed, not said aloud.</span>}
                   </span>
                   <span className={styles.rowXp}>{`+${row.xp} XP`}</span>
                   {/* Every row opens its transcript. The sheet adapts by bucket, so a
@@ -207,7 +210,7 @@ export default function RecapPage() {
                     size="S"
                     icon={<EyeIcon />}
                     label={`See what you said for ${getTerm(row.index)?.name}`}
-                    onClick={() => openSheet(router, `/session/transcript/${TRANSCRIPT_BUCKET[bucket]}?term=${row.index}${row.micTrouble ? '&mic=1' : ''}`)}
+                    onClick={() => openSheet(router, `/session/transcript/${TRANSCRIPT_BUCKET[bucket]}?term=${row.index}${row.micTrouble ? '&mic=1' : ''}${row.typed ? '&typed=1' : ''}`)}
                   />
                 </div>
               ))}

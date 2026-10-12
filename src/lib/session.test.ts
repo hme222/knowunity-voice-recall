@@ -6,6 +6,7 @@ import {
   getTerm,
   hintFor,
   markMicFault,
+  markSpokenTake,
   missCount,
   missedWordContext,
   nextAfter,
@@ -86,7 +87,16 @@ describe('nextAfter (routing)', () => {
   })
   it('ends a door run after its one definition', () => {
     startSession({ door: 'quiz' })
+    recordOutcome(1, 'Hinted')
     expect(nextAfter(1)).toBe('/home/unlock')
+  })
+  it('shows a door run that ended without a pass its own result first', () => {
+    startSession({ door: 'chat' })
+    recordOutcome(1, 'Revealed')
+    expect(nextAfter(1)).toBe('/door/missed')
+    startSession({ door: 'quiz' })
+    recordOutcome(1, 'Worth revisiting')
+    expect(nextAfter(1)).toBe('/door/missed')
   })
   it('runs a practice round in order and returns to the Recap once', () => {
     startPractice([
@@ -126,13 +136,22 @@ describe('recordOutcome (XP)', () => {
     expect(recordOutcome(2, 'Unaided').xp).toBe(XP.unaided)
   })
   it('pays a typed-by-choice pass at the hinted rate', () => {
-    setTypedAnswer(2, 'a typed answer that is long enough to pass the mock')
-    expect(recordOutcome(2, 'Unaided').xp).toBe(XP.hinted)
+    sendTypedAnswer(2, 'a typed answer that is long enough to pass the mock')
+    const outcome = recordOutcome(2, 'Unaided')
+    expect(outcome.xp).toBe(XP.hinted)
+    expect(outcome.typed).toBe(true)
   })
   it('pays a typed pass in full after the mic failed on that term', () => {
     markMicFault(2)
-    setTypedAnswer(2, 'a typed answer that is long enough to pass the mock')
+    sendTypedAnswer(2, 'a typed answer that is long enough to pass the mock')
     expect(recordOutcome(2, 'Unaided').xp).toBe(XP.unaided)
+  })
+  it('pays a spoken pass in full after an earlier typed miss on that term', () => {
+    sendTypedAnswer(2, 'too short')
+    markSpokenTake(2)
+    const outcome = recordOutcome(2, 'Unaided')
+    expect(outcome.xp).toBe(XP.unaided)
+    expect(outcome.typed).toBeUndefined()
   })
   it('never rewrites the run during practice', () => {
     recordOutcome(2, 'Revealed')

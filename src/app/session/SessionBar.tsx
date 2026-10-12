@@ -50,8 +50,19 @@ export function SessionBar({
       ? SUBJECT
       : `${SUBJECT} \u00b7 ${index}/${TOTAL_TERMS}${index === TOTAL_TERMS ? ' \u00b7 last one' : ''}`)
   const router = useRouter()
+  // The screen's h1, for screen readers: which question this is. Visible titles live in
+  // ChatBubble and RecallResult, which are not headings.
+  const termName = getTerm(index)?.name
+  const heading = !termName
+    ? label ? `Say It Back: ${label}` : 'Say It Back'
+    : state.practising
+      ? `Practice: ${termName}`
+      : doorRun
+        ? `${SUBJECT}: ${termName}`
+        : `${termName}, question ${index} of ${TOTAL_TERMS}`
   return (
     <>
+      <h1 className="srOnly">{heading}</h1>
       <AppBar
         variant={onSkip ? 'leftAndRightButton' : 'leftIconButtonOnly'}
         leftIcon={<CloseIcon />}

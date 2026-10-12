@@ -50,7 +50,7 @@ function DrillCaptured() {
             different faces in two flows. */}
         <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
         <RecallResultCaptured
-          title="Here&rsquo;s what I heard. Send it, or say it again."
+          title="Here&rsquo;s what I heard. Did I get it?"
           // Step 2 is the scripted stumble, so this shows the take that screen will quote.
           // It used to show the clean transcript, have the student tap "Looks right",
           // and then DD 07 quoted them saying something worse.

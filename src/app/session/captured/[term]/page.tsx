@@ -6,12 +6,13 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import { Suspense } from 'react'
 import {
+  actionRowClass,
   Button,
   MascotSlot,
   RecallResultCaptured,
   ScreenShell,
 } from '@/components'
-import { getTerm, shownAnswer, verdictFor, useSession } from '@/lib/session'
+import { getTerm, markMicFault, shownAnswer, verdictFor, useSession } from '@/lib/session'
 import styles from './captured.module.css'
 
 // 02a Captured — Figma frame "02a Captured — review before sending" (15785:13098).
@@ -51,13 +52,28 @@ function CapturedScreen({ index }: { index: number }) {
             fullWidth
             onClick={() => router.push(`/session/processing/${index}?${forward}`)}
           />
-          <Button
-            CTA="Say it again"
-            variant="Secondary"
-            size="M"
-            fullWidth
-            onClick={() => router.push(`/session/recording/${index}?attempt=${attempt}${hinted ? '&hinted=1' : ''}${door ? `&door=${door}` : ''}`)}
-          />
+          {/* "Type instead" for a transcript the app got wrong (UX critic, 2026-10-12):
+              a student who cannot say it again aloud had no way to correct a mishear
+              but Leave. A mishear is the app's fault, so the typed answer is marked as
+              mic trouble and keeps the full value. One row with "Say it again": the
+              action zone is a fixed 136 and a third full-width button does not fit. */}
+          <div className={actionRowClass}>
+            <Button
+              CTA="Say it again"
+              variant="Secondary"
+              size="M"
+              onClick={() => router.push(`/session/recording/${index}?attempt=${attempt}${hinted ? '&hinted=1' : ''}${door ? `&door=${door}` : ''}`)}
+            />
+            <Button
+              CTA="Type instead"
+              variant="Tertiary"
+              size="M"
+              onClick={() => {
+                markMicFault(index)
+                router.push(`/text/turn?term=${index}`)
+              }}
+            />
+          </div>
         </div>
       }
     >
@@ -68,7 +84,10 @@ function CapturedScreen({ index }: { index: number }) {
         <MascotSlot size="2XL" expression="excited" />
         <RecallResultCaptured
           className={styles.card}
-          title="Here&rsquo;s what I heard. Send it, or say it again."
+          /* A question the buttons answer (designer, 2026-10-12, option 3b): "Send it, or
+             say it again" sat over a button reading "Looks right", so the copy and the
+             control disagreed. The buttons stay the frame's. */
+          title="Here&rsquo;s what I heard. Did I get it?"
           transcript={shownAnswer(index, verdictFor(index, Number(searchParams.get('ms') ?? '0'), Number(attempt)), state)}
           /* No `tag` chip. The action zone below already offers "Say it again" and
              "Looks right" — the frame's pair — so an in-card chip repeating one of them

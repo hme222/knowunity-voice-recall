@@ -3,7 +3,7 @@
 import { useRedirect } from '@/lib/navigation'
 import { useRouter } from 'next/navigation'
 import { AppBar, MascotSlot, ProgressIndicator, RecallResult, ScreenShell, Button } from '@/components'
-import { getTerm } from '@/lib/session'
+import { getTerm, SUBJECT } from '@/lib/session'
 import styles from '../../door.module.css'
 
 // Door 1's result — Figma frame "Prove It Again — term result" (15672:19827).
@@ -37,6 +37,8 @@ export default function QuizDoorResult() {
     >
       <div className={styles.body}>
         <div className={styles.content}>
+          {/* The screen's h1, for screen readers; the verdict is in the card. */}
+          <h1 className="srOnly">{`${SUBJECT}: ${current.name}`}</h1>
           <MascotSlot size="2XL" expression="excited" />
         </div>
         <RecallResult state="Pass" title={current.passTitle} transcript={`“${current.transcript}”`} />

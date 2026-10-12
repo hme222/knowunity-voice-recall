@@ -28,8 +28,11 @@ const STORY = [
 ]
 
 const TO_TEST = [
-  'Hold the mic 5+ seconds for a correct answer, 2–5 for partly right.',
-  'Under 2 seconds it can’t hear you. Question 1 does this once on purpose.',
+  // Tap, not hold: the mic is tap to start, Submit to send. And the guided run is one
+  // definition, so "question 1" named a numbering it never shows (usability review,
+  // 2026-10-12).
+  'Record 5+ seconds, then Submit, for a correct answer; 2–5 for partly right.',
+  'Under 2 seconds it can’t hear you. The first try always does this, on purpose.',
   'No mic? Every question has Type instead.',
 ]
 
