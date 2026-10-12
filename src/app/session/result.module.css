@@ -17,6 +17,11 @@
   gap: calc(var(--size-primitive-space-200) * 1px);
 }
 
+/* The miss screen's action row with one button left in it. */
+.rowSingle {
+  justify-content: center;
+}
+
 .centred {
   display: flex;
   flex-direction: column;

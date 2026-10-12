@@ -78,7 +78,9 @@ function MissScreen({ index }: { index: number }) {
           {/* The frame's `primaryRow`: two buttons side by side, with Skip as plain
               text beneath. The XP line moves up into the content region, where the
               frame puts it in the app bar area rather than the action zone. */}
-          <div className={actionRowClass}>
+          {/* On the last rung Reveal is the only button, so it centres rather than
+              sitting at the row's left edge (designer, 2026-10-12). */}
+          <div className={lastRung ? `${actionRowClass} ${styles.rowSingle}` : actionRowClass}>
             {/* Reveal is the Secondary and Try again is the Primary, per the frame
                 and SPEC #5. They were inverted, which made giving up the emphasised
                 choice on a screen whose whole job is to invite another attempt. */}
