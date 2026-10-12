@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense, use, useEffect } from 'react'
+import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import {
@@ -52,12 +53,10 @@ function IdleScreen({ index }: { index: number }) {
     ensureSessionStarted()
   }, [])
 
+  useRedirect(!current, '/session/intro')
   if (sticky) return null
 
-  if (!current) {
-    router.replace('/session/intro')
-    return null
-  }
+  if (!current) return null
 
   function skip() {
     recordOutcome(index, 'Worth revisiting')
@@ -79,8 +78,6 @@ function IdleScreen({ index }: { index: number }) {
       topNavigation={<SessionBar index={index} door={door} onSkip={skip} label={practising ? `Practice · ${current.name}` : undefined} />}
       bottomContent={
         <div className={styles.actions}>
-          {/* Two buttons, not three. The frame has no "I don't know this one"; the
-              blank state is still reached from /text/turn, so nothing is orphaned. */}
           {/* The typed turn has offered this since it was built; the spoken turn only
               had Skip, so a student who genuinely did not know had to record nothing
               or take the no-XP exit. Same escape, both paths. */}

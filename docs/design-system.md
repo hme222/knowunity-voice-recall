@@ -1127,7 +1127,7 @@ different kind of moment, or the set reads as one face.
 | `expression` | What it is | The kind of moment | Screens |
 | --- | --- | --- | --- |
 | `determined` | Half-lidded, focused | **Working or waiting.** Knowie is busy, or it is the student's turn. | 01 Idle, 02a Captured, 03 Processing, the typed checking beat, 05 Miss, 05a Reveal, 06 Lock It In, the drill's rungs and stumbles, DD 02a Captured, DD 03, the chat and exam-plan doors, the OS permission sheet |
-| `excited` | Open, alert | **A win, or an invitation with energy.** Something good just happened, or is being offered. | 04 Pass, 06b Lock It In 2nd pass (when it actually passed), the say-it-back repeat, the quiz door's result, the unlock reveal, **00 Intro**, **the mic primer**, **session resume** |
+| `excited` | Open, alert | **A win, or an invitation with energy.** Something good just happened, or is being offered. | 04 Pass, 06b Lock It In 2nd pass (when it actually passed), the say-it-back repeat, the quiz door's result, the unlock reveal, **00 Intro**, **the mic primer**, **session resume**, **the start screen** (2026-10-12) |
 | `laughing` | Eyes curved shut, warm | **Completion, or warmth while helping.** Something has finished, or Knowie is carrying the student through. | 07 Recap on a clean run (a run with anything to revisit is `determined`, 2026-10-12), DD 08 Complete, DD 08a Round, DD 07c echo, DD 00b returning intro, **the quiz-complete door**, **blank term** |
 | `dazed` | Wide, big pupils | **The APP failed, not the student.** | 04a Couldn't hear, mic denied, **offline** |
 

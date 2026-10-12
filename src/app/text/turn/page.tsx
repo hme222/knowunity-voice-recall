@@ -1,10 +1,11 @@
 'use client'
 
 import { Suspense, useEffect, useState } from 'react'
+import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../session/SessionBar'
 import { actionRowClass, Button, ChatBubble, MascotSlot, ScreenShell } from '@/components'
-import { getTerm, nextAfter, recordOutcome, setSticky, setTypedAnswer, typedDraft, useSticky, SUBJECT } from '@/lib/session'
+import { getTerm, nextAfter, recordOutcome, setSticky, sendTypedAnswer, setTypedAnswer, typedDraft, useSticky, SUBJECT, advancePractice, isPractising, useSession } from '@/lib/session'
 import { DrillBar } from '../../drill/DrillBar'
 import styles from '../text.module.css'
 
@@ -38,7 +39,12 @@ function TextTurnScreen() {
   // transcript — so on a first visit the box opened pre-filled with the correct answer.
   // I verified the round trip (type, leave, return) and never opened the screen cold,
   // which is the only path where the fallback fires.
-  const [answer, setAnswer] = useState(() => typedDraft(index))
+  // The saved draft comes from the store (same snapshot on server and client), until the
+  // student types; reading storage in the initializer mismatched on hydration (dev
+  // review, 2026-10-12).
+  const state = useSession()
+  const [edited, setAnswer] = useState<string | null>(null)
+  const answer = edited ?? typedDraft(state, index)
 
   // The URL flag and the session flag were two sources of truth that disagreed. This
   // screen treated `?sticky=1` as equal to the stored flag and hid "Use the mic
@@ -56,14 +62,19 @@ function TextTurnScreen() {
   // exactly two controls, an X and a disabled Send, which breaks the brief's hard
   // constraint on the one screen written for a student who cannot speak.
   function skip() {
+    // Inside a drill, Skip leaves the drill as the drill's own Skip does. It used to
+    // record a skip into the graded run and jump to session term 2 (dev review).
+    if (drillStep) {
+      router.push(isPractising() ? advancePractice() : '/picker')
+      return
+    }
     recordOutcome(index, 'Worth revisiting')
     router.push(nextAfter(index))
   }
 
-  if (!current) {
-    router.replace('/session/intro')
-    return null
-  }
+  useRedirect(!current, '/session/intro')
+
+  if (!current) return null
 
   return (
     <ScreenShell
@@ -89,7 +100,7 @@ function TextTurnScreen() {
             onClick={() => {
               // Keep the student's own words: the result screens echo these back
               // instead of the fixture. See answerFor() in src/lib/session.ts.
-              setTypedAnswer(index, answer)
+              sendTypedAnswer(index, answer)
               router.push(
                 `/text/checking?term=${index}&len=${answer.trim().length}${sticky ? '&sticky=1' : ''}${drillStep ? `&drill=${drillStep}` : ''}`,
               )
@@ -104,12 +115,15 @@ function TextTurnScreen() {
                 onClick={() => router.push(drillStep ? `/drill/pass/${drillStep}` : `/session/idle/${index}`)}
               />
             )}
-            <Button
-              CTA="I don't know this one"
-              variant="Tertiary"
-              size="S"
-              onClick={() => router.push(`/session/blank/${index}`)}
-            />
+            {/* Not in a drill: the blank path is the session's, and it records there. */}
+            {!drillStep && (
+              <Button
+                CTA="I don't know this one"
+                variant="Tertiary"
+                size="S"
+                onClick={() => router.push(`/session/blank/${index}`)}
+              />
+            )}
           </div>
         </div>
       }
@@ -123,7 +137,6 @@ function TextTurnScreen() {
         <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
         <ChatBubble showTitle title={`${SUBJECT} · Explain: `} titleAccent={current.name} body={current.prompt} />
         <label>
-          <span className="sr-only">Your answer</span>
           <textarea
             className={styles.field}
             value={answer}
@@ -137,10 +150,18 @@ function TextTurnScreen() {
   )
 }
 
+// Keyed by term so the draft state starts fresh per question. Next keeps page state
+// when only the query changes, so /text/turn?term=1 → ?term=2 used to carry term 1's
+// typed text into term 2 (dev review, 2026-10-12).
+function KeyedTextTurn() {
+  const term = useSearchParams().get('term') ?? '1'
+  return <TextTurnScreen key={term} />
+}
+
 export default function TextTurnPage() {
   return (
     <Suspense fallback={null}>
-      <TextTurnScreen />
+      <KeyedTextTurn />
     </Suspense>
   )
 }

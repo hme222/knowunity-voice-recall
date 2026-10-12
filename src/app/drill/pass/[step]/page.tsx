@@ -1,9 +1,10 @@
 'use client'
 
 import { use } from 'react'
+import { useRedirect } from '@/lib/navigation'
 import { useRouter } from 'next/navigation'
 import { micRegionClass, Button, MascotSlot, MicButton, MicCaption, ScreenShell } from '@/components'
-import { drillRung, useDrillTerm } from '@/lib/session'
+import { drillRung, useDrillTerm, advancePractice, isPractising } from '@/lib/session'
 import { Cue } from '../../Cue'
 import { DrillBar } from '../../DrillBar'
 import styles from '../../drill.module.css'
@@ -39,10 +40,9 @@ export default function DrillPassPage({ params }: { params: Promise<{ step: stri
   const n = Number(step)
   const rung = drillRung(drillTerm, n)
 
-  if (!rung) {
-    router.replace('/drill/intro')
-    return null
-  }
+  useRedirect(!rung, '/drill/intro')
+
+  if (!rung) return null
 
   return (
     <ScreenShell
@@ -55,7 +55,7 @@ export default function DrillPassPage({ params }: { params: Promise<{ step: stri
           <MicCaption body="Say the whole thing. However it comes out." />
         </div>
       }
-      topNavigation={<DrillBar step={n} onExit={() => router.push('/picker')} onSkip={() => router.push('/picker')} />}
+      topNavigation={<DrillBar step={n} onExit={() => router.push('/picker')} onSkip={() => router.push(isPractising() ? advancePractice() : '/picker')} />}
       bottomContent={
         <Button CTA="Type instead" variant="Secondary" size="M" fullWidth onClick={() => router.push(`/text/turn?term=${drillTerm.index}&drill=${n}`)} />
       }

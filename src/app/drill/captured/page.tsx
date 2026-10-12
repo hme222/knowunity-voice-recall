@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense } from 'react'
+import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button, MascotSlot, RecallResultCaptured, ScreenShell } from '@/components'
 import { drillRung, useDrillTerm } from '@/lib/session'
@@ -17,10 +18,9 @@ function DrillCaptured() {
   const step = Number(useSearchParams().get('step') ?? '1')
   const rung = drillRung(drillTerm, step)
 
-  if (!rung) {
-    router.replace('/drill/intro')
-    return null
-  }
+  useRedirect(!rung, '/drill/intro')
+
+  if (!rung) return null
 
   return (
     <ScreenShell

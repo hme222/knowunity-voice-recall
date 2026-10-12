@@ -1,6 +1,7 @@
 'use client'
 
 import { use, useEffect } from 'react'
+import { useRedirect } from '@/lib/navigation'
 import { useRouter } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import {
@@ -37,13 +38,11 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
     if (sticky) router.replace(`/text/turn?term=${index}&sticky=1`)
   }, [sticky, index, router])
 
-  if (sticky) return null
   const current = getTerm(index)
+  useRedirect(!current, '/session/intro')
+  if (sticky) return null
 
-  if (!current) {
-    router.replace('/session/intro')
-    return null
-  }
+  if (!current) return null
 
   return (
     <ScreenShell

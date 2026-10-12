@@ -1,5 +1,6 @@
 'use client'
 
+import { useRedirect } from '@/lib/navigation'
 import { useRouter } from 'next/navigation'
 import { AppBar, MascotSlot, ProgressIndicator, RecallResult, ScreenShell, Button } from '@/components'
 import { getTerm } from '@/lib/session'
@@ -15,10 +16,9 @@ export default function QuizDoorResult() {
   const router = useRouter()
   const current = getTerm(1)
 
-  if (!current) {
-    router.replace('/door/quiz')
-    return null
-  }
+  useRedirect(!current, '/door/quiz')
+
+  if (!current) return null
 
   return (
     <ScreenShell

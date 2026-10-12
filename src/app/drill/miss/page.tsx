@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { actionRowClass, Button, Chips, HintCard, MascotSlot, RecallResult, ScreenShell } from '@/components'
-import { STUMBLES, useDrillTerm } from '@/lib/session'
+import { STUMBLES, useDrillTerm, advancePractice, isPractising } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
 
@@ -30,7 +30,7 @@ export default function DrillMissPage() {
 
   return (
     <ScreenShell
-      topNavigation={<DrillBar step={2} onExit={() => router.push('/picker')} onSkip={() => router.push('/picker')} />}
+      topNavigation={<DrillBar step={2} onExit={() => router.push('/picker')} onSkip={() => router.push(isPractising() ? advancePractice() : '/picker')} />}
       bottomContent={
         <div className={styles.stack}>
           <div className={actionRowClass}>

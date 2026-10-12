@@ -1,4 +1,5 @@
-import type { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 type Router = ReturnType<typeof useRouter>
 
@@ -36,6 +37,9 @@ export function returnBack(router: Router, fallback: string) {
       const saved = sessionStorage.getItem(RETURN_KEY)
       // Never return to the screen doing the returning.
       if (saved && saved !== window.location.pathname + window.location.search) to = saved
+      // One use. Left in place, a later, unrelated return landed on it — Recap →
+      // practice → X went back to a session question from much earlier.
+      sessionStorage.removeItem(RETURN_KEY)
     } catch {
       // keep the fallback
     }
@@ -53,4 +57,28 @@ export function goToExit(router: Router) {
 export function openSheet(router: Router, href: string) {
   rememberReturn()
   router.push(href)
+}
+
+/** The term the remembered screen was on (`/session/<screen>/<n>` or `?term=<n>`), if any. */
+export function rememberedTerm(): number | undefined {
+  if (typeof window === 'undefined') return undefined
+  try {
+    const saved = sessionStorage.getItem(RETURN_KEY) ?? ''
+    const m = saved.match(/\/session\/[a-z-]+\/(\d+)/) ?? saved.match(/[?&]term=(\d+)/)
+    return m ? Number(m[1]) : undefined
+  } catch {
+    return undefined
+  }
+}
+
+/**
+ * Redirect when `when` holds, from an effect. Screens used to call `router.replace` in
+ * the render pass — a side effect during render that fires twice under StrictMode (dev
+ * review, 2026-10-12). Call it before any early return, then `return null` when `when`.
+ */
+export function useRedirect(when: boolean, href: string) {
+  const router = useRouter()
+  useEffect(() => {
+    if (when) router.replace(href)
+  }, [when, href, router])
 }

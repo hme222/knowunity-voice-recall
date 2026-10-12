@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense, use, useEffect } from 'react'
+import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import {
@@ -12,7 +13,7 @@ import {
   ScreenShell,
   actionRowClass,
 } from '@/components'
-import { calibrationFor, confidenceFor, getTerm, hintFor, markHinted, nextAfter, recordOutcome, shownAnswer, useSession } from '@/lib/session'
+import { calibrationFor, confidenceFor, getTerm, hintFor, markHinted, nextAfter, recordOutcome, shownAnswer, useSession, missCount } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // 05 Miss + Hint — Figma frame "05 Miss + Hint (refreshed 2)" (15672:26357).
@@ -34,21 +35,22 @@ function MissScreen({ index }: { index: number }) {
   const searchParams = useSearchParams()
   const wasSure = searchParams.get('sure') === '1'
   const current = getTerm(index)
-  const attempt = Number(searchParams.get('attempt') ?? '1')
   // A typed answer too short to check (/text/checking sets it). No partial credit is
   // claimed for words the student never wrote.
   const thin = searchParams.get('thin') === '1'
   const state = useSession()
+  // The rung comes from the run, not the URL (dev review, 2026-10-12): the typed path
+  // dropped `attempt`, so its ladder never ended, and a mishear's retry bumped it.
+  const attempt = Math.max(1, missCount(state, index))
   // The ladder now ends. "Try again" was offered at attempt 10 with byte-identical
   // copy; past REVEAL_AT_ATTEMPT the only way on is the reveal.
   const step = current ? hintFor(current, attempt) : undefined
   // Already incurred, not promised: the tap happened and the answer was wrong.
   const sureCost = confidenceFor(state, index)?.wasSure ? calibrationFor(true, false) : 0
 
-  if (!current) {
-    router.replace('/session/intro')
-    return null
-  }
+  useRedirect(!current, '/session/intro')
+
+  if (!current) return null
 
   function skip() {
     recordOutcome(index, 'Worth revisiting', { wasSure })
@@ -132,7 +134,7 @@ function MissScreen({ index }: { index: number }) {
         <RecallResult
           state="Neutral"
           title={thin ? 'Nothing to check yet. Want a hint?' : current.missTitle}
-          transcript={`“${shownAnswer(index, 'Miss')}”`}
+          transcript={`“${shownAnswer(index, 'Miss', state)}”`}
           showTranscript={attempt < 2}
         />
         <HintCard body={step?.hint ?? current.hint} />

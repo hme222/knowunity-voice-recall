@@ -48,11 +48,18 @@ export default function StartPage() {
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="laughing" />
-        <div className="screenTitle">
-          <p className={styles.eyebrow}>Prototype · Knowunity</p>
-          <h1 className="screenTitleHeading">Say It Back</h1>
-          <p className="screenTitleCaption">Explain a definition in your own words to prove it stuck.</p>
+        {/* Knowie beside the title, not above it (designer, 2026-10-12: "Knowie on the
+            first screen"). Stacked, Knowie needed 136px the screen does not have at
+            390x668 and stepped out; side by side it costs about 30. */}
+        <div className={styles.hero}>
+          {/* `excited`: the design system's face for an invitation with energy, as on
+              00 Intro and the mic primer (designer, 2026-10-12). */}
+          <MascotSlot size="2XL" expression="excited" />
+          <div className={styles.heroText}>
+            <p className={styles.eyebrow}>Prototype · Knowunity</p>
+            <h1 className={styles.heroTitle}>Say It Back</h1>
+            <p className={styles.heroCaption}>Explain a definition in your own words to prove it stuck.</p>
+          </div>
         </div>
 
         {/* No visible heading: the numbered steps say what they are. */}

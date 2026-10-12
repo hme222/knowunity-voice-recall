@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense, use, useEffect } from 'react'
+import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import { micRegionClass, Button, MascotSlot, MicButton, RecallResult, ScreenShell } from '@/components'
@@ -31,10 +32,9 @@ function UnclearScreen({ index }: { index: number }) {
     markMicFault(index)
   }, [index])
 
-  if (!current) {
-    router.replace('/session/intro')
-    return null
-  }
+  useRedirect(!current, '/session/intro')
+
+  if (!current) return null
 
   function retry() {
     router.push(`/session/recording/${index}?attempt=${attempt + 1}${door ? `&door=${door}` : ''}`)

@@ -23,7 +23,7 @@ function DrillProcessing() {
 
   useEffect(() => {
     const id = window.setTimeout(() => {
-      // The mock advances a rung each pass. Every third pass stumbles, so the scaffold
+      // The mock advances a rung each pass. Pass 2 stumbles, so the scaffold
       // is reachable without hunting for it.
       if (step === 2) router.push('/drill/miss')
       else if (step >= DRILL_TOTAL_RUNGS) router.push('/drill/complete')

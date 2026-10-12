@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { AppBar, ProgressIndicator, SessionFraction } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { goToExit } from '@/lib/navigation'
-import { progressFor, SUBJECT, TOTAL_TERMS } from '@/lib/session'
+import { getTerm, progressFor, SUBJECT, TOTAL_TERMS, useSession } from '@/lib/session'
 
 // The session's top bar, in one place. Every numbered-term screen used to build its own
 // — the same AppBar, ring and fraction, repeated a dozen times — and Skip lived in each
@@ -36,9 +36,17 @@ export function SessionBar({
 }) {
   // The subject rides every session screen (designer, 2026-10-11): going from a
   // Chemistry quiz into Say It Back, nothing said it was still Chemistry, now out loud.
+  // The run's context comes from the store, not the URL (dev review, 2026-10-12): the
+  // door only rode some screens' query strings, so one door run read "Chemistry" on
+  // idle and "Chemistry · 1/4" on its result; the practice label was only passed on
+  // idle. The `door` prop still wins when given.
+  const state = useSession()
+  const doorRun = door ?? state.door
+  const practiceLabel = state.practising ? `Practice \u00b7 ${getTerm(index)?.name ?? SUBJECT}` : undefined
   const line =
     label ??
-    (door
+    practiceLabel ??
+    (doorRun
       ? SUBJECT
       : `${SUBJECT} \u00b7 ${index}/${TOTAL_TERMS}${index === TOTAL_TERMS ? ' \u00b7 last one' : ''}`)
   const router = useRouter()

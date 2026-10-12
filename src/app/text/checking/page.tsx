@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { ConfidenceAsk, ProcessingBeat, ScreenShell } from '@/components'
 import { confidenceGrace, processingDwell } from '@/lib/motion'
 import { SessionBar } from '../../session/SessionBar'
-import { recordConfidence } from '@/lib/session'
+import { recordConfidence, recordMiss } from '@/lib/session'
 
 // The typed path's equivalent of 03 Processing.
 //
@@ -64,6 +64,7 @@ function CheckingScreen() {
     const q = new URLSearchParams()
     if (sure !== undefined) q.set('sure', sure ? '1' : '0')
     if (verdict === 'miss' && thin) q.set('thin', '1')
+    if (verdict === 'miss') recordMiss(index)
     router.push(`/session/${verdict}/${index}?${q}`)
   }
 

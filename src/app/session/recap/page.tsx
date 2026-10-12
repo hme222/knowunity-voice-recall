@@ -143,7 +143,7 @@ export default function RecapPage() {
               first-attempt-with-no-help and printed it as "SCORE 25%", which invites
               comparison with a test mark — and a count cannot be misread that way.
               The `Score` variant is unchanged; only its label is. */}
-          <StatChip stat="Score" label="FIRST TRY" value={`${totals.unaided} of ${complete ? TOTAL_TERMS : outcomes.length}`} />
+          <StatChip stat="Score" label="FIRST TRY" value={`${totals.unaided} of ${counted}`} />
           <StatChip stat="Time" value={totals.elapsed} />
         </div>
       )}
@@ -207,7 +207,7 @@ export default function RecapPage() {
                     size="S"
                     icon={<EyeIcon />}
                     label={`See what you said for ${getTerm(row.index)?.name}`}
-                    onClick={() => openSheet(router, `/session/transcript/${TRANSCRIPT_BUCKET[bucket]}?term=${row.index}`)}
+                    onClick={() => openSheet(router, `/session/transcript/${TRANSCRIPT_BUCKET[bucket]}?term=${row.index}${row.micTrouble ? '&mic=1' : ''}`)}
                   />
                 </div>
               ))}

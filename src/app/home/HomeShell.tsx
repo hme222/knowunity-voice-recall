@@ -125,6 +125,11 @@ export function HomeShell({ children, toolChip, popup }: {
   // layout as designed, with the flag lifted for one synchronous read, so it cannot
   // flip-flop.
   const [compact, setCompact] = useState<0 | 1 | 2>(0)
+  // Scrolling only moves the fade; the Knowie step needs no re-measure for it (dev review).
+  const measureFade = useCallback(() => {
+    const el = midRef.current
+    if (el) setOverflowing(el.scrollTop + el.clientHeight < el.scrollHeight - 1)
+  }, [])
   const measure = useCallback(() => {
     const el = midRef.current
     if (!el) return
@@ -159,18 +164,21 @@ export function HomeShell({ children, toolChip, popup }: {
 
   return (
     <ScreenShell
+      // Home runs its own Knowie step (3XL, 2XL, out); the shell's would measure the same
+      // mascot a second time (dev review, 2026-10-12).
+      mascotGivesWay={false}
       panelHeader={<StatusBar />}
       topNavigation={<HomeAppBar />}
     >
       <div className={styles.body} data-popup={popup ? '' : undefined}>
-        {/* middleContent on the frame: centred, gap 64 between the greeting group and
+        {/* middleContent on the frame: centred, gap 32 (the frame's 64, tightened 2026-10-12) between the greeting group and
             whatever Say It Back surface this route is showing. */}
         <div
           ref={midRef}
           className={styles.middle}
           data-overflowing={overflowing || undefined}
           data-compact={compact || undefined}
-          onScroll={measure}
+          onScroll={measureFade}
         >
           <div className={styles.hero}>
             <div className={styles.mascotGroup}>

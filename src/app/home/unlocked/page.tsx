@@ -13,7 +13,10 @@ import { HomeShell } from '../HomeShell'
 export default function UnlockedHomePage() {
   const router = useRouter()
   const state = useSession()
-  const partway = state.outcomes.length > 0 && state.outcomes.length < TOTAL_TERMS
+  // A full session left partway — never a door run, which is one definition and is done
+  // when it ends. Offering to resume one looped a term at a time back to the unlock
+  // popup (dev review, 2026-10-12).
+  const partway = !state.door && state.outcomes.length > 0 && state.outcomes.length < TOTAL_TERMS
   return (
     <HomeShell toolChip={<SwipeChip onClick={() => router.push('/picker')} />}>
       <>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { returnBack } from '@/lib/navigation'
+import { rememberedTerm, returnBack } from '@/lib/navigation'
 import { Button, OptionRow, ScreenShell } from '@/components'
 import { setSticky, useSession, XP, setPractising } from '@/lib/session'
 import styles from './exit.module.css'
@@ -49,8 +49,17 @@ export default function ExitPage() {
               size="M"
               fullWidth
               onClick={() => {
-                setSticky()
-                router.push('/text/turn?term=1&sticky=1')
+                // Back to the question the sheet was opened from, not term 1. Only "can't
+                // speak out loud right now" turns the mic off for the session (and pays
+                // in full: typing wasn't a choice); "I'd rather type" is a choice, for this
+                // question (dev review, 2026-10-12).
+                const term = rememberedTerm() ?? 1
+                if (picked === REASONS[0]) {
+                  setSticky()
+                  router.push(`/text/turn?term=${term}&sticky=1`)
+                } else {
+                  router.push(`/text/turn?term=${term}`)
+                }
               }}
             />
           ) : (

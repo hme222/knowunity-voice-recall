@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense, useEffect, useState } from 'react'
+import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { micRegionClass, Button, MicButton, RecordingStatus, ScreenShell } from '@/components'
 import { drillRung, useDrillTerm } from '@/lib/session'
@@ -34,10 +35,9 @@ function DrillRecording() {
     return () => window.clearInterval(id)
   }, [paused])
 
-  if (!rung) {
-    router.replace('/drill/intro')
-    return null
-  }
+  useRedirect(!rung, '/drill/intro')
+
+  if (!rung) return null
 
   return (
     <ScreenShell

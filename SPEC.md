@@ -2,8 +2,8 @@
 
 **What we're building.** A voice-in / text-out active-recall step for Knowunity:
 the student speaks a term's definition out loud, Knowie answers in text, a clean
-pass echoes the student's own words back as proof and a miss requeues later in
-the same session.
+pass echoes the student's own words back as proof, and a miss is offered back on
+the Recap ("Practice what I missed") rather than requeued (changed 2026-10-08).
 
 **This prototype is the Next.js app in this repo.** Not a Figma prototype, not a
 slide deck. Every screen below is a real page at its own route under
@@ -248,7 +248,7 @@ and a door run that goes wrong should not be a dead end.
 | 14 | `/session/transcript/[bucket]` | Transcript sheet | passed; revealed; skipped | **`BottomSheet`** (to build, 3 content states); `OptionRow` rows | Read; dismiss | Dismiss → back |
 | 15 | `/session/repeat` | Say-it-back result | one | `RecallResult state="Pass"`; `Snackbar variant="Success" chipText="+1 XP"`; `Button variant="Primary"` | Continue | → next term |
 | 16 | `/session/blank` | Blank term | one | `ChatBubble`; `MicButton state="Idle"`; `Button variant="Tertiary"` | Attempt anyway; reveal | Attempt → `/session/recording`. Reveal → `/session/reveal` |
-| 17 | `/session/recap/practice` | 07a Go back over what you missed (redesigned 2026-10-09) | one; none-missed | `MascotSlot size="2XL" expression="laughing"`; title + caption; one outlined row per missed term (term, reason, `Button variant="Tertiary" size="S"` alternative method, `Button variant="Secondary" size="S"` recommended method — **screen-local**); `Button variant="Primary" CTA="Practise all N"` when N > 1 | Practise one term (recommended or alternative method); practise all | Drill → `/drill/intro` for that term; Say → `/session/idle/[term]`. A round runs in order and returns to `/session/recap` once |
+| 17 | `/session/recap/practice` | 07a Go back over what you missed (redesigned 2026-10-09) | one; none-missed; nothing run (the Recap's "Nothing recorded yet" line, 2026-10-12) | `MascotSlot size="2XL" expression="laughing"`; title + caption; one outlined row per missed term (term, reason, `Button variant="Tertiary" size="S"` alternative method, `Button variant="Secondary" size="S"` recommended method — **screen-local**); `Button variant="Primary" CTA="Practise all N"` when N > 1 | Practise one term (recommended or alternative method); practise all | Drill → `/drill/intro` for that term; Say → `/session/idle/[term]`. A round runs in order and returns to `/session/recap` once |
 
 ### Phase 3 — Permission, text and interruption. All new.
 
@@ -257,10 +257,10 @@ and a door run that goes wrong should not be a dead end.
 | 18 | `/permission/primer` | Mic primer | one | `TextBlock variant="XL"`; `MascotSlot`; `Button variant="Primary" CTA="Turn on the mic"`; `Button variant="Tertiary" CTA="Not now"` | Request the mic; decline | Request → `/permission/prompt`. Not now → `/text/turn` |
 | 19 | `/permission/prompt` | Primer + iOS sheet | one | Primer beneath a drawn iOS permission sheet (**new, screen-local**) | Allow; don't allow | Allow → `/session/idle`. Don't allow → `/permission/denied` |
 | 20 | `/permission/denied` | Denied — session choice | one | `TextBlock`; `Button variant="Primary" CTA="Type this session"`; `Button variant="Secondary" CTA="How to turn the mic on"` | Choose text for the session; read how to re-enable | Type → `/text/turn`. How-to → stays, expands |
-| 21 | `/text/turn` | Text fallback turn | empty; filled | `ChatBubble`; **text input** (to build); `Button variant="Primary" CTA="Send"` | Type an answer; send; switch back to voice | Send → `/text/checking`. Voice → `/session/idle` |
+| 21 | `/text/turn` | Text fallback turn | empty; filled (an unsent draft only — a sent answer is never put back, so a retry opens empty, 2026-10-12) | `ChatBubble`; **text input** (to build); `Button variant="Primary" CTA="Send"` | Type an answer; send; switch back to voice | Send → `/text/checking`. Voice → `/session/idle` |
 | 22 | `/text/checking` | Text checking beat | one | `MascotSlot` animating | Wait | → `/session/pass` / `/session/miss` |
 | 23 | ~~`/session/offline`~~ | ~~Network held take~~ — **removed 2026-10-12** (designer: irrelevant to the mockup) | | | | |
-| 24 | `/session/resume` | Session resume | one | `TextBlock`; `StatChip stat="XP"`; `Button variant="Primary" CTA="Pick up where you left off"` | Resume; start fresh | Resume → `/session/idle` |
+| 24 | `/session/resume` | Session resume | one; nothing to resume ("Start a session" → `/session/intro`); finished ("See your recap" → `/session/recap`), both with "Back to home" (2026-10-12) | `TextBlock`; `StatChip stat="XP"`; `Button variant="Primary" CTA="Pick up where you left off"` | Resume; start fresh | Resume → `/session/idle` |
 
 ### Phase 4 — Home and picker. Needs the five home components.
 

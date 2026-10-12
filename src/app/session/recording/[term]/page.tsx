@@ -1,6 +1,7 @@
 'use client'
 
 import { Suspense, use, useEffect, useRef, useState } from 'react'
+import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import {
@@ -78,10 +79,9 @@ function RecordingScreen({ index }: { index: number }) {
     setPaused((was) => !was)
   }
 
-  if (!current) {
-    router.replace('/session/intro')
-    return null
-  }
+  useRedirect(!current, '/session/intro')
+
+  if (!current) return null
 
   function done() {
     const took = elapsed()

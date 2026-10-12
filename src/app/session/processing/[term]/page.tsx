@@ -1,10 +1,11 @@
 'use client'
 
 import { Suspense, use, useEffect, useRef, useState } from 'react'
+import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import { ConfidenceAsk, ProcessingBeat, ScreenShell } from '@/components'
-import { getTerm, recordConfidence, verdictFor } from '@/lib/session'
+import { getTerm, recordConfidence, verdictFor, recordMiss } from '@/lib/session'
 import { doorResultHref } from '@/app/door/doors'
 import { confidenceGrace, processingDwell, slowThreshold } from '@/lib/motion'
 import styles from './processing.module.css'
@@ -62,10 +63,9 @@ function ProcessingScreen({ index }: { index: number }) {
     return () => window.clearTimeout(id)
   }, [unusable])
 
-  if (!current) {
-    router.replace('/session/intro')
-    return null
-  }
+  useRedirect(!current, '/session/intro')
+
+  if (!current) return null
 
   // `sure` is undefined when the student never answered: the ask is optional (designer,
   // 2026-10-09), so after confidenceGrace the turn moves on with no confidence recorded
@@ -87,6 +87,7 @@ function ProcessingScreen({ index }: { index: number }) {
     }
     const route =
       verdict === 'Pass' ? 'pass' : verdict === 'Miss' ? 'miss' : 'unclear'
+    if (verdict === 'Miss') recordMiss(index)
     const q = new URLSearchParams({ attempt: String(attempt) })
     if (sure !== undefined) q.set('sure', sure ? '1' : '0')
     if (hinted) q.set('hinted', '1')

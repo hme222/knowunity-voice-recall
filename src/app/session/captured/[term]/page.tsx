@@ -1,6 +1,7 @@
 'use client'
 
 import { use } from 'react'
+import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import { Suspense } from 'react'
@@ -10,7 +11,7 @@ import {
   RecallResultCaptured,
   ScreenShell,
 } from '@/components'
-import { getTerm, shownAnswer, verdictFor } from '@/lib/session'
+import { getTerm, shownAnswer, verdictFor, useSession } from '@/lib/session'
 import styles from './captured.module.css'
 
 // 02a Captured — Figma frame "02a Captured — review before sending" (15785:13098).
@@ -19,6 +20,7 @@ import styles from './captured.module.css'
 
 function CapturedScreen({ index }: { index: number }) {
   const router = useRouter()
+  const state = useSession()
   const searchParams = useSearchParams()
   const current = getTerm(index)
   // Forwarded wholesale rather than picked apart: dropping one of these is what broke
@@ -33,10 +35,9 @@ function CapturedScreen({ index }: { index: number }) {
   const attempt = searchParams.get('attempt') ?? '1'
   const hinted = searchParams.get('hinted') === '1'
 
-  if (!current) {
-    router.replace('/session/intro')
-    return null
-  }
+  useRedirect(!current, '/session/intro')
+
+  if (!current) return null
 
   return (
     <ScreenShell
@@ -68,7 +69,7 @@ function CapturedScreen({ index }: { index: number }) {
         <RecallResultCaptured
           className={styles.card}
           title="Here&rsquo;s what I heard. Send it, or say it again."
-          transcript={shownAnswer(index, verdictFor(index, Number(searchParams.get('ms') ?? '0'), Number(attempt)))}
+          transcript={shownAnswer(index, verdictFor(index, Number(searchParams.get('ms') ?? '0'), Number(attempt)), state)}
           /* No `tag` chip. The action zone below already offers "Say it again" and
              "Looks right" — the frame's pair — so an in-card chip repeating one of them
              put two controls with the same label on one screen. One action, one

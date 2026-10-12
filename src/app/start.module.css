@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: safe center;
   flex: 1;
-  gap: calc(var(--size-primitive-space-400) * 1px);
+  gap: calc(var(--size-primitive-space-300) * 1px);
 }
 
 .block {
@@ -32,7 +32,8 @@
   flex-direction: column;
   gap: calc(var(--size-primitive-space-300) * 1px);
   margin: 0;
-  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  /* space.300, not cardPadding: the room Knowie needs at 390x668. */
+  padding: calc(var(--size-primitive-space-300) * 1px);
   list-style: none;
   border-radius: calc(var(--size-primitive-radius-200) * 1px);
   background: var(--color-semantic-background-surface);
@@ -92,7 +93,7 @@
    prototype, not the student's story — and a real bulleted list. */
 .notes {
   gap: calc(var(--size-primitive-space-200) * 1px);
-  padding-left: calc((var(--spacing-semantic-card-padding) + var(--size-primitive-space-300)) * 1px);
+  padding-left: calc((var(--size-primitive-space-300) * 2) * 1px);
   list-style: disc;
   background: transparent;
   border: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default);
@@ -103,4 +104,39 @@
   font-weight: var(--typography-style-body-s-regular-font-weight);
   font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
   line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
+}
+
+/* Knowie and the title side by side. */
+.hero {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-300) * 1px);
+  align-self: stretch;
+}
+
+.hero > :first-child {
+  flex-shrink: 0;
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+}
+
+.heroTitle {
+  margin: 0;
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-headline-s-font-weight);
+  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-headline-s-letter-spacing) * 0.01em);
+}
+
+.heroCaption {
+  margin: 0;
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
 }

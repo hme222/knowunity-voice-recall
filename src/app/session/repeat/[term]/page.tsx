@@ -1,6 +1,7 @@
 'use client'
 
 import { use, useEffect } from 'react'
+import { useRedirect } from '@/lib/navigation'
 import { useRouter } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import {
@@ -11,7 +12,7 @@ import {
   Snackbar,
 } from '@/components'
 import { CheckIcon } from '@/components/icons'
-import { getTerm, nextAfter, recordOutcome, XP } from '@/lib/session'
+import { getTerm, isPractising, nextAfter, recordOutcome, useSession, XP } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // Say-it-back result — the optional repeat after a reveal. No Figma frame; behaviour
@@ -21,6 +22,8 @@ import styles from '../../result.module.css'
 
 export default function RepeatPage({ params }: { params: Promise<{ term: string }> }) {
   const router = useRouter()
+  // Practice pays nothing, so the chip says so instead of +3 (dev review, 2026-10-12).
+  const practising = isPractising(useSession())
   const { term } = use(params)
   const index = Number(term)
   const current = getTerm(index)
@@ -29,10 +32,9 @@ export default function RepeatPage({ params }: { params: Promise<{ term: string 
     recordOutcome(index, 'Revealed', { repeated: true })
   }, [index])
 
-  if (!current) {
-    router.replace('/session/intro')
-    return null
-  }
+  useRedirect(!current, '/session/intro')
+
+  if (!current) return null
 
   return (
     <ScreenShell
@@ -55,7 +57,7 @@ export default function RepeatPage({ params }: { params: Promise<{ term: string 
             knows they did not earn is worse than no praise. The +3 is for saying it
             back in their own words, which is a real retrieval act and is what this
             now claims. */}
-        <Snackbar Text="Said it back in your own words." variant="Success" icon={<CheckIcon />} chipText={`+${XP.repeat} XP`} />
+        <Snackbar Text="Said it back in your own words." variant="Success" icon={<CheckIcon />} chipText={practising ? 'Practice' : `+${XP.repeat} XP`} />
       </div>
     </ScreenShell>
   )

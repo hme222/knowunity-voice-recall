@@ -31,6 +31,17 @@ export default defineConfig({
           },
         },
       },
+      // Unit tests for src/lib — the session logic behind every routing and XP rule.
+      // Plain Node; the tests stub window.sessionStorage (dev review, 2026-10-12).
+      {
+        extends: true,
+        resolve: { alias: { '@': path.join(dirname, 'src') } },
+        test: {
+          name: 'unit',
+          environment: 'node',
+          include: ['src/lib/**/*.test.ts'],
+        },
+      },
     ],
   },
 });

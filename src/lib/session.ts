@@ -463,8 +463,6 @@ export type TermOutcome = {
    * what the call did to the session total.
    */
   calibration?: number
-  /** Set once the term has come back at 06 Lock It In. There is no second requeue. */
-  requeued?: boolean
   /**
    * Skipped after the mic failed on it (2026-10-12). Still offered for practice, but
    * the Recap does not count it as a miss: the app failed, not the student.
@@ -504,6 +502,13 @@ export type SessionState = {
    */
   micFault?: number[]
   /**
+   * Judged misses per term — the hint ladder's rung (dev review, 2026-10-12). It used to
+   * ride the URL as `attempt`, which the typed path dropped (so its ladder never ended)
+   * and which a mishear's retry bumped (so a couldn't-hear spent a rung). A fact about
+   * the run belongs in the run, like `hinted`.
+   */
+  misses?: Record<number, number>
+  /**
    * The door a one-definition run started from. A door run is ONE definition, however
    * it goes (designer, 2026-10-12): when that term resolves, the run ends on home
    * rather than carrying on into the full set. Absent for a full session.
@@ -530,6 +535,11 @@ export type SessionState = {
   hinted?: number[]
   /** What the student typed, by term index. Absent for spoken turns. */
   typed?: Record<number, string>
+  /**
+   * The last typed answer actually sent for judging, by term index. A draft that equals
+   * it has already been judged, so it is not put back in the box on a retry.
+   */
+  sentTyped?: Record<number, string>
   /**
    * The first tap per term that got a real verdict. A tap that preceded a couldn't-hear
    * is not stored: that was the app failing, not the student, and it must not be scored
@@ -601,19 +611,6 @@ export function startSession(opts?: { door?: string }) {
   write({ outcomes: [], startedAt: now, lastAt: now, ...(sticky ? { sticky } : {}), ...(opts?.door ? { door: opts.door } : {}) })
 }
 
-/**
- * Start the clock if nothing has started it yet, and leave a run in progress alone.
- *
- * `startSession` only ran on 00 Intro, and the doors go straight to
- * `/session/idle/1?door=…` — so a door run never started the clock, `startedAt` stayed
- * 0, and the Recap's Time chip read 0:00 for a session the student had just spent four
- * minutes on. Every other Recap number survived because they derive from `outcomes`,
- * which is written lazily as terms resolve; the clock was the one value that needed a
- * beginning and never got one.
- *
- * Called from 01 Idle, which is the first screen of EVERY entry path. Guarded on
- * `startedAt` so terms 2-4 don't restart it.
- */
 /** Record that a hint was shown for a term. Idempotent. */
 export function markHinted(index: number) {
   const state = readSession()
@@ -649,7 +646,10 @@ function practiceItemHref(item: PracticeItem, state: SessionState): string {
 export function startPractice(items: PracticeItem[]): string {
   const state = readSession()
   if (!items.length) return '/session/recap'
-  const next = { ...state, practising: true, practiceQueue: items, drillTerm: items[0].mode === 'drill' ? items[0].index : state.drillTerm }
+  // Each practised term starts a fresh hint ladder; the run's misses on it are history.
+  const misses = { ...(state.misses ?? {}) }
+  for (const item of items) delete misses[item.index]
+  const next = { ...state, practising: true, practiceQueue: items, misses, drillTerm: items[0].mode === 'drill' ? items[0].index : state.drillTerm }
   write(next)
   return practiceItemHref(items[0], next)
 }
@@ -682,6 +682,19 @@ export function isPractising(state: SessionState = readSession()): boolean {
   return Boolean(state.practising)
 }
 
+/**
+ * Start the clock if nothing has started it yet, and leave a run in progress alone.
+ *
+ * `startSession` only ran on 00 Intro, and the doors go straight to
+ * `/session/idle/1?door=…` — so a door run never started the clock, `startedAt` stayed
+ * 0, and the Recap's Time chip read 0:00 for a session the student had just spent four
+ * minutes on. Every other Recap number survived because they derive from `outcomes`,
+ * which is written lazily as terms resolve; the clock was the one value that needed a
+ * beginning and never got one.
+ *
+ * Called from 01 Idle, which is the first screen of EVERY entry path. Guarded on
+ * `startedAt` so terms 2-4 don't restart it.
+ */
 export function ensureSessionStarted() {
   const state = readSession()
   if (state.startedAt) return
@@ -737,14 +750,6 @@ function firstAttemptRight(bucket: Bucket): boolean {
 }
 
 /**
- * What a term is worth, given its bucket and the first judged tap. `total` is base plus
- * calibration, floored at 0 for the live in-flow figure — the negative case is charged
- * to the session total in sessionTotals, so a term never displays below zero.
- *
- * Pass: `xpFor('Unaided', tap?.wasSure)` → { base: 10, calibration: 2, total: 12 } when
- * they said Sure. Miss (skip or reveal after a Sure): base 0, calibration -3, total 0.
- */
-/**
  * Did this term's answer come from the keyboard when the mic was available?
  *
  * sprint-context.md: "Typed answers are reduced, but only when voice was available."
@@ -754,6 +759,22 @@ function firstAttemptRight(bucket: Bucket): boolean {
  */
 export function typedByChoice(state: SessionState, index: number): boolean {
   return Boolean(state.typed?.[index]?.trim()) && !isSticky(state) && !state.micFault?.includes(index)
+}
+
+/** Count a judged miss for a term. Call from the tap handler that routes to 05 Miss. */
+export function recordMiss(index: number) {
+  const state = readSession()
+  write({ ...state, misses: { ...(state.misses ?? {}), [index]: (state.misses?.[index] ?? 0) + 1 } })
+}
+
+/** How many judged misses a term has had this run. Pure; pass the state from useSession(). */
+export function missCount(state: SessionState, index: number): number {
+  return state.misses?.[index] ?? 0
+}
+
+/** The first term with no outcome yet, for "Pick up where you left off". */
+export function firstUnanswered(state: SessionState): number | undefined {
+  return TERMS.find((t) => !state.outcomes.some((o) => o.index === t.index))?.index
 }
 
 /** Mark that the mic failed on this term. Called by 04a Couldn't hear on arrival. */
@@ -778,6 +799,15 @@ export function bucketXp(bucket: Bucket, typedWhenVoiceWorked: boolean): number 
   return XP_BY_BUCKET[bucket]
 }
 
+/**
+ * What a term is worth, given its bucket and the first judged tap. `total` is base plus
+ * calibration, floored at 0 for the live in-flow figure — the negative case is charged
+ * to the session total in sessionTotals, so a term never displays below zero.
+ *
+ * Pass: `xpFor('Unaided', tap?.wasSure)` → { base: 10, calibration: 1, total: 11 } when
+ * they tapped either way (sure and unsure pay the same since 2026-10-12). Miss after a
+ * Sure: base 0, calibration 0 (sureWrong costs nothing since 2026-09-23), total 0.
+ */
 export function xpFor(
   bucket: Bucket,
   wasSure?: boolean,
@@ -795,9 +825,7 @@ export function outcomeFor(state: SessionState, index: number): TermOutcome | un
 
 /**
  * Resolve a term. Re-recording the same index replaces its bucket and XP but keeps what
- * the run already knows about it — `requeued` above all. Dropping that flag was the
- * requeue bug: a term re-answered at 06 Lock It In came back through here as a fresh
- * outcome, nextAfter no longer saw it as requeued, and the session ran again from term 2.
+ * the run already knows about it (whether the student was sure).
  *
  * The confidence adjustment comes from the tap stored by recordConfidence, never from
  * `opts.wasSure`: that option only feeds the Recap sort, and it can arrive from a tap
@@ -830,7 +858,6 @@ export function recordOutcome(
     repeated: opts?.repeated,
     wasSure,
     calibration,
-    requeued: prior?.requeued,
     micTrouble: opts?.micTrouble || undefined,
   }
   const outcomes = state.outcomes.filter((o) => o.index !== index)
@@ -934,14 +961,6 @@ export function termHref(index: number, state: SessionState = readSession()): st
 }
 
 /**
- * Try again re-presents the same terms in a different order, so position cues from the
- * first run don't carry over. Returns the term to start on.
- */
-export function shuffledFirstTerm(): number {
-  return TERMS[Math.floor(Math.random() * TERMS.length)].index
-}
-
-/**
  * What the student actually said for a term, when we have it.
  *
  * SPEC § "How the mocked recall behaves" 3 says transcripts are canned, which is right
@@ -962,15 +981,17 @@ export function setTypedAnswer(index: number, text: string) {
  * A short take produced less, so 02a Captured and 05 Miss both show the partial. A
  * typed answer always wins — those are the student's real words.
  */
-export function shownAnswer(index: number, verdict: Verdict): string {
-  const typed = readSession().typed?.[index]
+// Pass `state` from useSession() when calling during render: reading storage directly
+// in render mismatched the server snapshot on hydration and never re-rendered on change
+// (dev review, 2026-10-12). The default read is for tap handlers.
+export function shownAnswer(index: number, verdict: Verdict, state: SessionState = readSession()): string {
+  const typed = state.typed?.[index]
   if (typed && typed.trim()) return typed.trim()
   const term = getTerm(index)
   if (!term) return ''
   return verdict === 'Pass' ? term.transcript : term.partialTranscript
 }
 
-/** The typed answer if there is one, else the term's canned transcript. */
 /**
  * The student's own typed draft for a term, or '' if they have not typed one.
  *
@@ -981,12 +1002,30 @@ export function shownAnswer(index: number, verdict: Verdict): string {
  * in testing read it as the app having answered for her and Send passing it off as her
  * own. Anything that seeds an input reads this, never `answerFor`.
  */
-export function typedDraft(index: number): string {
-  return readSession().typed?.[index]?.trim() ?? ''
+//
+// And only a draft that has NOT been sent. A sent answer has been judged; putting it
+// back in the box on "Try again" (or on the next drill rung, which is the same term)
+// let a student resend it without recalling anything (click-through, 2026-10-12). An
+// unsent draft still survives Leave → "Keep learning". Pure; pass the state from
+// useSession().
+export function typedDraft(state: SessionState, index: number): string {
+  const draft = state.typed?.[index]?.trim() ?? ''
+  return draft && draft === state.sentTyped?.[index] ? '' : draft
 }
 
-export function answerFor(index: number): string {
-  const typed = readSession().typed?.[index]
+/** Record a typed answer as sent for judging. Call from Send, before routing. */
+export function sendTypedAnswer(index: number, text: string) {
+  const state = readSession()
+  write({
+    ...state,
+    typed: { ...(state.typed ?? {}), [index]: text },
+    sentTyped: { ...(state.sentTyped ?? {}), [index]: text.trim() },
+  })
+}
+
+/** The typed answer if there is one, else the term's canned transcript. */
+export function answerFor(index: number, state: SessionState = readSession()): string {
+  const typed = state.typed?.[index]
   if (typed && typed.trim()) return typed.trim()
   return getTerm(index)?.transcript ?? ''
 }

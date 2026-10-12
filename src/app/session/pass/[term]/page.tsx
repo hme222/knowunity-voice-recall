@@ -1,11 +1,12 @@
 'use client'
 
 import { Suspense, use, useEffect } from 'react'
+import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import { Button, Chips, MascotSlot, RecallResult, ScreenShell } from '@/components'
 import { CheckIcon } from '@/components/icons'
-import { answerFor, getTerm, nextAfter, outcomeFor, recordOutcome, useSession, XP } from '@/lib/session'
+import { answerFor, getTerm, nextAfter, outcomeFor, recordOutcome, useSession, XP, isPractising } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // 04 Pass — Figma frame "04 Pass" (15672:24247). Knowie's in-character reaction, not a
@@ -20,16 +21,16 @@ function PassScreen({ index }: { index: number }) {
   const hinted = searchParams.get('hinted') === '1'
   const state = useSession()
   const outcome = outcomeFor(state, index)
+  const practising = isPractising(state)
   const calibration = outcome?.calibration ?? 0
 
   useEffect(() => {
     recordOutcome(index, hinted ? 'Hinted' : 'Unaided', { wasSure })
   }, [index, hinted, wasSure])
 
-  if (!current) {
-    router.replace('/session/intro')
-    return null
-  }
+  useRedirect(!current, '/session/intro')
+
+  if (!current) return null
 
   return (
     <ScreenShell
@@ -47,14 +48,16 @@ function PassScreen({ index }: { index: number }) {
         <div className={styles.verdictRow}>
           <Chips Text="Correct" size="S" color="Primary" active showLeftIcon leftIcon={<CheckIcon />} showRightIcon={false} />
         </div>
-        <RecallResult state="Pass" title={current.passTitle} transcript={`“${answerFor(index)}”`} />
+        <RecallResult state="Pass" title={current.passTitle} transcript={`“${answerFor(index, state)}”`} />
         {/* The XP and the confidence line live here, in the content, not in the action
             zone: there they pushed Continue 14px below every other single button
             (critic panel, 2026-10-12). */}
-        <p className={styles.xp}>{`\u26a1 +${outcome?.xp ?? (hinted ? XP.hinted : XP.unaided)}`}</p>
+        {/* No XP line in a practice round: practice never rewrites the run, so the
+            figure here was the earlier outcome's (+0 on a skipped term) (dev review). */}
+        {!practising && <p className={styles.xp}>{`\u26a1 +${outcome?.xp ?? (hinted ? XP.hinted : XP.unaided)}`}</p>}
         {/* What the confidence tap was worth. Without this the tap is asked for and
             then never mentioned again. */}
-        {calibration !== 0 && (
+        {!practising && calibration !== 0 && (
           <p className={styles.calibration}>
             {calibration > 0
               ? `+${calibration} · ${outcome?.wasSure ? 'called it' : 'knew more than you thought'}`

@@ -1,7 +1,6 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { returnBack } from '@/lib/navigation'
 import { AppBar, Button, MascotSlot, ScreenShell } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { type Bucket, getTerm, type PracticeItem, recommendedMode, startPractice, type TermOutcome, useSession } from '@/lib/session'
@@ -51,7 +50,7 @@ export default function PracticePage() {
   return (
     <ScreenShell
       topNavigation={
-        <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Back" onLeft={() => returnBack(router, '/session/recap')} />
+        <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Back" onLeft={() => router.push('/session/recap')} />
       }
       // "Practice all" only when there is more than one; with one, its row is the action.
       // No "Not now": the X already does that.
@@ -72,7 +71,14 @@ export default function PracticePage() {
           )}
         </div>
 
-        {plan.length === 0 && state && <p className={styles.empty}>You got everything unaided. Nothing to practice.</p>}
+        {/* Two different empties. With no outcomes the session never ran, and "you got
+            everything unaided" was a claim about a run that did not happen
+            (click-through, 2026-10-12). Same line the Recap uses for it. */}
+        {state.outcomes.length === 0 ? (
+          <p className={styles.empty}>Nothing recorded yet — this session hasn&rsquo;t been run.</p>
+        ) : (
+          plan.length === 0 && <p className={styles.empty}>You got everything unaided. Nothing to practice.</p>
+        )}
 
         <ul className={styles.rows}>
           {missed.map((o, i) => {
