@@ -9,7 +9,7 @@ Voice-in / text-out active recall for Knowunity. A student explains a Chemistry 
 ## The flow
 
 ```
-/  →  /home/unlock (popup: "Try it now" / "Later")
+/  →  /start (prototype brief) ─Start─►  /home/unlock (popup: "Try it now" / "Later")
         └─ Try it now or the lit chip → startRun() → Q1
 Q(n): idle ─tap mic─► [first time only: primer sheet → drawn OS prompt → Allow]
       └► recording ─Submit─► captured (transcript + "How sure are you?" / Skip)
@@ -21,13 +21,13 @@ Q(n): idle ─tap mic─► [first time only: primer sheet → drawn OS prompt �
 Recap → "Practice what I missed" → practice list → drill or say-again → back to Recap
 ```
 
-Other entries: `/home/unlocked` chip → `/picker` ("Start Chemistry: bonding" or a drill); `/home/due` due chips; `/session/resume`; guided one-definition runs from `/door/quiz`, `/door/chat`, `/door/exam-plan` (reached from `/home`), which end on the door's result (pass) or `/door/missed` (no pass), then the unlock popup. `/start` is the reviewer brief, reached by direct URL only, on purpose: it is for whoever is handed the link, not part of the product, so nothing in the app links to it (system critic flagged it as an orphan, 2026-10-13). `/session/intro` is retired: it starts a run and redirects to Q1.
+Other entries: `/home/unlocked` chip → `/picker` ("Start Chemistry: bonding" or a drill); `/home/due` due chips; `/session/resume`; guided one-definition runs from `/door/quiz`, `/door/chat`, `/door/exam-plan` (reached from `/home`), which end on the door's result (pass) or `/door/missed` (no pass), then the unlock popup. `/start` is the reviewer brief and the first screen: `/` redirects to it (designer, 2026-10-13), and its Start goes to the unlock popup. `/session/intro` is retired: it starts a run and redirects to Q1.
 
 ## Routes (43)
 
 | Area | Routes |
 |---|---|
-| Home | `/` (redirect), `/home`, `/home/unlock`, `/home/unlocked`, `/home/due`, `/picker`, `/start` |
+| Home | `/` (redirect to `/start`), `/home`, `/home/unlock`, `/home/unlocked`, `/home/due`, `/picker`, `/start` |
 | Session | `/session/{idle,recording,captured,processing,pass,miss,unclear,reveal,repeat,blank}/[term]`, `/session/recap`, `/session/recap/practice`, `/session/transcript/[bucket]`, `/session/exit`, `/session/resume`, `/session/intro` (redirect) |
 | Typed | `/text/turn`, `/text/checking` |
 | Permission | `/permission/primer` (sheet), `/permission/prompt` (drawn OS sheet), `/permission/denied` |

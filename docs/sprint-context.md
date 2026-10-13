@@ -278,6 +278,8 @@ above.
         - *C2. Knowie does not grow across the run.* Size already means "the pass
           moment" (3XL); tying it to score would read as a judgement on a student who
           is struggling.
+        - *The brief is the first page again.* `/` → `/start` (what the prototype
+          is, how to test it) → Start → `/home/unlock`.
         - *C3. The Recap shows one climb.* The first Hinted term with a stored first
           take: "First try" faded over "Then" and their key phrase. Absent when
           nothing climbed.
