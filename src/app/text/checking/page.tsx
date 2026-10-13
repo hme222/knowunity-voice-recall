@@ -91,7 +91,7 @@ function CheckingScreen() {
 
   return (
     <ScreenShell
-      topNavigation={drillStep ? <DrillBar step={Number(drillStep)} onExit={() => router.push('/picker')} /> : <SessionBar index={index} />}
+      topNavigation={drillStep ? <DrillBar step={Number(drillStep)} onExit={() => router.push('/picker')} skip={false} /> : <SessionBar index={index} />}
       // Reserve the action zone before the question arrives. History: docs/code-history.md#h-091
       showBottomNavSlot
       bottomContent={

@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, use, useEffect } from 'react'
+import { Suspense, use, useEffect, useState } from 'react'
 import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
@@ -31,6 +31,9 @@ function PassScreen({ index }: { index: number }) {
   // the screen proves the improvement, not just the result (designer, 2026-10-13,
   // reach 1). A first-time pass has no "before" and looks as it always did.
   const firstTake = state.firstTakes?.[index]
+  // The payoff is staged (reach C1): the verdict, then their own words as the proof. A
+  // tap anywhere shows it all at once, so a student passing quickly never waits.
+  const [staged, setStaged] = useState(true)
 
   // Pays only against a judged take's receipt (engineering review, 2026-10-13). Opened
   // cold, with no receipt and nothing passed on this term, it goes back to the question
@@ -59,7 +62,9 @@ function PassScreen({ index }: { index: number }) {
     >
       {/* Centred in the region: the payoff sat in the top half and the screen emptied
           out below it (senior review, 2026-10-12). */}
-      <div className={`${styles.body} ${styles.bodyCentred}`}>
+      {/* Tap anywhere to settle the staged payoff. A convenience, not a control: the
+          transcript is in the DOM and announced from the start, only its paint waits. */}
+      <div className={`${styles.body} ${styles.bodyCentred}`} onClick={() => setStaged(false)}>
         {/* Knowie reacts: one bounce on arrival, and the card rises after it (senior
             review, 2026-10-12: "Knowie never visibly reacts"). Not on a practice round,
             which is a second look, not a first win. */}
@@ -83,6 +88,7 @@ function PassScreen({ index }: { index: number }) {
         <RecallResult
           state="Pass"
           verdict={verdict}
+          stagger={staged && !practising}
           title={current.passTitle}
           transcript={`“${answerFor(index, state)}”`}
           label={firstTake ? (typed ? 'Just now, you wrote' : 'Just now') : typed ? 'You wrote' : undefined}

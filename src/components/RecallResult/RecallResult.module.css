@@ -70,3 +70,22 @@
   line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
   letter-spacing: normal;
 }
+
+/* The staged payoff: the label and the student's words rise after the title. */
+.root[data-stagger] .label,
+.root[data-stagger] .body {
+  animation: proofIn calc(var(--motion-semantic-duration-standard) * 1ms) var(--motion-semantic-easing-standard)
+    calc(var(--motion-semantic-duration-proof-delay) * 1ms) both;
+}
+
+@keyframes proofIn {
+  from { opacity: 0; transform: translateY(calc(var(--size-primitive-space-200) * var(--size-primitive-unit))); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root[data-stagger] .label,
+  .root[data-stagger] .body {
+    animation: none;
+  }
+}

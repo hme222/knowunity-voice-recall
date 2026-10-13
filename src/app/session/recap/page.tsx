@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { openSheet } from '@/lib/navigation'
 import { AppBar, Button, ButtonIcon, HintCard, MascotSlot, ScreenShell } from '@/components'
 import { CloseIcon, EyeIcon } from '@/components/icons'
-import { Bucket, getTerm, keyPhrase, sessionTotals, setPractising, TOTAL_TERMS, typedByChoice, useSession, XP } from '@/lib/session'
+import { answerFor, Bucket, getTerm, keyPhrase, sessionTotals, setPractising, TOTAL_TERMS, typedByChoice, useSession, XP } from '@/lib/session'
 import styles from './recap.module.css'
 
 // 07 Recap — Figma frame "07 Recap (refreshed)" (15672:24456). History: docs/code-history.md#h-065
@@ -77,6 +77,13 @@ export default function RecapPage() {
   const xpShown = bonusEarned ? totals.withBonus : totals.earned
   // The typed rate, explained once, here, rather than implied by a smaller number on
   // every typed screen (designer, 2026-10-13: keep 7, fix the language).
+  // The run's biggest climb (designer, 2026-10-13, reach C3): a term that missed first
+  // and was got after, its first take faded over what passed. One, not every row: the
+  // hero stays a headline and one quote. Absent when nothing climbed.
+  const climbed = outcomes.find((o) => o.bucket === 'Hinted' && state.firstTakes?.[o.index] && !o.micTrouble)
+  const climb = climbed
+    ? { name: getTerm(climbed.index)?.name, before: state.firstTakes?.[climbed.index] ?? '', after: keyPhrase(climbed.index, state) || answerFor(climbed.index, state) }
+    : undefined
   const anyTypedByChoice = outcomes.some((o) => o.typed && typedByChoice(state, o.index))
 
   return (
@@ -161,6 +168,19 @@ export default function RecapPage() {
             {strip.map((o) => (
               <span key={o.index} className={styles.segment} data-bucket={o.micTrouble ? 'mic' : o.bucket} />
             ))}
+          </div>
+        )}
+        {climb && (
+          <div className={styles.climb}>
+            <p className={styles.climbLabel}>{`Your climb · ${climb.name}`}</p>
+            <p className={styles.climbBefore}>
+              <span className={styles.climbTag}>First try </span>
+              {`“${climb.before}”`}
+            </p>
+            <p className={styles.climbAfter}>
+              <span className={styles.climbTag}>Then </span>
+              {`“${climb.after}”`}
+            </p>
           </div>
         )}
       </div>

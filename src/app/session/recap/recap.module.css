@@ -240,3 +240,47 @@
     animation: none;
   }
 }
+
+/* The run's biggest climb (reach C3): one term's first take, faded, over what passed.
+   Left-aligned in the centred headline, as quotes read; one accent, the success text
+   on "Then". */
+.climb {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
+  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-400) * var(--size-primitive-unit));
+  background: var(--color-semantic-background-surface);
+  text-align: left;
+}
+
+.climbLabel,
+.climbBefore,
+.climbAfter {
+  margin: 0;
+  font-weight: var(--typography-style-body-s-regular-font-weight);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
+}
+
+.climbLabel {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+}
+
+.climbBefore {
+  /* Secondary, not tertiary: the faded take is still words to read, at 4.5:1. */
+  color: var(--color-semantic-text-secondary);
+}
+
+.climbAfter {
+  color: var(--color-semantic-text-primary);
+}
+
+.climbTag {
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+}
+
+.climbAfter .climbTag {
+  color: var(--color-semantic-text-success);
+}

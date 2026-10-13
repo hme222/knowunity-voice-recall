@@ -3,7 +3,7 @@
 import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { actionRowClass, Button, Chips, HintCard, MascotSlot, RecallResult, ScreenShell } from '@/components'
-import { STUMBLES, useDrillTerm, advancePractice, isPractising, useSession } from '@/lib/session'
+import { STUMBLES, useDrillTerm, useSession } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
 
@@ -20,7 +20,7 @@ function DrillMiss() {
 
   return (
     <ScreenShell
-      topNavigation={<DrillBar step={2} onExit={() => router.push('/picker')} onSkip={() => router.push(isPractising() ? advancePractice() : '/picker')} />}
+      topNavigation={<DrillBar step={2} onExit={() => router.push('/picker')} />}
       bottomContent={
         <div className={styles.stack}>
           <div className={actionRowClass}>

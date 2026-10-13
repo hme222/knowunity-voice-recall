@@ -3,17 +3,28 @@
 import { AppBar, ProgressIndicator, SessionFraction } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { useRouter } from 'next/navigation'
-import { DRILL_TOTAL_RUNGS, isPractising, progressFor, setPractising, useDrillTerm } from '@/lib/session'
+import { advancePractice, DRILL_TOTAL_RUNGS, isPractising, progressFor, setPractising, useDrillTerm } from '@/lib/session'
 
-// The drill's top region. Carries the progress ring and fraction — the fixed-ladder
-// fallback that the built frames show, shipped by decision. The doc's variable-length
-// model drops both and leaves progress entirely to StrengthMeter; if the coverage
-// judge is confirmed, this is the piece that goes.
+// The drill's top region, in the session's grammar (designer, 2026-10-13, option A):
+// the line under the ring names where you are — "Drill · Formal charge · 2/4" against
+// the session's "Chemistry · 1/4" — and Skip sits top right on every turn the student
+// acts on. It used to show a bare "2/4" or nothing, and Skip on one screen only.
+// The judging beats (processing, typed checking) pass `skip={false}`, as the session's
+// processing has no Skip either.
 
-/** The frame shows no fraction on the first rung, only the ring. Neither DD 01
-    (15782:11696) nor DD 07 (15782:12362) carries a "Drill" chip under the bar; it was
-    an addition and is removed. */
-export function DrillBar({ step, onExit, onSkip }: { step: number; onExit: () => void; onSkip?: () => void }) {
+export function DrillBar({
+  step,
+  onExit,
+  onSkip,
+  skip = true,
+}: {
+  step: number
+  onExit: () => void
+  /** Override Skip. By default it leaves the drill: the next practice item, or the picker. */
+  onSkip?: () => void
+  /** False on a judging beat. */
+  skip?: boolean
+}) {
   const router = useRouter()
   const term = useDrillTerm()
   // Leaving a drill inside a practice round goes back to the Recap it came from, and
@@ -23,18 +34,18 @@ export function DrillBar({ step, onExit, onSkip }: { step: number; onExit: () =>
     setPractising(false)
     router.push('/session/recap')
   }
+  const skipDrill = onSkip ?? (() => router.push(isPractising() ? advancePractice() : '/picker'))
   return (
     <>
       {/* The screen's h1, for screen readers. See SessionBar. */}
       <h1 className="srOnly">{`Drill: ${term.name}, round ${step} of ${DRILL_TOTAL_RUNGS}`}</h1>
-      {/* Skip top right when the screen offers it, as in the session's SessionBar. */}
       <AppBar
-        variant={onSkip ? 'leftAndRightButton' : 'leftIconButtonOnly'}
+        variant={skip ? 'leftAndRightButton' : 'leftIconButtonOnly'}
         leftIcon={<CloseIcon />}
         leftLabel="Leave"
         onLeft={leave}
         rightText="Skip"
-        onRightText={onSkip}
+        onRightText={skip ? skipDrill : undefined}
       >
         <ProgressIndicator
           progress={progressFor(step)}
@@ -44,7 +55,7 @@ export function DrillBar({ step, onExit, onSkip }: { step: number; onExit: () =>
           total={DRILL_TOTAL_RUNGS}
         />
       </AppBar>
-      {step > 1 && <SessionFraction current={step} total={DRILL_TOTAL_RUNGS} />}
+      <SessionFraction label={`Drill · ${term.name} · ${step}/${DRILL_TOTAL_RUNGS}`} />
     </>
   )
 }

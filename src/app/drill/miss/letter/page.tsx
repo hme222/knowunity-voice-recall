@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { micRegionClass, Button, Chips, HintCard, MascotSlot, MicButton, MicCaption, ScreenShell } from '@/components'
+import { micRegionClass, Chips, HintCard, MascotSlot, MicButton, MicCaption, ScreenShell } from '@/components'
 import { STUMBLES, micGate, missedWordContext, useDrillTerm } from '@/lib/session'
 import styles from '../../drill.module.css'
 import { Cue } from '../../Cue'
@@ -26,15 +26,10 @@ export default function DrillLetterPage() {
         </div>
       }
       topNavigation={<DrillBar step={2} onExit={() => router.push('/picker')} />}
-      bottomContent={
-        <Button
-          CTA="Come back to this one"
-          variant="Tertiary"
-          size="M"
-          fullWidth
-          onClick={() => router.push('/picker')}
-        />
-      }
+      // No "Come back to this one": Skip, top right, is the drill's one way past, as in
+      // the session (designer, 2026-10-13, option A). The zone stays reserved so the mic
+      // and the content do not move between rungs.
+      showBottomNavSlot
     >
       <div className={styles.frameBody}>
         <MascotSlot size="2XL" expression="determined" />

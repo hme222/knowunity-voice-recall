@@ -4,7 +4,7 @@ import { use } from 'react'
 import { useRedirect } from '@/lib/navigation'
 import { useRouter } from 'next/navigation'
 import { micRegionClass, Button, MascotSlot, MicButton, MicCaption, ScreenShell } from '@/components'
-import { drillRung, micGate, useDrillTerm, advancePractice, isPractising } from '@/lib/session'
+import { drillRung, micGate, useDrillTerm } from '@/lib/session'
 import { Cue } from '../../Cue'
 import { DrillBar } from '../../DrillBar'
 import styles from '../../drill.module.css'
@@ -33,7 +33,7 @@ export default function DrillPassPage({ params }: { params: Promise<{ step: stri
           <MicCaption body="Say the whole thing. However it comes out." />
         </div>
       }
-      topNavigation={<DrillBar step={n} onExit={() => router.push('/picker')} onSkip={() => router.push(isPractising() ? advancePractice() : '/picker')} />}
+      topNavigation={<DrillBar step={n} onExit={() => router.push('/picker')} />}
       bottomContent={
         <Button CTA="Type instead" variant="Tertiary" size="M" fullWidth onClick={() => router.push(`/text/turn?term=${drillTerm.index}&drill=${n}`)} />
       }

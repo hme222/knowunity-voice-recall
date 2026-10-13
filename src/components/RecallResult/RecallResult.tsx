@@ -44,14 +44,21 @@ export type RecallResultProps = {
    * (UX critic, 2026-10-13). Pass the chip's text and hide the chip from readers.
    */
   verdict?: string
+  /**
+   * Stage the payoff: the title lands with the card, and the label and transcript rise
+   * `motion.semantic.duration.proofDelay` later, as the proof (04 Pass; designer,
+   * 2026-10-13). Set it false to show everything at once — a tap does that. Nothing
+   * moves under reduced motion.
+   */
+  stagger?: boolean
   /** Tap on the CouldntHear retry tag. */
   onRetry?: () => void
   className?: string
 }
 
-export function RecallResult({ state = 'Pass', title, transcript, showTranscript = true, label, verdict, onRetry, className }: RecallResultProps) {
+export function RecallResult({ state = 'Pass', title, transcript, showTranscript = true, label, verdict, stagger = false, onRetry, className }: RecallResultProps) {
   return (
-    <div className={[styles.root, className].filter(Boolean).join(' ')} data-state={state} role="status">
+    <div className={[styles.root, className].filter(Boolean).join(' ')} data-state={state} data-stagger={stagger || undefined} role="status">
       {/* Only with somewhere to go. Drawn without `onRetry` it was a filled pill that
           looked like a button and did nothing (senior review, 2026-10-12); a screen
           whose mic is the retry labels the mic instead. */}

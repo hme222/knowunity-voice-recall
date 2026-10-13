@@ -264,6 +264,23 @@ above.
         caption, Knowie is XL there. Durations derived by ratio became tokens
         (`ambientStagger`, `celebrate`, `breathe`). Checked and left: labels are at the
         12px caption floor; mic captions already share a bottom line (666 / 490).
+      - **Panel interview, round two (designer, 2026-10-13).**
+        - *A. The drill's bar mirrors the session's.* "Drill · term · n/4" under the
+          ring and Skip top right on every drill turn (not on the judging beats).
+          "Come back to this one" is gone from the stumble rungs; Skip is the one way
+          past.
+        - *B. Home chip hit areas.* Already 48px overlays on every chip and "New"
+          (history h-038/h-039); verified by probing outside the painted box. The
+          critic measured painted boxes only.
+        - *C1. Pass stages its payoff.* The verdict lands with the card; the "You
+          said" line and the student's words rise `proofDelay` (600ms) later. A tap
+          shows it all; reduced motion shows it all; practice is not staged.
+        - *C2. Knowie does not grow across the run.* Size already means "the pass
+          moment" (3XL); tying it to score would read as a judgement on a student who
+          is struggling.
+        - *C3. The Recap shows one climb.* The first Hinted term with a stored first
+          take: "First try" faded over "Then" and their key phrase. Absent when
+          nothing climbed.
     - **02a Captured asks a question** (option 3b, same day): "Here's what I heard.
       Did I get it?" over the frame's "Looks right" / "Say it again". The frame's
       "Send it, or say it again." disagreed with its own button. Same in the drill.

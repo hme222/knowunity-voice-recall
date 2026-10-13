@@ -319,7 +319,7 @@ The composed text styles. Each resolves to a family, weight, size, line height a
 
 ## Motion primitives
 
-`motion.primitive.*` — 11 tokens
+`motion.primitive.*` — 12 tokens
 
 Durations in milliseconds, and easing curves.
 
@@ -331,6 +331,7 @@ Durations in milliseconds, and easing curves.
 | `motion.primitive.duration.300` | `300` |  | 300ms. Swipe-to-settle for a card carousel. UNCONFIRMED: matched to common iOS carousel timing, not verified against a reference or a prototype — the same epistemic status as the +10 XP value. Tune once the swipe is prototyped. |
 | `motion.primitive.duration.500` | `500` |  | 500ms. Knowie's one hop on a pass: two standard beats, up and back down. |
 | `motion.primitive.duration.550` | `550` |  | 550ms, alternates. Knowie's breathe on the interrupt screens (exit, resume): half the ambient loop each way, so a full breath matches the mic pulse. |
+| `motion.primitive.duration.600` | `600` |  | 600ms. When the proof lands on 04 Pass: after the card's rise (250 delay + 250) and a beat. |
 | `motion.primitive.duration.1100` | `1100` |  | 1100ms, loops. Mic-pulse timing, matched to iOS dictation / WhatsApp voice-note comparables. |
 | `motion.primitive.duration.1400` | `1400` |  | 1400ms. The judging dwell: how long a Processing beat holds before resolving. UNCONFIRMED against a real round trip, like the 300ms swipe. |
 | `motion.primitive.duration.6000` | `6000` |  | 6000ms. When a judge counts as slow and Processing escalates its copy in place. Past the Design Brief's <4s target with headroom, so an ordinary wait never trips it. |
@@ -339,7 +340,7 @@ Durations in milliseconds, and easing curves.
 
 ## Motion semantics
 
-`motion.semantic.*` — 14 tokens
+`motion.semantic.*` — 15 tokens
 
 Named timings.
 
@@ -356,6 +357,7 @@ Named timings.
 | `motion.semantic.duration.ambientStagger` | `{motion.primitive.duration.110}` | `110` | Offset between items of one looping animation; the nth item waits n × this. Was ambient × 0.1 typed into two stylesheets (system critic, 2026-10-13). |
 | `motion.semantic.duration.celebrate` | `{motion.primitive.duration.500}` | `500` | 04 Pass's Knowie hop. Was standard × 2 typed into result.module.css (system critic, 2026-10-13). |
 | `motion.semantic.duration.breathe` | `{motion.primitive.duration.550}` | `550` | Knowie's breathe on the interrupt screens, each way. Was ambient × 0.5 typed into interrupt.module.css (system critic, 2026-10-13). |
+| `motion.semantic.duration.proofDelay` | `{motion.primitive.duration.600}` | `600` | 04 Pass stages its payoff (designer, 2026-10-13, reach C1): the verdict line lands with the card, and the student's own words rise this long after mount, as the proof. A tap shows everything at once; reduced motion shows it at once. |
 | `motion.semantic.easing.standard` | `{motion.primitive.easing.standard}` | `cubic-bezier(0.4, 0, 0.2, 1)` | The curve fast, standard and ambient durations all use. |
 | `motion.semantic.easing.ambient` | `cubic-bezier(0.4, 0, 0.6, 1)` |  | Symmetric ease for motion that loops back to where it started — the mic pulse, Knowie's breathe, the processing dots. `standard` is asymmetric and made a looping animation read as a sawtooth, which is why `ease-in-out` had been typed directly into six stylesheets. |
 | `motion.semantic.easing.linear` | `linear` |  | For continuous rotation only — a spinner. Every other easing in this file shapes a start and an end; a spin has neither, and putting it on a curve makes each turn visibly speed up and slow down. Added because `linear` was otherwise being typed directly into two component stylesheets. |
@@ -431,4 +433,4 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ---
 
-331 tokens across 10 groups.
+333 tokens across 10 groups.

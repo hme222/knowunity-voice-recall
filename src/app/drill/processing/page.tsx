@@ -38,7 +38,7 @@ function DrillProcessing() {
 
   return (
     <ScreenShell
-      topNavigation={<DrillBar step={step} onExit={() => router.push('/picker')} />}
+      topNavigation={<DrillBar step={step} onExit={() => router.push('/picker')} skip={false} />}
       // Reserved though this screen has no actions, which is the scaffold's own rule:
       // "a region that is on still reserves its height even with nothing in it, which
       // is what keeps the action zone in the same place from screen to screen". Without

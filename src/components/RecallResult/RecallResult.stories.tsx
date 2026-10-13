@@ -70,6 +70,11 @@ export const WithVerdict: Story = {
   },
 }
 
+/** 04 Pass's staged payoff: the student's words rise after the verdict line. */
+export const Staged: Story = {
+  args: { stagger: true },
+}
+
 /** A typed answer: the eyebrow says "You wrote", not "You said". */
 export const Typed: Story = {
   args: {
