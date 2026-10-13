@@ -190,6 +190,7 @@
   --component-bottom-sheet-grabber-width: 32; /** Grabber width, 32. Was space.800, a spacing step standing in for a size. */
   --component-bottom-sheet-grabber-height: 4; /** Grabber height, 4. Was space.100. */
   --component-bottom-sheet-max-height: 85; /** Sheet ceiling as a percentage of the frame, so a long sheet still shows the screen it sits over. */
+  --component-picker-receded-opacity: 0.5; /** Opacity of everything on the picker except the title and the "Start here" row, while the guide is showing. Full again on hover or focus, so a receded row is still plainly usable. Below this, receded labels drop under 3:1. */
   --color-semantic-background-page: var(--color-primitive-navy-950); /** Root screen canvas. Use for every screen's base background; not for cards, sheets, or modals. */
   --color-semantic-background-surface: var(--color-primitive-navy-800); /** Elevated container fill. Use for cards, bottom sheets, modals, dropdown menus, chat bubbles, toasts. */
   --color-semantic-background-raised: var(--color-primitive-alpha-light-06); /** A surface sitting on top of another surface. Use when a card or row needs to separate from a container that is itself background.surface — the confirmed case is an optionRow inside a bottomSheet, where both would otherwise resolve to the same value and the row would vanish. Translucent on purpose so it composites correctly over any surface beneath it. Not a replacement for background.surface; only reach for it when there is a genuine second layer. */

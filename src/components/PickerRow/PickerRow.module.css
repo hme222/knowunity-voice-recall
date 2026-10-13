@@ -81,4 +81,8 @@
   color: var(--color-semantic-text-link);
 }
 
-.micGlyph { width: 45%; height: 45%; }
+.micGlyph {
+  display: block;
+  width: calc(var(--size-primitive-icon-250) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-icon-250) * var(--size-primitive-unit));
+}

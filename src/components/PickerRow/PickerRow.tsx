@@ -57,7 +57,12 @@ export function PickerRow({
         )}
       </span>
       <span className={styles.mic} aria-hidden="true">
-        <MicGlyphIcon className={styles.micGlyph} />
+        {/* Sized by a wrapper: the Lucide glyph sets width 100% inline, which beat the
+            45% class and drew the mic edge to edge in its circle (designer, 2026-10-13:
+            "icon sizing is off"). */}
+        <span className={styles.micGlyph}>
+          <MicGlyphIcon />
+        </span>
       </span>
     </button>
   )

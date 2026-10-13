@@ -499,7 +499,9 @@
 /* Knowie behind the card: the card overlaps his lower half, so only the head and
    eyes show, peeking over the edge. */
 .unlockPeek {
-  margin-bottom: calc(var(--size-primitive-space-1600) * -1 * var(--size-primitive-unit));
+  /* 48 under the card's top edge, not 64: the giggling face's closed eyes sit lower
+     than the old open ones and were hidden on the edge (2026-10-13). */
+  margin-bottom: calc(var(--size-primitive-space-1200) * -1 * var(--size-primitive-unit));
 }
 
 .unlockNote {

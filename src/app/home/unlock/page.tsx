@@ -31,8 +31,9 @@ export default function UnlockPage() {
           aria-modal="true"
           aria-labelledby="unlock-title"
         >
-          {/* `amazed`: something new appeared (design-system.md § Mascot poses). */}
-          <MascotSlot size="2XL" expression="amazed" className={styles.unlockPeek} />
+          {/* `giggling`: warm and calm. `amazed` stared over the card and pulled focus
+              from it (designer, 2026-10-13: "looks insane… distracting"). */}
+          <MascotSlot size="2XL" expression="giggling" className={styles.unlockPeek} />
           <div className={styles.unlockNote}>
             <p className={styles.unlockEyebrow}>
               <span className={styles.unlockEyebrowGlyph} aria-hidden="true">

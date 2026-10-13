@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { AppBar, Button, PickerRow, ScreenShell, TextInput } from '@/components'
+import { AppBar, Button, MascotSlot, PickerRow, ScreenShell, TextInput } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { PICKER_DRILLS, PICKER_TOPICS, setDrillTerm, setPractising, startRun, TOTAL_TERMS } from '@/lib/session'
 import styles from './picker.module.css'
@@ -22,6 +22,8 @@ export default function PickerPage() {
   const resumeTopic = PICKER_TOPICS.find((t) => t.seeded) ?? PICKER_TOPICS[0]
   return (
     <ScreenShell
+      // Knowie stays, smaller if the lists run long; the lists scroll (2026-10-13).
+      mascotGivesWay="shrink"
       topNavigation={
         <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Close" onLeft={() => router.push('/home/unlocked')} />
       }
@@ -34,12 +36,16 @@ export default function PickerPage() {
       }
     >
       <div className={styles.body}>
+        {/* Knowie, inviting (designer, 2026-10-13: "add Knowie"). */}
+        <MascotSlot size="2XL" expression="excited" className={styles.mascot} />
         <div className="screenTitle">
           <h1 className="screenTitleHeading">Say It Back</h1>
           {/* The guide (designer, 2026-10-13): name the quiz to pick, here and on the row. */}
           <p className="screenTitleCaption">{`Pick ${resumeTopic.label} to start: ${TOTAL_TERMS} definitions, said back in your own words.`}</p>
         </div>
-        <TextInput type="search" label="Search your topics" placeholder="Search your topics" value={query} onChange={setQuery} />
+        {/* Everything but the title and the "Start here" row recedes while the guide
+            shows (designer, 2026-10-13); hover or focus brings a row back to full. */}
+        <TextInput className={styles.receded} type="search" label="Search your topics" placeholder="Search your topics" value={query} onChange={setQuery} />
         {/* Announced, so a screen-reader user hears that the lists emptied. */}
         <p className={empty ? styles.note : 'srOnly'} role="status">
           {empty ? `Nothing matches \u201c${query.trim()}\u201d.` : ''}
@@ -47,7 +53,7 @@ export default function PickerPage() {
 
         {topics.length > 0 && (
           <section className={styles.group}>
-            <h2 className={styles.groupLabel}>Your topics</h2>
+            <h2 className={`${styles.groupLabel} ${styles.receded}`}>Your topics</h2>
             {topics.map((topic) =>
               topic.seeded ? (
                 // The quiz this session runs: ringed in the brand colour, labelled "Start
@@ -57,14 +63,14 @@ export default function PickerPage() {
                   <PickerRow variant="topic" label={topic.label} aria-describedby="start-here" onClick={() => router.push(startRun())} />
                 </div>
               ) : (
-                <PickerRow key={topic.label} variant="topic" label={topic.label} onClick={() => router.push(startRun())} />
+                <PickerRow key={topic.label} className={styles.receded} variant="topic" label={topic.label} onClick={() => router.push(startRun())} />
               ),
             )}
           </section>
         )}
 
         {drills.length > 0 && (
-          <section className={styles.group}>
+          <section className={`${styles.group} ${styles.receded}`}>
             <h2 className={styles.groupLabel}>Drill a definition</h2>
             <p className={styles.note}>
               Definitions you&rsquo;ve attempted. Amber ones need the most work.

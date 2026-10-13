@@ -1135,10 +1135,10 @@ four-face history below is kept for its reasoning; this table is the rule.
 | `sad` | Gently, it did not land | 05 Miss on the third try, the door run that ended without a pass |
 | `dazed` | The app failed, not the student | 04a Couldn't hear, DD mishear, mic denied, a door run lost to the mic |
 | `excited` | An invitation with energy, or "I caught that" | 02a Captured, DD 02a and the typed check (the 2026-09-23 decision, kept), the start brief, home, the mic primer, resume partway, practice, drill intro, the chat and exam-plan doors |
-| `amazed` | Something new appeared | The unlock popup ("Say It Back unlocked") |
+| `amazed` | Something new appeared | Not on a screen: over the unlock popup its stare pulled focus from the card (2026-10-13); the popup peeks `giggling` |
 | `approving` | Got it, with help, or a good step | 04 Pass with a hint / typed / in practice, the say-it-back repeat, the quiz door's result, a drill round's review |
 | `laughing` | The big win | 04 Pass clean and unaided, 07 Recap on a clean run, DD 08 drill complete, the quiz-complete door |
-| `giggling` | Light, playful warmth | `session/blank` ("I don't know this one"), the returning drill intro, DD 07c "say this with me" |
+| `giggling` | Light, playful warmth | The unlock popup's peek, `session/blank` ("I don't know this one"), the returning drill intro, DD 07c "say this with me" |
 | `determined`, `over-it`, `angry` | Exported, not used | Kept for completeness; `determined` read as mad on every screen it held |
 
 ### Before 2026-10-13: the four-face mapping (resolved 2026-09-20)

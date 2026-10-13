@@ -89,3 +89,13 @@
     animation: none;
   }
 }
+
+/* A miss's title is a sentence of feedback, often three lines, not a verdict word: at
+   Headline S it outweighed the student's own words under it (designer, 2026-10-13:
+   "the sizing of text is off"). Headline XS for Neutral; Pass keeps its short line big. */
+.root[data-state='Neutral'] .title {
+  font-weight: var(--typography-style-headline-xs-bold-font-weight);
+  font-size: calc(var(--typography-style-headline-xs-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-headline-xs-bold-line-height) * var(--size-primitive-unit));
+  letter-spacing: calc(var(--typography-style-headline-xs-bold-letter-spacing) * 0.01em);
+}

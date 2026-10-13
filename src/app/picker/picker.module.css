@@ -52,3 +52,20 @@
   font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
   line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
 }
+
+.mascot {
+  align-self: center;
+}
+
+/* The guide's spotlight: the rest recedes, and comes back on hover or focus so a
+   receded row is still plainly a control. Transition on the standard beat. */
+.receded {
+  opacity: var(--component-picker-receded-opacity);
+  transition: opacity calc(var(--motion-semantic-duration-standard) * 1ms) var(--motion-semantic-easing-standard);
+}
+
+.receded:hover,
+.receded:focus-visible,
+.receded:focus-within {
+  opacity: 1;
+}

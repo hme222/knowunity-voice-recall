@@ -385,7 +385,7 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ## Component tokens
 
-`component.*` — 41 tokens
+`component.*` — 42 tokens
 
 > Component tokens exist only when a component's bindings actually branch by state or variant in a way that benefits from its own indirection layer between it and the semantic tokens, not as documentation-only aliases for a value that never changes. The group holds button, scaffold, micButton, strengthMeter and bottomSheet (corrected 2026-10-13, system critic: this said micButton was the only entry). micButton is here because its four states each pair with a different semantic token, and these tokens are the real thing its Figma variables are bound to, not a restatement of them; scaffold, button and bottomSheet carry component dimensions with no semantic equivalent; strengthMeter carries a colour ramp the semantic layer does not have (the recorded exception in docs/design-system.md). chatBubble and hintCard never branch, they bind straight to semantic tokens with nothing in between, so a component.chatBubble.* or component.hintCard.* entry here would just be a second name for a value already named once. optionRow does branch by state the same way micButton does, four variants, four different fills, but its Figma variants bind straight to the semantic tokens directly rather than through a component-specific layer. That's an inconsistency with micButton's pattern, not a mistake exactly, treat micButton's indirection layer as the older, legacy approach rather than the template: an indirection layer that never diverges from what it aliases is upkeep with no payoff. Don't add one to a new component by default. Add one only when there's a concrete reason a component's own token might need to move independently of the semantic token it currently matches.
 
@@ -432,7 +432,8 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 | `component.bottomSheet.grabber.width` | `32` |  | Grabber width, 32. Was space.800, a spacing step standing in for a size. |
 | `component.bottomSheet.grabber.height` | `4` |  | Grabber height, 4. Was space.100. |
 | `component.bottomSheet.maxHeight` | `85` |  | Sheet ceiling as a percentage of the frame, so a long sheet still shows the screen it sits over. |
+| `component.picker.recededOpacity` | `0.5` |  | Opacity of everything on the picker except the title and the "Start here" row, while the guide is showing. Full again on hover or focus, so a receded row is still plainly usable. Below this, receded labels drop under 3:1. |
 
 ---
 
-335 tokens across 10 groups.
+336 tokens across 10 groups.

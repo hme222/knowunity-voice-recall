@@ -72,6 +72,8 @@ function MissScreen({ index }: { index: number }) {
 
   return (
     <ScreenShell
+      // Knowie stays, smaller on a short screen (designer, 2026-10-13: "Knowie missing").
+      mascotGivesWay="shrink"
       topNavigation={<SessionBar index={index} onSkip={skip} />}
       bottomContent={
         <div className={styles.actions}>
