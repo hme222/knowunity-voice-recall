@@ -1,16 +1,22 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { actionRowClass, Button, Chips, HintCard, MascotSlot, RecallResult, ScreenShell } from '@/components'
-import { STUMBLES, useDrillTerm, advancePractice, isPractising } from '@/lib/session'
+import { STUMBLES, useDrillTerm, advancePractice, isPractising, useSession } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
 
 // DD 07 — first stumble. History: docs/code-history.md#h-020
 
-export default function DrillMissPage() {
+function DrillMiss() {
   const router = useRouter()
   const drillTerm = useDrillTerm()
+  const state = useSession()
+  // A typed take shows what was typed, under "You wrote", with the neutral chip: the
+  // canned stumble ("…every bond's… evenly…") is the spoken mock's, and quoting it at
+  // someone who typed something else broke the echo (UX critic, 2026-10-13).
+  const typedText = useSearchParams().get('typed') === '1' ? state.sentTyped?.[drillTerm.index] : undefined
 
   return (
     <ScreenShell
@@ -36,18 +42,26 @@ export default function DrillMissPage() {
     >
       <div className={styles.frameBody}>
         <MascotSlot size="2XL" expression="determined" />
-        <Chips
-          Text={STUMBLES.first.verdict}
-          size="S"
-          color="Partial"
-          active
-          showLeftIcon={false}
-          showRightIcon={false}
-        />
+        <div className={[styles.fullWidth, styles.verdictRow].join(' ')}>
+          <Chips
+            Text={typedText ? 'Not quite yet' : STUMBLES.first.verdict}
+            size="S"
+            color={typedText ? 'Primary' : 'Partial'}
+            active={!typedText}
+            showLeftIcon={false}
+            showRightIcon={false}
+          />
+        </div>
         {/* RecallResult state="Neutral" — promoted from the inline card that three
             drill screens were duplicating. The drill is practice, not scored
             performance, so a miss here is not painted as an error. */}
-        <RecallResult className={styles.fullWidth} state="Neutral" title={STUMBLES.first.copy} transcript={`“${drillTerm.drill.partial}”`} />
+        <RecallResult
+          className={styles.fullWidth}
+          state="Neutral"
+          title={typedText ? 'Not all there yet. Here’s the word to build on.' : STUMBLES.first.copy}
+          transcript={`“${typedText ?? drillTerm.drill.partial}”`}
+          label={typedText ? 'You wrote' : undefined}
+        />
         <HintCard
           className={styles.fullWidth}
           label="The missing word"
@@ -56,5 +70,13 @@ export default function DrillMissPage() {
         />
       </div>
     </ScreenShell>
+  )
+}
+
+export default function DrillMissPage() {
+  return (
+    <Suspense fallback={null}>
+      <DrillMiss />
+    </Suspense>
   )
 }

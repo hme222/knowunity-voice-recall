@@ -3,8 +3,8 @@
 import { Suspense } from 'react'
 import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Button, MascotSlot, RecallResultCaptured, ScreenShell } from '@/components'
-import { drillRung, useDrillTerm } from '@/lib/session'
+import { Button, MascotSlot, RecallResult, RecallResultCaptured, ScreenShell } from '@/components'
+import { DRILL_COULDNT_HEAR_UNDER_MS, drillRung, useDrillTerm } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
 
@@ -15,51 +15,81 @@ import styles from '../drill.module.css'
 function DrillCaptured() {
   const router = useRouter()
   const drillTerm = useDrillTerm()
-  const step = Number(useSearchParams().get('step') ?? '1')
+  const params = useSearchParams()
+  const step = Number(params.get('step') ?? '1')
+  const stumble = params.get('stumble')
   const rung = drillRung(drillTerm, step)
+  // A take under the floor is a mishear, said as one, and spends no rung: a 0.5s take
+  // used to be judged as a whole answer (UX critic, 2026-10-13; designer, option
+  // "inline on drill Captured"). An absent `ms` is a take that cleared the floor.
+  const ms = params.get('ms')
+  const misheard = ms !== null && Number(ms) < DRILL_COULDNT_HEAR_UNDER_MS
+  const again = `/drill/recording?step=${step}${stumble ? `&stumble=${stumble}` : ''}`
+  const typeInstead = `/text/turn?term=${drillTerm.index}&drill=${step}`
 
   useRedirect(!rung, '/drill/intro')
 
   if (!rung) return null
 
+  if (misheard) {
+    return (
+      <ScreenShell
+        topNavigation={<DrillBar step={step} onExit={() => router.push('/picker')} />}
+        bottomContent={
+          <div className={styles.actions}>
+            <Button CTA="Say it again" variant="Primary" size="M" fullWidth onClick={() => router.replace(again)} />
+            <Button CTA="Type instead" variant="Tertiary" size="S" onClick={() => router.push(typeInstead)} />
+          </div>
+        }
+      >
+        <div className={styles.body}>
+          {/* The session's couldn't-hear, in the drill's chrome: the mic missed it. */}
+          <MascotSlot size="2XL" expression="dazed" className={styles.mascotCentred} />
+          <RecallResult
+            state="CouldntHear"
+            title="I didn’t catch that."
+            transcript="That was too short to hear. Say the same thing again, a little closer."
+          />
+        </div>
+      </ScreenShell>
+    )
+  }
+
   return (
     <ScreenShell
       topNavigation={<DrillBar step={step} onExit={() => router.push('/picker')} />}
       bottomContent={
-        <div className={styles.stack}>
+        <div className={styles.actions}>
+          {/* "Check it", not "Looks right": the student was confirming a take and was
+              then told "Partially right" on the next screen — agreeing, then being
+              contradicted (UX critic, 2026-10-13). The session's Captured changed the
+              same way on 2026-10-12. */}
           <Button
-            CTA="Looks right"
+            CTA="Check it"
             variant="Primary"
             size="M"
             fullWidth
-            onClick={() => router.push(`/drill/processing?step=${step}`)}
-          />
-          <Button
-            CTA="Say it again"
-            variant="Secondary"
-            size="M"
-            fullWidth
-            onClick={() => router.push(`/drill/recording?step=${step}`)}
+            onClick={() => router.replace(`/drill/processing?step=${step}`)}
           />
         </div>
       }
     >
       <div className={styles.body}>
-        {/* A review-before-sending beat, not a win — nothing has been judged yet. 02a
-            Captured in the core loop is already determined, so the same beat wore two
-            different faces in two flows. */}
+        {/* A review-before-sending beat, not a win — nothing has been judged yet. */}
         <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
         <RecallResultCaptured
-          title="Here&rsquo;s what I heard. Did I get it?"
+          title="Here&rsquo;s what I heard."
           // Step 2 is the scripted stumble, so this shows the take that screen will quote.
-          // It used to show the clean transcript, have the student tap "Looks right",
-          // and then DD 07 quoted them saying something worse.
           transcript={step === 2 ? drillTerm.drill.partial : drillTerm.transcript}
-          /* No `tag` chip. The action zone below already offers "Say it again" and
-             "Looks right" — the frame's pair — so an in-card chip repeating one of them
-             put two controls with the same label on one screen. One action, one
-             control. Logged in component-gaps.md. */
         />
+        {/* The corrections sit with the words they correct, inline, as on the session's
+            02a Captured — a full-width "Say it again" button here and inline links
+            there was one beat in two shapes (craft critic, 2026-10-13). */}
+        <div className={styles.fix}>
+          <span className={styles.fixLabel}>Not what you said?</span>
+          <Button CTA="Say it again" variant="Tertiary" size="S" onClick={() => router.push(again)} />
+          <Button CTA="Type instead" variant="Tertiary" size="S" onClick={() => router.push(typeInstead)} />
+        </div>
       </div>
     </ScreenShell>
   )

@@ -289,3 +289,27 @@
   justify-content: center;
   column-gap: calc(var(--size-primitive-space-600) * var(--size-primitive-unit));
 }
+
+/* The verdict chip's row: left, as the session's verdict row is (coherence critic,
+   2026-10-13: centred here, left there, for the same chip). */
+.verdictRow {
+  display: flex;
+  align-items: center;
+}
+
+/* "Not what you said?  Say it again  Type instead", under the card — the session's
+   02a Captured row, same tokens. */
+.fix {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  column-gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+}
+
+.fixLabel {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-s-regular-font-weight);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
+}

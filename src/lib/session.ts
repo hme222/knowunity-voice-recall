@@ -123,7 +123,7 @@ export const TERMS: Term[] = [
     keywords: ['split', 'even', 'assign'],
     // from the frame — 01 Idle (refreshed 2)
     title: 'Explain: Formal charge',
-    prompt: "Say what formal charge means, in your own words. However you'd explain it to a friend.",
+    prompt: "Say what formal charge means, in your own words. However you’d explain it to a friend.",
     // from the frame — 02a Captured
     transcript:
       "It's the charge on an atom if you split every bond's electrons evenly between the two atoms.",
@@ -158,7 +158,7 @@ export const TERMS: Term[] = [
     name: 'Covalent bond',
     keywords: ['shar'],
     title: 'Explain: Covalent bond',
-    prompt: 'Say what a covalent bond is and what holds it together, in your own words. However you would explain it to a friend.',
+    prompt: 'Say what a covalent bond is and what holds it together, in your own words. However you’d explain it to a friend.',
     transcript: 'It is when two atoms share a pair of electrons, and both nuclei pulling on that shared pair is what holds them together.',
     // Names the atoms, says nothing about the electrons — which is what `missTitle` names.
     partialTranscript: 'It is a bond between two atoms, usually two non-metals.',
@@ -183,7 +183,7 @@ export const TERMS: Term[] = [
     name: 'Electronegativity',
     keywords: ['attract', 'pull', 'draw'],
     title: 'Explain: Electronegativity',
-    prompt: 'Say what electronegativity means, in your own words. However you would explain it to a friend.',
+    prompt: 'Say what electronegativity means, in your own words. However you’d explain it to a friend.',
     transcript: 'It is how strongly an atom pulls shared electrons toward itself in a bond, so the more electronegative atom gets more than its share.',
     // Where you look it up, not what it measures.
     partialKind: 'wrong',
@@ -209,7 +209,7 @@ export const TERMS: Term[] = [
     name: 'Octet rule',
     keywords: ['eight', '8 ', 'outer shell', 'valence'],
     title: 'Explain: Octet rule',
-    prompt: 'Say what the octet rule is, in your own words. However you would explain it to a friend.',
+    prompt: 'Say what the octet rule is, in your own words. However you’d explain it to a friend.',
     transcript: 'Atoms tend to bond until they have eight electrons in their outer shell, by sharing, gaining or losing electrons.',
     // The number, with neither where the eight are nor how an atom gets them.
     partialTranscript: 'Atoms want to have eight electrons.',
@@ -294,6 +294,8 @@ export function progressFor(index: number): '0' | '25' | '50' | '75' | '100' {
 
 /** Under this, the take reads as nothing said. */
 const COULDNT_HEAR_UNDER_MS = 2000
+/** The drill's floor: the same, so a mishear never spends a drill rung either. */
+export const DRILL_COULDNT_HEAR_UNDER_MS = COULDNT_HEAR_UNDER_MS
 /** Under this, a partial answer. At or above, a clean pass. */
 const PASS_AT_MS = 5000
 
@@ -326,10 +328,16 @@ export function verdictFor(
 export const REVEAL_AT_ATTEMPT = 3
 
 export type HintStep = {
-  /** 1 on the first miss, 2 from the second on. Which `hintCard` body to show. */
-  level: 1
+  /** 1 on the first miss, 2 from the second on. */
+  level: 1 | 2
   /** The hint body for this rung. */
   hint: string
+  /**
+   * Rung 2's stronger hint: the drill's letter rung, borrowed — the definition around
+   * the term's missed word, that word reduced to its first letter and a drawn blank
+   * ("…every bond's e________ are split evenly…"). Absent on rung 1.
+   */
+  gap?: string
   /** False from REVEAL_AT_ATTEMPT on: hide Try again, or go straight to the reveal. */
   canRetry: boolean
   /** The attempt number to send Try again to. Undefined once retrying is closed. */
@@ -339,11 +347,16 @@ export type HintStep = {
 /** Which rung of the ladder a miss on `attempt` lands on. */
 export function hintFor(term: Term, attempt: number): HintStep {
   const n = Number.isFinite(attempt) && attempt > 0 ? Math.floor(attempt) : 1
-  // ONE hint, repeated. `docs/sprint-context.md` § "Not building this sprint" lists "Second hint", and CLAUDE.md makes that list binding. History: docs/code-history.md#h-138
+  // Two rungs since 2026-10-13 (designer, option B: "borrow the drill's rungs"): the
+  // hint, then the hint plus the drill's first-letter gap. It was ONE hint, repeated,
+  // while "Second hint" sat on the not-building list. History: docs/code-history.md#h-138
   const canRetry = n < REVEAL_AT_ATTEMPT
+  const level = n >= 2 ? 2 : 1
+  const word = term.drill.missedWord
   return {
-    level: 1,
+    level,
     hint: term.hint,
+    gap: level === 2 ? missedWordContext(term, `${word[0]}${'_'.repeat(word.length - 1)}`) : undefined,
     canRetry,
     nextAttempt: canRetry ? n + 1 : undefined,
   }
@@ -554,6 +567,18 @@ export type SessionState = {
   reviewQueue?: number[]
   /** Terms drilled to the end this run; each pays XP.drill once (9a). */
   drilled?: number[]
+  /**
+   * The take that earned a term its first miss, by term. 04 Pass shows it faded above
+   * the passing take — "First try" over "Just now" — so a pass after a miss shows the
+   * improvement, not just the result (designer, 2026-10-13, reach 1).
+   */
+  firstTakes?: Record<number, string>
+  /**
+   * XP from runs that have ended or been left, banked when a new run starts. Kept
+   * across runs, so Resume's "Start fresh" keeps what "Your XP is safe" promised
+   * (designer, 2026-10-13: it used to discard it).
+   */
+  bankedXp?: number
 }
 
 const EMPTY: SessionState = { outcomes: [], startedAt: 0, lastAt: 0 }
@@ -608,7 +633,10 @@ function write(state: SessionState) {
 
 export function startSession(opts?: { door?: string }) {
   const now = Date.now()
-  const { sticky, micGranted, reviewQueue } = readSession()
+  const prior = readSession()
+  const { sticky, micGranted, reviewQueue } = prior
+  // The run being replaced keeps what it earned: banked, not discarded.
+  const bankedXp = (prior.bankedXp ?? 0) + runXp(prior)
   write({
     outcomes: [],
     startedAt: now,
@@ -616,6 +644,7 @@ export function startSession(opts?: { door?: string }) {
     ...(sticky ? { sticky } : {}),
     ...(micGranted ? { micGranted } : {}),
     ...(reviewQueue?.length ? { reviewQueue } : {}),
+    ...(bankedXp ? { bankedXp } : {}),
     ...(opts?.door ? { door: opts.door } : {}),
   })
 }
@@ -668,8 +697,12 @@ export function startPractice(items: PracticeItem[]): string {
   if (!items.length) return '/session/recap'
   // Each practised term starts a fresh hint ladder; the run's misses on it are history.
   const misses = { ...(state.misses ?? {}) }
-  for (const item of items) delete misses[item.index]
-  const next = { ...state, practising: true, practiceQueue: items, misses, drillTerm: items[0].mode === 'drill' ? items[0].index : state.drillTerm }
+  const firstTakes = { ...(state.firstTakes ?? {}) }
+  for (const item of items) {
+    delete misses[item.index]
+    delete firstTakes[item.index]
+  }
+  const next = { ...state, practising: true, practiceQueue: items, misses, firstTakes, drillTerm: items[0].mode === 'drill' ? items[0].index : state.drillTerm }
   write(next)
   return practiceItemHref(items[0], next)
 }
@@ -785,7 +818,11 @@ export function typedByChoice(state: SessionState, index: number): boolean {
 /** Count a judged miss for a term. Call from the tap handler that routes to 05 Miss. */
 export function recordMiss(index: number) {
   const state = readSession()
-  write({ ...state, misses: { ...(state.misses ?? {}), [index]: (state.misses?.[index] ?? 0) + 1 } })
+  // The first missed take is kept for 04 Pass's before/after (reach 1).
+  const firstTakes = state.firstTakes?.[index]
+    ? state.firstTakes
+    : { ...(state.firstTakes ?? {}), [index]: shownAnswer(index, 'Miss', state) }
+  write({ ...state, misses: { ...(state.misses ?? {}), [index]: (state.misses?.[index] ?? 0) + 1 }, firstTakes })
 }
 
 /** How many judged misses a term has had this run. Pure; pass the state from useSession(). */
@@ -933,6 +970,33 @@ export function sessionTotals(state: SessionState) {
     score: state.outcomes.length ? Math.round((unaided / state.outcomes.length) * 100) : 0,
     elapsed: formatElapsed(elapsedMs),
   }
+}
+
+/**
+ * What a run is worth as it stands: the Recap's figure, with the finishing bonus only
+ * for a finished run that got at least one term. What startSession banks.
+ */
+export function runXp(state: SessionState): number {
+  const totals = sessionTotals(state)
+  const resolved = state.outcomes.filter((o) => o.bucket === 'Unaided' || o.bucket === 'Hinted').length
+  return state.outcomes.length === TOTAL_TERMS && resolved > 0 ? totals.withBonus : totals.earned
+}
+
+/**
+ * The student's own words that carried the definition, for the Recap row: the matched
+ * key idea and a few words either side, from the answer that passed (reach 2). Empty
+ * when nothing matches, so a row never quotes a fixture word the student did not say.
+ */
+export function keyPhrase(index: number, state: SessionState): string {
+  const term = getTerm(index)
+  if (!term) return ''
+  const words = answerFor(index, state).split(/\s+/)
+  const at = words.findIndex((w) => term.keywords.some((k) => w.toLowerCase().includes(k.trim())))
+  if (at < 0) return ''
+  const from = Math.max(0, at - 3)
+  const to = Math.min(words.length, at + 5)
+  const text = words.slice(from, to).join(' ').replace(/[,.;:]+$/, '')
+  return `${from > 0 ? '\u2026' : ''}${text}${to < words.length ? '\u2026' : ''}`
 }
 
 export function formatElapsed(ms: number) {

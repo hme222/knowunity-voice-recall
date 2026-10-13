@@ -15,3 +15,5 @@ export const processingDwell = () => ms('--motion-semantic-duration-processing-d
 export const slowThreshold = () => ms('--motion-semantic-duration-slow-threshold', 6000)
 /** motion.semantic.duration.confidenceGrace */
 export const confidenceGrace = () => ms('--motion-semantic-duration-confidence-grace', 10000)
+/** motion.semantic.duration.verdictHold */
+export const verdictHold = () => ms('--motion-semantic-duration-verdict-hold', 1100)

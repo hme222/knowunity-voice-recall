@@ -8,8 +8,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Fills the region so "Just check it" can sit at its foot, above the pair. */
-  min-height: 100%;
   gap: calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit));
 }
 
@@ -39,8 +37,4 @@
   font-weight: var(--typography-style-body-s-regular-font-weight);
   font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
   line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
-}
-
-.justCheck {
-  margin-top: auto;
 }

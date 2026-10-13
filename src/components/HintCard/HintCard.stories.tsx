@@ -27,3 +27,8 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {}
+
+/** 05 Miss's second rung: the drill's first-letter gap, borrowed. In the app the blank is drawn (Cue). */
+export const SecondRung: Story = {
+  args: { label: 'Fill the gap', body: '…every bond’s e________ are split evenly…' },
+}

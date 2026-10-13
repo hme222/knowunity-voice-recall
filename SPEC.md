@@ -304,10 +304,10 @@ From `docs/sprint-context.md` § "Not building this sprint", unchanged:
 - Knowie speaking. Voice out of any kind.
 - Auto-endpointing. Push-to-talk with an explicit stop, always.
 - A hint that accepts a reply or branches into conversation.
-- A second hint. The ladder is miss → hint → retry → reveal.
+- ~~A second hint.~~ Built 2026-10-13: the second miss adds the drill's first-letter gap. The ladder is miss → hint → retry → miss → hint + gap → retry → reveal.
 - Mid-answer language switching.
 - Mic-busy handling (on a call, hardware in use).
-- XP inside Definition Drill Down.
+- ~~XP inside Definition Drill Down.~~ +2 on finishing, 2026-10-13 (9a).
 
 And for the prototype specifically:
 
@@ -363,9 +363,10 @@ the states, not building the engine.
    - 00 Intro title "Say It Back", CTA "Let's go"
    - 01 Idle title "Explain: Formal charge", body "Say what formal charge
      means, in your own words. However you'd explain it to a friend."
-   - 02a Captured "Here's what I heard. Did I get it?" with `Looks right` /
-     `Say it again` (copy changed 2026-10-12 so it asks what the buttons answer; the
-     frame read "Send it, or say it again.")
+   - 02a Captured "Here's what I heard." with "Not what you said? Say it again /
+     Type instead" and the confidence ask (2026-10-12, 2b); DD 02a Captured the same
+     shape with a "Check it" button (2026-10-13). The frame read "Send it, or say it
+     again." over `Looks right` / `Say it again`.
 
 7. **Verdicts accumulate in `sessionStorage`** as each term resolves, so Recap
    can report the actual run. Cleared when a run starts (`startRun()`: the popup,

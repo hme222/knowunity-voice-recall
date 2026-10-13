@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import {
+  keyPhrase,
+  runXp,
   SCRIPTED_COULDNT_HEAR_TERM,
   typedVerdict,
   markDrilled,
@@ -302,5 +304,56 @@ describe('typedVerdict (the typed mock)', () => {
     expect(typedVerdict(2, 'Some sort of charge thing about atoms I think, honestly')).toBe('miss')
     expect(typedVerdict(2, 'Two atoms sharing a pair of electrons between them')).toBe('pass')
     expect(typedVerdict(2, 'sharing')).toBe('miss')
+  })
+})
+
+describe('the second hint rung (option B)', () => {
+  it('adds the drill’s first-letter gap from the second miss, not the first', () => {
+    const term = TERMS[0]
+    expect(hintFor(term, 1).gap).toBeUndefined()
+    expect(hintFor(term, 1).level).toBe(1)
+    const two = hintFor(term, 2)
+    expect(two.level).toBe(2)
+    expect(two.gap).toContain('e________')
+    expect(two.gap).not.toContain(term.drill.missedWord)
+  })
+})
+
+describe('first takes (reach 1: before/after on a retry pass)', () => {
+  it('keeps the take from the first miss, not later ones', () => {
+    sendTypedAnswer(2, 'first wrong guess here')
+    recordMiss(2)
+    sendTypedAnswer(2, 'second wrong guess')
+    recordMiss(2)
+    expect(readSession().firstTakes?.[2]).toBe('first wrong guess here')
+  })
+  it('is cleared for a practised term, which starts fresh', () => {
+    recordMiss(3)
+    startPractice([{ index: 3, mode: 'say' }])
+    expect(readSession().firstTakes?.[3]).toBeUndefined()
+  })
+})
+
+describe('banked XP (Start fresh keeps it)', () => {
+  it('banks the replaced run’s XP when a new run starts', () => {
+    recordOutcome(1, 'Unaided')
+    const earned = runXp(readSession())
+    expect(earned).toBe(XP.unaided)
+    startSession()
+    expect(readSession().outcomes).toHaveLength(0)
+    expect(readSession().bankedXp).toBe(earned)
+    startSession()
+    expect(readSession().bankedXp).toBe(earned)
+  })
+})
+
+describe('keyPhrase (reach 2: the student’s own words on the Recap)', () => {
+  it('quotes the words around the matched key idea', () => {
+    sendTypedAnswer(2, 'It is when two atoms share a pair of electrons between them both')
+    expect(keyPhrase(2, readSession())).toContain('share')
+  })
+  it('is empty when nothing matches, never a fixture word', () => {
+    sendTypedAnswer(2, 'no idea at all really')
+    expect(keyPhrase(2, readSession())).toBe('')
   })
 })

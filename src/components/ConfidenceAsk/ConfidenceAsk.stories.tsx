@@ -31,6 +31,15 @@ export const Default: Story = {
   },
 }
 
+/** With its optional exit, "Just check it", on the ask's line (02a Captured, typed checking). */
+export const WithDecline: Story = {
+  args: { onDecline: fn() },
+  play: async ({ canvas, args }) => {
+    await canvas.getByRole('button', { name: 'Just check it' }).click()
+    await expect(args.onDecline).toHaveBeenCalled()
+  },
+}
+
 /** The typed path asks the same question in its own words. */
 export const TypedPath: Story = {
   args: { prompt: 'Before I show you — how did that feel?' },

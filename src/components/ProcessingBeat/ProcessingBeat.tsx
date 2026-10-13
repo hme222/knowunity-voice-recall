@@ -11,10 +11,16 @@ export type ProcessingBeatProps = {
   above?: ReactNode
   /** Which Knowie. Every wait uses `determined`; the prop exists so it is a choice. */
   expression?: 'dazed' | 'determined' | 'excited' | 'laughing'
+  /**
+   * False while the screen waits on the STUDENT, not the judge — the typed checking
+   * beat's confidence ask. The dots said "working" over a question (craft critic,
+   * 2026-10-13). Default true.
+   */
+  working?: boolean
   className?: string
 }
 
-export function ProcessingBeat({ line, above, expression = 'determined', className }: ProcessingBeatProps) {
+export function ProcessingBeat({ line, above, expression = 'determined', working = true, className }: ProcessingBeatProps) {
   return (
     <div className={[styles.root, className].filter(Boolean).join(' ')}>
       {above ? <div className={styles.above}>{above}</div> : null}
@@ -25,11 +31,13 @@ export function ProcessingBeat({ line, above, expression = 'determined', classNa
         <p className={styles.line} role="status" aria-live="polite">
           {line}
         </p>
-        <div className={styles.dots} aria-hidden="true">
-          <span className={styles.dot} />
-          <span className={styles.dot} />
-          <span className={styles.dot} />
-        </div>
+        {working && (
+          <div className={styles.dots} aria-hidden="true">
+            <span className={styles.dot} />
+            <span className={styles.dot} />
+            <span className={styles.dot} />
+          </div>
+        )}
       </div>
     </div>
   )

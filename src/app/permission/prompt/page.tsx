@@ -3,7 +3,7 @@
 import { Suspense, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ScreenShell } from '@/components'
-import { safeInternalPath, setMicGranted } from '@/lib/session'
+import { micTurnedBackOn, safeInternalPath } from '@/lib/session'
 import { QuestionBehind } from '../QuestionBehind'
 import { useFocusTrap } from '@/lib/useFocusTrap'
 import styles from '../permission.module.css'
@@ -51,8 +51,9 @@ function Prompt() {
             </button>
             <button className={styles.dialogButton} onClick={() => {
                 // Allowed: straight into the recording the student tapped for, not back
-                // to the idle screen to tap again.
-                setMicGranted()
+                // to the idle screen to tap again. Clears a session's denial too: this is
+                // also the way back from typed mode ("Mic back on? Speak instead").
+                micTurnedBackOn()
                 router.replace(next)
               }}>
               Allow

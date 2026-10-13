@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import styles from './MicCaption.module.css'
 
 // No Figma counterpart. Built 2026-10-07 from three inline copies: the 01 Idle retry
@@ -5,8 +6,9 @@ import styles from './MicCaption.module.css'
 // designer the same day.
 
 export type MicCaptionProps = {
-  /** The line under the mic: a hint, or what tapping it does. */
-  body: string
+  /** The line under the mic: a hint, or what tapping it does. A node only when the
+      line carries drawn blanks (the second-rung gap on a retry). */
+  body: ReactNode
   /** Optional label above the body, e.g. "Hint". Omit for a plain caption. */
   label?: string
   className?: string

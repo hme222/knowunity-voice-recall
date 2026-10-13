@@ -13,7 +13,8 @@ import {
   MicCaption,
   ScreenShell,
 } from '@/components'
-import { ensureSessionStarted, getTerm, micGate, isPractising, nextAfter, recordOutcome, useSession, useSticky, SUBJECT } from '@/lib/session'
+import { ensureSessionStarted, getTerm, hintFor, micGate, missCount, isPractising, nextAfter, recordOutcome, useSession, useSticky, SUBJECT } from '@/lib/session'
+import { CueText } from '@/app/drill/Cue'
 import styles from './idle.module.css'
 
 // 01 Idle / Commit — Figma frame "01 Idle (refreshed 2)" (15672:26255).
@@ -40,7 +41,10 @@ function IdleScreen({ index }: { index: number }) {
   // voice-ux.md §3: a denied mic stays denied for the session. It used to survive one
   // turn — /text/turn then Continue handed the student straight back to a mic screen.
   const sticky = useSticky()
-  const practising = isPractising(useSession())
+  const state = useSession()
+  const practising = isPractising(state)
+  // The rung the last miss reached: from the second, the retry carries the gap.
+  const gap = current && hinted ? hintFor(current, missCount(state, index)).gap : undefined
   useEffect(() => {
     if (sticky) router.replace(`/text/turn?term=${index}&sticky=1`)
   }, [sticky, index, router])
@@ -70,7 +74,9 @@ function IdleScreen({ index }: { index: number }) {
               is on screen at every height, beside the control it is for. */}
           {/* The idle mic says what it does (senior review, 2026-10-12): an outlined
               ring with no words read as decoration. The accessible name, verbatim. */}
-          {hinted ? <MicCaption label="Hint" body={current.hint} /> : <MicCaption body="Start speaking" className={styles.micCaptionLead} />}
+          {hinted && gap ? (
+            <MicCaption label="Fill the gap" body={<CueText text={gap} />} />
+          ) : hinted ? <MicCaption label="Hint" body={current.hint} /> : <MicCaption body="Start speaking" className={styles.micCaptionLead} />}
         </div>
       }
       topNavigation={<SessionBar index={index} door={door} onSkip={skip} label={practising ? `Practice · ${current.name}` : undefined} />}

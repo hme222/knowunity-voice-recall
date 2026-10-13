@@ -220,6 +220,39 @@ above.
         help → Drill it, even when hinted (a confident miss is a wrong idea to
         rebuild). Typed → Say it again, aloud (the point of the feature). A wins over C;
         mic trouble still says it again first. The row says "· typed" when C applies.
+      - **The panel interview (designer, 2026-10-13, after the third critic run).**
+        - *Dropped network on Submit: out of scope.* The prototype has no network
+          layer; the offline screen stays removed (2026-10-12). Not a gap to flag.
+        - *Back to the mic after a denial (C).* The typed turn, when the mic is
+          denied, offers "Mic back on? Speak instead": through the drawn prompt,
+          Allow clears the denial and opens the mic on that question. Denied still
+          sticks until the student asks.
+        - *"Start fresh" keeps the XP.* Any new run banks the run it replaces
+          (`bankedXp`), so Resume's "Your XP is yours either way" is true.
+        - *"I've turned it on" stays unverified.* Mocked: a real build asks the OS.
+          Recorded in current-state.md.
+        - *A second hint (B).* The second miss adds the drill's first-letter gap
+          ("Fill the gap: …every bond's e____ are split evenly…") on the miss and
+          the retry; the third offers only the reveal. Moved off the not-building
+          list.
+        - *Drill mishear.* A drill take under 2s shows "I didn't catch that" on drill
+          Captured with Say it again / Type instead; no rung spent. Drill Captured
+          says "Check it", not "Looks right", so a student never agrees to a take
+          and is then told it was partial.
+        - *No verdict chip on the third miss: kept.* Three judgements in a row is the
+          point to stop judging; the headline says where they are ("That's three
+          tries. Let's look at the answer.").
+        - *Typed stance: 7 XP stays, the language changes.* "You wrote" on typed
+          takes; the Recap row says "Typed." and its working explains the rate once.
+        - *Pass shows before/after on a retry (reach 1).* The take that first missed,
+          faded, above "Just now". A first-time pass is unchanged.
+        - *The Recap quotes the student (reach 2).* Each got term shows their own key
+          phrase; rows build in one by one (none under reduced motion). The
+          secondary lines (wins, sure-and-missed, the typed rate) live in "How it
+          adds up".
+        - *Drill rounds say "Got it".* A passed round holds a "Got it" chip for
+          `motion.semantic.duration.verdictHold` before the next opens, spoken or
+          typed.
     - **02a Captured asks a question** (option 3b, same day): "Here's what I heard.
       Did I get it?" over the frame's "Looks right" / "Say it again". The frame's
       "Send it, or say it again." disagreed with its own button. Same in the drill.
@@ -866,10 +899,11 @@ description field, particularly `bottomSheet`'s own-branch-screen rule.
 - Knowie speaking (voice out).
 - Auto-endpointing.
 - A hint that accepts a reply or branches into conversation.
-- Second hint.
+- ~~Second hint.~~ Built 2026-10-13 (designer, option B): the drill's first-letter
+  gap on the second miss. See "The panel interview" above.
 - Mid-answer language switching.
 - Mic-busy handling.
-- XP inside Definition Drill Down.
+- ~~XP inside Definition Drill Down.~~ +2 on finishing since 2026-10-13 (9a).
 
 ## Open, unresolved, needs a decision from someone
 

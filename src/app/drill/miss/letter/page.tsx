@@ -38,14 +38,16 @@ export default function DrillLetterPage() {
     >
       <div className={styles.frameBody}>
         <MascotSlot size="2XL" expression="determined" />
-        <Chips
-          Text={STUMBLES.second.verdict}
-          size="S"
-          color="Partial"
-          active
-          showLeftIcon={false}
-          showRightIcon={false}
-        />
+        <div className={[styles.fullWidth, styles.verdictRow].join(' ')}>
+          <Chips
+            Text={STUMBLES.second.verdict}
+            size="S"
+            color="Partial"
+            active
+            showLeftIcon={false}
+            showRightIcon={false}
+          />
+        </div>
         {/* The nudge belongs in the hint card, with the letter it promises. "Starts
             with" appeared on screen with no letter after it. */}
         <HintCard

@@ -33,12 +33,17 @@ export type RecallResultProps = {
    * need on screen without scrolling (designer, 2026-10-08).
    */
   showTranscript?: boolean
+  /**
+   * The eyebrow over the transcript, when the state's default is wrong for the take:
+   * "You wrote" on a typed answer, which "You said" misdescribed (UX critic, 2026-10-13).
+   */
+  label?: string
   /** Tap on the CouldntHear retry tag. */
   onRetry?: () => void
   className?: string
 }
 
-export function RecallResult({ state = 'Pass', title, transcript, showTranscript = true, onRetry, className }: RecallResultProps) {
+export function RecallResult({ state = 'Pass', title, transcript, showTranscript = true, label, onRetry, className }: RecallResultProps) {
   return (
     <div className={[styles.root, className].filter(Boolean).join(' ')} data-state={state} role="status">
       {/* Only with somewhere to go. Drawn without `onRetry` it was a filled pill that
@@ -53,7 +58,7 @@ export function RecallResult({ state = 'Pass', title, transcript, showTranscript
       <p className={styles.title}>{title}</p>
       {showTranscript && (
         <>
-          <p className={styles.label}>{LABELS[state]}</p>
+          <p className={styles.label}>{label ?? LABELS[state]}</p>
           <p className={styles.body}>{transcript}</p>
         </>
       )}

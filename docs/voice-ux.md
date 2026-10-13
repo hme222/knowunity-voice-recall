@@ -89,7 +89,8 @@ asserted one. A denial routes to a **session-level choice** — type
 this session, or go fix mic access — rather than silently downgrading
 the student. Situational typing reverts to the mic on the next term;
 a denied mic stays sticky for the session, because it can't work
-anyway. And the XP reduction for typed answers applies **only when
+anyway — until the student says it is back: the typed turn offers "Mic back
+on? Speak instead", which goes through the permission prompt (2026-10-13). And the XP reduction for typed answers applies **only when
 voice was actually available**: penalising a student who physically
 can't speak is the opposite of what "never trap the student" is for.
 

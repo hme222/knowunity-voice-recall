@@ -5,7 +5,9 @@ import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../session/SessionBar'
 import { actionRowClass, Button, ChatBubble, MascotSlot, ScreenShell, HintCard } from '@/components'
-import { getTerm, nextAfter, recordOutcome, setSticky, sendTypedAnswer, setTypedAnswer, typedDraft, useSticky, SUBJECT, advancePractice, isPractising, useSession } from '@/lib/session'
+import { Cue, CueText } from '@/app/drill/Cue'
+import drillStyles from '../../drill/drill.module.css'
+import { hintFor, missCount, getTerm, nextAfter, recordOutcome, setSticky, sendTypedAnswer, setTypedAnswer, typedDraft, useSticky, SUBJECT, advancePractice, isPractising, useSession, drillRung, useDrillTerm } from '@/lib/session'
 import { DrillBar } from '../../drill/DrillBar'
 import styles from '../text.module.css'
 
@@ -24,6 +26,10 @@ function TextTurnScreen() {
   const urlSticky = searchParams.get('sticky') === '1'
   const sticky = urlSticky || sessionSticky
   const current = getTerm(index)
+  // In a drill, the rung's own cue — "Define:" and the thinned definition — not the
+  // session's "Explain:" question (UX critic, 2026-10-13).
+  const drillTerm = useDrillTerm()
+  const rung = drillStep ? drillRung(drillTerm, Number(drillStep)) : undefined
   // Seeded from the student's own draft, and from NOTHING ELSE. History: docs/code-history.md#h-094
   const state = useSession()
   const [edited, setAnswer] = useState<string | null>(null)
@@ -85,6 +91,22 @@ function TextTurnScreen() {
           {/* Centred, as 01 Idle centres "Type instead": the pair reads as one family
               (coherence critic, 2026-10-13). */}
           <div className={`${actionRowClass} ${styles.rowCentred}`}>
+            {/* Typed mode after a denial was for the whole session. Once the mic is back
+                on, the student can go back to it here, through the permission prompt:
+                Allow clears the denial and opens the mic on this question (designer,
+                2026-10-13, option C). */}
+            {sticky && !drillStep && (
+              <Button
+                CTA="Mic back on? Speak instead"
+                variant="Tertiary"
+                size="S"
+                onClick={() =>
+                  router.push(
+                    `/permission/prompt?next=${encodeURIComponent(`/session/recording/${index}`)}&alt=${encodeURIComponent(`/text/turn?term=${index}`)}`,
+                  )
+                }
+              />
+            )}
             {!sticky && (
               <Button
                 CTA="Say it instead"
@@ -109,18 +131,41 @@ function TextTurnScreen() {
       <div className={styles.body}>
         {/* Knowie and the accented term, as on every voice screen. History: docs/code-history.md#h-096 */}
         <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
-        <ChatBubble showTitle title={`${SUBJECT} · Explain: `} titleAccent={current.name} body={current.prompt} />
+        {rung ? (
+          <>
+            <p className={`${drillStyles.termPill} ${styles.pill}`}>
+              Define: <span className={drillStyles.termPillName}>{drillTerm.name}</span>
+            </p>
+            <div className={drillStyles.cueCard}>
+              <Cue className={drillStyles.cueBody} text={rung.cue} />
+            </div>
+          </>
+        ) : (
+          <ChatBubble showTitle title={`${SUBJECT} · Explain: `} titleAccent={current.name} body={current.prompt} />
+        )}
         {/* A typed retry carries its hint, as the spoken retry does under the mic. */}
-        {hinted && <HintCard body={current.hint} />}
-        <label>
-          <textarea
-            className={styles.field}
-            value={answer}
-            onChange={(e) => { setAnswer(e.target.value); setTypedAnswer(index, e.target.value) }}
-            placeholder="Type your answer…"
-            aria-label="Your answer"
-          />
-        </label>
+        {hinted && (() => {
+          const gap = hintFor(current, missCount(state, index)).gap
+          return gap ? <HintCard label="Fill the gap" body={<CueText text={gap} />} /> : <HintCard body={current.hint} />
+        })()}
+        {/* The field and its note as one group, so the note sits under the field rather
+            than a section's gap away. */}
+        <div className={styles.fieldGroup}>
+          <label>
+            <textarea
+              className={styles.field}
+              value={answer}
+              onChange={(e) => { setAnswer(e.target.value); setTypedAnswer(index, e.target.value) }}
+              placeholder="Type your answer…"
+              aria-label="Your answer"
+              aria-describedby="send-note"
+            />
+          </label>
+          {/* Why Send is disabled, said rather than left to be guessed (UX critic). */}
+          <p id="send-note" className={styles.note}>
+            {answer.trim() ? 'Send when you’re ready.' : 'Type your answer to send it.'}
+          </p>
+        </div>
       </div>
     </ScreenShell>
   )

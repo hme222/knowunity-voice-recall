@@ -39,14 +39,16 @@ export default function DrillEchoPage() {
     >
       <div className={styles.frameBody}>
         <MascotSlot size="2XL" expression="laughing" />
-        <Chips
-          Text={STUMBLES.third.verdict}
-          size="S"
-          color="Partial"
-          active
-          showLeftIcon={false}
-          showRightIcon={false}
-        />
+        <div className={[styles.fullWidth, styles.verdictRow].join(' ')}>
+          <Chips
+            Text={STUMBLES.third.verdict}
+            size="S"
+            color="Partial"
+            active
+            showLeftIcon={false}
+            showRightIcon={false}
+          />
+        </div>
         <HintCard
           className={styles.fullWidth}
           label="Say this with me"

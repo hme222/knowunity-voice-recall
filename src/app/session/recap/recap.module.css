@@ -164,13 +164,6 @@
   background: var(--color-semantic-feedback-partial-bold);
 }
 
-.sureMissed {
-  margin: 0;
-  color: var(--color-semantic-text-warning);
-  font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
-}
 
 .summary {
   margin: 0;
@@ -209,14 +202,6 @@
   text-underline-offset: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
 }
 
-/* The terms said back unaided, by name. */
-.wins {
-  margin: 0;
-  color: var(--color-semantic-text-success);
-  font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
-}
 
 /* "Comes back tomorrow." / "Drilled.": what happens next, in the quiet secondary tone
    so it does not compete with the warning notes above it. */
@@ -226,4 +211,32 @@
   font-weight: var(--typography-style-body-s-regular-font-weight);
   font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
   line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
+}
+
+/* The student's key phrase under a got term: their words as the study note (reach 2). */
+.rowQuote {
+  display: block;
+  color: var(--color-semantic-text-secondary);
+  font-style: italic;
+  font-weight: var(--typography-style-body-s-regular-font-weight);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
+}
+
+/* Rows build in one by one, a standard beat apart, after the headline (reach 2).
+   Transform and opacity only; nothing moves under reduced motion. */
+.row {
+  animation: rowIn calc(var(--motion-semantic-duration-standard) * 1ms) var(--motion-semantic-easing-standard)
+    calc((var(--i, 0) + 1) * var(--motion-semantic-duration-standard) * 1ms) both;
+}
+
+@keyframes rowIn {
+  from { opacity: 0; transform: translateY(calc(var(--size-primitive-space-200) * var(--size-primitive-unit))); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row {
+    animation: none;
+  }
 }

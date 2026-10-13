@@ -14,12 +14,13 @@ import {
   actionRowClass,
 } from '@/components'
 import { confidenceFor, getTerm, hintFor, markHinted, nextAfter, recordOutcome, shownAnswer, useSession, missCount } from '@/lib/session'
+import { CueText } from '@/app/drill/Cue'
 import styles from '../../result.module.css'
 
 // 05 Miss + Hint — Figma frame "05 Miss + Hint (refreshed 2)" (15672:26357).
-// One hint, then retry or reveal. There is no second hint (docs/sprint-context.md
-// § "Not building this sprint"). Skip is a quiet Tertiary link below the primary pair,
-// the placement resolved in the Skip/Reveal comparison.
+// The hint, then retry or reveal. The second miss adds the drill's first-letter gap
+// (designer, 2026-10-13, option B); the third offers only the reveal. Skip is in the
+// top bar, as on every turn screen.
 
 function MissScreen({ index }: { index: number }) {
   // The hint is on this screen, so the run now contains a hint for this term. History: docs/code-history.md#h-056
@@ -54,7 +55,8 @@ function MissScreen({ index }: { index: number }) {
         ? 'Start from the hint, then have another go.'
         : typedMiss
           // The fixture title describes the canned spoken partial, not what was typed.
-          ? 'Not there yet. Build on the hint below.'
+          // Not "Not there yet": the chip above already says "Not quite yet".
+          ? 'Build on the hint below, then have another go.'
           : current?.missTitle ?? ''
   // Already incurred, not promised: the tap happened and the answer was wrong.
   const wasSureHere = Boolean(confidenceFor(state, index)?.wasSure)
@@ -141,12 +143,19 @@ function MissScreen({ index }: { index: number }) {
           state="Neutral"
           title={missHeadline}
           transcript={`“${shownAnswer(index, 'Miss', state)}”`}
+          label={state.sentTyped?.[index] ? 'You wrote' : undefined}
           // The student's own words on every rung (UX critic and reach, 2026-10-13): on
           // the second miss the chip sat over nothing, and the take is what the hint
           // is meant to be read against. The body scrolls at 390x668 if it must.
           showTranscript
         />
-        <HintCard body={step?.hint ?? current.hint} />
+        {/* Rung 2 hands over more: the definition around the missed word, its first
+            letter given and the rest a drawn blank, as the drill's letter rung does. */}
+        {step?.gap && step.canRetry ? (
+          <HintCard label="Fill the gap" body={<CueText text={step.gap} />} />
+        ) : (
+          <HintCard body={step?.hint ?? current.hint} />
+        )}
       </div>
     </ScreenShell>
   )

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { Button, MascotSlot, ScreenShell, StatChip } from '@/components'
-import { sessionTotals, TOTAL_TERMS, useSession, firstUnanswered, termHref, startRun } from '@/lib/session'
+import { runXp, TOTAL_TERMS, useSession, firstUnanswered, termHref, startRun } from '@/lib/session'
 import styles from '../interrupt.module.css'
 
 // Session resume. Implied by banking per-term XP on leaving — the Design Brief says progress saves and returning… History: docs/code-history.md#h-080
@@ -10,7 +10,7 @@ import styles from '../interrupt.module.css'
 export default function ResumePage() {
   const router = useRouter()
   const state = useSession()
-  const totals = sessionTotals(state)
+  const xp = runXp(state)
   const done = state.outcomes.length
   // The first term with no outcome, not `done + 1`: outcomes are not always terms 1..n
   // in order (dev review, 2026-10-12). Through termHref, so a mic-denied run resumes
@@ -59,6 +59,8 @@ export default function ResumePage() {
             fullWidth
             onClick={() => router.push(termHref(next, state))}
           />
+          {/* Keeps the XP: startSession banks the run it replaces (designer, 2026-10-13).
+              It used to discard it, directly under "Your XP is safe". */}
           <Button CTA="Start fresh" variant="Tertiary" size="M" fullWidth onClick={() => router.push(startRun())} />
         </div>
       }
@@ -69,10 +71,10 @@ export default function ResumePage() {
         <div className="screenTitle">
           <h1 className="screenTitleHeading">You were partway through</h1>
           <p className="screenTitleCaption">
-            {`${done} of ${TOTAL_TERMS} done. Your XP is safe — only the finishing bonus is still up for grabs.`}
+            {`${done} of ${TOTAL_TERMS} done. Your XP is yours either way — picking up keeps the finishing bonus in reach.`}
           </p>
         </div>
-        <StatChip stat="XP" value={`+${totals.earned}`} />
+        <StatChip stat="XP" value={`+${xp}`} />
       </div>
     </ScreenShell>
   )

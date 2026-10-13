@@ -2,9 +2,12 @@
 
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Button, ConfidenceAsk, ProcessingBeat, RecallResultCaptured, ScreenShell } from '@/components'
+import { Chips, ConfidenceAsk, ProcessingBeat, RecallResultCaptured, ScreenShell } from '@/components'
+import { CheckIcon } from '@/components/icons'
+import { DrillBar } from '../../drill/DrillBar'
+import drillStyles from '../../drill/drill.module.css'
 import styles from '../text.module.css'
-import { processingDwell } from '@/lib/motion'
+import { processingDwell, verdictHold } from '@/lib/motion'
 import { SessionBar } from '../../session/SessionBar'
 import { DRILL_TOTAL_RUNGS, markEarned, recordConfidence, recordMiss, typedVerdict, useSession } from '@/lib/session'
 import { doorResultHref } from '@/app/door/doors'
@@ -29,6 +32,8 @@ function CheckingScreen() {
   const drillStep = searchParams.get('drill')
 
   const [asking, setAsking] = useState(false)
+  // A typed drill round that passed says "Got it" before the next, as a spoken one does.
+  const [got, setGot] = useState(false)
 
   // Once only: the grace timer and a tap can both land, and a double tap on Sure ran
   // this twice — recordMiss twice for one miss (engineering review, 2026-10-13).
@@ -44,8 +49,11 @@ function CheckingScreen() {
       // The last rung finishes the drill, as the spoken path does. Typed, rung 4's pass
       // pushed /drill/pass/5, which does not exist, and bounced to the drill intro.
       const step = Number(drillStep)
-      if (verdict === 'pass' && step >= DRILL_TOTAL_RUNGS) markEarned(state.drillTerm ?? index, 'Drill')
-      router.replace(verdict === 'pass' ? (step >= DRILL_TOTAL_RUNGS ? '/drill/complete' : `/drill/pass/${step + 1}`) : '/drill/miss')
+      // A miss goes to the stumble with the typed words, not the spoken mock's take.
+      if (verdict !== 'pass') return router.replace('/drill/miss?typed=1')
+      if (step >= DRILL_TOTAL_RUNGS) markEarned(state.drillTerm ?? index, 'Drill')
+      setGot(true)
+      window.setTimeout(() => router.replace(step >= DRILL_TOTAL_RUNGS ? '/drill/complete' : `/drill/pass/${step + 1}`), verdictHold())
       return
     }
     if (sure !== undefined) {
@@ -83,25 +91,38 @@ function CheckingScreen() {
 
   return (
     <ScreenShell
-      topNavigation={<SessionBar index={index} />}
+      topNavigation={drillStep ? <DrillBar step={Number(drillStep)} onExit={() => router.push('/picker')} /> : <SessionBar index={index} />}
       // Reserve the action zone before the question arrives. History: docs/code-history.md#h-091
       showBottomNavSlot
       bottomContent={
-        asking ? <ConfidenceAsk onAnswer={onward} /> : undefined
+        asking ? <ConfidenceAsk onAnswer={onward} onDecline={() => onward()} /> : undefined
       }
     >
       <div className={styles.checkingBody}>
         <ProcessingBeat
-          line={asking ? 'Before I show you — how did that feel?' : 'Checking that against the definition…'}
+          line={
+            got
+              ? Number(drillStep) >= DRILL_TOTAL_RUNGS
+                ? 'Got it. That’s the whole definition.'
+                : `Got it. On to round ${Number(drillStep) + 1}.`
+              : asking
+                ? 'Before I show you — how did that feel?'
+                : 'Checking that against the definition…'
+          }
+          // No "working" dots while the question waits on the student, or once judged.
+          working={!asking && !got}
           // The typed answer shown back before judging, as the spoken path shows its
           // transcript (UX critic, 2026-10-13).
-          above={asking && typedText ? <RecallResultCaptured title="Here’s what you wrote." transcript={typedText.trim()} /> : undefined}
+          above={
+            got ? (
+              <div className={drillStyles.verdictRow}>
+                <Chips Text="Got it" size="S" color="Primary" active showLeftIcon leftIcon={<CheckIcon />} showRightIcon={false} />
+              </div>
+            ) : asking && typedText ? (
+              <RecallResultCaptured title="Here’s what you wrote." label="You wrote" transcript={typedText.trim()} />
+            ) : undefined
+          }
         />
-        {asking && (
-          <div className={styles.justCheck}>
-            <Button CTA="Just check it" variant="Tertiary" size="S" onClick={() => onward()} />
-          </div>
-        )}
       </div>
     </ScreenShell>
   )

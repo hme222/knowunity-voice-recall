@@ -1,10 +1,14 @@
+import type { ReactNode } from 'react'
 import styles from './HintCard.module.css'
 
 // Mirrors the Figma component `hintCard` (15651:10676). No variants, no properties.
 
 export type HintCardProps = {
-  /** The one body line. */
-  body: string
+  /**
+   * The one body line. Usually a string; a node when the line carries drawn blanks
+   * (05 Miss's second rung borrows the drill's gap, which Cue draws as rules).
+   */
+  body: ReactNode
   /**
    * The label above the body. Defaults to "Hint", which is what the core loop's frames
    * show. The drill's DD 07 frame labels the same card "The missing word", because

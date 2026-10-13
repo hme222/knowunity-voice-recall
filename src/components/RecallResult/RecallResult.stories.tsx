@@ -60,3 +60,11 @@ export const MissWithoutTranscript: Story = {
     showTranscript: false,
   },
 }
+
+/** A typed answer: the eyebrow says "You wrote", not "You said". */
+export const Typed: Story = {
+  args: {
+    label: 'You wrote',
+    transcript: '“The charge an atom has when the bonding electrons are split evenly.”',
+  },
+}

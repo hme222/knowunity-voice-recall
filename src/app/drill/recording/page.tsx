@@ -1,10 +1,10 @@
 'use client'
 
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { actionRowClass, micRegionClass, Button, MicButton, RecordingStatus, ScreenShell } from '@/components'
-import { drillRung, useDrillTerm } from '@/lib/session'
+import { DRILL_COULDNT_HEAR_UNDER_MS, drillRung, useDrillTerm } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
 
@@ -23,12 +23,33 @@ function DrillRecording() {
   const rung = drillRung(drillTerm, step)
   const [seconds, setSeconds] = useState(0)
   const [paused, setPaused] = useState(false)
+  // Un-paused time, measured as the session's recording measures it, so a sub-2s take
+  // can be caught as a mishear rather than judged (UX critic, 2026-10-13).
+  const segmentStart = useRef(0)
+  const banked = useRef(0)
 
   useEffect(() => {
     if (paused) return
+    segmentStart.current = Date.now()
     const id = window.setInterval(() => setSeconds((s) => s + 1), 1000)
     return () => window.clearInterval(id)
   }, [paused])
+
+  function togglePause() {
+    if (!paused) banked.current += Date.now() - segmentStart.current
+    setPaused((was) => !was)
+  }
+
+  function submit() {
+    const took = banked.current + (paused ? 0 : Date.now() - segmentStart.current)
+    // Under the couldn't-hear floor, every take goes to Captured, which says so; a
+    // stumble take rides along so "Say it again" returns to the same rung.
+    if (took < DRILL_COULDNT_HEAR_UNDER_MS) {
+      router.push(`/drill/captured?step=${step}&ms=${took}${stumble ? `&stumble=${stumble}` : ''}`)
+      return
+    }
+    router.push(afterTake.startsWith('/drill/captured') ? `${afterTake}&ms=${took}` : afterTake)
+  }
 
   useRedirect(!rung, '/drill/intro')
 
@@ -43,7 +64,7 @@ function DrillRecording() {
               and the pulse ring kept animating while the caption said stopped. */}
           <MicButton
             state={paused ? 'Paused' : 'Listening'}
-            onClick={() => setPaused((p) => !p)}
+            onClick={togglePause}
           />
           {/* With the mic, as on 02 Recording. */}
           <div className={styles.micCaption}>
@@ -59,7 +80,7 @@ function DrillRecording() {
             variant="Primary"
             size="M"
             fullWidth
-            onClick={() => router.push(afterTake)}
+            onClick={submit}
           />
           {/* The session's recording escapes, here too (UX critic, 2026-10-13): discard
               and re-record before sending, or answer this rung by typing. */}
@@ -69,6 +90,8 @@ function DrillRecording() {
               variant="Tertiary"
               size="S"
               onClick={() => {
+                banked.current = 0
+                segmentStart.current = Date.now()
                 setSeconds(0)
                 setPaused(false)
               }}

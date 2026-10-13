@@ -336,7 +336,7 @@ Durations in milliseconds, and easing curves.
 
 ## Motion semantics
 
-`motion.semantic.*` — 10 tokens
+`motion.semantic.*` — 11 tokens
 
 Named timings.
 
@@ -346,6 +346,7 @@ Named timings.
 | `motion.semantic.duration.standard` | `{motion.primitive.duration.250}` | `250` | State transitions: idle to recording, processing to result, the Voice UX Reference's Must-state beats. |
 | `motion.semantic.duration.swipe` | `{motion.primitive.duration.300}` | `300` | Card-to-card transition when the student swipes between due quizzes on the plan-active home. Longer than standard because the card travels a full screen-width and the count badge and dots update with it; the motion has to read as one continuous movement, not a state flip. |
 | `motion.semantic.duration.processingDwell` | `{motion.primitive.duration.1400}` | `1400` | How long Processing and the typed checking beat hold before resolving. One token because they are the same designed beat: they were previously written as 1400 and 1200, two numbers for one decision. |
+| `motion.semantic.duration.verdictHold` | `{motion.primitive.duration.1100}` | `1100` | How long a drill round's "Got it" chip holds before the next round opens (designer, 2026-10-13: rounds passed silently). Shorter than processingDwell: it confirms a result the student expects, it does not make them wait for one. |
 | `motion.semantic.duration.slowThreshold` | `{motion.primitive.duration.6000}` | `6000` | When Processing escalates to "still thinking" in place. (It also offered a connection path until 2026-10-12, when the offline screen was removed.) |
 | `motion.semantic.duration.confidenceGrace` | `{motion.primitive.duration.10000}` | `10000` | How long "How sure are you?" waits for a tap before Processing advances without one — the tap is optional, not a gate (designer, 2026-10-09). An unanswered ask records no confidence: no reward, no cost. |
 | `motion.semantic.duration.ambient` | `{motion.primitive.duration.1100}` | `1100` | Looping ambient timing, e.g. the mic listening-state pulse. |
@@ -376,7 +377,7 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 `component.*` — 41 tokens
 
-> Component tokens exist only when a component's bindings actually branch by state or variant in a way that benefits from its own indirection layer between it and the semantic tokens, not as documentation-only aliases for a value that never changes. micButton is the only entry here on purpose: its four states each pair with a different semantic token, and these tokens are the real thing its Figma variables are bound to, not a restatement of them. chatBubble and hintCard never branch, they bind straight to semantic tokens with nothing in between, so a component.chatBubble.* or component.hintCard.* entry here would just be a second name for a value already named once. optionRow does branch by state the same way micButton does, four variants, four different fills, but its Figma variants bind straight to the semantic tokens directly rather than through a component-specific layer. That's an inconsistency with micButton's pattern, not a mistake exactly, treat micButton's indirection layer as the older, legacy approach rather than the template: an indirection layer that never diverges from what it aliases is upkeep with no payoff. Don't add one to a new component by default. Add one only when there's a concrete reason a component's own token might need to move independently of the semantic token it currently matches.
+> Component tokens exist only when a component's bindings actually branch by state or variant in a way that benefits from its own indirection layer between it and the semantic tokens, not as documentation-only aliases for a value that never changes. The group holds button, scaffold, micButton, strengthMeter and bottomSheet (corrected 2026-10-13, system critic: this said micButton was the only entry). micButton is here because its four states each pair with a different semantic token, and these tokens are the real thing its Figma variables are bound to, not a restatement of them; scaffold, button and bottomSheet carry component dimensions with no semantic equivalent; strengthMeter carries a colour ramp the semantic layer does not have (the recorded exception in docs/design-system.md). chatBubble and hintCard never branch, they bind straight to semantic tokens with nothing in between, so a component.chatBubble.* or component.hintCard.* entry here would just be a second name for a value already named once. optionRow does branch by state the same way micButton does, four variants, four different fills, but its Figma variants bind straight to the semantic tokens directly rather than through a component-specific layer. That's an inconsistency with micButton's pattern, not a mistake exactly, treat micButton's indirection layer as the older, legacy approach rather than the template: an indirection layer that never diverges from what it aliases is upkeep with no payoff. Don't add one to a new component by default. Add one only when there's a concrete reason a component's own token might need to move independently of the semantic token it currently matches.
 
 | Token | Value | Resolves to | Notes |
 | --- | --- | --- | --- |
@@ -424,4 +425,4 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ---
 
-324 tokens across 10 groups.
+325 tokens across 10 groups.

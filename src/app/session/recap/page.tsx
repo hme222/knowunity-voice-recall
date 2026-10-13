@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { openSheet } from '@/lib/navigation'
 import { AppBar, Button, ButtonIcon, HintCard, MascotSlot, ScreenShell } from '@/components'
 import { CloseIcon, EyeIcon } from '@/components/icons'
-import { Bucket, getTerm, sessionTotals, setPractising, TOTAL_TERMS, useSession, XP } from '@/lib/session'
+import { Bucket, getTerm, keyPhrase, sessionTotals, setPractising, TOTAL_TERMS, typedByChoice, useSession, XP } from '@/lib/session'
 import styles from './recap.module.css'
 
 // 07 Recap — Figma frame "07 Recap (refreshed)" (15672:24456). History: docs/code-history.md#h-065
@@ -75,6 +75,9 @@ export default function RecapPage() {
   // term was skipped or lost to the mic paid +5 for nothing (engineering review).
   const bonusEarned = complete && resolved > 0
   const xpShown = bonusEarned ? totals.withBonus : totals.earned
+  // The typed rate, explained once, here, rather than implied by a smaller number on
+  // every typed screen (designer, 2026-10-13: keep 7, fix the language).
+  const anyTypedByChoice = outcomes.some((o) => o.typed && typedByChoice(state, o.index))
 
   return (
     <ScreenShell
@@ -148,17 +151,6 @@ export default function RecapPage() {
             ))}
           </div>
         )}
-        {/* The win, named (Knowunity design review): the hero said "2 of 4" and never
-            which two, and the Unaided rows sat below the fold under the misses. The
-            misses-first order stays; this puts the wins in the first viewport. */}
-        {unaidedNames.length > 0 && unaidedNames.length < counted && (
-          <p className={styles.wins}>{`Without help: ${unaidedNames.join(', ')}`}</p>
-        )}
-        {sureMissed > 0 && (
-          <p className={styles.sureMissed}>
-            {sureMissed === 1 ? 'You were sure about 1 you missed.' : `You were sure about ${sureMissed} you missed.`}
-          </p>
-        )}
       </div>
 
       {/* XP and time, one line, not three coloured tiles with 9px labels; the working
@@ -170,6 +162,21 @@ export default function RecapPage() {
             {`\u26a1 +${xpShown} XP \u00b7 ${totals.elapsed}`}
             <span className={styles.summaryCue}>How it adds up</span>
           </summary>
+          {/* The secondary lines live here now, under the one line that opens them: the
+              headline area carried a green line and an amber line on top of the strip,
+              and the first bucket fell half under the fold at 390x668 (craft critic,
+              2026-10-13). The rows still mark each sure-and-missed term. */}
+          {unaidedNames.length > 0 && unaidedNames.length < counted && (
+            <p className={styles.working}>{`Without help: ${unaidedNames.join(', ')}.`}</p>
+          )}
+          {sureMissed > 0 && (
+            <p className={styles.working}>
+              {sureMissed === 1 ? 'You were sure about 1 you missed.' : `You were sure about ${sureMissed} you missed.`}
+            </p>
+          )}
+          {anyTypedByChoice && (
+            <p className={styles.working}>{`Typed answers earn ${XP.hinted} XP and said ones ${XP.unaided}: saying it out loud is the skill this practises.`}</p>
+          )}
           <p className={styles.working}>
             {[
               `+${totals.termXp} from the terms below`,
@@ -189,7 +196,7 @@ export default function RecapPage() {
         {outcomes.length === 0 && state && (
           <p className={styles.empty}>Nothing recorded yet — this session hasn&rsquo;t been run.</p>
         )}
-        {order.map((bucket) => {
+        {(() => { let built = 0; return order.map((bucket) => {
           const rows = outcomes
             .filter((o) => o.bucket === bucket)
             // Confidently-wrong sorts first. The signal drives the list, it doesn't decorate it.
@@ -198,10 +205,15 @@ export default function RecapPage() {
           return (
             <section key={bucket} className={styles.bucket}>
               <h2 className={styles.bucketLabel}>{`${bucket} · ${rows.length}`}</h2>
-              {rows.map((row) => (
-                <div key={row.index} className={styles.row} data-bucket={bucket}>
+              {rows.map((row) => {
+                const phrase = bucket === 'Unaided' || bucket === 'Hinted' ? keyPhrase(row.index, state) : ''
+                return (
+                // One by one, in reading order (reach 2); still under reduced motion.
+                <div key={row.index} className={styles.row} data-bucket={bucket} style={{ ['--i' as string]: built++ }}>
                   <span className={styles.rowTerm}>
                     {getTerm(row.index)?.name}
+                    {/* The student's own words that carried it, as the study note (reach 2). */}
+                    {phrase && <span className={styles.rowQuote}>{`“${phrase}”`}</span>}
                     {/* Any term the student was sure about and did not get first time, not only the skipped ones. History: docs/code-history.md#h-067 */}
                     {row.micTrouble ? (
                       <span className={styles.rowNote}>The mic missed it. Not counted.</span>
@@ -212,7 +224,7 @@ export default function RecapPage() {
                     )}
                     {/* Typed, said so: "Unaided" on its own read as said aloud
                         (usability review, 2026-10-12). */}
-                    {row.typed && !row.micTrouble && <span className={styles.rowNote}>Typed, not said aloud.</span>}
+                    {row.typed && !row.micTrouble && <span className={styles.rowReturn}>Typed.</span>}
                     {/* The return, said where the miss is (2a): the term goes on the
                         review list, and home offers it tomorrow. */}
                     {(bucket === 'Revealed' || bucket === 'Worth revisiting') && (
@@ -231,14 +243,20 @@ export default function RecapPage() {
                     variant="Overlay"
                     size="S"
                     icon={<EyeIcon />}
-                    label={`See what you said for ${getTerm(row.index)?.name}`}
+                    // A skipped term has no take: the sheet shows the answer (UX critic).
+                    label={
+                      bucket === 'Worth revisiting' || bucket === 'Revealed'
+                        ? `See the answer for ${getTerm(row.index)?.name}`
+                        : `See what you ${row.typed ? 'wrote' : 'said'} for ${getTerm(row.index)?.name}`
+                    }
                     onClick={() => openSheet(router, `/session/transcript/${TRANSCRIPT_BUCKET[bucket]}?term=${row.index}${row.micTrouble ? '&mic=1' : ''}${row.typed ? '&typed=1' : ''}`)}
                   />
                 </div>
-              ))}
+                )
+              })}
             </section>
           )
-        })}
+        }) })()}
       </div>
 
       {/* THE RECAP ENDS ON WHAT WAS LEARNED — designer, 2026-10-09. The numbers and the

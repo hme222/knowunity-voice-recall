@@ -27,6 +27,10 @@ function PassScreen({ index }: { index: number }) {
   const withHint = hinted || (!practising && outcome?.bucket === 'Hinted')
   const typed = Boolean(state.sentTyped?.[index])
   const verdict = ['Correct', typed && 'typed', withHint && 'with a hint'].filter(Boolean).join(', ')
+  // The take that missed, when this pass came after one: shown faded above this one, so
+  // the screen proves the improvement, not just the result (designer, 2026-10-13,
+  // reach 1). A first-time pass has no "before" and looks as it always did.
+  const firstTake = state.firstTakes?.[index]
 
   // Pays only against a judged take's receipt (engineering review, 2026-10-13). Opened
   // cold, with no receipt and nothing passed on this term, it goes back to the question
@@ -62,13 +66,27 @@ function PassScreen({ index }: { index: number }) {
         {/* 3XL on a first-time pass: the win is the one moment Knowie is bigger than
             the ask, and the space under the card was empty anyway. Gives way on short
             screens like every other mascot. */}
-        <MascotSlot size={practising ? '2XL' : '3XL'} expression="excited" className={`${styles.mascotCentred} ${practising ? '' : styles.celebrate}`} />
+        <MascotSlot size={practising || firstTake ? '2XL' : '3XL'} expression="excited" className={`${styles.mascotCentred} ${practising ? '' : styles.celebrate}`} />
         {/* A "Correct" chip, matching the partial's "Partially right": the verdict is
             not carried by the green card alone (designer, 2026-10-12). */}
         <div className={styles.verdictRow}>
           <Chips Text={verdict} size="S" color="Primary" active showLeftIcon leftIcon={<CheckIcon />} showRightIcon={false} />
         </div>
-        <RecallResult state="Pass" title={current.passTitle} transcript={`“${answerFor(index, state)}”`} className={practising ? undefined : styles.rise} />
+        {/* One line, label run in: as two lines it pushed the confidence sentence
+            under the fold at 390x668. */}
+        {firstTake && (
+          <p className={styles.before}>
+            <span className={styles.beforeLabel}>First try </span>
+            {`“${firstTake}”`}
+          </p>
+        )}
+        <RecallResult
+          state="Pass"
+          title={current.passTitle}
+          transcript={`“${answerFor(index, state)}”`}
+          label={firstTake ? (typed ? 'Just now, you wrote' : 'Just now') : typed ? 'You wrote' : undefined}
+          className={practising ? undefined : styles.rise}
+        />
         {/* The XP and the confidence line live here, in the content, not in the action
             zone: there they pushed Continue 14px below every other single button
             (critic panel, 2026-10-12). */}

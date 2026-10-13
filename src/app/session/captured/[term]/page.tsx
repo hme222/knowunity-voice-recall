@@ -72,7 +72,9 @@ function CapturedScreen({ index }: { index: number }) {
           }}
         />
       }
-      bottomContent={<ConfidenceAsk onAnswer={answer} />}
+      // "Just check it" under the pair it declines, not above it in the content
+      // (craft critic, 2026-10-13: the order read reversed).
+      bottomContent={<ConfidenceAsk onAnswer={answer} onDecline={() => answer()} />}
     >
       <div className={styles.body}>
         {/* Knowie has just heard you and is holding it up — "here's what I heard". */}
@@ -108,13 +110,6 @@ function CapturedScreen({ index }: { index: number }) {
               router.push(`/text/turn?term=${index}`)
             }}
           />
-        </div>
-        {/* The confidence ask is optional: "Just check it" moves on without one. Not
-            "Skip", which everywhere else skips the TERM. Pinned to the foot of the
-            body, directly above the Sure / Not sure pair it belongs to (UX critic,
-            2026-10-13: mid-screen it was easy to miss). The zone itself is full. */}
-        <div className={styles.justCheck}>
-          <Button CTA="Just check it" variant="Tertiary" size="S" onClick={() => answer()} />
         </div>
       </div>
     </ScreenShell>

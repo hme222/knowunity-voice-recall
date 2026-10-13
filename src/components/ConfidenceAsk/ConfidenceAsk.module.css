@@ -24,3 +24,15 @@
 .pair > * {
   flex: 1;
 }
+
+/* With a decline: the question left, its decline right, on one line. */
+.askRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+}
+
+.askRow .ask {
+  text-align: left;
+}

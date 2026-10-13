@@ -52,7 +52,7 @@ export default function PracticePage() {
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="laughing" />
         <div className="screenTitle">
-          <h1 className="screenTitleHeading">Go back over what you missed</h1>
+          <h1 className="screenTitleHeading">Practice what you missed</h1>
           {plan.length > 0 && (
             <p className="screenTitleCaption">
               {/* True whatever was picked: "Knowie picked a way for each" over rows that all
@@ -99,11 +99,14 @@ export default function PracticePage() {
                       variant="Tertiary"
                       size="S"
                       className={styles.rowAlt}
+                      // Named per term: three "or say it" links read identically out of
+                      // context (UX critic, 2026-10-13).
+                      aria-label={`${other === 'drill' ? 'Drill' : 'Say'} ${term?.name} instead`}
                       onClick={() => go([{ index: o.index, mode: other }])}
                     />
                   </div>
                 </div>
-                <Button CTA={CTA[mode]} variant="Secondary" size="S" onClick={() => go([{ index: o.index, mode }])} />
+                <Button CTA={CTA[mode]} aria-label={`${CTA[mode]}: ${term?.name}`} variant="Secondary" size="S" onClick={() => go([{ index: o.index, mode }])} />
               </li>
             )
           })}

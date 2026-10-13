@@ -1303,6 +1303,14 @@ tells you which layer it lives in just by shape.
   for colour: no component or screen reads `color.primitive.*`. Add a
   semantic spacing token when the same primitive starts meaning the same
   thing in three places.
+  **Recorded exception (2026-10-13, system critic): the StrengthMeter
+  ramp.** `component.strengthMeter.track` and `fill.*` reference
+  `color.primitive.neutral.600` and the `moss` ramp directly. The meter's
+  yellow-green family has no semantic meaning anywhere else — it is not
+  success, not partial — so a semantic token would name one use. The
+  component token layer is where the reach to the primitive happens; the
+  component's CSS still reads only `component.strengthMeter.*`. A second
+  consumer of that ramp means promoting it to a semantic token.
 - **Never build something new when a component in this system already
   does the job.** Check the "which component" section and the file
   itself before adding anything. A slightly-wrong existing component

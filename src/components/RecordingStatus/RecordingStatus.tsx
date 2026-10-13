@@ -21,13 +21,16 @@ export function RecordingStatus({ seconds, paused = false, className }: Recordin
       {/* Paused: no visible word — the mic's pause symbol is enough (designer,
           2026-10-09). It stays for screen readers, since this is the live status and
           the only announcement that recording stopped. */}
-      <span className={paused ? 'sr-only' : styles.label} role="status" aria-live="polite">
+      {/* `srOnly`, the global: this said 'sr-only', a class that does not exist, so the
+          word rendered unstyled and two critics disagreed on whether it showed. */}
+      <span className={paused ? 'srOnly' : styles.label} role="status" aria-live="polite">
         {paused ? 'Paused' : 'Listening'}
       </span>
       <span className={styles.timer}>{formatElapsed(seconds * 1000)}</span>
-      {/* Gone while paused: the mic shows the pause symbol, which says it on its own
-          (designer, 2026-10-08). */}
-      {!paused && <span className={styles.caption}>Tap to pause</span>}
+      {/* What a tap does, in both states. Paused used to show nothing here, leaving the
+          way back to the pause symbol alone (UX critic, 2026-10-13). Hidden from
+          readers: the mic's own name says it. */}
+      <span className={styles.caption} aria-hidden="true">{paused ? 'Tap to resume' : 'Tap to pause'}</span>
     </div>
   )
 }

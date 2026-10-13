@@ -102,3 +102,32 @@
   display: flex;
   justify-content: center;
 }
+
+/* The denied screen's recovery steps, at body size: they are the only way back. */
+.how {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+  width: 100%;
+  text-align: left;
+}
+
+.howTitle {
+  margin: 0;
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-m-bold-font-weight);
+  font-size: calc(var(--typography-style-body-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-bold-line-height) * var(--size-primitive-unit));
+}
+
+.howSteps {
+  margin: 0;
+  padding-left: calc(var(--size-primitive-space-600) * var(--size-primitive-unit));
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-m-regular-font-weight);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * var(--size-primitive-unit));
+}

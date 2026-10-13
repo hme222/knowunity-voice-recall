@@ -38,3 +38,8 @@ export const WithMeter: Story = {
     above: <StrengthMeter fill={50} label="Scoring what you said unaided" />,
   },
 }
+
+/** Waiting on the student, not the judge: no dots under a question. */
+export const WaitingOnStudent: Story = {
+  args: { line: 'Before I show you — how did that feel?', working: false },
+}

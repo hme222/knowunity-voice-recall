@@ -53,10 +53,11 @@ export default function RevealPage({ params }: { params: Promise<{ term: string 
         </div>
       }
       topNavigation={<SessionBar index={index} />}
-      // "Continue" in the action zone, text-weight: the say-it-back mic is the invitation
-      // and this is the quiet way past it. The top-right slot only ever means Skip, so it
-      // no longer reads "Continue" on this one screen (coherence critic, 2026-10-13).
-      bottomContent={<Button CTA="Continue" variant="Tertiary" size="M" fullWidth onClick={moveOn} />}
+      // "Continue" in the action zone, as a pill like every other Continue (craft critic,
+      // 2026-10-13: text here, a pill on Pass), but Secondary: the say-it-back mic is the
+      // invitation and this is the quiet way past it. The top-right slot only ever means
+      // Skip (coherence critic, 2026-10-13).
+      bottomContent={<Button CTA="Continue" variant="Secondary" size="M" fullWidth onClick={moveOn} />}
     >
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="determined" />

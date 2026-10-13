@@ -3,7 +3,7 @@ import { expect } from 'storybook/test'
 import { RecordingStatus } from './RecordingStatus'
 
 const DESCRIPTION = `
-**WHAT:** The text under the mic on a recording screen — the \`LISTENING\` label, the elapsed timer, and "Tap to pause". **Paused shows only the timer** (designer, 2026-10-08/09): the mic's pause symbol says the rest. The word "Paused" stays in the DOM, visually hidden, as the live status for screen readers. Loose text nodes on the Figma frame; one component here because all three describe the same state and must never disagree.
+**WHAT:** The text under the mic on a recording screen — the \`LISTENING\` label, the elapsed timer, and "Tap to pause". **Paused shows the timer and "Tap to resume"** (designer, 2026-10-08/09; caption restored 2026-10-13 after the UX critic found no visible way back). The word "Paused" stays in the DOM, visually hidden, as the live status for screen readers. Loose text nodes on the Figma frame; one component here because all three describe the same state and must never disagree.
 
 **WHEN:** 02 Recording and DD 02 Recording, in the bottom region beneath the mic.
 
@@ -33,8 +33,9 @@ export const Paused: Story = {
     // Announced, not shown.
     const status = canvas.getByRole('status')
     await expect(status).toHaveTextContent('Paused')
-    await expect(status).toHaveClass('sr-only')
+    await expect(status).toHaveClass('srOnly')
     await expect(canvas.queryByText('Tap to pause')).toBeNull()
+    await expect(canvas.getByText('Tap to resume')).toBeVisible()
   },
 }
 export const LongTake: Story = { name: 'Long take — 1:07', args: { seconds: 67 } }

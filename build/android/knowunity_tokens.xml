@@ -89,6 +89,7 @@
   <integer name="motion_semantic_duration_standard">250</integer>
   <integer name="motion_semantic_duration_swipe">300</integer>
   <integer name="motion_semantic_duration_processing_dwell">1400</integer>
+  <integer name="motion_semantic_duration_verdict_hold">1100</integer>
   <integer name="motion_semantic_duration_slow_threshold">6000</integer>
   <integer name="motion_semantic_duration_confidence_grace">10000</integer>
   <integer name="motion_semantic_duration_ambient">1100</integer>
