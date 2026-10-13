@@ -2,49 +2,42 @@
 
 import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { getTerm, SUBJECT } from '@/lib/session'
-import { Button, MascotSlot, ScreenShell } from '@/components'
+import { BottomSheet, Button, ScreenShell } from '@/components'
+import { QuestionBehind } from '../QuestionBehind'
 import styles from '../permission.module.css'
 
-// Mic permission primer. No Figma frame — this exists only as a journey-map node.
-// voice-ux Principle 3: never fire the OS request cold. Prime it with our own screen
-// that explains the value, triggered by a clear user action, then let the OS dialog
-// appear. Modelled on Babbel, which asks at the speaking-practice moment.
+// Mic permission primer, asked IN CONTEXT (designer, 2026-10-12, option 1b from the
+// senior review). It used to be a full screen between 00 Intro and question 1, so a
+// student met four screens of Knowie and a paragraph before the first question. Now
+// the question comes first, and this sheet opens over it on the first mic tap — the
+// moment the mic is needed. voice-ux Principle 3: never fire the OS request cold.
+// Modelled on Babbel, which asks at the speaking-practice moment.
+//
+// `next` is where the mic tap was going; `alt` the typed route for "Type instead".
 
 function Primer() {
   const router = useRouter()
-  // A door run carries its door through the mic grant, so it still lands on the door's
-  // own result. The start screen's guided path arrives here from the quiz door.
-  const door = useSearchParams().get('door')
+  const params = useSearchParams()
+  const next = params.get('next') ?? '/session/recording/1'
+  const alt = params.get('alt') ?? '/text/turn?term=1'
+  const forward = `next=${encodeURIComponent(next)}&alt=${encodeURIComponent(alt)}`
   return (
     <ScreenShell
-      bottomContent={
-        <div className={styles.actions}>
-          <Button
-            CTA="Turn on the mic"
-            variant="Primary"
-            size="M"
-            fullWidth
-            onClick={() => router.push(door ? `/permission/prompt?door=${door}` : '/permission/prompt')}
-          />
-          <Button CTA="Not now" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/text/turn')} />
-        </div>
+      showBottomSheetBackground
+      bottomSheetOnly={
+        <BottomSheet
+          Title="Knowie needs your mic"
+          subtitle="To hear your answer. It only listens while you’re recording, and you can always type instead."
+          onDismiss={() => router.back()}
+        >
+          <div className={styles.actions}>
+            <Button CTA="Turn on the mic" variant="Primary" size="M" fullWidth onClick={() => router.push(`/permission/prompt?${forward}`)} />
+            <Button CTA="Type instead" variant="Tertiary" size="M" fullWidth onClick={() => router.push(alt)} />
+          </div>
+        </BottomSheet>
       }
     >
-      <div className={styles.body}>
-        {/* "Ready to say it out loud?" is an invitation, not a wait. */}
-        <MascotSlot size="2XL" expression="excited" />
-        <div className="screenTitle">
-          {/* From the quiz, the primer says what carries over — the same Chemistry, one
-              question, now out loud — before it asks for the mic (designer, 2026-10-11). */}
-          <h1 className="screenTitleHeading">{door === 'quiz' ? 'Now say it back' : 'Ready to say it back?'}</h1>
-          <p className="screenTitleCaption">
-            {door === 'quiz'
-              ? `Same ${SUBJECT} quiz, one question: explain ${getTerm(1)?.name.toLowerCase()} in your own words. Knowie needs your mic to hear you, and only listens while you’re recording. You can always type instead.`
-              : 'Knowie needs your mic to hear your answer. It only listens while you’re recording, and nothing is kept anywhere else. You can always type instead.'}
-          </p>
-        </div>
-      </div>
+      <QuestionBehind next={next} />
     </ScreenShell>
   )
 }

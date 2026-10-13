@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { Suspense, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { setSticky } from '@/lib/session'
 import { Button, MascotSlot, ScreenShell, TextBlock } from '@/components'
 import styles from '../permission.module.css'
@@ -14,8 +14,10 @@ import styles from '../permission.module.css'
 // Denied makes text sticky for the session: the mic can't work, so re-offering it
 // every term would be asking someone to do something they've already said they can't.
 
-export default function DeniedPage() {
+function Denied() {
   const router = useRouter()
+  // Back to the turn the student was on, typed, not always question 1.
+  const alt = useSearchParams().get('alt') ?? '/text/turn?term=1'
   const [showHow, setShowHow] = useState(false)
   return (
     <ScreenShell
@@ -30,7 +32,7 @@ export default function DeniedPage() {
               // The decision has to outlive this turn. voice-ux.md §3: denied stays
               // denied for the session, and it used to survive exactly one screen.
               setSticky()
-              router.push('/text/turn?term=1&sticky=1')
+              router.push(`${alt}${alt.includes('?') ? '&' : '?'}sticky=1`)
             }}
           />
           <Button
@@ -59,5 +61,13 @@ export default function DeniedPage() {
         )}
       </div>
     </ScreenShell>
+  )
+}
+
+export default function DeniedPage() {
+  return (
+    <Suspense fallback={null}>
+      <Denied />
+    </Suspense>
   )
 }

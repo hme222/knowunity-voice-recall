@@ -2,6 +2,7 @@
 
 import { useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import { startRun } from '@/lib/session'
 import { actionRowClass, Button, MascotSlot, SwipeChip } from '@/components'
 import { MicGlyphIcon } from '@/components/icons'
 import { useFocusTrap } from '@/lib/useFocusTrap'
@@ -24,7 +25,7 @@ export default function UnlockPage() {
     <HomeShell
       // The chip is the way in: it starts the session at 00 Intro, the second screen of
       // the prototype (designer, 2026-10-12). It went to the picker.
-      toolChip={<SwipeChip onClick={() => router.push('/session/intro')} />}
+      toolChip={<SwipeChip onClick={() => router.push(startRun())} />}
       popup={
         <div
           ref={dialogRef}
@@ -51,7 +52,7 @@ export default function UnlockPage() {
                 popup and left the student to tap the chip as a second step. */}
             <div className={`${actionRowClass} ${styles.unlockActions}`}>
               {/* Primary first, so the dialog's initial focus lands on it. */}
-              <Button CTA="Try it now" variant="Primary" size="M" fullWidth onClick={() => router.push('/session/intro')} />
+              <Button CTA="Try it now" variant="Primary" size="M" fullWidth onClick={() => router.push(startRun())} />
               <Button CTA="Later" variant="Tertiary" size="M" onClick={() => router.push('/home/unlocked')} />
             </div>
           </div>

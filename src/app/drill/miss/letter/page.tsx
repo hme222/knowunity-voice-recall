@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { micRegionClass, Button, Chips, HintCard, MascotSlot, MicButton, MicCaption, ScreenShell } from '@/components'
-import { STUMBLES, missedWordContext, useDrillTerm } from '@/lib/session'
+import { STUMBLES, micGate, missedWordContext, useDrillTerm } from '@/lib/session'
 import styles from '../../drill.module.css'
 import { Cue } from '../../Cue'
 import { DrillBar } from '../../DrillBar'
@@ -30,7 +30,7 @@ export default function DrillLetterPage() {
         <div className={micRegionClass}>
           {/* Records, then advances. It used to jump straight to the next rung, so the
               mic was a Next button wearing a microphone. */}
-          <MicButton state="Idle" onClick={() => router.push('/drill/recording?step=2&stumble=letter')} />
+          <MicButton state="Idle" onClick={() => router.push(micGate('/drill/recording?step=2&stumble=letter', `/text/turn?term=${drillTerm.index}&drill=2`))} />
           {/* Knowie's line, under the mic it is asking the student to use (2026-10-12). */}
           <MicCaption body={STUMBLES.second.copy} />
         </div>

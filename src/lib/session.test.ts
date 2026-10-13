@@ -1,5 +1,9 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import {
+  SCRIPTED_COULDNT_HEAR_TERM,
+  recommendedMode,
+  micGate,
+  setMicGranted,
   advancePractice,
   calibrationFor,
   firstUnanswered,
@@ -47,14 +51,15 @@ beforeEach(() => {
 
 describe('verdictFor (the mock)', () => {
   it('maps hold time to a verdict: <2s couldn’t hear, 2–5s miss, 5s+ pass', () => {
-    expect(verdictFor(2, 1999, 1)).toBe('CouldntHear')
-    expect(verdictFor(2, 2000, 1)).toBe('Miss')
-    expect(verdictFor(2, 4999, 1)).toBe('Miss')
-    expect(verdictFor(2, 5000, 1)).toBe('Pass')
+    expect(verdictFor(3, 1999, 1)).toBe('CouldntHear')
+    expect(verdictFor(3, 2000, 1)).toBe('Miss')
+    expect(verdictFor(3, 4999, 1)).toBe('Miss')
+    expect(verdictFor(3, 5000, 1)).toBe('Pass')
   })
-  it('scripts a mishear on term 1’s first attempt only', () => {
-    expect(verdictFor(1, 9000, 1)).toBe('CouldntHear')
-    expect(verdictFor(1, 9000, 2)).toBe('Pass')
+  it('scripts a mishear on one term’s first attempt only, never term 1', () => {
+    expect(verdictFor(SCRIPTED_COULDNT_HEAR_TERM, 9000, 1)).toBe('CouldntHear')
+    expect(verdictFor(SCRIPTED_COULDNT_HEAR_TERM, 9000, 2)).toBe('Pass')
+    expect(verdictFor(1, 9000, 1)).toBe('Pass')
   })
 })
 
@@ -197,5 +202,35 @@ describe('typedDraft (what seeds the typed box)', () => {
     expect(readSession().typed?.[2]).toBe('half a thought ')
     setTypedAnswer(2, 'a new try')
     expect(typedDraft(readSession(), 2)).toBe('a new try')
+  })
+})
+
+describe('micGate (contextual permission)', () => {
+  it('asks first, then goes straight to the recording once allowed, across runs', () => {
+    const gated = micGate('/session/recording/1', '/text/turn?term=1')
+    expect(gated.startsWith('/permission/primer?next=')).toBe(true)
+    expect(decodeURIComponent(gated)).toContain('alt=/text/turn?term=1')
+    setMicGranted()
+    expect(micGate('/session/recording/1', '/text/turn?term=1')).toBe('/session/recording/1')
+    startSession()
+    expect(readSession().micGranted).toBe(true)
+  })
+})
+
+describe('recommendedMode (what Practice suggests)', () => {
+  it('keeps the base rule: revealed or skipped drills, hinted says it again', () => {
+    expect(recommendedMode('Revealed')).toBe('drill')
+    expect(recommendedMode('Worth revisiting')).toBe('drill')
+    expect(recommendedMode('Hinted')).toBe('say')
+    expect(recommendedMode('Revealed', true)).toBe('say')
+  })
+  it('rule A: sure and still needed help drills, even when hinted', () => {
+    expect(recommendedMode('Hinted', false, { wasSure: true })).toBe('drill')
+  })
+  it('rule C: a typed answer says it again, aloud', () => {
+    expect(recommendedMode('Revealed', false, { typed: true })).toBe('say')
+  })
+  it('rule A wins over rule C', () => {
+    expect(recommendedMode('Revealed', false, { wasSure: true, typed: true })).toBe('drill')
   })
 })

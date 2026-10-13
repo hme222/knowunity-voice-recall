@@ -13,7 +13,7 @@ import {
   MicCaption,
   ScreenShell,
 } from '@/components'
-import { ensureSessionStarted, getTerm, isPractising, nextAfter, recordOutcome, useSession, useSticky, SUBJECT } from '@/lib/session'
+import { ensureSessionStarted, getTerm, micGate, isPractising, nextAfter, recordOutcome, useSession, useSticky, SUBJECT } from '@/lib/session'
 import styles from './idle.module.css'
 
 // 01 Idle / Commit — Figma frame "01 Idle (refreshed 2)" (15672:26255).
@@ -67,7 +67,7 @@ function IdleScreen({ index }: { index: number }) {
     <ScreenShell
       mic={
         <div className={micRegionClass}>
-          <MicButton state="Idle" onClick={() => router.push(`/session/recording/${index}${onward}`)} />
+          <MicButton state="Idle" onClick={() => router.push(micGate(`/session/recording/${index}${onward}`, `/text/turn?term=${index}`))} />
           {/* The hint lives UNDER the mic, not as a card above it — locked by the
               designer 2026-10-07. As a card it could not fit: at 390x668 the question
               alone fills the content box, and the hint scrolled out of sight. Here it

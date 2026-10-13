@@ -4,7 +4,7 @@ import { use } from 'react'
 import { useRedirect } from '@/lib/navigation'
 import { useRouter } from 'next/navigation'
 import { micRegionClass, Button, MascotSlot, MicButton, MicCaption, ScreenShell } from '@/components'
-import { drillRung, useDrillTerm, advancePractice, isPractising } from '@/lib/session'
+import { drillRung, micGate, useDrillTerm, advancePractice, isPractising } from '@/lib/session'
 import { Cue } from '../../Cue'
 import { DrillBar } from '../../DrillBar'
 import styles from '../../drill.module.css'
@@ -48,7 +48,7 @@ export default function DrillPassPage({ params }: { params: Promise<{ step: stri
     <ScreenShell
       mic={
         <div className={micRegionClass}>
-          <MicButton state="Idle" onClick={() => router.push(`/drill/recording?step=${n}`)} />
+          <MicButton state="Idle" onClick={() => router.push(micGate(`/drill/recording?step=${n}`, `/text/turn?term=${drillTerm.index}&drill=${n}`))} />
           {/* The instruction is about the mic, so it sits under it — the locked
               MicCaption pattern (2026-10-07). In the card it cost the cue its room and
               the definition faded at 390x668 (designer, 2026-10-12). */}

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { Button, MascotSlot, ScreenShell, StatChip } from '@/components'
-import { sessionTotals, TOTAL_TERMS, useSession, firstUnanswered, termHref } from '@/lib/session'
+import { sessionTotals, TOTAL_TERMS, useSession, firstUnanswered, termHref, startRun } from '@/lib/session'
 import styles from '../interrupt.module.css'
 
 // Session resume. Implied by banking per-term XP on leaving — the Design Brief says
@@ -33,7 +33,7 @@ export default function ResumePage() {
             {finished ? (
               <Button CTA="See your recap" variant="Primary" size="M" fullWidth onClick={() => router.push('/session/recap')} />
             ) : (
-              <Button CTA="Start a session" variant="Primary" size="M" fullWidth onClick={() => router.push('/session/intro')} />
+              <Button CTA="Start a session" variant="Primary" size="M" fullWidth onClick={() => router.push(startRun())} />
             )}
             <Button CTA="Back to home" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/home/unlocked')} />
           </div>
@@ -63,7 +63,7 @@ export default function ResumePage() {
             fullWidth
             onClick={() => router.push(termHref(next, state))}
           />
-          <Button CTA="Start fresh" variant="Tertiary" size="M" fullWidth onClick={() => router.push('/session/intro')} />
+          <Button CTA="Start fresh" variant="Tertiary" size="M" fullWidth onClick={() => router.push(startRun())} />
         </div>
       }
     >

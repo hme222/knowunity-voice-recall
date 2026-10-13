@@ -182,6 +182,23 @@ above.
       because each reverses a recorded decision: merging the intro and primer, cutting
       02a Captured, moving the scripted mishear off term 1, and giving the chip one
       destination (`/home/unlock` → intro, `/home/unlocked` → picker).
+    - **Second senior-review round, the held decisions (same day, designer):**
+      - **Contextual mic permission (1b).** The question comes first; the primer is
+        a sheet over it on the first mic tap, then the drawn OS prompt, and Allow
+        goes straight into the recording. `micGranted` survives runs like a real
+        permission. 00 Intro is retired: every way in goes to question 1.
+      - **02a Captured carries the confidence ask (2b).** Transcript, "Not what you
+        said? Say it again / Type instead", and "How sure are you?" on one screen;
+        Processing is a judging beat with no ask. Both principles kept, one beat less.
+        This supersedes "Did I get it?" (3b) below.
+      - **The scripted mishear is on question 2 (3b, with a /start label).** Question
+        1 shows a clean pass first; door runs never mishear.
+      - **Two chip destinations kept, both one tap from a question (4c).** The
+        picker leads with "Start Chemistry: bonding".
+      - **Practice suggests by two more rules (5, A and C).** Sure and still needed
+        help → Drill it, even when hinted (a confident miss is a wrong idea to
+        rebuild). Typed → Say it again, aloud (the point of the feature). A wins over C;
+        mic trouble still says it again first. The row says "· typed" when C applies.
     - **02a Captured asks a question** (option 3b, same day): "Here's what I heard.
       Did I get it?" over the frame's "Looks right" / "Say it again". The frame's
       "Send it, or say it again." disagreed with its own button. Same in the drill.

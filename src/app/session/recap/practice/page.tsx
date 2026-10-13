@@ -43,7 +43,7 @@ export default function PracticePage() {
         // Sure-and-wrong first within a bucket, as on the Recap.
         Number(b.wasSure ?? false) - Number(a.wasSure ?? false),
     )
-  const plan: PracticeItem[] = missed.map((o) => ({ index: o.index, mode: recommendedMode(o.bucket, o.micTrouble) }))
+  const plan: PracticeItem[] = missed.map((o) => ({ index: o.index, mode: recommendedMode(o.bucket, o.micTrouble, { wasSure: o.wasSure, typed: o.typed }) }))
 
   const go = (items: PracticeItem[]) => router.push(startPractice(items))
 
@@ -101,6 +101,8 @@ export default function PracticePage() {
                     <p className={styles.rowReason}>
                       {o.micTrouble ? 'The mic missed it' : REASON[o.bucket as Exclude<Bucket, 'Unaided'>]}
                       {o.wasSure ? ' · you were sure' : ''}
+                      {/* Says why the method differs: rule C. */}
+                      {o.typed && !o.micTrouble ? ' · typed' : ''}
                     </p>
                     <Button
                       CTA={ALT[mode]}

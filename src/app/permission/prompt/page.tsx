@@ -2,18 +2,22 @@
 
 import { Suspense, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { MascotSlot, ScreenShell } from '@/components'
+import { ScreenShell } from '@/components'
+import { setMicGranted } from '@/lib/session'
+import { QuestionBehind } from '../QuestionBehind'
 import { useFocusTrap } from '@/lib/useFocusTrap'
 import styles from '../permission.module.css'
 
-// The primer with a drawn iOS permission sheet on top. The prototype has no microphone
+// The drawn iOS permission sheet, over the question the student tapped the mic for. The prototype has no microphone
 // and the real dialog will never fire, so it is drawn — otherwise Allow / Don't Allow
 // is an asserted fork rather than one a reviewer can take, and the denied path (a Must
 // state) stays unreachable.
 
 function Prompt() {
   const router = useRouter()
-  const door = useSearchParams().get('door')
+  const params = useSearchParams()
+  const next = params.get('next') ?? '/session/recording/1'
+  const alt = params.get('alt') ?? '/text/turn?term=1'
   // The other real dialog in the app, and it had the same defect BottomSheet did:
   // aria-modal="true" with focus left on <body> and the screen behind it still in the
   // tab order, so nothing announced that a dialog had opened and Tab walked out of it.
@@ -22,12 +26,9 @@ function Prompt() {
 
   return (
     <ScreenShell>
-      <div className={styles.body}>
-        <MascotSlot size="2XL" expression="determined" />
-        <div className="screenTitle">
-          <h1 className="screenTitleHeading">Ready to say it back?</h1>
-        </div>
-      </div>
+      {/* The question stays behind the OS sheet, as behind the primer. */}
+      <h1 className="srOnly">Microphone permission</h1>
+      <QuestionBehind next={next} />
 
       <div
         ref={dialogRef}
@@ -45,10 +46,15 @@ function Prompt() {
             </p>
           </div>
           <div className={styles.dialogActions}>
-            <button className={styles.dialogButton} onClick={() => router.push('/permission/denied')}>
+            <button className={styles.dialogButton} onClick={() => router.push(`/permission/denied?alt=${encodeURIComponent(alt)}`)}>
               Don&rsquo;t Allow
             </button>
-            <button className={styles.dialogButton} onClick={() => router.push(door ? `/session/idle/1?door=${door}` : '/session/idle/1')}>
+            <button className={styles.dialogButton} onClick={() => {
+                // Allowed: straight into the recording the student tapped for, not back
+                // to the idle screen to tap again.
+                setMicGranted()
+                router.replace(next)
+              }}>
               Allow
             </button>
           </div>

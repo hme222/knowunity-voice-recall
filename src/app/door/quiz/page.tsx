@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { AppBar, Button, MascotSlot, ProgressIndicator, ScreenShell } from '@/components'
 import { startSession } from '@/lib/session'
 import { MicGlyphIcon } from '@/components/icons'
+import { proveItHref } from '../doors'
 import styles from '../door.module.css'
 
 // Door 1, Quiz complete — Figma frame "Quiz complete — Prove It Again, Option 1
@@ -40,7 +41,7 @@ export default function QuizCompleteDoor() {
             // mic, and voice-ux Principle 3 says never fire the OS ask cold.
             onClick={() => {
               startSession({ door: 'quiz' })
-              router.push('/permission/primer?door=quiz')
+              router.push(proveItHref('quiz'))
             }}
           />
         </div>

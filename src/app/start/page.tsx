@@ -35,7 +35,8 @@ const TO_TEST = [
   // definition, so "question 1" named a numbering it never shows (usability review,
   // 2026-10-12).
   'Record 5+ seconds, then Submit, to pass; 2–5 is partly right.',
-  'Under 2 seconds it can’t hear you. The first try always does this, on purpose.',
+  // Question 2 since 2026-10-12, so question 1 shows a clean pass first.
+  'Under 2 seconds it can’t hear you. Question 2’s first try does this on purpose.',
   'No mic? Every question has Type instead.',
 ]
 

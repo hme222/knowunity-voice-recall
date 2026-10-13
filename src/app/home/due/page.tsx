@@ -3,7 +3,7 @@
 import { Suspense, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { DueSignalCard, SwipeChip, SwipeDeck, SwipeDots } from '@/components'
-import { DUE_QUIZZES, dueCountLabel } from '@/lib/session'
+import { DUE_QUIZZES, dueCountLabel, startRun } from '@/lib/session'
 import { HomeShell } from '../HomeShell'
 import styles from '../home.module.css'
 
@@ -31,7 +31,7 @@ function DueHome() {
           {DUE_QUIZZES.length === 1 ? (
             <DueSignalCard
               DueLabel={`Quiz due ${quiz.due}`}
-              onClick={() => router.push('/session/intro')}
+              onClick={() => router.push(startRun())}
             />
           ) : (
             <>
@@ -49,7 +49,7 @@ function DueHome() {
                   due
                   QuizLabel={`${quiz.subject} · ${quiz.term} · due ${quiz.due}`}
                   Count={dueCountLabel(active)}
-                  onClick={() => router.push('/session/intro')}
+                  onClick={() => router.push(startRun())}
                 />
                 {/* The dots ARE the non-gesture way through, so the swipe is not the
                     only route and nothing on screen describes a gesture it is not. The

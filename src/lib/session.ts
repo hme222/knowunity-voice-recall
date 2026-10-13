@@ -294,10 +294,13 @@ const PASS_AT_MS = 5000
 
 /**
  * One term is scripted to CouldntHear on its first attempt so the state appears in
- * every walkthrough without anyone hunting for it. Term 1, because the built
- * CouldntHear copy names formal charge.
+ * every walkthrough without anyone hunting for it. Term 2 since 2026-10-12 (designer,
+ * from the senior review): on term 1 every walkthrough opened on a "failure", and the
+ * echo-your-own-words pass was not seen until question 2. Now question 1 shows the
+ * payoff and question 2 the mishear, while the reviewer is still watching. A door run
+ * is term 1 only, so it never mishears. /start says so.
  */
-export const SCRIPTED_COULDNT_HEAR_TERM = 1
+export const SCRIPTED_COULDNT_HEAR_TERM = 2
 
 export function verdictFor(termIndex: number, durationMs: number, attempt: number): Verdict {
   if (termIndex === SCRIPTED_COULDNT_HEAR_TERM && attempt === 1) return 'CouldntHear'
@@ -558,6 +561,12 @@ export type SessionState = {
    * changed just because the run restarted.
    */
   sticky?: boolean
+  /**
+   * The mic has been allowed on this device (2026-10-12, contextual permission). Asked
+   * on the first mic tap, not before the first question, and kept across runs like a
+   * real OS permission: startSession keeps it.
+   */
+  micGranted?: boolean
 }
 
 const EMPTY: SessionState = { outcomes: [], startedAt: 0, lastAt: 0 }
@@ -612,8 +621,15 @@ function write(state: SessionState) {
 
 export function startSession(opts?: { door?: string }) {
   const now = Date.now()
-  const { sticky } = readSession()
-  write({ outcomes: [], startedAt: now, lastAt: now, ...(sticky ? { sticky } : {}), ...(opts?.door ? { door: opts.door } : {}) })
+  const { sticky, micGranted } = readSession()
+  write({
+    outcomes: [],
+    startedAt: now,
+    lastAt: now,
+    ...(sticky ? { sticky } : {}),
+    ...(micGranted ? { micGranted } : {}),
+    ...(opts?.door ? { door: opts.door } : {}),
+  })
 }
 
 /** Record that a hint was shown for a term. Idempotent. */
@@ -636,9 +652,20 @@ export type PracticeItem = { index: number; mode: 'drill' | 'say' }
  * Shown the answer or skipped: the student did not have it, so rebuild it a piece at a
  * time in the drill. Got it with a hint: they nearly had it, so say it again.
  */
-export function recommendedMode(bucket: Bucket, micTrouble = false): PracticeItem['mode'] {
+export function recommendedMode(
+  bucket: Bucket,
+  micTrouble = false,
+  opts?: { wasSure?: boolean; typed?: boolean },
+): PracticeItem['mode'] {
   // A term the mic missed was never judged, so the first try is just saying it again.
   if (micTrouble) return 'say'
+  // Rule A, overconfident (designer, 2026-10-12): sure, and still needed help. A
+  // confident miss means a wrong idea, and saying it again may only repeat it;
+  // rebuilding it a piece at a time corrects it. Wins over rule C.
+  if (opts?.wasSure && bucket !== 'Unaided') return 'drill'
+  // Rule C, typed (same day): saying it out loud is the point, and a typed answer
+  // skipped exactly that. Say it again, aloud.
+  if (opts?.typed) return 'say'
   return bucket === 'Hinted' ? 'say' : 'drill'
 }
 
@@ -955,6 +982,30 @@ export function setSticky(on = true) {
 /** Whether the mic is denied this session. Pure; pass the state from useSession(). */
 export function isSticky(state: SessionState): boolean {
   return state.sticky === true
+}
+
+/** Record that the student allowed the mic. Called from the drawn OS prompt's Allow. */
+export function setMicGranted() {
+  const state = readSession()
+  if (state.micGranted) return
+  write({ ...state, micGranted: true })
+}
+
+/**
+ * Where a mic tap goes: straight to `next` once the mic is allowed, or first to the
+ * primer, which asks in context over the question (Design Brief F5; designer
+ * 2026-10-12, option 1b). `alt` is the typed route the primer's "Type instead" and the
+ * denied screen fall back to. Call from a tap handler.
+ */
+export function micGate(next: string, alt: string, state: SessionState = readSession()): string {
+  if (state.micGranted) return next
+  return `/permission/primer?next=${encodeURIComponent(next)}&alt=${encodeURIComponent(alt)}`
+}
+
+/** Where every way into the full session starts: a clean run at question 1. */
+export function startRun(): string {
+  startSession()
+  return termHref(1)
 }
 
 /** isSticky, subscribed. Safe to call during render. */

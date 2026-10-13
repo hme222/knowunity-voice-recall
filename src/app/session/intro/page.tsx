@@ -2,53 +2,18 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { SessionBar } from '../SessionBar'
-import { Button, ChatBubble, MascotSlot, ScreenShell } from '@/components'
-import { startSession, TOTAL_TERMS } from '@/lib/session'
-import styles from './intro.module.css'
+import { startRun } from '@/lib/session'
 
-// 00 Intro — Figma frame "00 Intro (refreshed)" (15672:24268).
-// One state. Copy is verbatim from the frame.
-
+// 00 Intro is retired from the flow (designer, 2026-10-12, option 1b from the senior
+// review). With the popup already saying what Say It Back is and the mic asked for in
+// context on the first tap, an intro screen and a full-screen primer were two more
+// beats of Knowie-plus-paragraph before the first question. The route stays so old
+// links and the screens' own fallbacks (useRedirect to /session/intro) still land: it
+// starts a clean run and goes to question 1.
 export default function IntroPage() {
   const router = useRouter()
-
-  // Clears any previous run so 07 Recap reports this one. In an effect, never during
-  // render — sessionStorage touched in the render pass breaks hydration.
   useEffect(() => {
-    startSession()
-  }, [])
-
-  return (
-    <ScreenShell
-      topNavigation={<SessionBar index={0} label={`${TOTAL_TERMS} definitions`} />}
-      bottomContent={
-        <Button
-          CTA="Let's go"
-          variant="Primary"
-          size="M"
-          fullWidth
-          onClick={() => router.push('/permission/primer')}
-        />
-      }
-    >
-      <div className={styles.body}>
-        {/* The invitation that opens the whole feature. It wore the same face as 03
-            Processing, which is the working state — the first thing Knowie does should not
-            look like concentrating. */}
-        <MascotSlot size="2XL" expression="excited" />
-        <ChatBubble
-          showTitle
-          title="Say It Back: "
-          titleAccent="Chemistry bonding"
-          // The subject is named before anything starts — designer, 2026-10-08; one
-          // subject for the whole set from 2026-10-09. The
-          // "anything you miss comes back once at the end" line went with the requeue.
-          // Two lines, not five sentences (senior review, 2026-10-12): the unlock popup has
-          // already said what this is, so the intro only has to say what happens next.
-          body={`Say what you know, in your own words. Knowie tells you how it landed.\n\n${TOTAL_TERMS} definitions, starting with formal charge.`}
-        />
-      </div>
-    </ScreenShell>
-  )
+    router.replace(startRun())
+  }, [router])
+  return null
 }

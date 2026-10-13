@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { AppBar, PickerRow, ScreenShell } from '@/components'
+import { AppBar, Button, PickerRow, ScreenShell } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { PICKER_DRILLS, PICKER_TOPICS, setDrillTerm, setPractising } from '@/lib/session'
+import { PICKER_DRILLS, PICKER_TOPICS, setDrillTerm, setPractising, startRun } from '@/lib/session'
 import styles from './picker.module.css'
 
 // Picker — Figma frame "Picker page — Say It Back + drill down" (15810:11285).
@@ -26,10 +26,19 @@ export default function PickerPage() {
   const topics = PICKER_TOPICS.filter((t) => t.label.toLowerCase().includes(q))
   const drills = PICKER_DRILLS.filter((d) => d.label.toLowerCase().includes(q))
   const empty = topics.length === 0 && drills.length === 0
+  // The topic this student was seeded with, the one their last run used.
+  const resumeTopic = PICKER_TOPICS.find((t) => t.seeded) ?? PICKER_TOPICS[0]
   return (
     <ScreenShell
       topNavigation={
         <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Close" onLeft={() => router.push('/home/unlocked')} />
+      }
+      // One tap to recall for a returning student, as the popup is for a new one
+      // (designer, 2026-10-12, option 4c): the chip's two destinations stay — first run
+      // straight in, then the picker — but both are now one tap from a question. The
+      // rows below are the choice for anyone who wants another topic or a drill.
+      bottomContent={
+        <Button CTA={`Start ${resumeTopic.label}`} variant="Primary" size="M" fullWidth onClick={() => router.push(startRun())} />
       }
     >
       <div className={styles.body}>
@@ -58,7 +67,7 @@ export default function PickerPage() {
                 key={topic.label}
                 variant="topic"
                 label={topic.label}
-                onClick={() => router.push('/session/intro')}
+                onClick={() => router.push(startRun())}
               />
             ))}
           </section>

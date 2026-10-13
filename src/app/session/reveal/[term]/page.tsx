@@ -12,7 +12,7 @@ import {
   MicCaption,
   ScreenShell,
 } from '@/components'
-import { getTerm, nextAfter, recordOutcome, useSticky, XP } from '@/lib/session'
+import { getTerm, micGate, nextAfter, recordOutcome, useSticky, XP } from '@/lib/session'
 import styles from './reveal.module.css'
 
 // 05a Reveal answer — Figma frame "05a Reveal answer result" (15752:17156), which
@@ -54,7 +54,7 @@ export default function RevealPage({ params }: { params: Promise<{ term: string 
     <ScreenShell
       mic={
         <div className={micRegionClass}>
-          <MicButton state="Idle" label="Say it back" onClick={() => router.push(`/session/recording/${index}?repeat=1`)} />
+          <MicButton state="Idle" label="Say it back" onClick={() => router.push(micGate(`/session/recording/${index}?repeat=1`, `/text/turn?term=${index}`))} />
           {/* Labelled and marked optional (senior review, 2026-10-12): an unlabelled mic
               against "Continue" top right read as two competing ways on. Continue is the
               quiet way past; this says what the mic is for and what it is worth. */}

@@ -5,7 +5,7 @@ import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import { micRegionClass, Button, MascotSlot, MicButton, MicCaption, RecallResult, ScreenShell } from '@/components'
-import { getTerm, nextAfter, recordOutcome, markMicFault } from '@/lib/session'
+import { getTerm, micGate, nextAfter, recordOutcome, markMicFault } from '@/lib/session'
 import styles from './unclear.module.css'
 
 // 04a Couldn't hear — Figma frame "04a Couldn't hear (refreshed)" (15672:24583).
@@ -37,7 +37,7 @@ function UnclearScreen({ index }: { index: number }) {
   if (!current) return null
 
   function retry() {
-    router.push(`/session/recording/${index}?attempt=${attempt + 1}${door ? `&door=${door}` : ''}`)
+    router.push(micGate(`/session/recording/${index}?attempt=${attempt + 1}${door ? `&door=${door}` : ''}`, `/text/turn?term=${index}`))
   }
 
   function skip() {

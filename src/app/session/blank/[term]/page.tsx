@@ -13,7 +13,7 @@ import {
   MicCaption,
   ScreenShell,
 } from '@/components'
-import { getTerm, useSticky, SUBJECT } from '@/lib/session'
+import { getTerm, micGate, useSticky, SUBJECT } from '@/lib/session'
 import styles from '../../interrupt.module.css'
 
 // A genuinely blank term — not a near-miss, nothing at all. This answers the Design
@@ -57,7 +57,7 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
               could come back "That one didn't come through" on the one screen that
               promises nothing is scored against them. `blank=1` takes the verdict out
               of it entirely: the take happens, then the answer. */}
-          <MicButton state="Idle" label="Say whatever you've got" onClick={() => router.push(`/session/recording/${index}?blank=1`)} />
+          <MicButton state="Idle" label="Say whatever you've got" onClick={() => router.push(micGate(`/session/recording/${index}?blank=1`, `/text/turn?term=${index}`))} />
           {/* The encouragement moved under the mic so the question can stay on screen. */}
           <MicCaption label="Drawing a blank?" body="Say whatever you’ve got, even half of it." />
         </div>

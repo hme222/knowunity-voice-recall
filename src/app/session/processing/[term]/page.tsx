@@ -4,10 +4,10 @@ import { Suspense, use, useEffect, useRef, useState } from 'react'
 import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
-import { ConfidenceAsk, ProcessingBeat, ScreenShell } from '@/components'
-import { getTerm, markSpokenTake, recordConfidence, verdictFor, recordMiss } from '@/lib/session'
+import { ProcessingBeat, ScreenShell } from '@/components'
+import { getTerm, markSpokenTake, verdictFor, recordMiss } from '@/lib/session'
 import { doorResultHref } from '@/app/door/doors'
-import { confidenceGrace, processingDwell, slowThreshold } from '@/lib/motion'
+import { processingDwell, slowThreshold } from '@/lib/motion'
 import styles from './processing.module.css'
 
 // 03 Processing — Figma frame "03 Processing" (15672:20190), plus the confidence tap
@@ -50,24 +50,6 @@ function ProcessingScreen({ index }: { index: number }) {
     return () => window.clearTimeout(id)
   }, [unusable, index, attempt, router, door])
 
-  // Not a gate any more. If the ask goes unanswered, move on once the student has had a
-  // fair chance — after the slow threshold, so "still thinking" still shows first. Through a ref, so the re-render at the slow threshold does not
-  // restart the clock.
-  const answerRef = useRef<(sure?: boolean) => void>(() => {})
-  const answeredRef = useRef(false)
-  useEffect(() => {
-    answerRef.current = answer
-  })
-  useEffect(() => {
-    if (unusable) return
-    const id = window.setTimeout(() => answerRef.current(), confidenceGrace())
-    return () => window.clearTimeout(id)
-  }, [unusable])
-
-  useRedirect(!current, '/session/intro')
-
-  if (!current) return null
-
   // `sure` is undefined when the student never answered: the ask is optional (designer,
   // 2026-10-09), so after confidenceGrace the turn moves on with no confidence recorded
   // — no reward and no cost, rather than guessing one for them.
@@ -83,7 +65,7 @@ function ProcessingScreen({ index }: { index: number }) {
     // A tap that is given costs or pays something — the Design Brief's own test is
     // "overconfidence has to cost something", and sure/not-sure used to produce
     // identical screens and identical XP.
-    if (sure !== undefined) recordConfidence(index, sure, verdict)
+    // Recorded on 02a Captured, where the tap now happens.
     // A run that came through a door and landed a Pass goes to that door's own result
     // rather than into the session, which it was never part of. A Miss or a mishear
     // falls through to the normal verdict screens: the help they offer is the same
@@ -102,6 +84,28 @@ function ProcessingScreen({ index }: { index: number }) {
     router.push(`/session/${route}/${index}?${q}`)
   }
 
+  // No ask here any more: the confidence call moved to 02a Captured, beside the
+  // transcript (designer, 2026-10-12, option 2b). This is the judging beat, and it moves
+  // on by itself after it, carrying the call Captured recorded. Through a ref, so the
+  // re-render at the slow threshold does not restart the clock.
+  const sureParam = searchParams.get('sure')
+  const sure = sureParam === null ? undefined : sureParam === '1'
+  const answerRef = useRef<(sure?: boolean) => void>(() => {})
+  const answeredRef = useRef(false)
+  useEffect(() => {
+    answerRef.current = answer
+  })
+  useEffect(() => {
+    if (unusable) return
+    const id = window.setTimeout(() => answerRef.current(sure), processingDwell())
+    return () => window.clearTimeout(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [unusable])
+
+  useRedirect(!current, '/session/intro')
+
+  if (!current) return null
+
   return (
     <ScreenShell
       className={styles.root}
@@ -112,11 +116,7 @@ function ProcessingScreen({ index }: { index: number }) {
       // screen to screen" — and here it keeps it in the same place from MOMENT to
       // moment: without it the wait jumped 60px the instant the ask appeared, and an unusable take has no ask at all.
       showBottomNavSlot
-      bottomContent={
-        <div className={styles.confidence}>
-          {!unusable && <ConfidenceAsk onAnswer={answer} />}
-        </div>
-      }
+      bottomContent={<div className={styles.confidence} />}
     >
       <ProcessingBeat
         line={
