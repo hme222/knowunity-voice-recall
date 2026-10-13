@@ -23,6 +23,8 @@ export function CueText({ text }: { text: string }) {
             key={i}
             className={styles.blank}
             style={{ ['--blank-length' as string]: part.length }}
+            // Continues a word ("e____"): no space before it, so the letter stays on it.
+            data-joined={i > 0 && /\S$/.test(parts[i - 1]) ? '' : undefined}
             role="img"
             aria-label="blank"
           />

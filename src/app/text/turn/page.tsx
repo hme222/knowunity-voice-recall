@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from 'react'
 import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../session/SessionBar'
-import { actionRowClass, Button, ChatBubble, MascotSlot, ScreenShell, HintCard } from '@/components'
+import { actionRowClass, Button, ChatBubble, MascotSlot, ScreenShell, HintCard, TextInput } from '@/components'
 import { Cue, CueText } from '@/app/drill/Cue'
 import drillStyles from '../../drill/drill.module.css'
 import { hintFor, missCount, getTerm, nextAfter, recordOutcome, setSticky, sendTypedAnswer, setTypedAnswer, typedDraft, useSticky, SUBJECT, advancePractice, isPractising, useSession, drillRung, useDrillTerm } from '@/lib/session'
@@ -151,16 +151,14 @@ function TextTurnScreen() {
         {/* The field and its note as one group, so the note sits under the field rather
             than a section's gap away. */}
         <div className={styles.fieldGroup}>
-          <label>
-            <textarea
-              className={styles.field}
-              value={answer}
-              onChange={(e) => { setAnswer(e.target.value); setTypedAnswer(index, e.target.value) }}
-              placeholder="Type your answer…"
-              aria-label="Your answer"
-              aria-describedby="send-note"
-            />
-          </label>
+          <TextInput
+            variant="multi"
+            label="Your answer"
+            placeholder="Type your answer…"
+            value={answer}
+            onChange={(v) => { setAnswer(v); setTypedAnswer(index, v) }}
+            describedBy="send-note"
+          />
           {/* Why Send is disabled, said rather than left to be guessed (UX critic). */}
           <p id="send-note" className={styles.note}>
             {answer.trim() ? 'Send when you’re ready.' : 'Type your answer to send it.'}

@@ -21,7 +21,7 @@ detail.
 | Recap bucket row (term + per-term XP + confidence note) | 07 Recap | Inline. Promote when a second screen lists per-term results. Not merged with the Practice row: this one reports (XP, notes, transcript eye), that one acts (a method button and an alternative) |
 | Stat chip row wrapper | 07 Recap | **Retired 2026-10-12**: the Recap's three stat tiles became one XP line |
 | Drawn iOS permission sheet | Mic primer + prompt | Inline. Deliberately a facsimile — the prototype has no mic and the real dialog never fires. Retire when real speech recognition lands: the OS draws its own |
-| Multi-line text input | Text fallback turn | Inline. No text input exists in the catalog at all Promote when a second screen takes typed input (a search with more than one line, a note). |
+| Multi-line text input | Text fallback turn | **Promoted 2026-10-13** to `TextInput` (`variant: 'single' \| 'multi'`), its second consumer being the picker's search (system critic). |
 | Pulse rings around the mic | 02 Recording | Inline, but sized from `component.micButton.pulse.ring.*`. **This claim was FALSE until 2026-09-22** — the CSS referenced those tokens from the day it was written, the `pulse` group was added later with only the scale and opacity values, and all three rings rendered 2x2px. `npm run check:vars` now fails on a var() that resolves to nothing rather than literals Promote into MicButton when a second screen records. |
 | Home surround (greeting, plan cards, composer chip row) | Home ×3 | Inline in `src/app/home/HomeShell.tsx` — the real app's home isn't ours to reproduce |
 | Drill top bar (ring + fraction + Drill chip) | Drill ×9 | Inline in `src/app/drill/DrillBar.tsx` — drill-only, and it's the piece that goes if the coverage judge is confirmed |

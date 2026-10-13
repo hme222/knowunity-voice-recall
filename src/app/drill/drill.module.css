@@ -115,10 +115,18 @@
 .blank {
   display: inline-block;
   width: calc(var(--blank-length) * 1ch);
-  vertical-align: baseline;
+  /* A full line-box tall and bottom-aligned, so the rule lands under the letters like
+     a writing line — empty and baseline-aligned it rode at x-height after a lowercase
+     letter and read as strikethrough (craft critic, 2026-10-13). A hair of space each
+     side keeps it off the neighbouring letters. */
+  height: 1em;
+  vertical-align: text-bottom;
+  margin-inline: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
   border-bottom: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid currentColor;
-  /* Sits on the baseline rather than through it. */
-  margin-bottom: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
+}
+
+.blank[data-joined] {
+  margin-inline-start: 0;
 }
 
 /* The cue card. Same shape as ChatBubble — which takes a string body and so cannot

@@ -49,7 +49,7 @@ export default function RevealPage({ params }: { params: Promise<{ term: string 
           {/* Labelled and marked optional (senior review, 2026-10-12): an unlabelled mic
               against "Continue" top right read as two competing ways on. Continue is the
               quiet way past; this says what the mic is for and what it is worth. */}
-          <MicCaption label="Optional" body={`Say it back once for +${XP.repeat} XP`} />
+          <MicCaption label="Optional" body={`Say it back in your own words for +${XP.repeat} XP`} />
         </div>
       }
       topNavigation={<SessionBar index={index} />}
@@ -67,7 +67,9 @@ export default function RevealPage({ params }: { params: Promise<{ term: string 
             region. The only word the second bubble added was "own", so it moved up. */}
         <ChatBubble
           showTitle
-          title="Here’s the answer. Now say it back, in your own words."
+          // One line: the invitation lives once, under the mic it is for. Two lines
+          // here put the screen 4px past the region at 390x668 (system critic).
+          title="Here’s the answer."
           body={current.answer}
           className={styles.bubble}
         />

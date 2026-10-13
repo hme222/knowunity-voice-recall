@@ -5,6 +5,7 @@
   Source: tokens/tokens.json. Rebuild with `npm run tokens`.
 -->
 <resources>
+  <integer name="size_semantic_field_min_height">120</integer>
   <integer name="size_semantic_caption_measure">280</integer>
   <integer name="size_primitive_space_0">0</integer>
   <integer name="size_primitive_space_100">4</integer>
@@ -78,9 +79,12 @@
   <string name="typography_primitive_font_weight_semibold">SemiBold</string>
   <string name="typography_primitive_font_weight_bold">Bold</string>
   <string name="typography_primitive_font_weight_heavy">Heavy</string>
+  <integer name="motion_primitive_duration_110">110</integer>
   <integer name="motion_primitive_duration_150">150</integer>
   <integer name="motion_primitive_duration_250">250</integer>
   <integer name="motion_primitive_duration_300">300</integer>
+  <integer name="motion_primitive_duration_500">500</integer>
+  <integer name="motion_primitive_duration_550">550</integer>
   <integer name="motion_primitive_duration_1100">1100</integer>
   <integer name="motion_primitive_duration_1400">1400</integer>
   <integer name="motion_primitive_duration_6000">6000</integer>
@@ -93,6 +97,9 @@
   <integer name="motion_semantic_duration_slow_threshold">6000</integer>
   <integer name="motion_semantic_duration_confidence_grace">10000</integer>
   <integer name="motion_semantic_duration_ambient">1100</integer>
+  <integer name="motion_semantic_duration_ambient_stagger">110</integer>
+  <integer name="motion_semantic_duration_celebrate">500</integer>
+  <integer name="motion_semantic_duration_breathe">550</integer>
   <integer name="responsive_primitive_device_width_desktop">1200</integer>
   <integer name="responsive_primitive_device_width_mobile">390</integer>
   <integer name="responsive_primitive_device_width_tablet">768</integer>

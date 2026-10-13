@@ -99,7 +99,10 @@ export function ScreenShell({
     const el = middleRef.current
     if (el) setOverflowing(el.scrollTop + el.clientHeight < el.scrollHeight - 1)
   }, [])
-  const [mascotStage, setMascotStage] = useState<0 | 2>(0)
+  // 3 = Knowie out AND anything the screen marks `data-gives-way` (a repeated question,
+  // an XP line): the second thing to go, so a short screen never clips a card mid-way
+  // (system critic, 2026-10-13: unclear, the chat door at 390x668).
+  const [mascotStage, setMascotStage] = useState<0 | 2 | 3>(0)
   const measure = useCallback(() => {
     const el = middleRef.current
     if (!el) return
@@ -107,15 +110,22 @@ export function ScreenShell({
     // last thing on the screen stays half-faded — the Recap's closing takeaway did.
     setOverflowing(el.scrollTop + el.clientHeight < el.scrollHeight - 1)
     const mascot = mascotGivesWay ? el.querySelector<HTMLElement>('[data-mascot]') : null
-    if (!mascot) {
+    const yielding = el.querySelector<HTMLElement>('[data-gives-way]')
+    if (!mascot && !yielding) {
       setMascotStage(0)
       return
     }
+    // Measure each stage as it would render, then put back what was there.
     const applied = el.getAttribute('data-mascot-stage')
-    if (applied) el.removeAttribute('data-mascot-stage')
-    const over = el.scrollHeight - el.clientHeight
+    const overAt = (stage: string | null) => {
+      if (stage) el.setAttribute('data-mascot-stage', stage)
+      else el.removeAttribute('data-mascot-stage')
+      return el.scrollHeight - el.clientHeight
+    }
+    const stage = overAt(null) <= 1 ? 0 : !yielding || overAt('2') <= 1 ? 2 : 3
     if (applied) el.setAttribute('data-mascot-stage', applied)
-    setMascotStage(over <= 1 ? 0 : 2)
+    else el.removeAttribute('data-mascot-stage')
+    setMascotStage(stage)
   }, [mascotGivesWay])
   // Layout effect, not effect: the stage has to land before the first paint, or a short
   // screen flashes a full-size Knowie and then drops it.

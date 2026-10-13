@@ -89,7 +89,12 @@ function UnclearScreen({ index }: { index: number }) {
         {/* The question stays (Knowunity design review, 2026-10-13; live 26 keeps it):
             Under the status, which is the screen's message, so at 390x668 it is the
             question that scrolls, not the reassurance. Without it the screen was a lone error card after six seconds of talking. */}
-        <ChatBubble showTitle title={`${SUBJECT} · Explain: `} titleAccent={current.name} body={current.prompt} className={styles.card} />
+        {/* Gives way when it cannot fit (390x668): a card cut to its top edge read as
+            a stray outline (craft and system critics, 2026-10-13). The reassurance
+            above is the screen's message; the question is on the next take's screen. */}
+        <div data-gives-way className={styles.card}>
+          <ChatBubble showTitle title={`${SUBJECT} · Explain: `} titleAccent={current.name} body={current.prompt} />
+        </div>
 
         {/* The same fixed region as every other voice screen, so the control the
             student is being asked to use again is exactly where they last used it. */}

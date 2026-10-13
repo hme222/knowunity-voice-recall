@@ -60,7 +60,8 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
             fullWidth
             onClick={() => router.push(`/text/turn?term=${index}`)}
           />
-          <Button CTA="Just show me" variant="Tertiary" size="M" fullWidth onClick={() => router.push(`/session/reveal/${index}`)} />
+          {/* "Reveal answer", the miss screen's name for the same move (craft critic, 2026-10-13). */}
+          <Button CTA="Reveal answer" variant="Tertiary" size="M" fullWidth onClick={() => router.push(`/session/reveal/${index}`)} />
         </div>
       }
     >

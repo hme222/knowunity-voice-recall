@@ -379,6 +379,12 @@ own.
   (`cardPadding`) as a placeholder, not because that's the resolved
   answer to whether the original 20px was intentional.
 
+**Code-only components** (no Figma counterpart, promoted from inline
+copies once a second screen needed them): `MicCaption`, `ProcessingBeat`,
+`ConfidenceAsk`, `RecallResultCaptured`, and, since 2026-10-13,
+`TextInput` (`single` for the picker's search, `multi` for the typed
+answer box). Any typed input is a `TextInput`.
+
 **Before adding anything not on this list:** search the file first —
 that's still the rule, and it now covers two tiers instead of one.
 Between the locally-defined set and the external-library set, most of
@@ -1311,6 +1317,11 @@ tells you which layer it lives in just by shape.
   component token layer is where the reach to the primitive happens; the
   component's CSS still reads only `component.strengthMeter.*`. A second
   consumer of that ramp means promoting it to a semantic token.
+- **Never derive a duration by typing a ratio.** `ambient × 0.1` is a new
+  duration with no name; it drifts silently when `ambient` changes. Name it
+  (`ambientStagger`, `celebrate`, `breathe`, 2026-10-13). The one sanctioned
+  multiplication is an index: the nth item of a stagger waits
+  `n × ambientStagger` (the Recap rows' `--i`, the second and third dot).
 - **Never build something new when a component in this system already
   does the job.** Check the "which component" section and the file
   itself before adding anything. A slightly-wrong existing component

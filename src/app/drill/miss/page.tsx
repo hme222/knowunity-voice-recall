@@ -42,7 +42,7 @@ function DrillMiss() {
     >
       <div className={styles.frameBody}>
         <MascotSlot size="2XL" expression="determined" />
-        <div className={[styles.fullWidth, styles.verdictRow].join(' ')}>
+        <div className={[styles.fullWidth, styles.verdictRow].join(' ')} aria-hidden="true">
           <Chips
             Text={typedText ? 'Not quite yet' : STUMBLES.first.verdict}
             size="S"
@@ -58,6 +58,7 @@ function DrillMiss() {
         <RecallResult
           className={styles.fullWidth}
           state="Neutral"
+          verdict={typedText ? 'Not quite yet' : STUMBLES.first.verdict}
           title={typedText ? 'Not all there yet. Here’s the word to build on.' : STUMBLES.first.copy}
           transcript={`“${typedText ?? drillTerm.drill.partial}”`}
           label={typedText ? 'You wrote' : undefined}

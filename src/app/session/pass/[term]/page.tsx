@@ -69,7 +69,7 @@ function PassScreen({ index }: { index: number }) {
         <MascotSlot size={practising || firstTake ? '2XL' : '3XL'} expression="excited" className={`${styles.mascotCentred} ${practising ? '' : styles.celebrate}`} />
         {/* A "Correct" chip, matching the partial's "Partially right": the verdict is
             not carried by the green card alone (designer, 2026-10-12). */}
-        <div className={styles.verdictRow}>
+        <div className={styles.verdictRow} aria-hidden="true">
           <Chips Text={verdict} size="S" color="Primary" active showLeftIcon leftIcon={<CheckIcon />} showRightIcon={false} />
         </div>
         {/* One line, label run in: as two lines it pushed the confidence sentence
@@ -82,6 +82,7 @@ function PassScreen({ index }: { index: number }) {
         )}
         <RecallResult
           state="Pass"
+          verdict={verdict}
           title={current.passTitle}
           transcript={`“${answerFor(index, state)}”`}
           label={firstTake ? (typed ? 'Just now, you wrote' : 'Just now') : typed ? 'You wrote' : undefined}

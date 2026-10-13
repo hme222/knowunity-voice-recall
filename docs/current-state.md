@@ -55,7 +55,7 @@ Invariants enforced in code: judging screens move on with `router.replace`, so b
 
 ## Tokens and assets
 
-`tokens/tokens.json` → `npm run tokens` → `build/css/tokens.css` (+ `build/ios/KnowunityTokens.swift`, `build/android/*.xml`). CSS sizes are unitless tokens × `--size-primitive-unit` (0.0625rem), so the UI scales with text size. `check:tokens` (no raw hex) and `check:vars` (every `var()` resolves) guard it. Knowie: four Figma-exported faces in `public/knowie/` (~50KB gzipped each); Storybook-only peek frames in `storybook-assets/knowie-peek/`.
+`tokens/tokens.json` → `npm run tokens` → `build/css/tokens.css` (+ `build/ios/KnowunityTokens.swift`, `build/android/*.xml`). CSS sizes are unitless tokens × `--size-primitive-unit` (0.0625rem), so the UI scales with text size. `check:tokens` (no raw hex) and `check:vars` (every `var()` resolves) guard it. Short screens: Knowie gives way first, then anything marked `data-gives-way`. Knowie: four Figma-exported faces in `public/knowie/` (~50KB gzipped each); Storybook-only peek frames in `storybook-assets/knowie-peek/`.
 
 ## Mocked, or missing for production
 

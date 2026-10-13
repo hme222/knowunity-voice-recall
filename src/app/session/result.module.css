@@ -79,7 +79,7 @@
    opacity only, on the standard curve; durations from tokens (the hop is two standard
    beats, the rise one, after the hop's first). Nothing moves under reduced motion. */
 .celebrate {
-  animation: hop calc(var(--motion-semantic-duration-standard) * 2ms) var(--motion-semantic-easing-standard) both;
+  animation: hop calc(var(--motion-semantic-duration-celebrate) * 1ms) var(--motion-semantic-easing-standard) both;
 }
 
 @keyframes hop {

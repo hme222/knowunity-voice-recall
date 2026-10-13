@@ -60,12 +60,12 @@ function DrillCaptured() {
       topNavigation={<DrillBar step={step} onExit={() => router.push('/picker')} />}
       bottomContent={
         <div className={styles.actions}>
-          {/* "Check it", not "Looks right": the student was confirming a take and was
-              then told "Partially right" on the next screen — agreeing, then being
-              contradicted (UX critic, 2026-10-13). The session's Captured changed the
-              same way on 2026-10-12. */}
+          {/* "Submit", as on Recording, not "Looks right": the student was confirming a
+              take and was then told "Partially right" on the next screen — agreeing,
+              then being contradicted (UX critic, 2026-10-13). Not "Check it" either, one
+              word from the session's "Just check it" (craft critic, same day). */}
           <Button
-            CTA="Check it"
+            CTA="Submit"
             variant="Primary"
             size="M"
             fullWidth

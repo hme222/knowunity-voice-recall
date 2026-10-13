@@ -68,14 +68,14 @@
   border-color: var(--color-semantic-border-subtle);
   /* Stagger derived from the ambient loop rather than stated. Halved with the period
      so the 1/5, 2/5 relationship survives. */
-  animation-delay: calc(var(--motion-semantic-duration-ambient) * 0.1ms);
+  animation-delay: calc(var(--motion-semantic-duration-ambient-stagger) * 1ms);
 }
 
 .ring:nth-child(3) {
   width: calc(var(--component-mic-button-pulse-ring-outer) * var(--size-primitive-unit));
   height: calc(var(--component-mic-button-pulse-ring-outer) * var(--size-primitive-unit));
   border-color: var(--color-semantic-border-default);
-  animation-delay: calc(var(--motion-semantic-duration-ambient) * 0.2ms);
+  animation-delay: calc(var(--motion-semantic-duration-ambient-stagger) * 2ms);
 }
 
 /* The rings stop AND return to rest when paused. This selector used to hang off

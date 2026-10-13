@@ -65,6 +65,7 @@
   --color-primitive-moss-400: #97C459; /** Raw value, not for direct use. Sampled from the Figma component render of `strengthMeter` (15808:17668). The meter at 50. */
   --color-primitive-moss-600: #639922; /** Raw value, not for direct use. Sampled from the Figma component render of `strengthMeter` (15808:17668). The meter at 75. */
   --color-primitive-moss-800: #3B6D11; /** Raw value, not for direct use. Sampled from the Figma component render of `strengthMeter` (15808:17668). The meter at 100. */
+  --size-semantic-field-min-height: 120; /** Minimum height of a multi-line TextInput: the typed answer box. Three lines of body.m plus the card padding. It read illustration.1500, an illustration box standing in for a field (system critic, 2026-10-13); same 120, now named for what it sizes. */
   --size-semantic-caption-measure: 280; /** Measure for a centred screen caption. 280 is what the Quiz complete frame (15672:24061) sets on its caption text node, so the line breaks where the frame breaks it. Moved 2026-10-13 from component.card.captionMaxWidth: a caption measure is not card geometry, and component.card had no other consumer (system critic). */
   --size-primitive-unit: 0.0625rem; /** One design pixel, in rem: 1/16 of the root font size, so 1px at the default 16px. Every size in the CSS is a unitless token multiplied by this (calc(var(--x) * var(--size-primitive-unit))), so the whole UI scales with the student's text-size setting instead of being fixed in px (Knowunity engineering review, 2026-10-13). Native platforms do not use it: their outputs keep the unitless numbers as points/dp. */
   --size-primitive-space-0: 0; /** 0px spacing step. */
@@ -141,9 +142,12 @@
   --typography-primitive-font-weight-semibold: 600; /** The Bold-labeled variants of Headline XS/XXS, Body and Caption. */
   --typography-primitive-font-weight-bold: 700; /** Display M and S, Headline XL through S. */
   --typography-primitive-font-weight-heavy: 900; /** Display L only, paired with fontFamily.display. On the Greed VF this is wght 900 (the file's own 'Heavy' instance), not 800. */
+  --motion-primitive-duration-110: 110; /** 110ms. The offset between elements of one looping animation (the processing dots, the recording rings). A tenth of the ambient loop, so they read as one wave. */
   --motion-primitive-duration-150: 150; /** 150ms. Micro-feedback: button press, checkbox toggle, mic circle press-down. */
   --motion-primitive-duration-250: 250; /** 250ms. State transitions: idle to recording, processing to result. */
   --motion-primitive-duration-300: 300; /** 300ms. Swipe-to-settle for a card carousel. UNCONFIRMED: matched to common iOS carousel timing, not verified against a reference or a prototype — the same epistemic status as the +10 XP value. Tune once the swipe is prototyped. */
+  --motion-primitive-duration-500: 500; /** 500ms. Knowie's one hop on a pass: two standard beats, up and back down. */
+  --motion-primitive-duration-550: 550; /** 550ms, alternates. Knowie's breathe on the interrupt screens (exit, resume): half the ambient loop each way, so a full breath matches the mic pulse. */
   --motion-primitive-duration-1100: 1100; /** 1100ms, loops. Mic-pulse timing, matched to iOS dictation / WhatsApp voice-note comparables. */
   --motion-primitive-duration-1400: 1400; /** 1400ms. The judging dwell: how long a Processing beat holds before resolving. UNCONFIRMED against a real round trip, like the 300ms swipe. */
   --motion-primitive-duration-6000: 6000; /** 6000ms. When a judge counts as slow and Processing escalates its copy in place. Past the Design Brief's <4s target with headroom, so an ordinary wait never trips it. */
@@ -287,6 +291,9 @@
   --motion-semantic-duration-slow-threshold: var(--motion-primitive-duration-6000); /** When Processing escalates to "still thinking" in place. (It also offered a connection path until 2026-10-12, when the offline screen was removed.) */
   --motion-semantic-duration-confidence-grace: var(--motion-primitive-duration-10000); /** How long "How sure are you?" waits for a tap before Processing advances without one — the tap is optional, not a gate (designer, 2026-10-09). An unanswered ask records no confidence: no reward, no cost. */
   --motion-semantic-duration-ambient: var(--motion-primitive-duration-1100); /** Looping ambient timing, e.g. the mic listening-state pulse. */
+  --motion-semantic-duration-ambient-stagger: var(--motion-primitive-duration-110); /** Offset between items of one looping animation; the nth item waits n × this. Was ambient × 0.1 typed into two stylesheets (system critic, 2026-10-13). */
+  --motion-semantic-duration-celebrate: var(--motion-primitive-duration-500); /** 04 Pass's Knowie hop. Was standard × 2 typed into result.module.css (system critic, 2026-10-13). */
+  --motion-semantic-duration-breathe: var(--motion-primitive-duration-550); /** Knowie's breathe on the interrupt screens, each way. Was ambient × 0.5 typed into interrupt.module.css (system critic, 2026-10-13). */
   --motion-semantic-easing-standard: var(--motion-primitive-easing-standard); /** The curve fast, standard and ambient durations all use. */
   --responsive-primitive-root-font-size: var(--typography-primitive-font-size-root); /** Browser root font size, same across all three modes. References typography.primitive.fontSize.root. */
   --spacing-semantic-screen-margin: var(--size-primitive-space-400); /** Standard horizontal screen margin, 16px, matches the platform constraints doc exactly. */

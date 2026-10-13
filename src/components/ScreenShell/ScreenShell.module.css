@@ -93,6 +93,9 @@
 /* Knowie gives way before the words do. Set by the shell's measure, on any screen, only
    while the content would otherwise not fit. */
 .middle[data-mascot-stage='2'] [data-mascot],
+.middle[data-mascot-stage='3'] [data-mascot],
+.middle[data-mascot-stage='3'] [data-gives-way],
+.middle[data-mascot-stage='3'] :has(> [data-mascot]:only-child),
 /* A wrapper that exists only to hold Knowie goes with it. The doors' `.content` block
    kept its 32/16 padding and both flex gaps — 80 of nothing between the chat door's XP
    line and its bubble, on the screen with the least room to spare. */

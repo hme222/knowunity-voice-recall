@@ -208,13 +208,19 @@ public class KnowunityTokens {
     public static let componentStrengthMeterTrackHeight = 12 /** Track height, 12. The Figma component draws 220x10; 10 is not a step in this scale and 12 is the nearest, which is what was already built. */
     public static let componentStrengthMeterTrackWidth = 220 /** Track width, 220. The Figma component draws 220x10 and the DD frames use it at that width, centred — not stretched to the screen margin, which is what made the meter read as a page-wide banner rather than a small coverage gauge. */
     public static let motionPrimitiveDuration10000 = 10000 /** 10000ms. How long the confidence ask waits before Processing moves on without it. Added 2026-10-09: the designer decided the ask must not be required. Longer than the 6000 slow threshold on purpose, so 'still thinking' shows before the screen advances. */
+    public static let motionPrimitiveDuration110 = 110 /** 110ms. The offset between elements of one looping animation (the processing dots, the recording rings). A tenth of the ambient loop, so they read as one wave. */
     public static let motionPrimitiveDuration1100 = 1100 /** 1100ms, loops. Mic-pulse timing, matched to iOS dictation / WhatsApp voice-note comparables. */
     public static let motionPrimitiveDuration1400 = 1400 /** 1400ms. The judging dwell: how long a Processing beat holds before resolving. UNCONFIRMED against a real round trip, like the 300ms swipe. */
     public static let motionPrimitiveDuration150 = 150 /** 150ms. Micro-feedback: button press, checkbox toggle, mic circle press-down. */
     public static let motionPrimitiveDuration250 = 250 /** 250ms. State transitions: idle to recording, processing to result. */
     public static let motionPrimitiveDuration300 = 300 /** 300ms. Swipe-to-settle for a card carousel. UNCONFIRMED: matched to common iOS carousel timing, not verified against a reference or a prototype — the same epistemic status as the +10 XP value. Tune once the swipe is prototyped. */
+    public static let motionPrimitiveDuration500 = 500 /** 500ms. Knowie's one hop on a pass: two standard beats, up and back down. */
+    public static let motionPrimitiveDuration550 = 550 /** 550ms, alternates. Knowie's breathe on the interrupt screens (exit, resume): half the ambient loop each way, so a full breath matches the mic pulse. */
     public static let motionPrimitiveDuration6000 = 6000 /** 6000ms. When a judge counts as slow and Processing escalates its copy in place. Past the Design Brief's <4s target with headroom, so an ordinary wait never trips it. */
     public static let motionSemanticDurationAmbient = 1100 /** Looping ambient timing, e.g. the mic listening-state pulse. */
+    public static let motionSemanticDurationAmbientStagger = 110 /** Offset between items of one looping animation; the nth item waits n × this. Was ambient × 0.1 typed into two stylesheets (system critic, 2026-10-13). */
+    public static let motionSemanticDurationBreathe = 550 /** Knowie's breathe on the interrupt screens, each way. Was ambient × 0.5 typed into interrupt.module.css (system critic, 2026-10-13). */
+    public static let motionSemanticDurationCelebrate = 500 /** 04 Pass's Knowie hop. Was standard × 2 typed into result.module.css (system critic, 2026-10-13). */
     public static let motionSemanticDurationConfidenceGrace = 10000 /** How long "How sure are you?" waits for a tap before Processing advances without one — the tap is optional, not a gate (designer, 2026-10-09). An unanswered ask records no confidence: no reward, no cost. */
     public static let motionSemanticDurationFast = 150 /** Micro-feedback timing: button press, checkbox toggle, the mic circle's press-down scale. */
     public static let motionSemanticDurationProcessingDwell = 1400 /** How long Processing and the typed checking beat hold before resolving. One token because they are the same designed beat: they were previously written as 1400 and 1200, two numbers for one decision. */
@@ -270,6 +276,7 @@ public class KnowunityTokens {
     public static let sizePrimitiveStrokeBorder = 1 /** 1px stroke weight. */
     public static let sizePrimitiveStrokeHeavyBorder = 2 /** 2px stroke weight. */
     public static let sizeSemanticCaptionMeasure = 280 /** Measure for a centred screen caption. 280 is what the Quiz complete frame (15672:24061) sets on its caption text node, so the line breaks where the frame breaks it. Moved 2026-10-13 from component.card.captionMaxWidth: a caption measure is not card geometry, and component.card had no other consumer (system critic). */
+    public static let sizeSemanticFieldMinHeight = 120 /** Minimum height of a multi-line TextInput: the typed answer box. Three lines of body.m plus the card padding. It read illustration.1500, an illustration box standing in for a field (system critic, 2026-10-13); same 120, now named for what it sizes. */
     public static let spacingSemanticBetweenSections = 24 /** Vertical gap between major blocks on a screen, e.g. between the prompt bubble and the mic control. */
     public static let spacingSemanticCardLabelGap = 6 /** Vertical gap between a card's own label or title and its body text. chatBubble's title-to-body gap, hintCard's label-to-body gap. Not for gaps between separate blocks on a screen, that's betweenSections. */
     public static let spacingSemanticCardPadding = 16 /** Interior padding for cards, sheets and the recall turn bubble. Shares its value with screenMargin by design, same base padding unit. */

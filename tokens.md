@@ -319,15 +319,18 @@ The composed text styles. Each resolves to a family, weight, size, line height a
 
 ## Motion primitives
 
-`motion.primitive.*` — 8 tokens
+`motion.primitive.*` — 11 tokens
 
 Durations in milliseconds, and easing curves.
 
 | Token | Value | Resolves to | Notes |
 | --- | --- | --- | --- |
+| `motion.primitive.duration.110` | `110` |  | 110ms. The offset between elements of one looping animation (the processing dots, the recording rings). A tenth of the ambient loop, so they read as one wave. |
 | `motion.primitive.duration.150` | `150` |  | 150ms. Micro-feedback: button press, checkbox toggle, mic circle press-down. |
 | `motion.primitive.duration.250` | `250` |  | 250ms. State transitions: idle to recording, processing to result. |
 | `motion.primitive.duration.300` | `300` |  | 300ms. Swipe-to-settle for a card carousel. UNCONFIRMED: matched to common iOS carousel timing, not verified against a reference or a prototype — the same epistemic status as the +10 XP value. Tune once the swipe is prototyped. |
+| `motion.primitive.duration.500` | `500` |  | 500ms. Knowie's one hop on a pass: two standard beats, up and back down. |
+| `motion.primitive.duration.550` | `550` |  | 550ms, alternates. Knowie's breathe on the interrupt screens (exit, resume): half the ambient loop each way, so a full breath matches the mic pulse. |
 | `motion.primitive.duration.1100` | `1100` |  | 1100ms, loops. Mic-pulse timing, matched to iOS dictation / WhatsApp voice-note comparables. |
 | `motion.primitive.duration.1400` | `1400` |  | 1400ms. The judging dwell: how long a Processing beat holds before resolving. UNCONFIRMED against a real round trip, like the 300ms swipe. |
 | `motion.primitive.duration.6000` | `6000` |  | 6000ms. When a judge counts as slow and Processing escalates its copy in place. Past the Design Brief's <4s target with headroom, so an ordinary wait never trips it. |
@@ -336,7 +339,7 @@ Durations in milliseconds, and easing curves.
 
 ## Motion semantics
 
-`motion.semantic.*` — 11 tokens
+`motion.semantic.*` — 14 tokens
 
 Named timings.
 
@@ -350,6 +353,9 @@ Named timings.
 | `motion.semantic.duration.slowThreshold` | `{motion.primitive.duration.6000}` | `6000` | When Processing escalates to "still thinking" in place. (It also offered a connection path until 2026-10-12, when the offline screen was removed.) |
 | `motion.semantic.duration.confidenceGrace` | `{motion.primitive.duration.10000}` | `10000` | How long "How sure are you?" waits for a tap before Processing advances without one — the tap is optional, not a gate (designer, 2026-10-09). An unanswered ask records no confidence: no reward, no cost. |
 | `motion.semantic.duration.ambient` | `{motion.primitive.duration.1100}` | `1100` | Looping ambient timing, e.g. the mic listening-state pulse. |
+| `motion.semantic.duration.ambientStagger` | `{motion.primitive.duration.110}` | `110` | Offset between items of one looping animation; the nth item waits n × this. Was ambient × 0.1 typed into two stylesheets (system critic, 2026-10-13). |
+| `motion.semantic.duration.celebrate` | `{motion.primitive.duration.500}` | `500` | 04 Pass's Knowie hop. Was standard × 2 typed into result.module.css (system critic, 2026-10-13). |
+| `motion.semantic.duration.breathe` | `{motion.primitive.duration.550}` | `550` | Knowie's breathe on the interrupt screens, each way. Was ambient × 0.5 typed into interrupt.module.css (system critic, 2026-10-13). |
 | `motion.semantic.easing.standard` | `{motion.primitive.easing.standard}` | `cubic-bezier(0.4, 0, 0.2, 1)` | The curve fast, standard and ambient durations all use. |
 | `motion.semantic.easing.ambient` | `cubic-bezier(0.4, 0, 0.6, 1)` |  | Symmetric ease for motion that loops back to where it started — the mic pulse, Knowie's breathe, the processing dots. `standard` is asymmetric and made a looping animation read as a sawtooth, which is why `ease-in-out` had been typed directly into six stylesheets. |
 | `motion.semantic.easing.linear` | `linear` |  | For continuous rotation only — a spinner. Every other easing in this file shapes a start and an end; a spin has neither, and putting it on a curve makes each turn visibly speed up and slow down. Added because `linear` was otherwise being typed directly into two component stylesheets. |
@@ -425,4 +431,4 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ---
 
-325 tokens across 10 groups.
+331 tokens across 10 groups.

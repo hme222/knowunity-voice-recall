@@ -116,7 +116,8 @@ function MissScreen({ index }: { index: number }) {
         {/* No "Partially right" on the last rung: it sat over "That's three tries" and
             read as a contradiction (Duolingo design review, 2026-10-13). */}
         {!lastRung && (
-          <div className={styles.verdictRow}>
+          // The chip is visual; its words are announced in the card's live region.
+          <div className={styles.verdictRow} aria-hidden="true">
             {/* Amber is partial CREDIT, so it is kept for a real half-answer (8a). A wrong
                 idea, a typed miss the mock cannot judge, and "too short" get the neutral
                 chip instead of amber credit for something not said. */}
@@ -141,6 +142,7 @@ function MissScreen({ index }: { index: number }) {
             2026-10-12); the chip carries the verdict. */}
         <RecallResult
           state="Neutral"
+          verdict={lastRung ? undefined : partialCredit ? 'Partially right' : thin ? 'Not enough to check' : 'Not quite yet'}
           title={missHeadline}
           transcript={`“${shownAnswer(index, 'Miss', state)}”`}
           label={state.sentTyped?.[index] ? 'You wrote' : undefined}

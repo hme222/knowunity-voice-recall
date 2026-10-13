@@ -365,7 +365,7 @@ the states, not building the engine.
      means, in your own words. However you'd explain it to a friend."
    - 02a Captured "Here's what I heard." with "Not what you said? Say it again /
      Type instead" and the confidence ask (2026-10-12, 2b); DD 02a Captured the same
-     shape with a "Check it" button (2026-10-13). The frame read "Send it, or say it
+     shape with a "Submit" button (2026-10-13). The frame read "Send it, or say it
      again." over `Looks right` / `Say it again`.
 
 7. **Verdicts accumulate in `sessionStorage`** as each term resolves, so Recap

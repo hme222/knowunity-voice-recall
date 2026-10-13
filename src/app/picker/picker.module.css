@@ -29,21 +29,5 @@
   line-height: calc(var(--typography-style-caption-m-regular-line-height) * var(--size-primitive-unit));
 }
 
-/* "Search your topics" — on the frame, and it had no counterpart in the build. */
-.search {
-  width: 100%;
-  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
-  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
-  background: var(--color-semantic-background-input);
-  border: calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-default);
-  color: var(--color-semantic-text-primary);
-  font-family: inherit;
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
-}
 
-.search::placeholder { color: var(--color-semantic-text-disabled); }
 
-.search:focus-visible {
-  outline: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-focus);
-  outline-offset: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
-}

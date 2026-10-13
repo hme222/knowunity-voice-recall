@@ -117,7 +117,9 @@ export default function RecapPage() {
         {/* Knowie reads the run (designer, 2026-10-12, from the Reach critic): laughing
             when nothing needs revisiting, determined — "let's go", never dazed — when
             something does. It laughed over a 2-of-4 recap whose job is not to flatter. */}
-        <MascotSlot size="2XL" expression={needsRevisiting ? 'determined' : 'laughing'} className={styles.mascotCentred} />
+        {/* XL, not 2XL: the rows are the content, and at 2XL only one showed above the
+            fold at 390x668 (UX critic, 2026-10-13). */}
+        <MascotSlot size="XL" expression={needsRevisiting ? 'determined' : 'laughing'} className={styles.mascotCentred} />
         {/* Headline S over Body M Regular, as the frames set a screen title — not
             TextBlock's L, which renders 44px. See door.module.css for the same note;
             the evidence there is a direct read of the Quiz complete frame. */}
@@ -136,8 +138,18 @@ export default function RecapPage() {
                 ? `You said all ${counted} back without help`
                 : `You can say ${totals.unaided} of ${counted} back without help`}
           </h1>
-          {outcomes.length > 0 && resolved > totals.unaided && (
-            <p className="screenTitleCaption">{`${resolved - totals.unaided} more with a hint.`}</p>
+          {/* The wins by name, in the caption rather than a coloured line of their own:
+              the misses lead the list, so this is where the first viewport says what
+              the student CAN do (Knowunity design review; UX critic, 2026-10-13). */}
+          {outcomes.length > 0 && (unaidedNames.length > 0 && unaidedNames.length < counted || resolved > totals.unaided) && (
+            <p className="screenTitleCaption">
+              {[
+                unaidedNames.length > 0 && unaidedNames.length < counted ? `Without help: ${unaidedNames.join(', ')}.` : null,
+                resolved > totals.unaided ? `${resolved - totals.unaided} more with a hint.` : null,
+              ]
+                .filter(Boolean)
+                .join(' ')}
+            </p>
           )}
         </div>
         {strip.length > 0 && (
@@ -162,13 +174,10 @@ export default function RecapPage() {
             {`\u26a1 +${xpShown} XP \u00b7 ${totals.elapsed}`}
             <span className={styles.summaryCue}>How it adds up</span>
           </summary>
-          {/* The secondary lines live here now, under the one line that opens them: the
+          {/* The secondary lines live here, under the one line that opens them: the
               headline area carried a green line and an amber line on top of the strip,
               and the first bucket fell half under the fold at 390x668 (craft critic,
               2026-10-13). The rows still mark each sure-and-missed term. */}
-          {unaidedNames.length > 0 && unaidedNames.length < counted && (
-            <p className={styles.working}>{`Without help: ${unaidedNames.join(', ')}.`}</p>
-          )}
           {sureMissed > 0 && (
             <p className={styles.working}>
               {sureMissed === 1 ? 'You were sure about 1 you missed.' : `You were sure about ${sureMissed} you missed.`}

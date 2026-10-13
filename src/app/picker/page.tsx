@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { AppBar, Button, PickerRow, ScreenShell } from '@/components'
+import { AppBar, Button, PickerRow, ScreenShell, TextInput } from '@/components'
 import { CloseIcon } from '@/components/icons'
 import { PICKER_DRILLS, PICKER_TOPICS, setDrillTerm, setPractising, startRun } from '@/lib/session'
 import styles from './picker.module.css'
@@ -38,14 +38,7 @@ export default function PickerPage() {
           <h1 className="screenTitleHeading">Say It Back</h1>
           <p className="screenTitleCaption">Run a recall session, or drill one definition.</p>
         </div>
-        <input
-          className={styles.search}
-          type="search"
-          placeholder="Search your topics"
-          aria-label="Search your topics"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+        <TextInput type="search" label="Search your topics" placeholder="Search your topics" value={query} onChange={setQuery} />
         {/* Announced, so a screen-reader user hears that the lists emptied. */}
         <p className={empty ? styles.note : 'srOnly'} role="status">
           {empty ? `Nothing matches \u201c${query.trim()}\u201d.` : ''}

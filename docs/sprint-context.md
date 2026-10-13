@@ -237,7 +237,7 @@ above.
           list.
         - *Drill mishear.* A drill take under 2s shows "I didn't catch that" on drill
           Captured with Say it again / Type instead; no rung spent. Drill Captured
-          says "Check it", not "Looks right", so a student never agrees to a take
+          says "Submit" (as on Recording), not "Looks right", so a student never agrees to a take
           and is then told it was partial.
         - *No verdict chip on the third miss: kept.* Three judgements in a row is the
           point to stop judging; the headline says where they are ("That's three
@@ -253,6 +253,17 @@ above.
         - *Drill rounds say "Got it".* A passed round holds a "Got it" chip for
           `motion.semantic.duration.verdictHold` before the next opens, spoken or
           typed.
+      - **Fourth critic run's fixes (2026-10-13).** Short screens: ScreenShell's
+        give-way has a second stage — after Knowie, anything marked `data-gives-way`
+        (the unclear screen's repeated question, the chat door's XP line) drops, so no
+        card is cut mid-line at 390x668. Reveal's bubble title is "Here's the answer."
+        and the invitation lives once, under the mic. Verdict chips are announced
+        inside the result card's live region (`RecallResult verdict`). `TextInput`
+        promoted (typed answer box, picker search). Drill Captured's button is
+        "Submit"; blank's is "Reveal answer". The Recap's wins are named in the
+        caption, Knowie is XL there. Durations derived by ratio became tokens
+        (`ambientStagger`, `celebrate`, `breathe`). Checked and left: labels are at the
+        12px caption floor; mic captions already share a bottom line (666 / 490).
     - **02a Captured asks a question** (option 3b, same day): "Here's what I heard.
       Did I get it?" over the frame's "Looks right" / "Say it again". The frame's
       "Send it, or say it again." disagreed with its own button. Same in the drill.

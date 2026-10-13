@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { expect } from 'storybook/test'
 import { RECALL_RESULT_STATES, RecallResult } from './RecallResult'
 
 // Verbatim from the Figma component description (recallResult, 15657:10978).
@@ -58,6 +59,14 @@ export const MissWithoutTranscript: Story = {
     title: 'You’ve got the “charge on an atom” part right. The “evenly split” piece is what’s missing.',
     transcript: '“It’s the charge on an atom, worked out from its bonds.”',
     showTranscript: false,
+  },
+}
+
+/** With the verdict chip's words announced in the card's live region (visually hidden). */
+export const WithVerdict: Story = {
+  args: { state: 'Neutral', verdict: 'Partially right', title: 'Right atoms. What they do with their electrons is the piece that is missing.' },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('status')).toHaveTextContent('Partially right.')
   },
 }
 

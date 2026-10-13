@@ -6,29 +6,8 @@
   gap: calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit));
 }
 
-.field {
-  width: 100%;
-  min-height: calc(var(--size-primitive-illustration-1500) * var(--size-primitive-unit));
-  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
-  border-radius: calc(var(--size-primitive-radius-400) * var(--size-primitive-unit));
-  background: var(--color-semantic-background-input);
-  border: calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-default);
-  color: var(--color-semantic-text-primary);
-  font-family: inherit;
-  font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * var(--size-primitive-unit));
-  resize: none;
-}
 
-.field::placeholder {
-  color: var(--color-semantic-text-disabled);
-}
 
-.field:focus-visible {
-  outline: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-focus);
-  outline-offset: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
-}
 
 .actions {
   display: flex;

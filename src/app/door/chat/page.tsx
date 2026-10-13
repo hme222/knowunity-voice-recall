@@ -50,16 +50,20 @@ export default function ChatDoor() {
       }
     >
       <div className={styles.body}>
-        <p className={styles.xp}>{'⚡ 2 XP'}</p>
+        {/* Gives way at 390x668 after Knowie, so the bubble is never cut mid-line. */}
+        <p className={styles.xp} data-gives-way>{'⚡ 2 XP'}</p>
+        {/* The screen's h1, for screen readers; the visible title is in the bubble.
+            Outside the mascot's wrapper, so the wrapper is Knowie alone and goes with
+            Knowie at 390x668 — with the h1 inside, its 48px of padding stayed. */}
+        <h1 className="srOnly">{`${SUBJECT}: ${getTerm(1)?.name}`}</h1>
         <div className={styles.content}>
-          {/* The screen's h1, for screen readers; the visible title is in the bubble. */}
-          <h1 className="srOnly">{`${SUBJECT}: ${getTerm(1)?.name}`}</h1>
           <MascotSlot size="2XL" expression="determined" />
         </div>
         <ChatBubble
           showTitle
           title="You were just asking about formal charge"
-          body="Want to say it back in your own words? It's the quickest way to know it stuck."
+          // One line shorter: at 390x668 the second sentence was cut mid-line.
+          body="Say it back in your own words. It’s the quickest way to know it stuck."
         />
         {/* A mic, in the shared region, like the exam-plan door. It was a Secondary
             Button — two doors offering the same thing two ways, and the one that opens

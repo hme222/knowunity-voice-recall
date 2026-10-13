@@ -38,12 +38,18 @@ export type RecallResultProps = {
    * "You wrote" on a typed answer, which "You said" misdescribed (UX critic, 2026-10-13).
    */
   label?: string
+  /**
+   * The verdict chip's words, announced inside this card's live region. The chip sits
+   * outside the region, so a screen reader heard the card and never "Partially right"
+   * (UX critic, 2026-10-13). Pass the chip's text and hide the chip from readers.
+   */
+  verdict?: string
   /** Tap on the CouldntHear retry tag. */
   onRetry?: () => void
   className?: string
 }
 
-export function RecallResult({ state = 'Pass', title, transcript, showTranscript = true, label, onRetry, className }: RecallResultProps) {
+export function RecallResult({ state = 'Pass', title, transcript, showTranscript = true, label, verdict, onRetry, className }: RecallResultProps) {
   return (
     <div className={[styles.root, className].filter(Boolean).join(' ')} data-state={state} role="status">
       {/* Only with somewhere to go. Drawn without `onRetry` it was a filled pill that
@@ -55,7 +61,10 @@ export function RecallResult({ state = 'Pass', title, transcript, showTranscript
         // missed it (designer, 2026-10-08).
         <Chips size="S" color="Primary" active Text="Say it again" leftIcon={<RetryIcon />} showRightIcon={false} onClick={onRetry} />
       )}
-      <p className={styles.title}>{title}</p>
+      <p className={styles.title}>
+        {verdict && <span className="srOnly">{`${verdict}. `}</span>}
+        {title}
+      </p>
       {showTranscript && (
         <>
           <p className={styles.label}>{label ?? LABELS[state]}</p>
