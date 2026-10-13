@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from 'react'
 import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../session/SessionBar'
-import { actionRowClass, Button, ChatBubble, MascotSlot, ScreenShell } from '@/components'
+import { actionRowClass, Button, ChatBubble, MascotSlot, ScreenShell, HintCard } from '@/components'
 import { getTerm, nextAfter, recordOutcome, setSticky, sendTypedAnswer, setTypedAnswer, typedDraft, useSticky, SUBJECT, advancePractice, isPractising, useSession } from '@/lib/session'
 import { DrillBar } from '../../drill/DrillBar'
 import styles from '../text.module.css'
@@ -19,6 +19,7 @@ function TextTurnScreen() {
   // session and a student practising one definition came out inside a 4-term run on a
   // different term.
   const drillStep = searchParams.get('drill')
+  const hinted = searchParams.get('hinted') === '1'
   const sessionSticky = useSticky()
   const urlSticky = searchParams.get('sticky') === '1'
   const sticky = urlSticky || sessionSticky
@@ -109,6 +110,8 @@ function TextTurnScreen() {
         {/* Knowie and the accented term, as on every voice screen. History: docs/code-history.md#h-096 */}
         <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
         <ChatBubble showTitle title={`${SUBJECT} · Explain: `} titleAccent={current.name} body={current.prompt} />
+        {/* A typed retry carries its hint, as the spoken retry does under the mic. */}
+        {hinted && <HintCard body={current.hint} />}
         <label>
           <textarea
             className={styles.field}

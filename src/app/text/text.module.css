@@ -52,3 +52,20 @@
   justify-content: center;
   column-gap: calc(var(--size-primitive-space-600) * var(--size-primitive-unit));
 }
+
+/* The checking beat: the wait, the typed answer shown back, and the optional exit at
+   the foot, directly above the confidence pair. */
+.checkingBody {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.checkingBody > :first-child {
+  flex: 1;
+}
+
+.justCheck {
+  display: flex;
+  justify-content: center;
+}

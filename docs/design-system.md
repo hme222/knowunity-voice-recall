@@ -1294,6 +1294,15 @@ tells you which layer it lives in just by shape.
   thing allowed to reference a primitive. If a component needs
   `color.primitive.violet.500`, that's a sign a semantic token is
   missing, not a reason to reach past the semantic layer to get it.
+  **Recorded exception (2026-10-13, system critic): size primitives.**
+  Components and screens read `size.primitive.space.*`, `radius.*`,
+  `stroke.*`, `icon.*` and `illustration.*` directly, because the semantic
+  spacing layer is deliberately thin (five tokens: screen margin, card
+  padding, between sections, card label gap, tap target) and the spacing
+  scale itself is the shared language. The rule holds without exception
+  for colour: no component or screen reads `color.primitive.*`. Add a
+  semantic spacing token when the same primitive starts meaning the same
+  thing in three places.
 - **Never build something new when a component in this system already
   does the job.** Check the "which component" section and the file
   itself before adding anything. A slightly-wrong existing component

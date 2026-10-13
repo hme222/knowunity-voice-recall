@@ -283,3 +283,9 @@
   font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
   line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
 }
+
+/* Two quiet escapes side by side, centred under the primary. */
+.rowCentred {
+  justify-content: center;
+  column-gap: calc(var(--size-primitive-space-600) * var(--size-primitive-unit));
+}

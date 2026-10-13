@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from 'react'
 import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { micRegionClass, Button, MicButton, RecordingStatus, ScreenShell } from '@/components'
+import { actionRowClass, micRegionClass, Button, MicButton, RecordingStatus, ScreenShell } from '@/components'
 import { drillRung, useDrillTerm } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
@@ -61,6 +61,20 @@ function DrillRecording() {
             fullWidth
             onClick={() => router.push(afterTake)}
           />
+          {/* The session's recording escapes, here too (UX critic, 2026-10-13): discard
+              and re-record before sending, or answer this rung by typing. */}
+          <div className={`${actionRowClass} ${styles.rowCentred}`}>
+            <Button
+              CTA="Start over"
+              variant="Tertiary"
+              size="S"
+              onClick={() => {
+                setSeconds(0)
+                setPaused(false)
+              }}
+            />
+            <Button CTA="Type instead" variant="Tertiary" size="S" onClick={() => router.push(`/text/turn?term=${drillTerm.index}&drill=${step}`)} />
+          </div>
         </div>
       }
     >

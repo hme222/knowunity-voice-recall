@@ -21,7 +21,7 @@ Q(n): idle ─tap mic─► [first time only: primer sheet → drawn OS prompt �
 Recap → "Practice what I missed" → practice list → drill or say-again → back to Recap
 ```
 
-Other entries: `/home/unlocked` chip → `/picker` ("Start Chemistry: bonding" or a drill); `/home/due` due chips; `/session/resume`; guided one-definition runs from `/door/quiz`, `/door/chat`, `/door/exam-plan` (reached from `/home`), which end on the door's result (pass) or `/door/missed` (no pass), then the unlock popup. `/start` is the reviewer brief. `/session/intro` is retired: it starts a run and redirects to Q1.
+Other entries: `/home/unlocked` chip → `/picker` ("Start Chemistry: bonding" or a drill); `/home/due` due chips; `/session/resume`; guided one-definition runs from `/door/quiz`, `/door/chat`, `/door/exam-plan` (reached from `/home`), which end on the door's result (pass) or `/door/missed` (no pass), then the unlock popup. `/start` is the reviewer brief, reached by direct URL only, on purpose: it is for whoever is handed the link, not part of the product, so nothing in the app links to it (system critic flagged it as an orphan, 2026-10-13). `/session/intro` is retired: it starts a run and redirects to Q1.
 
 ## Routes (43)
 
@@ -42,7 +42,7 @@ Invariants enforced in code: judging screens move on with `router.replace`, so b
 
 ## Rules
 
-- **Verdict (mock).** Spoken: under 2s → couldn't hear, 2–5s → miss, 5s+ → pass. Question 2's first attempt is a scripted couldn't-hear (never in practice, never on a door run). Typed: 40+ chars → pass, under 15 → "too short to check", else miss. Say-it-back under 2s pays nothing.
+- **Verdict (mock).** Spoken: under 2s → couldn't hear, 2–5s → miss, 5s+ → pass. Question 2's first attempt is a scripted couldn't-hear (never in practice, never on a door run). Typed: 40+ chars and at least one of the term's `keywords` → pass, under 15 → "too short to check", else miss. Say-it-back under 2s pays nothing.
 - **Hint ladder.** One hint, repeated; from the 3rd judged miss only Reveal is offered. A mishear does not spend a rung.
 - **XP.** Unaided 10 · Hinted 7 · Revealed 0 (+3 for a judged say-it-back) · Skipped 0 · finishing bonus +5 (only if at least one term was got). Typed by choice pays the Hinted rate; typing after a real couldn't-hear or with the mic denied pays in full.
 - **Confidence.** Asked on Captured (optional: Sure / Not sure / Skip). Right first time +1 either way; sure and wrong costs 0 but is named on the miss, the reveal and the Recap.

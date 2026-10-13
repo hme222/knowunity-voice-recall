@@ -65,6 +65,7 @@
   --color-primitive-moss-400: #97C459; /** Raw value, not for direct use. Sampled from the Figma component render of `strengthMeter` (15808:17668). The meter at 50. */
   --color-primitive-moss-600: #639922; /** Raw value, not for direct use. Sampled from the Figma component render of `strengthMeter` (15808:17668). The meter at 75. */
   --color-primitive-moss-800: #3B6D11; /** Raw value, not for direct use. Sampled from the Figma component render of `strengthMeter` (15808:17668). The meter at 100. */
+  --size-semantic-caption-measure: 280; /** Measure for a centred screen caption. 280 is what the Quiz complete frame (15672:24061) sets on its caption text node, so the line breaks where the frame breaks it. Moved 2026-10-13 from component.card.captionMaxWidth: a caption measure is not card geometry, and component.card had no other consumer (system critic). */
   --size-primitive-unit: 0.0625rem; /** One design pixel, in rem: 1/16 of the root font size, so 1px at the default 16px. Every size in the CSS is a unitless token multiplied by this (calc(var(--x) * var(--size-primitive-unit))), so the whole UI scales with the student's text-size setting instead of being fixed in px (Knowunity engineering review, 2026-10-13). Native platforms do not use it: their outputs keep the unitless numbers as points/dp. */
   --size-primitive-space-0: 0; /** 0px spacing step. */
   --size-primitive-space-100: 4; /** 4px spacing step. */
@@ -183,8 +184,6 @@
   --component-bottom-sheet-grabber-width: 32; /** Grabber width, 32. Was space.800, a spacing step standing in for a size. */
   --component-bottom-sheet-grabber-height: 4; /** Grabber height, 4. Was space.100. */
   --component-bottom-sheet-max-height: 85; /** Sheet ceiling as a percentage of the frame, so a long sheet still shows the screen it sits over. */
-  --component-card-placeholder-min-height: 120; /** Minimum height of home's placeholder cards. Was illustration.1500, an illustration box used as a card height — right number, wrong meaning. */
-  --component-card-caption-max-width: 280; /** Measure for a centred screen caption. 280 is what the Quiz complete frame (15672:24061) sets on its caption text node, so the line breaks where the frame breaks it. */
   --color-semantic-background-page: var(--color-primitive-navy-950); /** Root screen canvas. Use for every screen's base background; not for cards, sheets, or modals. */
   --color-semantic-background-surface: var(--color-primitive-navy-800); /** Elevated container fill. Use for cards, bottom sheets, modals, dropdown menus, chat bubbles, toasts. */
   --color-semantic-background-raised: var(--color-primitive-alpha-light-06); /** A surface sitting on top of another surface. Use when a card or row needs to separate from a container that is itself background.surface — the confirmed case is an optionRow inside a bottomSheet, where both would otherwise resolve to the same value and the row would vanish. Translucent on purpose so it composites correctly over any surface beneath it. Not a replacement for background.surface; only reach for it when there is a genuine second layer. */

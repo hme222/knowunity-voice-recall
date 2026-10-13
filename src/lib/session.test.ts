@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import {
   SCRIPTED_COULDNT_HEAR_TERM,
+  typedVerdict,
   markDrilled,
   startReview,
   sessionTotals,
@@ -293,5 +294,13 @@ describe('2a / 8a / 9a', () => {
   })
   it('marks electronegativity’s partial take as a wrong idea, the others as partial', () => {
     expect(TERMS.filter((t) => t.partialKind === 'wrong').map((t) => t.name)).toEqual(['Electronegativity'])
+  })
+})
+
+describe('typedVerdict (the typed mock)', () => {
+  it('needs length AND a key idea of the term', () => {
+    expect(typedVerdict(2, 'Some sort of charge thing about atoms I think, honestly')).toBe('miss')
+    expect(typedVerdict(2, 'Two atoms sharing a pair of electrons between them')).toBe('pass')
+    expect(typedVerdict(2, 'sharing')).toBe('miss')
   })
 })

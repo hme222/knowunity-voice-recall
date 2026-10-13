@@ -28,6 +28,12 @@ export type Term = {
    */
   partialTranscript: string
   /**
+   * The typed mock's key ideas: a typed answer passes at 40+ characters AND with at
+   * least one of these (lowercase substring). Length alone passed "Some sort of charge
+   * thing about atoms I think" as a covalent bond (UX critic, 2026-10-13).
+   */
+  keywords: string[]
+  /**
    * 'wrong' when the partial take is a wrong idea, not half of a right one: the miss
    * then reads "Not quite yet" (neutral), not "Partially right" (amber), so the amber
    * chip keeps meaning real partial credit (designer, 2026-10-13, option 8a).
@@ -114,6 +120,7 @@ export const TERMS: Term[] = [
   {
     index: 1,
     name: 'Formal charge',
+    keywords: ['split', 'even', 'assign'],
     // from the frame — 01 Idle (refreshed 2)
     title: 'Explain: Formal charge',
     prompt: "Say what formal charge means, in your own words. However you'd explain it to a friend.",
@@ -149,6 +156,7 @@ export const TERMS: Term[] = [
   {
     index: 2,
     name: 'Covalent bond',
+    keywords: ['shar'],
     title: 'Explain: Covalent bond',
     prompt: 'Say what a covalent bond is and what holds it together, in your own words. However you would explain it to a friend.',
     transcript: 'It is when two atoms share a pair of electrons, and both nuclei pulling on that shared pair is what holds them together.',
@@ -173,6 +181,7 @@ export const TERMS: Term[] = [
   {
     index: 3,
     name: 'Electronegativity',
+    keywords: ['attract', 'pull', 'draw'],
     title: 'Explain: Electronegativity',
     prompt: 'Say what electronegativity means, in your own words. However you would explain it to a friend.',
     transcript: 'It is how strongly an atom pulls shared electrons toward itself in a bond, so the more electronegative atom gets more than its share.',
@@ -198,6 +207,7 @@ export const TERMS: Term[] = [
   {
     index: 4,
     name: 'Octet rule',
+    keywords: ['eight', '8 ', 'outer shell', 'valence'],
     title: 'Explain: Octet rule',
     prompt: 'Say what the octet rule is, in your own words. However you would explain it to a friend.',
     transcript: 'Atoms tend to bond until they have eight electrons in their outer shell, by sharing, gaining or losing electrons.',
@@ -1036,6 +1046,14 @@ export function startReview(): string {
   startSession()
   if (!queue.length) return termHref(1)
   return startPractice(queue.map((index) => ({ index, mode: 'say' as const })))
+}
+
+/** The typed mock's verdict: long enough, and naming a key idea of the term. */
+export function typedVerdict(index: number, text: string): 'pass' | 'miss' {
+  const t = text.trim().toLowerCase()
+  const term = getTerm(index)
+  if (t.length < 40 || !term) return 'miss'
+  return term.keywords.some((k) => t.includes(k)) ? 'pass' : 'miss'
 }
 
 /** Where every way into the full session starts: a clean run at question 1. */

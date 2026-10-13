@@ -173,8 +173,6 @@ public class KnowunityTokens {
     public static let componentButtonLHeight = 56 /** Size L pill height. Taller than the tap target, so the pill is the hit area. */
     public static let componentButtonMHeight = 40 /** Size M pill height. Inside a 48px tap target (spacing.semantic.tapTarget). */
     public static let componentButtonSHeight = 32 /** Size S pill height. Inside a 48px tap target (spacing.semantic.tapTarget). */
-    public static let componentCardCaptionMaxWidth = 280 /** Measure for a centred screen caption. 280 is what the Quiz complete frame (15672:24061) sets on its caption text node, so the line breaks where the frame breaks it. */
-    public static let componentCardPlaceholderMinHeight = 120 /** Minimum height of home's placeholder cards. Was illustration.1500, an illustration box used as a card height — right number, wrong meaning. */
     public static let componentMicButtonCapturedFill = UIColor(red: 0.000, green: 0.765, blue: 0.525, alpha: 1) /** Captured, the take held for review. Its own colour as of 2026-09-24. It aliased brand.bold, the same value as listening.fill, and under prefers-reduced-motion the pulse ring is display:none — so Listening and Captured rendered pixel-identically and the only thing separating 'recording right now' from 'finished' was an invisible aria attribute. This component's own $description claims 'the fill alone carries the state, so the rings can stop entirely under reduced motion without the screen becoming ambiguous'; that was untrue while two states shared a fill. Same correction paused.fill already had on 2026-09-21, for the same reason. */
     public static let componentMicButtonCapturedGlyph = UIColor(red: 0.039, green: 0.122, blue: 0.094, alpha: 1) /** Captured mic circle icon color. Same fill as captured.fill (brand.bold), so it takes the same contrast pairing as listening.glyph. */
     public static let componentMicButtonDiameter = 120 /** Mic circle diameter, the primary tap target in the recall loop. */
@@ -270,6 +268,7 @@ public class KnowunityTokens {
     public static let sizePrimitiveSpaceNegative600 = -24 /** -24px spacing step. */
     public static let sizePrimitiveStrokeBorder = 1 /** 1px stroke weight. */
     public static let sizePrimitiveStrokeHeavyBorder = 2 /** 2px stroke weight. */
+    public static let sizeSemanticCaptionMeasure = 280 /** Measure for a centred screen caption. 280 is what the Quiz complete frame (15672:24061) sets on its caption text node, so the line breaks where the frame breaks it. Moved 2026-10-13 from component.card.captionMaxWidth: a caption measure is not card geometry, and component.card had no other consumer (system critic). */
     public static let spacingSemanticBetweenSections = 24 /** Vertical gap between major blocks on a screen, e.g. between the prompt bubble and the mic control. */
     public static let spacingSemanticCardLabelGap = 6 /** Vertical gap between a card's own label or title and its body text. chatBubble's title-to-body gap, hintCard's label-to-body gap. Not for gaps between separate blocks on a screen, that's betweenSections. */
     public static let spacingSemanticCardPadding = 16 /** Interior padding for cards, sheets and the recall turn bubble. Shares its value with screenMargin by design, same base padding unit. */

@@ -5,6 +5,7 @@
   Source: tokens/tokens.json. Rebuild with `npm run tokens`.
 -->
 <resources>
+  <integer name="size_semantic_caption_measure">280</integer>
   <integer name="size_primitive_space_0">0</integer>
   <integer name="size_primitive_space_100">4</integer>
   <integer name="size_primitive_space_150">6</integer>
@@ -128,8 +129,6 @@
   <integer name="component_bottom_sheet_grabber_width">32</integer>
   <integer name="component_bottom_sheet_grabber_height">4</integer>
   <integer name="component_bottom_sheet_max_height">85</integer>
-  <integer name="component_card_placeholder_min_height">120</integer>
-  <integer name="component_card_caption_max_width">280</integer>
   <string name="typography_style_display_l_font_weight">Heavy</string>
   <dimen name="typography_style_display_l_font_size">103</dimen>
   <integer name="typography_style_display_l_line_height">104</integer>

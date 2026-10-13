@@ -374,7 +374,7 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ## Component tokens
 
-`component.*` — 43 tokens
+`component.*` — 41 tokens
 
 > Component tokens exist only when a component's bindings actually branch by state or variant in a way that benefits from its own indirection layer between it and the semantic tokens, not as documentation-only aliases for a value that never changes. micButton is the only entry here on purpose: its four states each pair with a different semantic token, and these tokens are the real thing its Figma variables are bound to, not a restatement of them. chatBubble and hintCard never branch, they bind straight to semantic tokens with nothing in between, so a component.chatBubble.* or component.hintCard.* entry here would just be a second name for a value already named once. optionRow does branch by state the same way micButton does, four variants, four different fills, but its Figma variants bind straight to the semantic tokens directly rather than through a component-specific layer. That's an inconsistency with micButton's pattern, not a mistake exactly, treat micButton's indirection layer as the older, legacy approach rather than the template: an indirection layer that never diverges from what it aliases is upkeep with no payoff. Don't add one to a new component by default. Add one only when there's a concrete reason a component's own token might need to move independently of the semantic token it currently matches.
 
@@ -421,9 +421,7 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 | `component.bottomSheet.grabber.width` | `32` |  | Grabber width, 32. Was space.800, a spacing step standing in for a size. |
 | `component.bottomSheet.grabber.height` | `4` |  | Grabber height, 4. Was space.100. |
 | `component.bottomSheet.maxHeight` | `85` |  | Sheet ceiling as a percentage of the frame, so a long sheet still shows the screen it sits over. |
-| `component.card.placeholderMinHeight` | `120` |  | Minimum height of home's placeholder cards. Was illustration.1500, an illustration box used as a card height — right number, wrong meaning. |
-| `component.card.captionMaxWidth` | `280` |  | Measure for a centred screen caption. 280 is what the Quiz complete frame (15672:24061) sets on its caption text node, so the line breaks where the frame breaks it. |
 
 ---
 
-326 tokens across 10 groups.
+324 tokens across 10 groups.

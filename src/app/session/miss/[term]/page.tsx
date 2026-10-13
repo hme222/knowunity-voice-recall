@@ -94,7 +94,9 @@ function MissScreen({ index }: { index: number }) {
                 CTA="Try again"
                 variant="Primary"
                 size="M"
-                onClick={() => router.push(`/session/idle/${index}?attempt=${step.nextAttempt}&hinted=1`)}
+                // Back the way they answered: a typed miss retries typed, with the hint,
+                // not on the mic screen (UX critic, 2026-10-13).
+                onClick={() => router.push(typedMiss ? `/text/turn?term=${index}&hinted=1` : `/session/idle/${index}?attempt=${step.nextAttempt}&hinted=1`)}
               />
             )}
           </div>
@@ -139,8 +141,10 @@ function MissScreen({ index }: { index: number }) {
           state="Neutral"
           title={missHeadline}
           transcript={`“${shownAnswer(index, 'Miss', state)}”`}
-          // The student's own words stay on the last rung, to compare with the reveal.
-          showTranscript={attempt < 2 || lastRung}
+          // The student's own words on every rung (UX critic and reach, 2026-10-13): on
+          // the second miss the chip sat over nothing, and the take is what the hint
+          // is meant to be read against. The body scrolls at 390x668 if it must.
+          showTranscript
         />
         <HintCard body={step?.hint ?? current.hint} />
       </div>

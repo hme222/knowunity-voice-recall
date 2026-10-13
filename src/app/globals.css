@@ -69,7 +69,7 @@ body {
 
 .screenTitleCaption {
   margin: 0;
-  max-width: calc(var(--component-card-caption-max-width) * var(--size-primitive-unit));
+  max-width: calc(var(--size-semantic-caption-measure) * var(--size-primitive-unit));
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-m-regular-font-weight);
   font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));

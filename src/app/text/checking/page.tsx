@@ -2,10 +2,11 @@
 
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { ConfidenceAsk, ProcessingBeat, ScreenShell } from '@/components'
-import { confidenceGrace, processingDwell } from '@/lib/motion'
+import { Button, ConfidenceAsk, ProcessingBeat, RecallResultCaptured, ScreenShell } from '@/components'
+import styles from '../text.module.css'
+import { processingDwell } from '@/lib/motion'
 import { SessionBar } from '../../session/SessionBar'
-import { DRILL_TOTAL_RUNGS, markEarned, recordConfidence, recordMiss, useSession } from '@/lib/session'
+import { DRILL_TOTAL_RUNGS, markEarned, recordConfidence, recordMiss, typedVerdict, useSession } from '@/lib/session'
 import { doorResultHref } from '@/app/door/doors'
 
 // The typed path's equivalent of 03 Processing. History: docs/code-history.md#h-089
@@ -18,7 +19,7 @@ function CheckingScreen() {
   // verdict there, answer length here. A typed miss has to be reachable — a path that
   // can only ever pass isn't a judged path at all.
   const len = Number(searchParams.get('len') ?? '0')
-  const verdict = len >= 40 ? 'pass' : 'miss'
+  // Read after the store: the typed text decides it, not its length alone.
   // Too short to have said anything checkable ("idk lol"). The miss screen then says so
   // instead of crediting part of a definition the student never wrote (designer,
   // 2026-10-12, from the critic panel).
@@ -33,6 +34,8 @@ function CheckingScreen() {
   // this twice — recordMiss twice for one miss (engineering review, 2026-10-13).
   const doneRef = useRef(false)
   const state = useSession()
+  const typedText = state.sentTyped?.[index] ?? state.typed?.[index] ?? ''
+  const verdict = typedVerdict(index, typedText || 'x'.repeat(len))
 
   const onward = (sure?: boolean) => {
     if (doneRef.current) return
@@ -74,14 +77,9 @@ function CheckingScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, router, verdict, drillStep])
 
-  // The ask is optional here too, as on 03 Processing (designer, 2026-10-12): after
-  // confidenceGrace with no tap, move on and record no confidence.
-  useEffect(() => {
-    if (!asking) return
-    const id = window.setTimeout(() => onward(), confidenceGrace())
-    return () => window.clearTimeout(id)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [asking])
+  // The ask is optional through "Just check it", not a timer: the same exit as the
+  // spoken path's Captured (UX critic, 2026-10-13: the typed path, the accessibility
+  // path, was the stricter one, waiting with no way past).
 
   return (
     <ScreenShell
@@ -92,9 +90,19 @@ function CheckingScreen() {
         asking ? <ConfidenceAsk onAnswer={onward} /> : undefined
       }
     >
-      <ProcessingBeat
-        line={asking ? 'Before I show you — how did that feel?' : 'Checking that against the definition…'}
-      />
+      <div className={styles.checkingBody}>
+        <ProcessingBeat
+          line={asking ? 'Before I show you — how did that feel?' : 'Checking that against the definition…'}
+          // The typed answer shown back before judging, as the spoken path shows its
+          // transcript (UX critic, 2026-10-13).
+          above={asking && typedText ? <RecallResultCaptured title="Here’s what you wrote." transcript={typedText.trim()} /> : undefined}
+        />
+        {asking && (
+          <div className={styles.justCheck}>
+            <Button CTA="Just check it" variant="Tertiary" size="S" onClick={() => onward()} />
+          </div>
+        )}
+      </div>
     </ScreenShell>
   )
 }

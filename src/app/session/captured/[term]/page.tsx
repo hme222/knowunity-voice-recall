@@ -110,9 +110,12 @@ function CapturedScreen({ index }: { index: number }) {
           />
         </div>
         {/* The confidence ask is optional: "Just check it" moves on without one. Not
-            "Skip", which everywhere else skips the TERM (coherence critic, 2026-10-13).
-            Up here rather than in the action zone, which the ask fills. */}
-        <Button CTA="Just check it" variant="Tertiary" size="S" onClick={() => answer()} />
+            "Skip", which everywhere else skips the TERM. Pinned to the foot of the
+            body, directly above the Sure / Not sure pair it belongs to (UX critic,
+            2026-10-13: mid-screen it was easy to miss). The zone itself is full. */}
+        <div className={styles.justCheck}>
+          <Button CTA="Just check it" variant="Tertiary" size="S" onClick={() => answer()} />
+        </div>
       </div>
     </ScreenShell>
   )
