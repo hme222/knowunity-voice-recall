@@ -195,6 +195,16 @@ above.
         1 shows a clean pass first; door runs never mishear.
       - **Two chip destinations kept, both one tap from a question (4c).** The
         picker leads with "Start Chemistry: bonding".
+      - **A reason to come back (2a, 2026-10-13).** A revealed or skipped term goes
+        on a review list that survives runs; the Recap row says "Comes back
+        tomorrow." and home shows it as a due chip even with no exam plan. Tapping it
+        is a say-again round of exactly those terms; a pass clears it.
+      - **Two miss labels (8a, 2026-10-13).** "Partially right" (amber) is kept for a
+        real half-answer; a wrong idea (the term's `partialKind: 'wrong'`), a typed
+        miss the mock cannot read, and "too short" get the neutral "Not quite yet" /
+        "Not enough to check".
+      - **The drill pays +2 XP (9a, 2026-10-13),** once per term per run, against a
+        receipt from its last judged round; shown on drill complete and the Recap.
       - **Practice suggests by two more rules (5, A and C).** Sure and still needed
         help → Drill it, even when hinted (a confident miss is a wrong idea to
         rebuild). Typed → Say it again, aloud (the point of the feature). A wins over C;
@@ -672,7 +682,7 @@ then deliberately adjusted on one point:
   frame is now stale sample data** — it was 10+7+5+0 under the old curve, and
   Recap is derived from the actual run rather than canned, so no fixed total
   is correct any more.
-- **No XP anywhere in Definition Drill Down.** Deliberate — the drill
+- **Superseded 2026-10-13 (9a): finishing a drill pays +2 XP, once per term per run.** Was: **No XP anywhere in Definition Drill Down.** Deliberate — the drill
   is practice, not scored performance. If XP is ever added there, the
   copy needs rewriting, nothing currently mentions it.
 - **The say-it-back repeat is +3**, and never moves a term between buckets.

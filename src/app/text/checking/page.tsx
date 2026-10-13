@@ -41,6 +41,7 @@ function CheckingScreen() {
       // The last rung finishes the drill, as the spoken path does. Typed, rung 4's pass
       // pushed /drill/pass/5, which does not exist, and bounced to the drill intro.
       const step = Number(drillStep)
+      if (verdict === 'pass' && step >= DRILL_TOTAL_RUNGS) markEarned(state.drillTerm ?? index, 'Drill')
       router.replace(verdict === 'pass' ? (step >= DRILL_TOTAL_RUNGS ? '/drill/complete' : `/drill/pass/${step + 1}`) : '/drill/miss')
       return
     }

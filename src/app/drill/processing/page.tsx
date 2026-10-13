@@ -3,7 +3,7 @@
 import { Suspense, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ProcessingBeat, ScreenShell } from '@/components'
-import { DRILL_TOTAL_RUNGS } from '@/lib/session'
+import { DRILL_TOTAL_RUNGS, markEarned, readSession } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import { processingDwell } from '@/lib/motion'
 
@@ -18,7 +18,11 @@ function DrillProcessing() {
       // The mock advances a rung each pass. Pass 2 stumbles, so the scaffold
       // is reachable without hunting for it.
       if (step === 2) router.push('/drill/miss')
-      else if (step >= DRILL_TOTAL_RUNGS) router.push('/drill/complete')
+      else if (step >= DRILL_TOTAL_RUNGS) {
+        // The drill's receipt: /drill/complete pays +2 against it, once (9a).
+        markEarned(readSession().drillTerm ?? 1, 'Drill')
+        router.push('/drill/complete')
+      }
       else router.push(`/drill/pass/${step + 1}`)
     }, processingDwell())
     return () => window.clearTimeout(id)

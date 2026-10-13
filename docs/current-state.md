@@ -36,7 +36,7 @@ Other entries: `/home/unlocked` chip → `/picker` ("Start Chemistry: bonding" o
 
 ## State
 
-One store, `src/lib/session.ts`, over `sessionStorage` key `sayitback.session`, read with `useSyncExternalStore` (server snapshot = empty). Fields: `outcomes[]` (per term: bucket, xp, calibration, wasSure, typed, repeated, micTrouble), `startedAt/lastAt`, `misses` (judged misses per term → hint rung), `hinted[]`, `confidence` (first judged tap per term), `typed` / `sentTyped` (draft vs. sent typed answer), `micFault[]`, `sticky` (mic denied this session), `micGranted` (survives runs), `door`, `practising` + `practiceQueue`, `drillTerm`, `earned` (one-time receipts). Some run facts still also ride the URL (`attempt`, `ms`, `hinted`, `sure`); the store wins where both exist.
+One store, `src/lib/session.ts`, over `sessionStorage` key `sayitback.session`, read with `useSyncExternalStore` (server snapshot = empty). Fields: `outcomes[]` (per term: bucket, xp, calibration, wasSure, typed, repeated, micTrouble), `startedAt/lastAt`, `misses` (judged misses per term → hint rung), `hinted[]`, `confidence` (first judged tap per term), `typed` / `sentTyped` (draft vs. sent typed answer), `micFault[]`, `sticky` (mic denied this session), `micGranted` (survives runs), `door`, `practising` + `practiceQueue`, `drillTerm`, `earned` (one-time receipts), `reviewQueue` (survives runs), `drilled`. Some run facts still also ride the URL (`attempt`, `ms`, `hinted`, `sure`); the store wins where both exist.
 
 Invariants enforced in code: judging screens move on with `router.replace`, so back cannot replay them; Pass and say-it-back pay only against a receipt from the judging step (`markEarned`/`spendEarned`); judging handlers fire once; a bad term link goes to `/session/resume`, never a fresh run; query-string paths are internal-only (`safeInternalPath`).
 
@@ -46,6 +46,9 @@ Invariants enforced in code: judging screens move on with `router.replace`, so b
 - **Hint ladder.** One hint, repeated; from the 3rd judged miss only Reveal is offered. A mishear does not spend a rung.
 - **XP.** Unaided 10 · Hinted 7 · Revealed 0 (+3 for a judged say-it-back) · Skipped 0 · finishing bonus +5 (only if at least one term was got). Typed by choice pays the Hinted rate; typing after a real couldn't-hear or with the mic denied pays in full.
 - **Confidence.** Asked on Captured (optional: Sure / Not sure / Skip). Right first time +1 either way; sure and wrong costs 0 but is named on the miss, the reveal and the Recap.
+- **Miss labels.** "Partially right" (amber) for a real half-answer; "Not quite yet" (neutral) for a wrong idea (`partialKind: 'wrong'`) or a typed miss; "Not enough to check" under 15 typed characters.
+- **Coming back.** Revealed or skipped terms join `reviewQueue` (survives runs); the Recap says "Comes back tomorrow."; `/home/unlocked` shows them as a due chip; tapping runs `startReview()`, a say-again round; a pass clears them.
+- **Drill.** Finishing pays +2 XP once per term per run (receipt from the last judged round).
 - **Practice suggestion.** Mic trouble → say it again; sure and still needed help → drill; typed → say it again (aloud); else revealed/skipped → drill, hinted → say it again.
 
 ## Tokens and assets
@@ -54,8 +57,8 @@ Invariants enforced in code: judging screens move on with `router.replace`, so b
 
 ## Mocked, or missing for production
 
-Mocked: speech recognition and the judge, transcripts, the OS permission sheet, Chemistry fixtures and the home chrome. Missing: analytics, i18n (~1,000 English strings), a server-side session, a reducer/state machine with take IDs, Pro/free rules, a retention loop after the Recap, light mode, end-to-end tests. Font is a TRIAL licence (`src/app/fonts/GreedCollectionVF-TRIAL.ttf`).
+Mocked: speech recognition and the judge, transcripts, the OS permission sheet, Chemistry fixtures and the home chrome. Missing: analytics, i18n (~1,000 English strings), a server-side session, a reducer/state machine with take IDs, Pro/free rules, real spacing (the review list is "tomorrow" in copy only), light mode, end-to-end tests. Font is a TRIAL licence (`src/app/fonts/GreedCollectionVF-TRIAL.ttf`).
 
 ## Checks
 
-`npm run lint` · `npx tsc --noEmit` · `npm run test:unit` (30) · `npm run check:tokens` · `npm run check:vars` · Storybook tests (`npx vitest run --project storybook`; slow, times out under load).
+`npm run lint` · `npx tsc --noEmit` · `npm run test:unit` (34) · `npm run check:tokens` · `npm run check:vars` · Storybook tests (`npx vitest run --project storybook`; slow, times out under load).

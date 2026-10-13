@@ -273,3 +273,13 @@
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
 }
+
+/* "⚡ +2 XP" on drill complete, in the session's XP colour. */
+.xp {
+  margin: 0;
+  text-align: center;
+  color: var(--color-semantic-accent-blue-bold);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
+}

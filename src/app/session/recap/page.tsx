@@ -173,6 +173,7 @@ export default function RecapPage() {
           <p className={styles.working}>
             {[
               `+${totals.termXp} from the terms below`,
+              totals.drillXp ? `+${totals.drillXp} for drills` : null,
               totals.calibration !== 0
                 ? `${totals.calibration > 0 ? '+' : ''}${totals.calibration} for how sure you were`
                 : null,
@@ -212,6 +213,12 @@ export default function RecapPage() {
                     {/* Typed, said so: "Unaided" on its own read as said aloud
                         (usability review, 2026-10-12). */}
                     {row.typed && !row.micTrouble && <span className={styles.rowNote}>Typed, not said aloud.</span>}
+                    {/* The return, said where the miss is (2a): the term goes on the
+                        review list, and home offers it tomorrow. */}
+                    {(bucket === 'Revealed' || bucket === 'Worth revisiting') && (
+                      <span className={styles.rowReturn}>Comes back tomorrow.</span>
+                    )}
+                    {state.drilled?.includes(row.index) && <span className={styles.rowReturn}>{`Drilled. +${XP.drill} XP`}</span>}
                   </span>
                   {/* "Not yet", not "+0 XP", on a term still to learn (senior review). */}
                   <span className={styles.rowXp}>

@@ -42,6 +42,9 @@ function MissScreen({ index }: { index: number }) {
   // copy; past REVEAL_AT_ATTEMPT the only way on is the reveal.
   const step = current ? hintFor(current, attempt) : undefined
   // Where the student is on the ladder, as the card's headline (designer, 2026-10-12, from the usability review). History: docs/code-history.md#h-057
+  // A typed answer the mock cannot read; its canned partial does not apply (8a).
+  const typedMiss = Boolean(state.sentTyped?.[index]) && !thin
+  const partialCredit = !thin && !typedMiss && current?.partialKind !== 'wrong'
   const lastRung = step ? !step.canRetry : false
   const missHeadline = lastRung
     ? 'That’s three tries. Let’s look at the answer.'
@@ -49,7 +52,10 @@ function MissScreen({ index }: { index: number }) {
       ? 'One more go, then I’ll show you the answer.'
       : thin
         ? 'Start from the hint, then have another go.'
-        : current?.missTitle ?? ''
+        : typedMiss
+          // The fixture title describes the canned spoken partial, not what was typed.
+          ? 'Not there yet. Build on the hint below.'
+          : current?.missTitle ?? ''
   // Already incurred, not promised: the tap happened and the answer was wrong.
   const wasSureHere = Boolean(confidenceFor(state, index)?.wasSure)
 
@@ -107,7 +113,17 @@ function MissScreen({ index }: { index: number }) {
             read as a contradiction (Duolingo design review, 2026-10-13). */}
         {!lastRung && (
           <div className={styles.verdictRow}>
-            <Chips Text={thin ? 'Not enough to check' : 'Partially right'} size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} />
+            {/* Amber is partial CREDIT, so it is kept for a real half-answer (8a). A wrong
+                idea, a typed miss the mock cannot judge, and "too short" get the neutral
+                chip instead of amber credit for something not said. */}
+            <Chips
+              Text={partialCredit ? 'Partially right' : thin ? 'Not enough to check' : 'Not quite yet'}
+              size="S"
+              color={partialCredit ? 'Partial' : 'Primary'}
+              active={partialCredit}
+              showLeftIcon={false}
+              showRightIcon={false}
+            />
           </div>
         )}
         {/* Said here, at the miss, not only on the Recap: sure and wrong is the moment a

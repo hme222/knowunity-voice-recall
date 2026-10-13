@@ -27,6 +27,12 @@ export type Term = {
    * Each of these omits exactly what its `missTitle` goes on to name.
    */
   partialTranscript: string
+  /**
+   * 'wrong' when the partial take is a wrong idea, not half of a right one: the miss
+   * then reads "Not quite yet" (neutral), not "Partially right" (amber), so the amber
+   * chip keeps meaning real partial credit (designer, 2026-10-13, option 8a).
+   */
+  partialKind?: 'wrong'
   /** Figma `recallResult` title, state=Pass. */
   passTitle: string
   /** Figma `recallResult` title, state=Miss. */
@@ -68,6 +74,8 @@ export const XP = {
   skipped: 0,
   /** Forfeited by leaving; per-term XP is banked. */
   completionBonus: 5,
+  /** Finishing a definition drill, once per term per run (designer, 2026-10-13, 9a). */
+  drill: 2,
   // The confidence tap (03 Processing, "How sure are you?") is the Design Brief's own test — "overconfidence has to cost… History: docs/code-history.md#h-135
   /** Sure, and right first time. Called it.
    *
@@ -169,6 +177,7 @@ export const TERMS: Term[] = [
     prompt: 'Say what electronegativity means, in your own words. However you would explain it to a friend.',
     transcript: 'It is how strongly an atom pulls shared electrons toward itself in a bond, so the more electronegative atom gets more than its share.',
     // Where you look it up, not what it measures.
+    partialKind: 'wrong',
     partialTranscript: 'It is a number each element has on the periodic table.',
     passTitle: 'Yes — the pull on shared electrons, and what it does.',
     missTitle: 'True, but that is where you look it up. What it measures is the piece that is missing.',
@@ -526,7 +535,15 @@ export type SessionState = {
    * nothing: opening /session/pass/3 cold used to record an Unaided +10 for a term never
    * attempted (engineering review, 2026-10-13).
    */
-  earned?: Record<number, 'Pass' | 'Repeat'>
+  earned?: Record<number, 'Pass' | 'Repeat' | 'Drill'>
+  /**
+   * Terms to come back to: missed (revealed or skipped) and not yet got since. Kept
+   * across runs like micGranted, so home can offer them tomorrow even with no exam
+   * plan (designer, 2026-10-13, option 2a). A pass on the term clears it.
+   */
+  reviewQueue?: number[]
+  /** Terms drilled to the end this run; each pays XP.drill once (9a). */
+  drilled?: number[]
 }
 
 const EMPTY: SessionState = { outcomes: [], startedAt: 0, lastAt: 0 }
@@ -581,13 +598,14 @@ function write(state: SessionState) {
 
 export function startSession(opts?: { door?: string }) {
   const now = Date.now()
-  const { sticky, micGranted } = readSession()
+  const { sticky, micGranted, reviewQueue } = readSession()
   write({
     outcomes: [],
     startedAt: now,
     lastAt: now,
     ...(sticky ? { sticky } : {}),
     ...(micGranted ? { micGranted } : {}),
+    ...(reviewQueue?.length ? { reviewQueue } : {}),
     ...(opts?.door ? { door: opts.door } : {}),
   })
 }
@@ -830,6 +848,12 @@ export function recordOutcome(
   bucket: Bucket,
   opts?: { repeated?: boolean; wasSure?: boolean; micTrouble?: boolean },
 ): TermOutcome {
+  // The review list moves on every result, practice included: a miss joins it, a pass
+  // (with or without a hint) clears it.
+  const queued = readSession().reviewQueue ?? []
+  const missed = bucket === 'Revealed' || bucket === 'Worth revisiting'
+  const reviewQueue = missed ? [...new Set([...queued, index])] : queued.filter((i) => i !== index)
+  if (reviewQueue.join() !== queued.join()) write({ ...readSession(), reviewQueue: reviewQueue.length ? reviewQueue : undefined })
   const state = readSession()
   const prior = state.outcomes.find((o) => o.index === index)
   // A practice round does not rewrite the run it is practising. Returning the existing
@@ -875,17 +899,20 @@ export function recordOutcome(
  * non-zero, otherwise the rows will not appear to add up.
  */
 export function sessionTotals(state: SessionState) {
+  // Drills pay on top of the terms (9a), so they show in the working as their own line.
+  const drillXp = (state.drilled?.length ?? 0) * XP.drill
   const termXp = state.outcomes.reduce((sum, o) => sum + o.xp, 0)
   const calibration = state.outcomes.reduce((sum, o) => sum + (o.calibration ?? 0), 0)
   const sureWrong = state.outcomes.filter((o) => (o.calibration ?? 0) < 0).length
   // By the tap, not the amount: the two pay the same since 2026-10-12.
   const unsureRight = state.outcomes.filter((o) => (o.calibration ?? 0) > 0 && !o.wasSure).length
   const sureRight = state.outcomes.filter((o) => (o.calibration ?? 0) > 0 && o.wasSure).length
-  const earned = Math.max(0, termXp + calibration)
+  const earned = Math.max(0, termXp + calibration + drillXp)
   const unaided = state.outcomes.filter((o) => o.bucket === 'Unaided').length
   const elapsedMs = state.startedAt ? Math.max(0, state.lastAt - state.startedAt) : 0
   return {
     termXp,
+    drillXp,
     calibration,
     sureRight,
     unsureRight,
@@ -963,13 +990,13 @@ export function micGate(next: string, alt: string, state: SessionState = readSes
 }
 
 /** Leave a receipt for a judged take. Call from the step that judged it. */
-export function markEarned(index: number, kind: 'Pass' | 'Repeat') {
+export function markEarned(index: number, kind: 'Pass' | 'Repeat' | 'Drill') {
   const state = readSession()
   write({ ...state, earned: { ...(state.earned ?? {}), [index]: kind } })
 }
 
 /** Spend a receipt. True once per judged take; false for a cold or replayed load. */
-export function spendEarned(index: number, kind: 'Pass' | 'Repeat'): boolean {
+export function spendEarned(index: number, kind: 'Pass' | 'Repeat' | 'Drill'): boolean {
   const state = readSession()
   if (state.earned?.[index] !== kind) return false
   const earned = { ...state.earned }
@@ -990,6 +1017,25 @@ export function safeInternalPath(value: string | null, fallback: string): string
 export function micTurnedBackOn() {
   const state = readSession()
   write({ ...state, sticky: undefined, micGranted: true })
+}
+
+/** Record a drill finished to the end. Once per term per run; pays XP.drill (9a). */
+export function markDrilled(index: number) {
+  const state = readSession()
+  if (state.drilled?.includes(index)) return
+  write({ ...state, drilled: [...(state.drilled ?? []), index] })
+}
+
+/**
+ * Start a review of the terms that came back (2a): a fresh run of just those terms,
+ * each to be said again — retrieval, not a rebuild — ending on the Recap. Returns
+ * where to go. With nothing queued, a normal run.
+ */
+export function startReview(): string {
+  const queue = readSession().reviewQueue ?? []
+  startSession()
+  if (!queue.length) return termHref(1)
+  return startPractice(queue.map((index) => ({ index, mode: 'say' as const })))
 }
 
 /** Where every way into the full session starts: a clean run at question 1. */

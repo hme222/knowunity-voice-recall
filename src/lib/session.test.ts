@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import {
   SCRIPTED_COULDNT_HEAR_TERM,
+  markDrilled,
+  startReview,
+  sessionTotals,
   markEarned,
   spendEarned,
   safeInternalPath,
@@ -261,5 +264,34 @@ describe('engineering-review fixes', () => {
     micTurnedBackOn()
     expect(readSession().sticky).toBeUndefined()
     expect(readSession().micGranted).toBe(true)
+  })
+})
+
+describe('2a / 8a / 9a', () => {
+  it('a miss joins the review list, survives a new run, and a pass clears it', () => {
+    recordOutcome(2, 'Revealed')
+    recordOutcome(3, 'Worth revisiting')
+    expect(readSession().reviewQueue).toEqual([2, 3])
+    startSession()
+    expect(readSession().reviewQueue).toEqual([2, 3])
+    recordOutcome(2, 'Hinted')
+    expect(readSession().reviewQueue).toEqual([3])
+  })
+  it('a review is a say-again round of exactly the queued terms', () => {
+    recordOutcome(3, 'Revealed')
+    expect(startReview()).toBe('/session/idle/3')
+    expect(readSession().practiceQueue).toEqual([{ index: 3, mode: 'say' }])
+    expect(readSession().outcomes).toEqual([])
+  })
+  it('a drill pays XP.drill once per term, inside the total', () => {
+    recordOutcome(1, 'Unaided')
+    markDrilled(2)
+    markDrilled(2)
+    const t = sessionTotals(readSession())
+    expect(t.drillXp).toBe(XP.drill)
+    expect(t.earned).toBe(XP.unaided + XP.drill)
+  })
+  it('marks electronegativity’s partial take as a wrong idea, the others as partial', () => {
+    expect(TERMS.filter((t) => t.partialKind === 'wrong').map((t) => t.name)).toEqual(['Electronegativity'])
   })
 })

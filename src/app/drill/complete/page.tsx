@@ -1,8 +1,9 @@
 'use client'
 
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { actionRowClass, Button, MascotSlot, RecallResult, ScreenShell } from '@/components'
-import { advancePractice, isPractising, useDrillTerm } from '@/lib/session'
+import { advancePractice, isPractising, useDrillTerm, markDrilled, spendEarned, useSession, XP } from '@/lib/session'
 import styles from '../drill.module.css'
 
 // DD 08 Complete — Figma frame "DD 08 Complete — definition reassembles" (15782:12475). History: docs/code-history.md#h-010
@@ -18,6 +19,12 @@ const ROUNDS = [
 export default function DrillCompletePage() {
   const router = useRouter()
   const drillTerm = useDrillTerm()
+  const drilled = Boolean(useSession().drilled?.includes(drillTerm.index))
+  // Pays against the drill's receipt, once per term per run (9a): a cold load of this
+  // route earns nothing.
+  useEffect(() => {
+    if (spendEarned(drillTerm.index, 'Drill')) markDrilled(drillTerm.index)
+  }, [drillTerm.index])
   return (
     <ScreenShell
       bottomContent={
@@ -52,6 +59,9 @@ export default function DrillCompletePage() {
           title="That’s the whole thing. Yours."
           transcript={`“${drillTerm.answer}”`}
         />
+        {/* The reward for finishing (designer, 2026-10-13, 9a). Small on purpose:
+            the drill is practice, not a points grind. */}
+        {drilled && <p className={styles.xp}>{`\u26a1 +${XP.drill} XP`}</p>}
         <section className={styles.climb} aria-labelledby="climb-heading">
           <h2 id="climb-heading" className={styles.climbHeading}>What you climbed</h2>
           <ol className={styles.climbSteps}>
