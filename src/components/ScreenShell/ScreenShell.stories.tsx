@@ -85,7 +85,7 @@ const bodyStyle = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  gap: 'calc(var(--spacing-semantic-between-sections) * 1px)',
+  gap: 'calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit))',
 } as const
 
 const idleBody = (

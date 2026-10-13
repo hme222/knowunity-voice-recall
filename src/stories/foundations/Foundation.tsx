@@ -3,7 +3,7 @@ import { NO_DESCRIPTION, type Token } from './tokens'
 
 // Shared layout for the Foundations stories. Every value here is a token.
 
-const px = (cssVar: string) => `calc(var(${cssVar}) * 1px)`
+const px = (cssVar: string) => `calc(var(${cssVar}) * var(--size-primitive-unit))`
 
 export function Page({ children }: { children: ReactNode }) {
   return (

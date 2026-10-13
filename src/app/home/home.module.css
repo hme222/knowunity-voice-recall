@@ -1,15 +1,4 @@
-/* The home surfaces. Three states, gated first on whether the feature is unlocked and
-   then on whether the student has a plan (docs/sprint-context.md § "Where it lives"):
-     1. before first encounter — no chip at all
-     2. unlocked — the composer chip
-     3. unlocked + plan with due dates — chip plus the due signal
-
-   Rebuilt 2026-09-23 to Figma frame "Home card — where Say It Back lives, native and
-   unmodified" (15674:34093). The surround was previously a stand-in: a left-aligned
-   greeting and two grey placeholder cards that appear on no frame. Every value below
-   comes from the frame, rounded to the nearest token — the frame's appBar sub-tree is
-   a scaled instance, so its 10.884 / 36.279 / 43.535 / 21.767 are 12 / 40 / 44 / 24
-   at 0.907. Those are the numbers used. */
+/* The home surfaces. Three states, gated first on whether the feature is unlocked and then on whether the student has… History: docs/code-history.md#h-029 */
 
 .body {
   display: flex;
@@ -21,25 +10,25 @@
 /* ---------------------------------------------------------------- status bar */
 
 .statusBar {
-  height: calc(var(--component-scaffold-panel-header-height) * 1px);
+  height: calc(var(--component-scaffold-panel-header-height) * var(--size-primitive-unit));
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-inline: calc(var(--size-primitive-space-600) * 1px);
+  padding-inline: calc(var(--size-primitive-space-600) * var(--size-primitive-unit));
 }
 
 .statusTime {
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
-  letter-spacing: calc(var(--typography-primitive-tracking-tight) * 1px);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
+  letter-spacing: calc(var(--typography-primitive-tracking-tight) * var(--size-primitive-unit));
 }
 
 .statusRight {
   display: flex;
   align-items: center;
-  gap: calc(var(--size-primitive-space-150) * 1px);
+  gap: calc(var(--size-primitive-space-150) * var(--size-primitive-unit));
 }
 
 /* Cellular bars, wifi and battery. The frame exports these as SVG; they are four
@@ -48,14 +37,14 @@
 .signal {
   display: flex;
   align-items: flex-end;
-  gap: calc(var(--size-primitive-space-050) / 2 * 1px);
-  height: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-050) / 2 * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
 }
 
 .signal i {
   width: calc(var(--size-primitive-stroke-border) * 2px);
   background: var(--color-semantic-background-inverse);
-  border-radius: calc(var(--size-primitive-radius-100) / 2 * 1px);
+  border-radius: calc(var(--size-primitive-radius-100) / 2 * var(--size-primitive-unit));
 }
 
 .signal i:nth-child(1) { height: 35%; }
@@ -68,43 +57,43 @@
    resolve cleanly at 16x12 and it rendered as a blob rather than a fan. A real glyph
    costs nothing here and the maths was never worth defending. */
 .wifi {
-  width: calc(var(--size-primitive-space-400) * 1px);
-  height: calc(var(--size-primitive-space-400) * 1px);
+  width: calc(var(--size-primitive-space-400) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-space-400) * var(--size-primitive-unit));
   color: var(--color-semantic-background-inverse);
   display: block;
 }
 
 .battery {
   position: relative;
-  width: calc(var(--size-primitive-space-600) * 1px);
-  height: calc(var(--size-primitive-space-300) * 1px);
-  border: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-background-inverse);
-  border-radius: calc(var(--size-primitive-radius-100) / 2 * 1px);
+  width: calc(var(--size-primitive-space-600) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+  border: calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit)) solid var(--color-semantic-background-inverse);
+  border-radius: calc(var(--size-primitive-radius-100) / 2 * var(--size-primitive-unit));
   opacity: 0.35;
 }
 
 .batteryFill {
   position: absolute;
-  inset: calc(var(--size-primitive-stroke-border) * 1px);
+  inset: calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit));
   background: var(--color-semantic-background-inverse);
-  border-radius: calc(var(--size-primitive-radius-100) / 4 * 1px);
+  border-radius: calc(var(--size-primitive-radius-100) / 4 * var(--size-primitive-unit));
 }
 
 /* ------------------------------------------------------------------- app bar */
 
 .appBar {
-  height: calc(var(--component-scaffold-top-navigation-height) * 1px);
+  height: calc(var(--component-scaffold-top-navigation-height) * var(--size-primitive-unit));
   display: flex;
   align-items: center;
-  gap: calc(var(--size-primitive-space-100) * 1px);
-  padding-inline: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
+  padding-inline: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
 }
 
 /* 44 outer for the target, 40 round for the paint — the frame's App Bar Button Icon. */
 .appBarButton {
   flex-shrink: 0;
-  min-width: calc(var(--spacing-semantic-tap-target) * 1px);
-  min-height: calc(var(--spacing-semantic-tap-target) * 1px);
+  min-width: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
+  min-height: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -116,8 +105,8 @@
 }
 
 .appBarGlyph {
-  width: calc(var(--size-primitive-icon-300) * 1px);
-  height: calc(var(--size-primitive-icon-300) * 1px);
+  width: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
 }
 
 .statusChips {
@@ -125,7 +114,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
   overflow: hidden;
 }
 
@@ -133,9 +122,9 @@
 .streakChip {
   display: inline-flex;
   align-items: center;
-  gap: calc(var(--size-primitive-space-100) * 1px);
-  height: calc(var(--component-button-s-height) * 1px);
-  padding-inline: calc(var(--size-primitive-space-100) * 1px);
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
+  height: calc(var(--component-button-s-height) * var(--size-primitive-unit));
+  padding-inline: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
   flex-shrink: 0;
 }
 
@@ -145,19 +134,19 @@
   align-items: center;
   background: var(--color-semantic-pro-bold);
   color: var(--color-semantic-pro-on-bold);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
-  padding-inline: calc(var(--size-primitive-space-150) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
+  padding-inline: calc(var(--size-primitive-space-150) * var(--size-primitive-unit));
   font-weight: var(--typography-primitive-font-weight-heavy);
-  font-size: calc(var(--typography-style-caption-s-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
   font-stretch: calc(var(--typography-primitive-font-width-condensed) * 1%);
 }
 
 .proLabel,
 .streakCount {
   font-weight: var(--typography-primitive-font-weight-heavy);
-  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
-  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
+  font-size: calc(var(--typography-style-headline-s-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-headline-s-line-height) * var(--size-primitive-unit));
   font-stretch: calc(var(--typography-primitive-font-width-condensed) * 1%);
 }
 
@@ -166,8 +155,8 @@
 }
 
 .streakGlyph {
-  width: calc(var(--size-primitive-icon-300) * 1px);
-  height: calc(var(--size-primitive-icon-300) * 1px);
+  width: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
 }
 
 .streakChip[data-tone='blue'] {
@@ -186,22 +175,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* `safe` centre, not plain centre. Centred flex overflows equally on BOTH sides, and
-     the half above the container cannot be scrolled to — so on the crowded home routes
-     Knowie's head was cut off with nothing to scroll. `safe` falls back to start
-     alignment the moment the content stops fitting, which is what makes the overflow
-     reachable and the shell's fade honest. */
+  /* `safe` centre, not plain centre. History: docs/code-history.md#h-030 */
   justify-content: safe center;
   /* 32, not the frame's 64 (designer, 2026-10-12: "fix overall home spacing"). At 64
      the hero and Say It Back's surface read as two unrelated blocks, and on
      /home/unlocked one button floated alone in the gap. */
-  gap: calc(var(--size-primitive-space-800) * 1px);
-  padding-block: calc(var(--size-primitive-space-200) * 1px);
-  /* This region scrolls, the chrome does not. The tool chips, the composer and the tab
-     bar are the host app's furniture and pinning them is the whole point of a tab bar.
-     Without this the capped middle let its content escape the box instead of scrolling
-     it: on /home/due the swipe button and the second chip painted straight through the
-     tool row, with main reporting no overflow at all because nothing had grown. */
+  gap: calc(var(--size-primitive-space-800) * var(--size-primitive-unit));
+  padding-block: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+  /* This region scrolls, the chrome does not. History: docs/code-history.md#h-031 */
   overflow-y: auto;
   scrollbar-width: none;
 }
@@ -210,16 +191,11 @@
   display: none;
 }
 
-/* Same fade as ScreenShell's own overflow rule, and measured the same way rather than
-   held on: sprint-context, "a content region that overflows shows a fade", and
-   /home/due sliced "Swipe to the next due quiz" clean through the middle with no cue
-   that more existed. An unconditional mask would dim the Say It Back chip on the
-   routes that fit. A mask reads only alpha, so `black` is "fully opaque", not a
-   colour. */
+/* Same fade as ScreenShell's own overflow rule, and measured the same way rather than held on: sprint-context, "a… History: docs/code-history.md#h-032 */
 .middle[data-overflowing='true'] {
   mask-image: linear-gradient(
     to bottom,
-    black calc(100% - var(--component-scaffold-scroll-fade-height) * 1px),
+    black calc(100% - var(--component-scaffold-scroll-fade-height) * var(--size-primitive-unit)),
     transparent 100%
   );
 }
@@ -228,17 +204,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
   width: 100%;
   flex-shrink: 0;
 }
 
-/* KNOWIE GIVES WAY, NOT THE CHIP — in one step, not a slide (2026-10-12). When the
-   middle would not fit with Knowie at the frame's 3XL, HomeShell sets data-compact and
-   Knowie is 2XL, the size it is on every other screen; past that the region scrolls.
-   The shrink used to be continuous flex: the hero was allowed to shrink below its own
-   content, so at 390x668 the greeting spilled into the slot and printed over the
-   doors on /home, and Knowie came out a different size on every home state. */
+/* KNOWIE GIVES WAY, NOT THE CHIP — in one step, not a slide (2026-10-12). History: docs/code-history.md#h-033 */
 .mascotGroup {
   position: relative;
   display: flex;
@@ -246,8 +217,8 @@
 }
 
 .middle[data-compact='1'] .mascotGroup > .mascot[data-size] {
-  width: calc(var(--size-primitive-illustration-1500) * 1px);
-  height: calc(var(--size-primitive-illustration-1500) * 1px);
+  width: calc(var(--size-primitive-illustration-1500) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-illustration-1500) * var(--size-primitive-unit));
 }
 
 /* Still too tall at 2XL: Knowie steps out and the greeting stays. */
@@ -255,36 +226,23 @@
   display: none;
 }
 
-/* The frame's ground ellipse: 134 x 24, at the foot of the 200 box.
-
-   A flat fill at scrim strength reads as a dark bar struck through Knowie's legs,
-   because the artwork's feet stop above the box edge. The frame's is a soft shadow, so
-   this fades out rather than ending on a hard rim — same token, same box, no edge. */
+/* The frame's ground ellipse: 134 x 24, at the foot of the 200 box. History: docs/code-history.md#h-034 */
 .groundShadow {
   position: absolute;
   bottom: 0;
-  width: calc((var(--size-primitive-space-4000) - var(--size-primitive-space-700)) * 1px);
-  height: calc(var(--size-primitive-space-600) * 1px);
+  width: calc((var(--size-primitive-space-4000) - var(--size-primitive-space-700)) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-space-600) * var(--size-primitive-unit));
   background: radial-gradient(ellipse at center, var(--color-semantic-background-scrim) 0%, transparent 72%);
 }
 
-/* 32/32.651 Greed Condensed Heavy on the frame. headline-l is the nearest size token
-   (33); heavy and condensed come from the VF primitives the display style uses, so
-   nothing here is an untokenised literal.
-
-   A DELIBERATE DEPARTURE from "one screen-title scale" (sprint-context, 2026-09-22),
-   recorded here because an audit will otherwise read it as drift: every other h1 in the
-   app renders at 21 and this one at 33, and the mascot beside it is 176 against 96
-   everywhere else. Both come from frame 15674:34093. That decision governs the session
-   flow's screen TITLES; this is the host app's home and the line is a greeting, not a
-   title. If the two ever have to agree, the frame is what gives way, not this file. */
+/* 32/32.651 Greed Condensed Heavy on the frame. History: docs/code-history.md#h-035 */
 .greeting {
   color: var(--color-semantic-text-primary);
   text-align: center;
   font-weight: var(--typography-primitive-font-weight-heavy);
-  font-size: calc(var(--typography-style-headline-l-font-size) * 1px);
-  line-height: calc(var(--typography-style-headline-l-line-height) * 1px);
-  letter-spacing: calc(var(--typography-primitive-tracking-tight) * 1px);
+  font-size: calc(var(--typography-style-headline-l-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-headline-l-line-height) * var(--size-primitive-unit));
+  letter-spacing: calc(var(--typography-primitive-tracking-tight) * var(--size-primitive-unit));
   font-stretch: calc(var(--typography-primitive-font-width-condensed) * 1%);
   /* The frame breaks the greeting after "session,". It is one line here otherwise,
      because the VF at wdth 75 sets narrower than the Greed Condensed cut the frame
@@ -298,7 +256,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
   width: 100%;
   flex-shrink: 0;
 }
@@ -308,22 +266,18 @@
 .chrome {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
   flex-shrink: 0;
 }
 
 .tools {
   display: flex;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
   overflow-x: auto;
   scrollbar-width: none;
-  /* Room for the chips' 48 hit areas INSIDE the scroller. overflow-x: auto clips the
-     block axis too, so the ::after overlays below were cut back to the 32 the chips
-     paint at — measured 32 tall, a failed touch-target gate on the product's own entry
-     chip. Padding the row by (tapTarget - chip) / 2 and pulling it back with the same
-     negative margin keeps the layout exactly where the frame has it. */
-  padding-block: calc((var(--spacing-semantic-tap-target) - var(--component-button-s-height)) / 2 * 1px);
-  margin-block: calc((var(--spacing-semantic-tap-target) - var(--component-button-s-height)) / -2 * 1px);
+  /* Room for the chips' 48 hit areas INSIDE the scroller. History: docs/code-history.md#h-036 */
+  padding-block: calc((var(--spacing-semantic-tap-target) - var(--component-button-s-height)) / 2 * var(--size-primitive-unit));
+  margin-block: calc((var(--spacing-semantic-tap-target) - var(--component-button-s-height)) / -2 * var(--size-primitive-unit));
 }
 
 .tools::-webkit-scrollbar {
@@ -341,46 +295,46 @@
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
-  gap: calc(var(--size-primitive-space-150) * 1px);
-  height: calc(var(--component-button-s-height) * 1px);
-  padding-inline: calc(var(--size-primitive-space-300) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  gap: calc(var(--size-primitive-space-150) * var(--size-primitive-unit));
+  height: calc(var(--component-button-s-height) * var(--size-primitive-unit));
+  padding-inline: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
   border: none;
   cursor: pointer;
   color: var(--color-semantic-text-primary);
   /* The frame's inset foot on every chip and button. */
-  box-shadow: inset 0 calc(var(--size-primitive-space-100) * -1px) 0 0 var(--color-semantic-background-scrim);
+  box-shadow: inset 0 calc(var(--size-primitive-space-100) * -1 * var(--size-primitive-unit)) 0 0 var(--color-semantic-background-scrim);
 }
 
 .toolGlyph {
-  width: calc(var(--size-primitive-icon-300) * 1px);
-  height: calc(var(--size-primitive-icon-300) * 1px);
+  width: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
   flex-shrink: 0;
 }
 
 .toolLabel {
   font-weight: var(--typography-style-body-m-bold-font-weight);
-  font-size: calc(var(--typography-style-body-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-bold-line-height) * var(--size-primitive-unit));
   white-space: nowrap;
 }
 
 .composer {
   display: flex;
   align-items: center;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 .composerNew {
   position: relative;
   flex-shrink: 0;
-  height: calc(var(--component-button-m-height) * 1px);
-  min-width: calc(var(--component-button-m-height) * 1px);
+  height: calc(var(--component-button-m-height) * var(--size-primitive-unit));
+  min-width: calc(var(--component-button-m-height) * var(--size-primitive-unit));
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
   border: none;
   cursor: pointer;
@@ -388,20 +342,20 @@
 }
 
 .composerGlyph {
-  width: calc(var(--size-primitive-icon-300) * 1px);
-  height: calc(var(--size-primitive-icon-300) * 1px);
+  width: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
 }
 
 .composerField {
   flex: 1;
   min-width: 0;
-  height: calc(var(--component-button-m-height) * 1px);
+  height: calc(var(--component-button-m-height) * var(--size-primitive-unit));
   display: flex;
   align-items: center;
-  gap: calc(var(--size-primitive-space-200) * 1px);
-  padding-left: calc(var(--size-primitive-space-400) * 1px);
-  padding-right: calc(var(--size-primitive-space-200) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+  padding-left: calc(var(--size-primitive-space-400) * var(--size-primitive-unit));
+  padding-right: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
 }
 
@@ -409,13 +363,13 @@
   flex: 1;
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * var(--size-primitive-unit));
 }
 
 .composerMic {
-  width: calc(var(--size-primitive-icon-300) * 1px);
-  height: calc(var(--size-primitive-icon-300) * 1px);
+  width: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
   flex-shrink: 0;
   color: var(--color-semantic-text-primary);
 }
@@ -424,16 +378,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-block: calc(var(--size-primitive-space-100) * 1px);
+  padding-block: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
 }
 
 .tab {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: calc(var(--spacing-semantic-tap-target) * 1px);
-  min-height: calc(var(--spacing-semantic-tap-target) * 1px);
-  padding: calc(var(--size-primitive-space-200) * 1px);
+  min-width: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
+  min-height: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
+  padding: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
   background: none;
   border: none;
   cursor: pointer;
@@ -441,16 +395,16 @@
 }
 
 .tabGlyph {
-  width: calc(var(--size-primitive-icon-300) * 1px);
-  height: calc(var(--size-primitive-icon-300) * 1px);
+  width: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
 }
 
 .avatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: calc(var(--spacing-semantic-tap-target) * 1px);
-  min-height: calc(var(--spacing-semantic-tap-target) * 1px);
+  min-width: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
+  min-height: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
   background: none;
   border: none;
   padding: 0;
@@ -464,28 +418,28 @@
 .avatarInitial {
   display: grid;
   place-items: center;
-  width: calc(var(--size-primitive-icon-400) * 1px);
-  height: calc(var(--size-primitive-icon-400) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
-  border: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default);
+  width: calc(var(--size-primitive-icon-400) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-icon-400) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
+  border: calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-default);
   background: var(--color-semantic-background-surface);
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
 }
 
 .homeIndicator {
-  height: calc(var(--size-primitive-space-800) * 1px);
+  height: calc(var(--size-primitive-space-800) * var(--size-primitive-unit));
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .homeIndicator span {
-  width: calc((var(--size-primitive-space-2400) + var(--size-primitive-space-600)) * 1px);
+  width: calc((var(--size-primitive-space-2400) + var(--size-primitive-space-600)) * var(--size-primitive-unit));
   height: calc(var(--size-primitive-stroke-border) * 4px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   background: var(--color-semantic-background-inverse);
 }
 
@@ -493,15 +447,15 @@
 
 .chipRow {
   display: flex;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
   overflow-x: auto;
-  padding-bottom: calc(var(--size-primitive-space-100) * 1px);
+  padding-bottom: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
 }
 
 .due {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
   align-items: stretch;
   width: 100%;
 }
@@ -534,12 +488,7 @@
   z-index: 2;
 }
 
-/* The unlock popup, on Knowunity's own feature-intro pattern (reference/screenshots
-   36, 49, 61; designer, 2026-10-12: "the colors feel off brand"). The live app never
-   tints a panel violet or rings it: colour comes from one violet hero (here Knowie,
-   rising from behind the card's top edge as in 36), a small violet label with an icon
-   above the title, an all-white title and a grey line. A violet-filled, violet-edged
-   card with a violet word in the title was tried first and read as off brand. */
+/* The unlock popup, on Knowunity's own feature-intro pattern (reference/screenshots 36, 49, 61; designer, 2026-10-12: "the colors feel off brand"). History: docs/code-history.md#h-037 */
 .unlockWrap {
   display: flex;
   flex-direction: column;
@@ -550,7 +499,7 @@
 /* Knowie behind the card: the card overlaps his lower half, so only the head and
    eyes show, peeking over the edge. */
 .unlockPeek {
-  margin-bottom: calc(var(--size-primitive-space-1600) * -1px);
+  margin-bottom: calc(var(--size-primitive-space-1600) * -1 * var(--size-primitive-unit));
 }
 
 .unlockNote {
@@ -558,12 +507,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
   width: 100%;
-  padding: calc(var(--spacing-semantic-card-padding) * 1px);
-  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-400) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
-  border: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default);
+  border: calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-default);
   text-align: center;
 }
 
@@ -580,17 +529,17 @@
 .unlockEyebrow {
   display: inline-flex;
   align-items: center;
-  gap: calc(var(--size-primitive-space-100) * 1px);
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
   margin: 0;
   color: var(--color-semantic-brand-on-surface);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
 }
 
 .unlockEyebrowGlyph {
-  width: calc(var(--size-primitive-icon-200) * 1px);
-  height: calc(var(--size-primitive-icon-200) * 1px);
+  width: calc(var(--size-primitive-icon-200) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-icon-200) * var(--size-primitive-unit));
 }
 
 /* Headline M, white: the intros' titles are the largest thing on the card. */
@@ -598,8 +547,8 @@
   margin: 0;
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-headline-m-font-weight);
-  font-size: calc(var(--typography-style-headline-m-font-size) * 1px);
-  line-height: calc(var(--typography-style-headline-m-line-height) * 1px);
+  font-size: calc(var(--typography-style-headline-m-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-headline-m-line-height) * var(--size-primitive-unit));
   letter-spacing: calc(var(--typography-style-headline-m-letter-spacing) * 0.01em);
 }
 
@@ -609,14 +558,14 @@
   color: var(--color-semantic-text-tertiary);
   text-align: center;
   font-weight: var(--typography-style-caption-m-regular-font-weight);
-  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * var(--size-primitive-unit));
 }
 
 .doors {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
   width: 100%;
 }
 
@@ -630,28 +579,18 @@
   width: 100%;
 }
 
-/* Hit area to 44pt without changing the paint.
-   These are the host app's chips and they are drawn at the size the frame draws them —
-   32 for a tool chip, 40 for the composer's new button. Growing the boxes would make
-   the row taller than the frame's; an overlay reaches the target size and leaves the
-   layout alone. Widths already clear 44 on every one of them, so only the block axis
-   needs it. */
+/* Hit area to 44pt without changing the paint. History: docs/code-history.md#h-038 */
 .tool::after {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
   top: 50%;
-  height: calc(var(--spacing-semantic-tap-target) * 1px);
+  height: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
   transform: translateY(-50%);
 }
 
-/* Hit area to 44pt without changing the paint.
-   These are the host app's chips and they are drawn at the size the frame draws them —
-   32 for a tool chip, 40 for the composer's new button. Growing the boxes would make
-   the row taller than the frame's; an overlay reaches the target size and leaves the
-   layout alone. Widths already clear 44 on every one of them, so only the block axis
-   needs it. */
+/* Hit area to 44pt without changing the paint. History: docs/code-history.md#h-039 */
 /* The only one of these that is narrow as well as short: the composer's new button is a
    40px circle, so the overlay has to reach on both axes rather than inheriting a width
    from the box it sits in. */
@@ -660,7 +599,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: calc(var(--spacing-semantic-tap-target) * 1px);
-  height: calc(var(--spacing-semantic-tap-target) * 1px);
+  width: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
+  height: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
   transform: translate(-50%, -50%);
 }

@@ -7,15 +7,7 @@ import { getTerm, outcomeFor, startSession, SUBJECT, useSession } from '@/lib/se
 import { proveItHref, type DoorId } from '../doors'
 import styles from '../door.module.css'
 
-// A door run that ended without a pass: revealed, skipped, or lost to the mic. No
-// Figma frame; added 2026-10-12 (designer, option 1a from the usability review).
-//
-// A door run is one definition (sprint-context, 2026-10-12) and used to go straight to
-// the "Say It Back feature unlocked" popup whatever happened, so a student who skipped
-// or was shown the answer got a celebration and nothing about the definition. The
-// start screen promises step 3, "See how it landed". This is that step for a miss: the
-// definition to take away, a way to try again, and only then the unlock. A pass already
-// has its own result (the quiz door's, or 04 Pass).
+// A door run that ended without a pass: revealed, skipped, or lost to the mic. History: docs/code-history.md#h-006
 
 export default function DoorMissedPage() {
   const router = useRouter()

@@ -6,24 +6,24 @@
 .body {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
 }
 
 .reasons {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 .note {
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-caption-m-regular-font-weight);
-  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * var(--size-primitive-unit));
 }
 
 .actions {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }

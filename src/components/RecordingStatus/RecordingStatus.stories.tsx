@@ -20,7 +20,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: { docs: { description: { component: DESCRIPTION } } },
   args: { seconds: 4, paused: false },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}><Story /></div>],
 } satisfies Meta<typeof RecordingStatus>
 
 export default meta

@@ -22,6 +22,14 @@ StyleDictionary.registerFileHeader({
   ],
 });
 
+// Native platforms (Knowunity engineering review, 2026-10-13): the same source, out as
+// Swift and Android resources so iOS and Android consume the tokens directly rather
+// than re-typing them. Sizes stay unitless numbers there (points / dp); the CSS-only
+// rem unit and the composite typography and easing tokens are left to the web.
+const nativeFilter = (token) =>
+  !["typography", "cubicBezier", "fontFamily", "string"].includes(token.$type) &&
+  token.path.join(".") !== "size.primitive.unit";
+
 const config = {
   source: ["tokens/**/*.json"],
   expand: true,
@@ -37,6 +45,36 @@ const config = {
             fileHeader: "knowunity/generated",
             outputReferences: true,
           },
+        },
+      ],
+    },
+    ios: {
+      transformGroup: "ios-swift",
+      buildPath: "build/ios/",
+      files: [
+        {
+          destination: "KnowunityTokens.swift",
+          format: "ios-swift/class.swift",
+          filter: nativeFilter,
+          options: { className: "KnowunityTokens", fileHeader: "knowunity/generated" },
+        },
+      ],
+    },
+    android: {
+      transformGroup: "android",
+      buildPath: "build/android/",
+      files: [
+        {
+          destination: "knowunity_colors.xml",
+          format: "android/colors",
+          filter: (token) => token.$type === "color",
+          options: { fileHeader: "knowunity/generated" },
+        },
+        {
+          destination: "knowunity_tokens.xml",
+          format: "android/resources",
+          filter: (token) => nativeFilter(token) && token.$type !== "color",
+          options: { fileHeader: "knowunity/generated" },
         },
       ],
     },

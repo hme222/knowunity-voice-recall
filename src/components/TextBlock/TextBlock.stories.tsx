@@ -21,7 +21,7 @@ const meta = {
   parameters: { docs: { description: { component: FIGMA_DESCRIPTION } } },
   argTypes: { variant: { control: 'radio', options: TEXT_BLOCK_VARIANTS } },
   args: { variant: 'XL', title: 'Nice work', caption: 'You recalled 3 of 4', showCaption: true },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}><Story /></div>],
 } satisfies Meta<typeof TextBlock>
 
 export default meta

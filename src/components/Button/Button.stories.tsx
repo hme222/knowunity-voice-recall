@@ -39,7 +39,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}>
+      <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}>
         <Story />
       </div>
     ),
@@ -101,12 +101,12 @@ export const WithIcons: Story = { args: { showLeftIcon: true, showRightIcon: tru
 export const AllVariants: Story = {
   parameters: { controls: { disable: true } },
   render: (args) => (
-    <div style={{ display: 'grid', gap: 'calc(var(--spacing-semantic-between-sections) * 1px)' }}>
+    <div style={{ display: 'grid', gap: 'calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit))' }}>
       {BUTTON_VARIANTS.map((variant) =>
         BUTTON_SIZES.map((size) => (
           <div
             key={`${variant}-${size}`}
-            style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'calc(var(--size-primitive-space-200) * 1px)' }}
+            style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'calc(var(--size-primitive-space-200) * var(--size-primitive-unit))' }}
           >
             {BUTTON_STATES.map((state) => (
               <Button key={state} {...args} variant={variant} size={size} state={state} CTA={`${variant} ${size}`} />

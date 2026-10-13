@@ -1,29 +1,23 @@
-/* The text fallback turn. No Figma frame — the journey map has one card saying
-   "Idle shows the prompt with a text field instead of the mic, she types and taps
-   submit, a brief checking beat covers judging, then the same Result branches".
-   That card is the whole spec; the rest is built from voice-ux Principle 5.
-
-   The field is a local build — there is no text input in the component catalog.
-   Logged in component-gaps.md. */
+/* The text fallback turn. History: docs/code-history.md#h-092 */
 
 .body {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  gap: calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit));
 }
 
 .field {
   width: 100%;
-  min-height: calc(var(--size-primitive-illustration-1500) * 1px);
-  padding: calc(var(--spacing-semantic-card-padding) * 1px);
-  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  min-height: calc(var(--size-primitive-illustration-1500) * var(--size-primitive-unit));
+  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-400) * var(--size-primitive-unit));
   background: var(--color-semantic-background-input);
-  border: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default);
+  border: calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-default);
   color: var(--color-semantic-text-primary);
   font-family: inherit;
   font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * var(--size-primitive-unit));
   resize: none;
 }
 
@@ -32,14 +26,14 @@
 }
 
 .field:focus-visible {
-  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
-  outline-offset: calc(var(--size-primitive-space-050) * 1px);
+  outline: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
 }
 
 .actions {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 @keyframes breathe {

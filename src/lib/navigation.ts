@@ -76,6 +76,9 @@ export function rememberedTerm(): number | undefined {
  * the render pass — a side effect during render that fires twice under StrictMode (dev
  * review, 2026-10-12). Call it before any early return, then `return null` when `when`.
  */
+// Term screens fall back to /session/resume, never /session/intro: the intro starts a
+// fresh run, so a stale or mistyped term link mid-session wiped the run's outcomes
+// (engineering review, 2026-10-13). Resume shows where the run is, or offers a start.
 export function useRedirect(when: boolean, href: string) {
   const router = useRouter()
   useEffect(() => {

@@ -7,75 +7,75 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  height: calc(var(--chip-height) * 1px);
-  min-width: calc(var(--chip-height) * 1px);
+  height: calc(var(--chip-height) * var(--size-primitive-unit));
+  min-width: calc(var(--chip-height) * var(--size-primitive-unit));
   border: 0;
   margin: 0;
   appearance: none;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   font: inherit;
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   background-color: var(--color-semantic-background-surface);
   color: var(--color-semantic-text-primary);
   white-space: nowrap;
 }
 .root:focus-visible {
-  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
-  outline-offset: calc(var(--size-primitive-space-050) * 1px);
+  outline: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
 }
 
 /* Sizes — pill height, padding, gap, icon box and label style from the variant bindings. */
 .root[data-size='XXS'] {
   --chip-height: var(--size-primitive-icon-250);
-  padding-inline: calc(var(--size-primitive-space-150) * 1px);
-  gap: calc(var(--size-primitive-space-050) * 1px);
+  padding-inline: calc(var(--size-primitive-space-150) * var(--size-primitive-unit));
+  gap: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
   --chip-icon: var(--size-primitive-icon-150);
 }
 .root[data-size='XS'] {
   --chip-height: var(--size-primitive-icon-300);
-  padding-inline: calc(var(--size-primitive-space-200) * 1px);
-  gap: calc(var(--size-primitive-space-100) * 1px);
+  padding-inline: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
   --chip-icon: var(--size-primitive-icon-150);
 }
 .root[data-size='S'] {
   --chip-height: var(--component-button-s-height);
-  padding-inline: calc(var(--size-primitive-space-300) * 1px);
-  gap: calc(var(--size-primitive-space-100) * 1px);
+  padding-inline: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
   --chip-icon: var(--size-primitive-icon-200);
 }
 .root[data-size='M'] {
   --chip-height: var(--component-button-m-height);
-  padding-inline: calc(var(--size-primitive-space-400) * 1px);
-  gap: calc(var(--size-primitive-space-150) * 1px);
+  padding-inline: calc(var(--size-primitive-space-400) * var(--size-primitive-unit));
+  gap: calc(var(--size-primitive-space-150) * var(--size-primitive-unit));
   --chip-icon: var(--size-primitive-icon-250);
 }
 
 .root[data-size='XXS'] .label,
 .root[data-size='XS'] .label {
   font-weight: var(--typography-style-caption-s-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-s-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-s-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-s-bold-line-height) * var(--size-primitive-unit));
   letter-spacing: calc(var(--typography-style-caption-s-bold-letter-spacing) * 0.01em);
 }
 .root[data-size='S'] .label {
   font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
   letter-spacing: calc(var(--typography-style-caption-m-bold-letter-spacing) * 0.01em);
 }
 .root[data-size='M'] .label {
   font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
   letter-spacing: calc(var(--typography-style-body-s-bold-letter-spacing) * 0.01em);
 }
 
 .icon {
   display: inline-flex;
   flex: none;
-  width: calc(var(--chip-icon) * 1px);
-  height: calc(var(--chip-icon) * 1px);
+  width: calc(var(--chip-icon) * var(--size-primitive-unit));
+  height: calc(var(--chip-icon) * var(--size-primitive-unit));
 }
 
 /* Colours. Inactive is background.surface + text.primary for every colour.
@@ -98,22 +98,14 @@
   color: var(--color-semantic-feedback-unclear-on-bold);
 }
 
-/* Interactive chips only: the <button> box itself is spacing.semantic.tapTarget tall,
-   and the pill inside it keeps its designed height. Transparent block borders make up
-   the difference and background-clip keeps the fill off them, so the pill paints at 32
-   (S) while the element measures 48. The previous version drew the hit area on an
-   ::after pseudo, which extended what a finger could press but left the element's own
-   box at 32 — which is what every audit tool measures, and what the gate failed on.
-   The negative block margin gives the extra height back to the layout, so the pill sits
-   exactly where an inert chip of the same size would; the hit area overlaps the
-   neighbouring padding, never a neighbouring target. */
+/* Interactive chips only: the <button> box itself is spacing.semantic.tapTarget tall, and the pill inside it keeps its designed height. History: docs/code-history.md#h-101 */
 .root[data-interactive] {
   --chip-inset: calc((var(--spacing-semantic-tap-target) - var(--chip-height)) / 2);
   position: relative;
-  height: calc(var(--spacing-semantic-tap-target) * 1px);
-  border-block: calc(var(--chip-inset) * 1px) solid transparent;
+  height: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
+  border-block: calc(var(--chip-inset) * var(--size-primitive-unit)) solid transparent;
   background-clip: padding-box;
-  margin-block: calc(var(--chip-inset) * -1px);
+  margin-block: calc(var(--chip-inset) * -1 * var(--size-primitive-unit));
 }
 
 /* The focus ring hugs the visible pill (the padding box), not the 48 hit box. */
@@ -126,8 +118,8 @@
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
-  outline-offset: calc(var(--size-primitive-space-050) * 1px);
+  outline: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
 }
 
 .root:not([data-interactive]) {

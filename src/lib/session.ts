@@ -1,10 +1,4 @@
-// Fixture data for the mocked recall. There is no speech recognition and no judging
-// model — the prototype designs the states, not the engine (Design Brief, Hard
-// constraints). Every screen reads from here; no screen hardcodes its own copy.
-//
-// Copy marked "from the frame" is verbatim from the Complete Flow screens in Figma.
-// Copy not marked is written for this prototype, because only term 1 has real copy on
-// any frame — see the build report.
+// Fixture data for the mocked recall. History: docs/code-history.md#h-134
 
 import { useSyncExternalStore } from 'react'
 
@@ -74,11 +68,7 @@ export const XP = {
   skipped: 0,
   /** Forfeited by leaving; per-term XP is banked. */
   completionBonus: 5,
-  // The confidence tap (03 Processing, "How sure are you?") is the Design Brief's own
-  // test — "overconfidence has to cost something and underconfidence has to be
-  // rewarded, or the screen is just flattery." These three make it mechanical. They
-  // are judged on the FIRST tap that got a real verdict (a couldn't-hear does not
-  // count), so a hint or a reveal can never launder the original call.
+  // The confidence tap (03 Processing, "How sure are you?") is the Design Brief's own test — "overconfidence has to cost… History: docs/code-history.md#h-135
   /** Sure, and right first time. Called it.
    *
    *  FLATTENED 2026-10-12 (designer, from the critic panel): sureRight and unsureRight
@@ -147,13 +137,7 @@ export const TERMS: Term[] = [
       partial: "It's the charge on an atom if you split every bond's… evenly between the two atoms.",
     },
   },
-  // Terms 2-4 are Chemistry: bonding, the same topic as formal charge — decided
-  // 2026-10-09 by the designer: one subject, like a normal Say It Back session. They
-  // were three Biology terms, so a "Chemistry quiz" door led into a mixed set.
-  //
-  // The rules the Biology set learned the hard way still hold: the prompt asks for
-  // every part the marking checks, and `partialTranscript` leaves out exactly what
-  // `missTitle` names, so the verdict never contradicts the quote printed under it.
+  // Terms 2-4 are Chemistry: bonding, the same topic as formal charge — decided 2026-10-09 by the designer: one subject, like a normal Say It Back session. History: docs/code-history.md#h-136
   {
     index: 2,
     name: 'Covalent bond',
@@ -239,9 +223,11 @@ export const SUBJECT = 'Chemistry'
  * student clears them: "+2" → "+1" → "last one".
  */
 export const DUE_QUIZZES = [
-  { term: 'Formal charge', subject: 'Chemistry', due: '9/15' },
-  { term: 'Covalent bond', subject: 'Chemistry', due: '9/17' },
-  { term: 'Electronegativity', subject: 'Chemistry', due: '9/19' },
+  // Relative, not dated: "due 9/15" was already in the past on 2026-10-13 and a fixed
+  // date always will be (Duolingo design review).
+  { term: 'Formal charge', subject: 'Chemistry', due: 'tomorrow' },
+  { term: 'Covalent bond', subject: 'Chemistry', due: 'in 3 days' },
+  { term: 'Electronegativity', subject: 'Chemistry', due: 'next week' },
 ]
 
 export function dueCountLabel(indexFromZero: number) {
@@ -302,21 +288,20 @@ const PASS_AT_MS = 5000
  */
 export const SCRIPTED_COULDNT_HEAR_TERM = 2
 
-export function verdictFor(termIndex: number, durationMs: number, attempt: number): Verdict {
-  if (termIndex === SCRIPTED_COULDNT_HEAR_TERM && attempt === 1) return 'CouldntHear'
+export function verdictFor(
+  termIndex: number,
+  durationMs: number,
+  attempt: number,
+  opts?: { practising?: boolean },
+): Verdict {
+  // Never in a practice round: the demo beat is for the first run, and replaying it
+  // on "Practice what I missed" read as the app failing again (engineering review).
+  if (termIndex === SCRIPTED_COULDNT_HEAR_TERM && attempt === 1 && !opts?.practising) return 'CouldntHear'
   if (durationMs < COULDNT_HEAR_UNDER_MS) return 'CouldntHear'
   return durationMs >= PASS_AT_MS ? 'Pass' : 'Miss'
 }
 
-// ---------------------------------------------------------------------------
-// The hint ladder
-// ---------------------------------------------------------------------------
-// hint → retry → second hint → retry → reveal (Design Brief § "What Knowunity
-// specified"). Keyed on the attempt number the miss arrived with, which is what the
-// screens already carry, so the ladder needs no new state. Bounded: from the third
-// missed attempt on, Try again is withdrawn and the reveal is the only way forward. A
-// requeue starts at attempt 2 (06 Lock It In), so a missed requeue gets the strong hint
-// and one retry — a second chance, not a whole new ladder.
+// --------------------------------------------------------------------------- The hint ladder… History: docs/code-history.md#h-137
 
 /** The attempt at which a miss can no longer be retried. */
 export const REVEAL_AT_ATTEMPT = 3
@@ -335,16 +320,7 @@ export type HintStep = {
 /** Which rung of the ladder a miss on `attempt` lands on. */
 export function hintFor(term: Term, attempt: number): HintStep {
   const n = Number.isFinite(attempt) && attempt > 0 ? Math.floor(attempt) : 1
-  // ONE hint, repeated. `docs/sprint-context.md` § "Not building this sprint" lists
-  // "Second hint", and CLAUDE.md makes that list binding. The Design Brief describes a
-  // two-hint ladder, but under § "What Knowunity specified at kickoff" — the kickoff
-  // ask, which this sprint scoped down. A `hint2` was briefly added here against that
-  // rule and is removed.
-  //
-  // What DOES stay is the bound. The real defect was that "Try again" was still offered
-  // at attempt 10 with byte-identical copy: a loop with no end. It ends at
-  // REVEAL_AT_ATTEMPT now, and the reveal is the escalation the second hint would have
-  // been.
+  // ONE hint, repeated. `docs/sprint-context.md` § "Not building this sprint" lists "Second hint", and CLAUDE.md makes that list binding. History: docs/code-history.md#h-138
   const canRetry = n < REVEAL_AT_ATTEMPT
   return {
     level: 1,
@@ -354,18 +330,7 @@ export function hintFor(term: Term, attempt: number): HintStep {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Definition Drill Down
-// ---------------------------------------------------------------------------
-// A separate opt-in practice mode: work one definition out loud until you own it.
-// Not graded, verbatim-oriented, NO XP — the reward is completing the thing.
-//
-// NOTE ON WHAT IS BUILT. The doc's model is variable-length: the meter fills by unaided
-// coverage and the drill ends when coverage reaches full, whether that is the second
-// pass or the sixth. That depends on a judge scoring unaided coverage per pass, which
-// is unconfirmed with engineering. The built screens ship the FALLBACK — the four-rung
-// ladder — by decision (SPEC.md Open 5). The meter is continuous either way, so the
-// variable-length version is a data change, not a rebuild.
+// --------------------------------------------------------------------------- Definition Drill Down… History: docs/code-history.md#h-139
 
 export type DrillRung = { step: number; cue: string; coverage: number }
 
@@ -425,25 +390,13 @@ export function useDrillTerm(): Term {
  * per session.
  */
 export const STUMBLES = {
-  // The verdict escalates with the rung. All three used to be the same literal string,
-  // so the one piece of chrome built to announce severity said the same sentence from
-  // the first gentle nudge to the guaranteed-completable echo — the copy below escalated
-  // three times and the chip above it never moved.
-  // No ✓ on any of these (designer, 2026-10-12): a check mark on a miss contradicted
-  // the screen, and the first one now reads the same as the session's partial,
-  // "Partially right", so one verdict has one name in both flows.
+  // The verdict escalates with the rung. History: docs/code-history.md#h-140
   first: { verdict: 'Partially right', copy: "One word off. It's below, then take it again." },
   second: { verdict: 'Same word again', copy: "Still tricky? Here's a nudge." },
   third: { verdict: 'Let\u2019s do this one together', copy: "Let's say this one together." },
 } as const
 
-// ---------------------------------------------------------------------------
-// Session state
-// ---------------------------------------------------------------------------
-// Verdicts accumulate so 07 Recap reports the actual run rather than a canned result.
-// sessionStorage, not React context: a context on the session layout dies on refresh,
-// which would contradict the addressable-route decision. Never read during render —
-// that breaks hydration. See SPEC.md § Conventions.
+// --------------------------------------------------------------------------- Session state… History: docs/code-history.md#h-141
 
 const KEY = 'sayitback.session'
 
@@ -567,6 +520,13 @@ export type SessionState = {
    * real OS permission: startSession keeps it.
    */
   micGranted?: boolean
+  /**
+   * A judged take's receipt, by term: the judging step writes it, and the screen that
+   * pays (04 Pass, the say-it-back repeat) spends it. Without one those screens pay
+   * nothing: opening /session/pass/3 cold used to record an Unaided +10 for a term never
+   * attempted (engineering review, 2026-10-13).
+   */
+  earned?: Record<number, 'Pass' | 'Repeat'>
 }
 
 const EMPTY: SessionState = { outcomes: [], startedAt: 0, lastAt: 0 }
@@ -1002,6 +962,36 @@ export function micGate(next: string, alt: string, state: SessionState = readSes
   return `/permission/primer?next=${encodeURIComponent(next)}&alt=${encodeURIComponent(alt)}`
 }
 
+/** Leave a receipt for a judged take. Call from the step that judged it. */
+export function markEarned(index: number, kind: 'Pass' | 'Repeat') {
+  const state = readSession()
+  write({ ...state, earned: { ...(state.earned ?? {}), [index]: kind } })
+}
+
+/** Spend a receipt. True once per judged take; false for a cold or replayed load. */
+export function spendEarned(index: number, kind: 'Pass' | 'Repeat'): boolean {
+  const state = readSession()
+  if (state.earned?.[index] !== kind) return false
+  const earned = { ...state.earned }
+  delete earned[index]
+  write({ ...state, earned })
+  return true
+}
+
+/**
+ * Only internal paths: `next` and `alt` ride the query string, and passing them
+ * straight to the router let /permission/primer?alt=https://… navigate off-site.
+ */
+export function safeInternalPath(value: string | null, fallback: string): string {
+  return value && value.startsWith('/') && !value.startsWith('//') ? value : fallback
+}
+
+/** Undo the denied mic: the student turned it back on in Settings. */
+export function micTurnedBackOn() {
+  const state = readSession()
+  write({ ...state, sticky: undefined, micGranted: true })
+}
+
 /** Where every way into the full session starts: a clean run at question 1. */
 export function startRun(): string {
   startSession()
@@ -1065,12 +1055,7 @@ export function shownAnswer(index: number, verdict: Verdict, state: SessionState
  * in testing read it as the app having answered for her and Send passing it off as her
  * own. Anything that seeds an input reads this, never `answerFor`.
  */
-//
-// And only a draft that has NOT been sent. A sent answer has been judged; putting it
-// back in the box on "Try again" (or on the next drill rung, which is the same term)
-// let a student resend it without recalling anything (click-through, 2026-10-12). An
-// unsent draft still survives Leave → "Keep learning". Pure; pass the state from
-// useSession().
+// And only a draft that has NOT been sent. History: docs/code-history.md#h-142
 export function typedDraft(state: SessionState, index: number): string {
   const draft = state.typed?.[index]?.trim() ?? ''
   return draft && draft === state.sentTyped?.[index] ? '' : draft

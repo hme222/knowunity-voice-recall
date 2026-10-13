@@ -29,7 +29,7 @@ const meta = {
     icon: { control: false },
   },
   args: { label: 'Add', variant: 'Primary', size: 'M', state: 'Default' },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}><Story /></div>],
 } satisfies Meta<typeof ButtonIcon>
 
 export default meta
@@ -62,10 +62,10 @@ export const L: Story = { args: { size: 'L' } }
 export const AllVariants: Story = {
   parameters: { controls: { disable: true } },
   render: (args) => (
-    <div style={{ display: 'grid', gap: 'calc(var(--spacing-semantic-between-sections) * 1px)' }}>
+    <div style={{ display: 'grid', gap: 'calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit))' }}>
       {BUTTON_ICON_VARIANTS.map((variant) =>
         BUTTON_ICON_SIZES.map((size) => (
-          <div key={`${variant}-${size}`} style={{ display: 'flex', alignItems: 'center', gap: 'calc(var(--size-primitive-space-200) * 1px)' }}>
+          <div key={`${variant}-${size}`} style={{ display: 'flex', alignItems: 'center', gap: 'calc(var(--size-primitive-space-200) * var(--size-primitive-unit))' }}>
             {BUTTON_ICON_STATES.map((state) => (
               <ButtonIcon key={state} {...args} variant={variant} size={size} state={state} label={`${variant} ${size} ${state}`} />
             ))}

@@ -12,7 +12,7 @@ import {
   Snackbar,
 } from '@/components'
 import { CheckIcon } from '@/components/icons'
-import { getTerm, isPractising, nextAfter, recordOutcome, useSession, XP } from '@/lib/session'
+import { getTerm, isPractising, nextAfter, outcomeFor, readSession, recordOutcome, spendEarned, useSession, XP } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // Say-it-back result — the optional repeat after a reveal. No Figma frame; behaviour
@@ -28,11 +28,13 @@ export default function RepeatPage({ params }: { params: Promise<{ term: string 
   const index = Number(term)
   const current = getTerm(index)
 
+  // Pays the +3 only against a judged say-it-back (engineering review, 2026-10-13).
   useEffect(() => {
-    recordOutcome(index, 'Revealed', { repeated: true })
-  }, [index])
+    if (spendEarned(index, 'Repeat')) recordOutcome(index, 'Revealed', { repeated: true })
+    else if (!outcomeFor(readSession(), index)?.repeated) router.replace(`/session/reveal/${index}`)
+  }, [index, router])
 
-  useRedirect(!current, '/session/intro')
+  useRedirect(!current, '/session/resume')
 
   if (!current) return null
 
@@ -52,11 +54,7 @@ export default function RepeatPage({ params }: { params: Promise<{ term: string 
           title="That's it, in your own voice."
           transcript={`“${current.transcript}”`}
         />
-        {/* NOT "said back unaided". The student read the answer off 05a ten seconds
-            earlier, so unaided is the one thing this was not, and praise a student
-            knows they did not earn is worse than no praise. The +3 is for saying it
-            back in their own words, which is a real retrieval act and is what this
-            now claims. */}
+        {/* NOT "said back unaided". History: docs/code-history.md#h-079 */}
         <Snackbar Text="Said it back in your own words." variant="Success" icon={<CheckIcon />} chipText={practising ? 'Practice' : `+${XP.repeat} XP`} />
       </div>
     </ScreenShell>

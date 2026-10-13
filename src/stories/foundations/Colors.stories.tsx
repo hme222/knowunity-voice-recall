@@ -12,14 +12,14 @@ const groups = [...new Set(semantic.map((t) => t.path.split('.')[2]))]
 function Swatch({ token }: { token: Token }) {
   const resolved = useResolved(token.cssVar)
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'calc(var(--size-primitive-space-200) * 1px)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'calc(var(--size-primitive-space-200) * var(--size-primitive-unit))' }}>
       <div
         data-swatch={token.cssVar}
         style={{
-          height: 'calc(var(--size-primitive-illustration-800) * 1px)',
-          borderRadius: 'calc(var(--size-primitive-radius-200) * 1px)',
+          height: 'calc(var(--size-primitive-illustration-800) * var(--size-primitive-unit))',
+          borderRadius: 'calc(var(--size-primitive-radius-200) * var(--size-primitive-unit))',
           background: `var(${token.cssVar})`,
-          border: 'calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default)',
+          border: 'calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-default)',
         }}
       />
       <Meta token={token} resolved={resolved || '…'} />
@@ -36,7 +36,7 @@ function Colors() {
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-              gap: 'calc(var(--size-primitive-space-400) * 1px)',
+              gap: 'calc(var(--size-primitive-space-400) * var(--size-primitive-unit))',
             }}
           >
             {semantic

@@ -13,7 +13,7 @@ import {
   ScreenShell,
   actionRowClass,
 } from '@/components'
-import { calibrationFor, confidenceFor, getTerm, hintFor, markHinted, nextAfter, recordOutcome, shownAnswer, useSession, missCount } from '@/lib/session'
+import { confidenceFor, getTerm, hintFor, markHinted, nextAfter, recordOutcome, shownAnswer, useSession, missCount } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // 05 Miss + Hint — Figma frame "05 Miss + Hint (refreshed 2)" (15672:26357).
@@ -22,11 +22,7 @@ import styles from '../../result.module.css'
 // the placement resolved in the Skip/Reveal comparison.
 
 function MissScreen({ index }: { index: number }) {
-  // The hint is on this screen, so the run now contains a hint for this term. Recorded
-  // here rather than forwarded down the URL chain: 04a Couldn't hear's retry rebuilds
-  // the query from scratch and used to lose `hinted`, so a term that was hinted, then
-  // misheard, then answered came back bucketed Unaided and the Recap credited a cold
-  // recall the student had been helped with.
+  // The hint is on this screen, so the run now contains a hint for this term. History: docs/code-history.md#h-056
   useEffect(() => {
     markHinted(index)
   }, [index])
@@ -45,11 +41,7 @@ function MissScreen({ index }: { index: number }) {
   // The ladder now ends. "Try again" was offered at attempt 10 with byte-identical
   // copy; past REVEAL_AT_ATTEMPT the only way on is the reveal.
   const step = current ? hintFor(current, attempt) : undefined
-  // Where the student is on the ladder, as the card's headline (designer, 2026-10-12,
-  // from the usability review). The second miss's warning was a faint caption in the
-  // action zone that read as a footnote, and the third miss withdrew "Try again"
-  // without a word. One hint by decision, so the rungs differ by what they SAY: the
-  // second warns, the third says why the reveal is the only way on.
+  // Where the student is on the ladder, as the card's headline (designer, 2026-10-12, from the usability review). History: docs/code-history.md#h-057
   const lastRung = step ? !step.canRetry : false
   const missHeadline = lastRung
     ? 'That’s three tries. Let’s look at the answer.'
@@ -59,9 +51,9 @@ function MissScreen({ index }: { index: number }) {
         ? 'Start from the hint, then have another go.'
         : current?.missTitle ?? ''
   // Already incurred, not promised: the tap happened and the answer was wrong.
-  const sureCost = confidenceFor(state, index)?.wasSure ? calibrationFor(true, false) : 0
+  const wasSureHere = Boolean(confidenceFor(state, index)?.wasSure)
 
-  useRedirect(!current, '/session/intro')
+  useRedirect(!current, '/session/resume')
 
   if (!current) return null
 
@@ -90,13 +82,7 @@ function MissScreen({ index }: { index: number }) {
               size="M"
               onClick={() => router.push(`/session/reveal/${index}`)}
             />
-            {/* Try again goes to an IDLE beat, not a live mic. It used to push straight
-                to /session/recording, so the timer was already running when the screen
-                arrived — no chance to gather yourself right after being told you were
-                wrong, and the hint you were about to use vanished with the screen. Two
-                students in testing named it as the moment they would put the phone
-                down, and one lost a 19-second take to it, mostly silence. 01 Idle
-                carries the hint through and starts when the student taps. */}
+            {/* Try again goes to an IDLE beat, not a live mic. History: docs/code-history.md#h-058 */}
             {step?.canRetry && (
               <Button
                 CTA="Try again"
@@ -106,12 +92,7 @@ function MissScreen({ index }: { index: number }) {
               />
             )}
           </div>
-          {/* No "See the full transcript" here. The card above already shows "You
-              said" and the transcript, so it repeated what was on screen — and it
-              opened the REVEALED sheet, which appends the definition. A tertiary link
-              was handing over the answer that "Reveal answer" exists to give, except
-              Reveal pays 0 XP while this route left the +7 and Try again intact.
-              The sheet is still reached from every Recap row. */}
+          {/* No "See the full transcript" here. History: docs/code-history.md#h-059 */}
           {/* "Skip", like the other ten. sprint-context: "Skip has one placement and one
               label… two labels for one escape was the clearer problem." This screen was
               the one holdout. The cost is disclosed by the Recap's own bucket, not by a
@@ -121,17 +102,18 @@ function MissScreen({ index }: { index: number }) {
     >
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="determined" className={styles.mascotCentred} />
-        {/* No PROVISIONAL XP here. "⚡ +7" sat in the same slot and style as the earned
-            "+10" on 04 Pass while Reveal pays 0 — a promise dressed as a balance.
-            sprint-context.md, 2026-09-22.
-
-            The confidence cost is different and stays: being sure and wrong is already
-            settled, not a promise, and hiding it would mean the one screen where that
-            cost is incurred never mentions it. */}
-        <div className={styles.verdictRow}>
-          <Chips Text={thin ? 'Not enough to check' : 'Partially right'} size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} />
-          {sureCost ? <p className={styles.calibration}>{`${sureCost} · you were sure`}</p> : null}
-        </div>
+        {/* No PROVISIONAL XP here. History: docs/code-history.md#h-060 */}
+        {/* No "Partially right" on the last rung: it sat over "That's three tries" and
+            read as a contradiction (Duolingo design review, 2026-10-13). */}
+        {!lastRung && (
+          <div className={styles.verdictRow}>
+            <Chips Text={thin ? 'Not enough to check' : 'Partially right'} size="S" color="Partial" active showLeftIcon={false} showRightIcon={false} />
+          </div>
+        )}
+        {/* Said here, at the miss, not only on the Recap: sure and wrong is the moment a
+            correction sticks best (Duolingo design review). Costs nothing since
+            2026-09-23; it is a sentence, not a penalty. */}
+        {wasSureHere && <p className={styles.calibration}>You were sure. This one&rsquo;s worth remembering.</p>}
         {/* Attempt 2 drops "You said" so the hint is on screen without scrolling —
             designer, 2026-10-08. The first miss still echoes the take. */}
         {/* Neutral card, amber chip: "partially right" is not "wrong", and the red Miss
@@ -141,7 +123,8 @@ function MissScreen({ index }: { index: number }) {
           state="Neutral"
           title={missHeadline}
           transcript={`“${shownAnswer(index, 'Miss', state)}”`}
-          showTranscript={attempt < 2}
+          // The student's own words stay on the last rung, to compare with the reveal.
+          showTranscript={attempt < 2 || lastRung}
         />
         <HintCard body={step?.hint ?? current.hint} />
       </div>

@@ -6,14 +6,7 @@ import { Button, ChatBubble, MascotSlot, ScreenShell } from '@/components'
 import { advancePractice, isPractising, useDrillTerm } from '@/lib/session'
 import styles from '../drill.module.css'
 
-// DD 00 / 00b — drill intro. Figma frames "DD 00 Entry framing (first time ever)"
-// (15782:12588) and "DD 00b Entry framing (returning, compressed)" (15782:12675).
-//
-// Two states on one route: first run explains the mechanic, the return visit is
-// compressed to the one rule. Static on purpose so it becomes a ritual.
-//
-// No XP is mentioned anywhere, deliberately — the drill is practice, not scored
-// performance. If XP is ever added here, this copy needs rewriting.
+// DD 00 / 00b — drill intro. History: docs/code-history.md#h-017
 
 function DrillIntro() {
   const router = useRouter()

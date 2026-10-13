@@ -7,17 +7,7 @@ import styles from '../../drill.module.css'
 import { Cue } from '../../Cue'
 import { DrillBar } from '../../DrillBar'
 
-// DD 07b — second stumble on the SAME word. Figma frame "DD 07b Miss — 2nd stumble
-// (first letter)" (15810:11025).
-//
-// The word stays visible with its first letter shown: a prompt, not a giveaway. The
-// meter barely moves, because a prompted recall is not an unaided one.
-//
-// Scaffold state resets per definition, per session — which needs a per-word stumble
-// count, unconfirmed with engineering (docs/sprint-context.md open question 8).
-//
-// Built on DD 07's shape: mascot, verdict, neutral result card, the prompt card, then
-// the mic alone. The graded red card and the full-bleed meter are not in this family.
+// DD 07b — second stumble on the SAME word. History: docs/code-history.md#h-019
 
 export default function DrillLetterPage() {
   const router = useRouter()

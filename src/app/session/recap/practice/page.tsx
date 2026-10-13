@@ -6,18 +6,7 @@ import { CloseIcon } from '@/components/icons'
 import { type Bucket, getTerm, type PracticeItem, recommendedMode, startPractice, type TermOutcome, useSession } from '@/lib/session'
 import styles from './practice.module.css'
 
-// 07a Practice what I missed. Redesigned 2026-10-09 with the designer, replacing the
-// Figma frame "07a Practice what I missed — choose how" (15785:13615).
-//
-// The frame asked "How do you want to practice?" over a list of terms, so the student
-// made two choices (which term, which method) with one of them hidden: a row was
-// preselected, and both methods were equal-weight Secondary buttons with nothing to say
-// how they differed. Now each row IS the action. The app recommends the method from
-// what happened to the term (recommendedMode), says why the term is there, and offers
-// the other method as a quiet alternative. "Practice all" runs every row in order and
-// comes back to the Recap once.
-//
-// The drill is still OFFERED here, never entered mid-session (decided 2026-09-20).
+// 07a Practice what I missed. History: docs/code-history.md#h-068
 
 /** Why the term is on this list, in the student's terms. */
 const REASON: Record<Exclude<Bucket, 'Unaided'>, string> = {
@@ -93,8 +82,9 @@ export default function PracticePage() {
               <li key={o.index} className={styles.row}>
                 <div className={styles.rowText}>
                   <p className={styles.rowTerm}>{term?.name}</p>
-                  {/* What they are about to work on, at a glance (senior review). */}
-                  <p className={styles.rowDefinition}>{term?.answer}</p>
+                  {/* No definition here: shown before the drill it gave the answer away
+                      and cut the drill's retrieval value (Duolingo design review,
+                      2026-10-13, over the senior review's earlier ask). */}
                   {/* The reason, then the other method as a quiet link on the same line:
                       one line instead of two keeps three rows and Knowie on a phone. */}
                   <div className={styles.rowMeta}>

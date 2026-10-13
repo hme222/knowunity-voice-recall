@@ -26,7 +26,7 @@ const meta = {
   // only reads correctly beside the AppBar and ProgressIndicator it labels.
   decorators: [
     (Story, ctx) => (
-      <div style={{ position: 'relative', height: 'calc(var(--component-scaffold-top-navigation-height) * 1px)' }}>
+      <div style={{ position: 'relative', height: 'calc(var(--component-scaffold-top-navigation-height) * var(--size-primitive-unit))' }}>
         <AppBar variant="leftAndRightButton" leftIcon={<CloseIcon />} leftLabel="Leave" rightText="Skip">
           <ProgressIndicator
             progress={ctx.args.current === 4 ? '100' : ctx.args.current === 2 ? '50' : '25'}

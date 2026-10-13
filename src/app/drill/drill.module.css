@@ -1,8 +1,4 @@
-/* Definition Drill Down. A different mode from the recall loop: no XP, no verdict
-   badge, and the meter is the only progress signal.
-   The built screens carry the progress ring at 25/50/75/100 — the fixed-ladder
-   fallback, shipped by decision (SPEC.md Open 5). The doc's variable-length model is
-   the intended version. */
+/* Definition Drill Down. History: docs/code-history.md#h-015 */
 
 .body {
   display: flex;
@@ -12,7 +8,7 @@
      lands hard against the mascot instead of sitting in its own room. */
   flex: 1;
   min-height: 0;
-  gap: calc(var(--size-primitive-space-400) * 1px);
+  gap: calc(var(--size-primitive-space-400) * var(--size-primitive-unit));
 }
 
 .centred {
@@ -21,18 +17,18 @@
   align-items: center;
   justify-content: center;
   flex: 1;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  gap: calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit));
   text-align: center;
 }
 
 .cue {
-  padding: calc(var(--spacing-semantic-card-padding) * 1px);
-  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-400) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * var(--size-primitive-unit));
 }
 
 /* Buttons only. The mic is NOT an action-zone item: at 120px it pushed this region to
@@ -42,20 +38,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 .stack {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 .note {
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-caption-m-regular-font-weight);
-  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * var(--size-primitive-unit));
   text-align: center;
 }
 
@@ -73,20 +69,14 @@
    piece of status, then the cards, then the control. */
 
 /* The frames stack a centred column, not a stretched one. */
-/* Gap at space.400, not betweenSections.
-   These screens carry more than a session screen does — mascot, chip, a card, a nudge,
-   a cue, and the mic's fixed region — and at 24 the gaps alone put the content 52 to
-   152px past the region, where the sticky mic rendered on top of the cue text it is
-   meant to sit under. The room has to come from somewhere and the gaps are the cheapest
-   place; the alternative was compressing the mic region, which is what made the control
-   sit at four different heights across this flow. */
+/* Gap at space.400, not betweenSections. History: docs/code-history.md#h-016 */
 .frameBody {
   display: flex;
   flex-direction: column;
   flex: 1;
   min-height: 0;
   align-items: center;
-  gap: calc(var(--size-primitive-space-400) * 1px);
+  gap: calc(var(--size-primitive-space-400) * var(--size-primitive-unit));
 }
 
 /* Cards still span the margin; only the small status elements hug. */
@@ -103,13 +93,13 @@
 .termPill {
   display: inline-flex;
   align-items: center;
-  gap: calc(var(--size-primitive-space-100) * 1px);
-  padding: calc(var(--size-primitive-space-150) * 1px) calc(var(--size-primitive-space-300) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
+  padding: calc(var(--size-primitive-space-150) * var(--size-primitive-unit)) calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
   color: var(--color-semantic-text-secondary);
 }
 
@@ -126,9 +116,9 @@
   display: inline-block;
   width: calc(var(--blank-length) * 1ch);
   vertical-align: baseline;
-  border-bottom: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid currentColor;
+  border-bottom: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid currentColor;
   /* Sits on the baseline rather than through it. */
-  margin-bottom: calc(var(--size-primitive-space-050) * 1px);
+  margin-bottom: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
 }
 
 /* The cue card. Same shape as ChatBubble — which takes a string body and so cannot
@@ -136,9 +126,9 @@
 .cueCard {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--spacing-semantic-card-label-gap) * 1px);
-  padding: calc(var(--spacing-semantic-card-padding) * 1px);
-  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  gap: calc(var(--spacing-semantic-card-label-gap) * var(--size-primitive-unit));
+  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-400) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
 }
 
@@ -146,8 +136,8 @@
   margin: 0;
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * var(--size-primitive-unit));
 }
 
 /* A transcript quote inside the sheet. It was a PickerRow, which renders a <button>,
@@ -155,13 +145,13 @@
    nothing. */
 .quote {
   margin: 0;
-  padding: calc(var(--spacing-semantic-card-padding) * 1px);
-  border-radius: calc(var(--size-primitive-radius-200) * 1px);
+  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-200) * var(--size-primitive-unit));
   background: var(--color-semantic-background-raised);
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * var(--size-primitive-unit));
 }
 
 /* Wraps the shared mic region so the recording caption can sit under the mic without
@@ -189,15 +179,15 @@
 .climb {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 .climbHeading {
   margin: 0;
   color: var(--color-semantic-feedback-success-on-subtle);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
 }
 
 .climbSteps {
@@ -216,8 +206,8 @@
   /* Half a column of the four-column grid on each side: dot centre to dot centre. */
   left: calc(100% / 8);
   right: calc(100% / 8);
-  top: calc((var(--spacing-semantic-tap-target) - var(--size-primitive-icon-400)) / 2 * 1px + var(--size-primitive-icon-400) / 2 * 1px);
-  height: calc(var(--size-primitive-stroke-heavy-border) * 1px);
+  top: calc((var(--spacing-semantic-tap-target) - var(--size-primitive-icon-400)) / 2 * var(--size-primitive-unit) + var(--size-primitive-icon-400) / 2 * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit));
   background: var(--color-semantic-border-success);
 }
 
@@ -230,9 +220,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--size-primitive-space-100) * 1px);
-  min-width: calc(var(--spacing-semantic-tap-target) * 1px);
-  padding: calc((var(--spacing-semantic-tap-target) - var(--size-primitive-icon-400)) / 2 * 1px) 0 0;
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
+  min-width: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
+  padding: calc((var(--spacing-semantic-tap-target) - var(--size-primitive-icon-400)) / 2 * var(--size-primitive-unit)) 0 0;
   background: none;
   border: none;
   cursor: pointer;
@@ -240,24 +230,24 @@
 }
 
 .climbButton:focus-visible {
-  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
-  outline-offset: calc(var(--size-primitive-space-050) * 1px);
-  border-radius: calc(var(--size-primitive-radius-200) * 1px);
+  outline: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-200) * var(--size-primitive-unit));
 }
 
 .climbDot {
   position: relative;
   display: grid;
   place-items: center;
-  width: calc(var(--size-primitive-icon-400) * 1px);
-  height: calc(var(--size-primitive-icon-400) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
-  border: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-success);
+  width: calc(var(--size-primitive-icon-400) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-icon-400) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
+  border: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-success);
   background: var(--color-semantic-background-page);
   color: var(--color-semantic-feedback-success-on-subtle);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
 }
 
 .climbButton[data-stumbled] .climbDot {
@@ -274,8 +264,8 @@
 .climbLabel {
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-caption-m-regular-font-weight);
-  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * var(--size-primitive-unit));
   text-align: center;
 }
 

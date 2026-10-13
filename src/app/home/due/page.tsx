@@ -7,15 +7,7 @@ import { DUE_QUIZZES, dueCountLabel, startRun } from '@/lib/session'
 import { HomeShell } from '../HomeShell'
 import styles from '../home.module.css'
 
-// Home, plan active — Figma frames "Home due-signal — priority card, quiz due date
-// (chosen)" (15675:44721) and swipes 2 and 3.
-//
-// The chip and the due-signal are not competing directions; they are two states of one
-// feature, gated on whether the student has a plan. The card is a reminder layer on
-// top of the chip, never a replacement — so the chip is present here too.
-//
-// Swiping is real rather than three separate routes: the built frames are three states
-// of one carousel, and three routes would have implied three screens.
+// Home, plan active — Figma frames "Home due-signal — priority card, quiz due date (chosen)" (15675:44721) and swipes 2 and 3. History: docs/code-history.md#h-027
 
 function DueHome() {
   const router = useRouter()
@@ -51,11 +43,7 @@ function DueHome() {
                   Count={dueCountLabel(active)}
                   onClick={() => router.push(startRun())}
                 />
-                {/* The dots ARE the non-gesture way through, so the swipe is not the
-                    only route and nothing on screen describes a gesture it is not. The
-                    full-width "Swipe to the next due quiz" button they replace was a
-                    third way to do one thing and did not fit — the region's overflow
-                    fade cut it in half. */}
+                {/* The dots ARE the non-gesture way through, so the swipe is not the only route and nothing on screen describes a gesture it is not. History: docs/code-history.md#h-028 */}
                 <SwipeDots
                   active={active + 1}
                   total={DUE_QUIZZES.length}

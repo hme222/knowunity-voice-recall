@@ -3,15 +3,7 @@
 import { useCallback, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import styles from './ScreenShell.module.css'
 
-// The React counterpart of the Figma `scaffold` component set, variant `size=iPhone 13`.
-// Every screen in Complete Flow is an instance of it, so every screen here fills its
-// slots rather than laying itself out. See SPEC.md § Conventions and
-// docs/design-system.md § "The scaffold".
-//
-// The three booleans mirror the Figma component's own toggles. Per design-system.md:
-// "These control visibility, they don't remove the underlying slot" — so a region that
-// is on still reserves its height even with nothing in it, which is what keeps the
-// action zone in the same place from screen to screen.
+// The React counterpart of the Figma `scaffold` component set, variant `size=iPhone 13`. History: docs/code-history.md#h-117
 
 export type ScreenShellProps = {
   /**
@@ -101,12 +93,7 @@ export function ScreenShell({
   // whenever the content changes, because most of these screens are state-dependent.
   const middleRef = useRef<HTMLElement>(null)
   const [overflowing, setOverflowing] = useState(false)
-  // When the content does not fit, Knowie gives way before the words do: 0 = as
-  // designed, 2 = out. Every screen, not only voice screens — attempt 2's hint was
-  // scrolled out of sight on a screen with no mic (designer, 2026-10-08). No shrunk
-  // stage: Knowie at XL read as too small, so it is full size or not there. The stage is
-  // chosen from the layout AS DESIGNED — the attribute is lifted for one synchronous
-  // read and put back — so it never reads its own effect and cannot flip-flop.
+  // When the content does not fit, Knowie gives way before the words do: 0 = as designed, 2 = out. History: docs/code-history.md#h-118
   const hasMic = mic != null
   const measureFade = useCallback(() => {
     const el = middleRef.current
@@ -157,12 +144,7 @@ export function ScreenShell({
 
   return (
     <div className={[styles.root, className].filter(Boolean).join(' ')} data-sheet={showBottomSheetBackground}>
-      {/* Panel Header — the status-bar region, and a real slot as of 2026-09-23. It was
-          a reserved 48 of nothing on the reasoning that the real app's Status Bar is an
-          external-library component. Home is built to a frame that HAS one, and with no
-          slot the status bar had to go into topNavigation, which is a fixed 56 with
-          overflow:hidden — so it pushed the app bar out and the app bar simply vanished.
-          The scaffold has this region; the shell now exposes it. */}
+      {/* Panel Header — the status-bar region, and a real slot as of 2026-09-23. History: docs/code-history.md#h-119 */}
       <div className={styles.panelHeader} aria-hidden={panelHeader ? undefined : true}>
         {panelHeader}
       </div>

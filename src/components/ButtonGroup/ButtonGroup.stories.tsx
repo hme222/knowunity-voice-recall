@@ -27,7 +27,7 @@ const meta = {
     children: { control: false },
   },
   args: { variant: 'Vertical', size: 'M', children: null },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}><Story /></div>],
   render: (args) => (
     <ButtonGroup {...args}>
       {args.variant === 'Vertical' ? (

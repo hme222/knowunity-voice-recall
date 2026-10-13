@@ -16,12 +16,7 @@ import {
 import { getTerm, micGate, useSticky, SUBJECT } from '@/lib/session'
 import styles from '../../interrupt.module.css'
 
-// A genuinely blank term — not a near-miss, nothing at all. This answers the Design
-// Brief's first open question, which had gone unanswered: encourage one attempt, then
-// reveal. A wrong attempt still beats silence for retrieval.
-//
-// Distinct from Skip, which stays a silent exit. Skip is avoidance; this is a student
-// saying "I don't know this", which is different information.
+// A genuinely blank term — not a near-miss, nothing at all. History: docs/code-history.md#h-048
 
 export default function BlankPage({ params }: { params: Promise<{ term: string }> }) {
   const router = useRouter()
@@ -29,17 +24,13 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
   const { term } = use(params)
   const index = Number(term)
 
-  // voice-ux.md §3: a denied mic stays denied for the SESSION, not for one turn. This
-  // screen was mic-only, so a student already moved to typing could reach it from
-  // /text/turn's "I don't know this one" and be handed a microphone they had refused —
-  // the recording screen then rendered "LISTENING" with a running timer on a mic with
-  // no permission. 01 Idle has had this redirect all along; blank and reveal did not.
+  // voice-ux.md §3: a denied mic stays denied for the SESSION, not for one turn. History: docs/code-history.md#h-049
   useEffect(() => {
     if (sticky) router.replace(`/text/turn?term=${index}&sticky=1`)
   }, [sticky, index, router])
 
   const current = getTerm(index)
-  useRedirect(!current, '/session/intro')
+  useRedirect(!current, '/session/resume')
   if (sticky) return null
 
   if (!current) return null
@@ -48,15 +39,7 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
     <ScreenShell
       mic={
         <div className={micRegionClass}>
-          {/* One encouraged attempt, then the answer — voice-ux.md marks this state Must
-              and specifies exactly that. The mic used to push into the ordinary
-              recording pipeline with no marker, so a mid-length take landed on the
-              standard miss hint-ladder ("Try again", "One more go, then I'll show you
-              the answer") — a retry ladder offered to a student who has just said they
-              know none of it. It also inherited the scripted mishear, so a clean take
-              could come back "That one didn't come through" on the one screen that
-              promises nothing is scored against them. `blank=1` takes the verdict out
-              of it entirely: the take happens, then the answer. */}
+          {/* One encouraged attempt, then the answer — voice-ux.md marks this state Must and specifies exactly that. History: docs/code-history.md#h-050 */}
           <MicButton state="Idle" label="Say whatever you've got" onClick={() => router.push(micGate(`/session/recording/${index}?blank=1`, `/text/turn?term=${index}`))} />
           {/* The encouragement moved under the mic so the question can stay on screen. */}
           <MicCaption label="Drawing a blank?" body="Say whatever you’ve got, even half of it." />

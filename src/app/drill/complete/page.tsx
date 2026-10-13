@@ -5,20 +5,9 @@ import { actionRowClass, Button, MascotSlot, RecallResult, ScreenShell } from '@
 import { advancePractice, isPractising, useDrillTerm } from '@/lib/session'
 import styles from '../drill.module.css'
 
-// DD 08 Complete — Figma frame "DD 08 Complete — definition reassembles"
-// (15782:12475). Meter full, Knowie's warm arrival, no badge.
-//
-// The training log shows however many passes actually happened. The frame's footer
-// reads "all four takes"; that copy is a leftover from the fixed ladder and is not
-// reproduced — the count is derived.
-//
-// No XP anywhere. Deliberate: the drill is practice, not scored performance.
+// DD 08 Complete — Figma frame "DD 08 Complete — definition reassembles" (15782:12475). History: docs/code-history.md#h-010
 
-// The climb as a step meter, not a four-row list — designer, 2026-10-12. The list was
-// what pushed this screen 62px past 390x668; four steps on one line say the same thing
-// at a glance, and each still opens that round's take. Round 2 is where the mock
-// stumbles (see /drill/processing), so it carries the mark. Built inline: see
-// component-gaps.md.
+// The climb as a step meter, not a four-row list — designer, 2026-10-12. History: docs/code-history.md#h-011
 const ROUNDS = [
   { short: 'Full', label: 'Round 1 · Full definition' },
   { short: 'Stumbled', label: 'Round 2 · Stumbled', stumbled: true },
@@ -32,12 +21,7 @@ export default function DrillCompletePage() {
   return (
     <ScreenShell
       bottomContent={
-        // The same SHAPE as 07 Recap, not just the same variants. This matched Recap's
-        // Primary/Secondary vocabulary and then stacked the pair full-width in the
-        // opposite order — Done on top, Run it again beneath — while Recap puts them
-        // side by side with "Run it again" always left. The comment claimed parity; the
-        // position was never part of what got checked. Two screens, identical choice,
-        // same row and same order now.
+        // The same SHAPE as 07 Recap, not just the same variants. History: docs/code-history.md#h-012
         <div className={actionRowClass}>
           <Button
             CTA="Run it again"

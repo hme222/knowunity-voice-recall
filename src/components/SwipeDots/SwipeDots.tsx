@@ -1,22 +1,6 @@
 import styles from './SwipeDots.module.css'
 
-// Mirrors the Figma component set `swipeDots` (15813:37248), whose variant is
-// `active=1|2|3`. Expressed here as numbers rather than a string union: the batch size
-// is however many quizzes are due, and hardcoding three would be the same
-// fixed-count-that-lies problem the drill's ladder had.
-//
-// Two shapes, decided by whether `onSelect` is passed:
-//
-//   - With it, the dots are real tabs and the dot IS the control. This is what the due
-//     carousel uses. It replaced a full-width tertiary button reading "Swipe to the next
-//     due quiz" — which described a gesture that did not exist, and once the gesture did
-//     exist was a third way to do one thing, sliced in half by the region's overflow
-//     fade because the screen had no room for it.
-//   - Without it, they are decoration beside something else that pages.
-//
-// The role follows the shape. It used to be `role="tablist"` in both cases, with
-// `role="presentation"` spans inside — a tablist containing no tabs, which tells a
-// screen reader a widget is there and then gives it nothing to operate.
+// Mirrors the Figma component set `swipeDots` (15813:37248), whose variant is `active=1|2|3`. History: docs/code-history.md#h-129
 
 export type SwipeDotsProps = {
   /** Which card is showing, 1-based. Figma's `active` variant. */

@@ -1,8 +1,4 @@
-/* appBar — mirrors the Figma component set `appBar` (9003:8606).
-   56 tall = a tapTarget row plus space.200 below. Background is background.page fading
-   to transparent (Figma: two unbound linear gradients of that colour), for content
-   scrolling underneath. The controls at each end are ButtonIcon and Button from the
-   catalog (see AppBar.tsx); nothing about them is styled here. */
+/* appBar — mirrors the Figma component set `appBar` (9003:8606). History: docs/code-history.md#h-097 */
 
 .root {
   width: 100%;
@@ -14,19 +10,19 @@
 .bar {
   display: flex;
   align-items: center;
-  gap: calc(var(--size-primitive-space-100) * 1px);
-  padding: 0 calc(var(--size-primitive-space-400) * 1px) calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
+  padding: 0 calc(var(--size-primitive-space-400) * var(--size-primitive-unit)) calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 /* Edge padding follows what sits at each edge: an icon button gets space.100, text or nothing gets space.400. */
 .root:not([data-variant='default']) .bar {
-  padding-left: calc(var(--size-primitive-space-100) * 1px);
+  padding-left: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
 }
 .root[data-variant='leftAndRightIconButton'] .bar,
 .root[data-variant='leftAndTwoRightIconButtons'] .bar {
-  padding-right: calc(var(--size-primitive-space-100) * 1px);
+  padding-right: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
 }
 .root[data-variant='leftAnd2RightButtons'] .bar {
-  padding-right: calc(var(--size-primitive-space-300) * 1px);
+  padding-right: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
 }
 
 /* The Slot: fills, centred, tapTarget tall. */
@@ -35,8 +31,8 @@
   flex: 1 1 auto;
   align-items: center;
   justify-content: center;
-  gap: calc(var(--size-primitive-space-200) * 1px);
-  height: calc(var(--spacing-semantic-tap-target) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+  height: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
   min-width: 0;
 }
 .right {
@@ -44,11 +40,11 @@
   align-items: center;
 }
 .root[data-variant='leftAnd2RightButtons'] .right {
-  padding-right: calc(var(--size-primitive-space-100) * 1px);
+  padding-right: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
 }
 
 /* App Bar Button's space.300 lead-in, on the catalog Button's outer hit box. Two
    classes so it outranks Button's own `padding: 0` on .root. */
 .right .textButton {
-  padding-left: calc(var(--size-primitive-space-300) * 1px);
+  padding-left: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
 }

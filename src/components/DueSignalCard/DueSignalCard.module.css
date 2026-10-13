@@ -1,35 +1,31 @@
-/* Figma `dueSignalCard` (15812:15287): 287×56, horizontal, gap space.300, pad 10/12,
-   surface fill, amber 1px border, fully rounded. An amber clock badge, a due label,
-   and the Say It Back action.
-   The border was a raw hex in Figma; bound to feedback.warning.border here, the same
-   token swipeChip uses — they are the same due-signal accent and were diverging. */
+/* Figma `dueSignalCard` (15812:15287): 287×56, horizontal, gap space.300, pad 10/12, surface fill, amber 1px border, fully rounded. History: docs/code-history.md#h-104 */
 
 .root {
   display: flex;
   align-items: center;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
   width: 100%;
-  padding: calc(var(--size-primitive-space-300) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  padding: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
-  border: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-feedback-warning-border);
+  border: calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit)) solid var(--color-semantic-feedback-warning-border);
   cursor: pointer;
   font: inherit;
   text-align: left;
 }
 
 .root:focus-visible {
-  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
-  outline-offset: calc(var(--size-primitive-space-050) * 1px);
+  outline: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
 }
 
 .badge {
   flex-shrink: 0;
-  width: calc(var(--size-primitive-space-800) * 1px);
-  height: calc(var(--size-primitive-space-800) * 1px);
+  width: calc(var(--size-primitive-space-800) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-space-800) * var(--size-primitive-unit));
   display: grid;
   place-items: center;
-  border-radius: calc(var(--size-primitive-radius-200) * 1px);
+  border-radius: calc(var(--size-primitive-radius-200) * var(--size-primitive-unit));
   background: var(--color-semantic-feedback-warning-bold);
   color: var(--color-semantic-feedback-warning-on-bold);
 }
@@ -41,22 +37,22 @@
   min-width: 0;
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
 }
 
 .action {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  gap: calc(var(--size-primitive-space-150) * 1px);
-  padding-block: calc(var(--size-primitive-space-150) * 1px);
-  padding-inline: calc(var(--size-primitive-space-300) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  gap: calc(var(--size-primitive-space-150) * var(--size-primitive-unit));
+  padding-block: calc(var(--size-primitive-space-150) * var(--size-primitive-unit));
+  padding-inline: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   background: var(--color-semantic-interactive-primary);
   color: var(--color-semantic-interactive-on-primary);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
 }
 
-.actionGlyph { width: calc(var(--size-primitive-space-400) * 1px); height: calc(var(--size-primitive-space-400) * 1px); }
+.actionGlyph { width: calc(var(--size-primitive-space-400) * var(--size-primitive-unit)); height: calc(var(--size-primitive-space-400) * var(--size-primitive-unit)); }

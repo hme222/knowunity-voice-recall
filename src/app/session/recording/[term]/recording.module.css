@@ -1,14 +1,4 @@
-/* 02 Recording — full-screen mic takeover. Figma frame "02 Recording" (15672:20100):
-   no mascot, no chat bubble.
-
-   The pulse rings are loose ELLIPSE siblings of the frame in Figma. Here they are
-   children of the mic, so they cannot be orphaned or buried in z-order — the failure
-   docs/design-system-update.md § 2 records, where all three were present, positioned
-   and invisible at once.
-
-   The rings carry their stagger in colour, not opacity: three alpha border tokens
-   rather than three raw opacity values, so nothing here is an untokenised literal.
-   Only `transform` animates. */
+/* 02 Recording — full-screen mic takeover. History: docs/code-history.md#h-076 */
 
 .root {
   --pulse-duration: calc(var(--motion-semantic-duration-ambient) * 1ms);
@@ -25,16 +15,9 @@
   align-self: stretch;
 }
 
-/* Same fixed region as every other voice screen. Without it the mic sat at y=383 here
-   and y=566 on 01 Idle, so it moved 183px on the tap that starts the recording — the
-   one tap where the control must not move. The rings are absolute children, so the
-   height comes from the region rather than from them.
-
-   The mic sits at the TOP of the region, not centred in it — matching ScreenShell's
-   .micRegion, which was moved at the same time so idle and recording still agree to
-   the pixel. That is what frees the bottom of the region for the status. */
+/* Same fixed region as every other voice screen. History: docs/code-history.md#h-077 */
 .micWrap {
-  height: calc(var(--component-scaffold-mic-region-height) * 1px);
+  height: calc(var(--component-scaffold-mic-region-height) * var(--size-primitive-unit));
   width: 100%;
   flex-shrink: 0;
   position: relative;
@@ -44,18 +27,7 @@
   justify-content: flex-start;
 }
 
-/* BELOW the mic, which is where it belongs and where the frame has it.
-
-   It has been in three places. In the action zone it was 235px from the control it
-   describes. Centred in the region with the mic it ran 610-666 against a mic of
-   506-626, printing "Tap to pause" on top of the thing you tap. Moved above the mic it
-   was clear of everything and read as a heading for the screen rather than a caption
-   for the control.
-
-   What made below unusable was the mic being centred in a 200 region: there were 40px
-   under it and the caption needs 56. Top-aligning the mic gives the status the bottom
-   80 of the region, so it sits under the control, clear of it, and in the reading
-   order the sentence actually has — the mic, then what it is doing. */
+/* BELOW the mic, which is where it belongs and where the frame has it. History: docs/code-history.md#h-078 */
 .micCaption {
   position: absolute;
   left: 0;
@@ -75,9 +47,9 @@
 
 .ring {
   position: absolute;
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   border-style: solid;
-  border-width: calc(var(--size-primitive-stroke-border) * 1px);
+  border-width: calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit));
   /* Half the period, reversed. Sampled at 60ms the old loop climbed to scale 1.039
      then snapped to 0.923 in a single frame, every 1.1s, because direction defaulted
      to normal. A pulse that jumps is a sawtooth. */
@@ -85,14 +57,14 @@
 }
 
 .ring:nth-child(1) {
-  width: calc(var(--component-mic-button-pulse-ring-inner) * 1px);
-  height: calc(var(--component-mic-button-pulse-ring-inner) * 1px);
+  width: calc(var(--component-mic-button-pulse-ring-inner) * var(--size-primitive-unit));
+  height: calc(var(--component-mic-button-pulse-ring-inner) * var(--size-primitive-unit));
   border-color: var(--color-semantic-border-strong);
 }
 
 .ring:nth-child(2) {
-  width: calc(var(--component-mic-button-pulse-ring-middle) * 1px);
-  height: calc(var(--component-mic-button-pulse-ring-middle) * 1px);
+  width: calc(var(--component-mic-button-pulse-ring-middle) * var(--size-primitive-unit));
+  height: calc(var(--component-mic-button-pulse-ring-middle) * var(--size-primitive-unit));
   border-color: var(--color-semantic-border-subtle);
   /* Stagger derived from the ambient loop rather than stated. Halved with the period
      so the 1/5, 2/5 relationship survives. */
@@ -100,8 +72,8 @@
 }
 
 .ring:nth-child(3) {
-  width: calc(var(--component-mic-button-pulse-ring-outer) * 1px);
-  height: calc(var(--component-mic-button-pulse-ring-outer) * 1px);
+  width: calc(var(--component-mic-button-pulse-ring-outer) * var(--size-primitive-unit));
+  height: calc(var(--component-mic-button-pulse-ring-outer) * var(--size-primitive-unit));
   border-color: var(--color-semantic-border-default);
   animation-delay: calc(var(--motion-semantic-duration-ambient) * 0.2ms);
 }
@@ -131,5 +103,5 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
 }

@@ -7,13 +7,7 @@ import { Button, OptionRow, ScreenShell } from '@/components'
 import { setSticky, useSession, XP, setPractising } from '@/lib/session'
 import styles from './exit.module.css'
 
-// 01b Exit confirmation. Eight real reasons, matching IMG_7511. Tone stays light, no
-// guilt — this satisfies "never trap the student", it isn't a retention gate.
-//
-// The note is the corrected version: per-term XP is banked, only the completion bonus
-// is forfeited (docs/sprint-context.md § "XP model", 2026-09-20). The frame's older
-// line said all session XP was lost, which contradicted the Design Brief's
-// "progress saves, returning resumes".
+// 01b Exit confirmation. History: docs/code-history.md#h-052
 
 const REASONS = [
   "I can\u2019t speak out loud right now (I\u2019m around people / in public)",

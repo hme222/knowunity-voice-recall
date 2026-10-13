@@ -1,15 +1,11 @@
-/* 04a Couldn't hear.
-
-   A voice screen, not a result screen: the whole point is to say it again, so it wears
-   01 Idle's shape — fill the region, mic pinned at the foot — rather than the result
-   stack it borrowed, which sizes to its content and leaves no room for a control. */
+/* 04a Couldn't hear. A voice screen, not a result screen: the whole point is to say it again, so it wears 01 Idle's… History: docs/code-history.md#h-086 */
 
 .body {
   display: flex;
   flex-direction: column;
   align-items: center;
   flex: 1;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  gap: calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit));
 }
 
 .body > * {
@@ -24,5 +20,5 @@
 .actions {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }

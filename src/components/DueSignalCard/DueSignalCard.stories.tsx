@@ -19,7 +19,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: { docs: { description: { component: DESCRIPTION } } },
   args: { DueLabel: 'Quiz due 9/15' },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}><Story /></div>],
 } satisfies Meta<typeof DueSignalCard>
 
 export default meta

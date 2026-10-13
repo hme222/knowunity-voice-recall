@@ -4,8 +4,8 @@ import { Suspense, use, useEffect } from 'react'
 import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
-import { micRegionClass, Button, MascotSlot, MicButton, MicCaption, RecallResult, ScreenShell } from '@/components'
-import { getTerm, micGate, nextAfter, recordOutcome, markMicFault } from '@/lib/session'
+import { micRegionClass, Button, ChatBubble, MascotSlot, MicButton, MicCaption, RecallResult, ScreenShell } from '@/components'
+import { getTerm, micGate, nextAfter, recordOutcome, markMicFault, SUBJECT } from '@/lib/session'
 import styles from './unclear.module.css'
 
 // 04a Couldn't hear — Figma frame "04a Couldn't hear (refreshed)" (15672:24583).
@@ -20,11 +20,7 @@ function UnclearScreen({ index }: { index: number }) {
   const current = getTerm(index)
   const attempt = Number(searchParams.get('attempt') ?? '1')
   const door = searchParams.get('door')
-  // A second mishear is a different situation from the first. It used to render
-  // byte-identically — same "a little closer to the mic" after the mic had already
-  // failed once — so the screen kept asking for the thing that was not working.
-  // voice-ux Principle 4: a mishear is the app's problem, so the escalation offers the
-  // way out rather than blaming the student.
+  // A second mishear is a different situation from the first. History: docs/code-history.md#h-085
   const repeated = attempt >= 2
   // The mic failed on this term, so typing it from here is not typing by choice: it
   // pays in full (designer, 2026-10-12).
@@ -32,7 +28,7 @@ function UnclearScreen({ index }: { index: number }) {
     markMicFault(index)
   }, [index])
 
-  useRedirect(!current, '/session/intro')
+  useRedirect(!current, '/session/resume')
 
   if (!current) return null
 
@@ -90,6 +86,11 @@ function UnclearScreen({ index }: { index: number }) {
               : `The mic didn’t pick you up. Say the same answer again, a little closer.`
           }
         />
+        {/* The question stays (Knowunity design review, 2026-10-13; live 26 keeps it):
+            Under the status, which is the screen's message, so at 390x668 it is the
+            question that scrolls, not the reassurance. Without it the screen was a lone error card after six seconds of talking. */}
+        <ChatBubble showTitle title={`${SUBJECT} · Explain: `} titleAccent={current.name} body={current.prompt} className={styles.card} />
+
         {/* The same fixed region as every other voice screen, so the control the
             student is being asked to use again is exactly where they last used it. */}
       </div>

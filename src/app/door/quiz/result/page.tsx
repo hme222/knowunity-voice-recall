@@ -6,11 +6,7 @@ import { AppBar, MascotSlot, ProgressIndicator, RecallResult, ScreenShell, Butto
 import { getTerm, SUBJECT } from '@/lib/session'
 import styles from '../../door.module.css'
 
-// Door 1's result — Figma frame "Prove It Again — term result" (15672:19827).
-//
-// The one-term version of 04 Pass: same card, same echoed transcript, but no session
-// fraction and no XP line, because a door run is not a session. Continue goes to the
-// reveal, which is the first time home has ever shown the feature.
+// Door 1's result — Figma frame "Prove It Again — term result" (15672:19827). History: docs/code-history.md#h-008
 
 export default function QuizDoorResult() {
   const router = useRouter()

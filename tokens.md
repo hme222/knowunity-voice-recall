@@ -184,12 +184,13 @@ Roles. These are what components bind to.
 
 ## Size primitives
 
-`size.primitive.*` — 40 tokens
+`size.primitive.*` — 41 tokens
 
 Spacing, radius, stroke, icon and illustration scales.
 
 | Token | Value | Resolves to | Notes |
 | --- | --- | --- | --- |
+| `size.primitive.unit` | `0.0625rem` |  | One design pixel, in rem: 1/16 of the root font size, so 1px at the default 16px. Every size in the CSS is a unitless token multiplied by this (calc(var(--x) * var(--size-primitive-unit))), so the whole UI scales with the student's text-size setting instead of being fixed in px (Knowunity engineering review, 2026-10-13). Native platforms do not use it: their outputs keep the unitless numbers as points/dp. |
 | `size.primitive.space.0` | `0` |  | 0px spacing step. |
 | `size.primitive.space.100` | `4` |  | 4px spacing step. |
 | `size.primitive.space.150` | `6` |  | 6px spacing step. |
@@ -425,4 +426,4 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ---
 
-325 tokens across 10 groups.
+326 tokens across 10 groups.

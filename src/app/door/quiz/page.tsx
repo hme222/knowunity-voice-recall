@@ -7,15 +7,7 @@ import { MicGlyphIcon } from '@/components/icons'
 import { proveItHref } from '../doors'
 import styles from '../door.module.css'
 
-// Door 1, Quiz complete — Figma frame "Quiz complete — Prove It Again, Option 1
-// (CHOSEN, refreshed from production)" (15672:24061).
-//
-// THIS IS THE FIRST SCREEN OF THE PROTOTYPE. Say It Back has no chip on home until a
-// door has shown it, so the flow cannot start on home — it starts here, at the end of
-// something the student was already doing.
-//
-// Both actions lead to the reveal: it is the showing that unlocks, not the completing
-// (docs/sprint-context.md § "Where it lives").
+// Door 1, Quiz complete — Figma frame "Quiz complete — Prove It Again, Option 1 (CHOSEN, refreshed from production)" (15672:24061). History: docs/code-history.md#h-007
 
 export default function QuizCompleteDoor() {
   const router = useRouter()

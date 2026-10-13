@@ -24,7 +24,7 @@ const meta = {
   // Shown in place: inside a mic region at the 390 frame width, under an idle mic.
   decorators: [
     (Story) => (
-      <div style={{ width: 'calc(var(--responsive-primitive-device-width-mobile) * 1px)' }}>
+      <div style={{ width: 'calc(var(--responsive-primitive-device-width-mobile) * var(--size-primitive-unit))' }}>
         <div className={micRegionClass}>
           <MicButton state="Idle" />
           <Story />

@@ -6,10 +6,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(var(--spacing-semantic-tap-target) * 1px);
+  min-height: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
   /* And a minimum WIDTH. min-height alone left a short Tertiary label ("Skip")
      rendering 30px wide, which clears 44pt on one axis only. */
-  min-width: calc(var(--spacing-semantic-tap-target) * 1px);
+  min-width: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
   padding: 0;
   margin: 0;
   border: 0;
@@ -28,9 +28,9 @@
 
 /* Keyboard focus. Not in the Figma set (touch-only); design-system.md: border.focus at Stroke/Heavy Border, never removed without replacement. */
 .root:focus-visible {
-  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
-  outline-offset: calc(var(--size-primitive-space-050) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  outline: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
 }
 
 /* Figma "Fill container" sizing override (buttonGroup). */
@@ -47,7 +47,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   overflow: hidden;
 }
 
@@ -61,29 +61,29 @@
 
 /* Sizes — padding, gap, icon box and pill height, straight from the variant bindings. */
 .root[data-size='S'] .pill {
-  height: calc(var(--component-button-s-height) * 1px);
-  padding-inline: calc(var(--size-primitive-space-300) * 1px);
-  gap: calc(var(--size-primitive-space-150) * 1px);
+  height: calc(var(--component-button-s-height) * var(--size-primitive-unit));
+  padding-inline: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+  gap: calc(var(--size-primitive-space-150) * var(--size-primitive-unit));
   --button-icon: var(--size-primitive-icon-200);
 }
 .root[data-size='M'] .pill {
-  height: calc(var(--component-button-m-height) * 1px);
-  padding-inline: calc(var(--size-primitive-space-400) * 1px);
-  gap: calc(var(--size-primitive-space-150) * 1px);
+  height: calc(var(--component-button-m-height) * var(--size-primitive-unit));
+  padding-inline: calc(var(--size-primitive-space-400) * var(--size-primitive-unit));
+  gap: calc(var(--size-primitive-space-150) * var(--size-primitive-unit));
   --button-icon: var(--size-primitive-icon-250);
 }
 .root[data-size='L'] .pill {
-  height: calc(var(--component-button-l-height) * 1px);
-  padding-inline: calc(var(--size-primitive-space-600) * 1px);
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  height: calc(var(--component-button-l-height) * var(--size-primitive-unit));
+  padding-inline: calc(var(--size-primitive-space-600) * var(--size-primitive-unit));
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
   --button-icon: var(--size-primitive-icon-300);
 }
 .root[data-size='S'] .content,
 .root[data-size='M'] .content {
-  padding-bottom: calc(var(--size-primitive-space-050) * 1px);
+  padding-bottom: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
 }
 .root[data-size='L'] .content {
-  padding-bottom: calc(var(--size-primitive-space-100) * 1px);
+  padding-bottom: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
 }
 
 /* Label — typography.style.bodySBold for S and M, headlineS for L. */
@@ -94,22 +94,22 @@
 .root[data-size='S'] .label,
 .root[data-size='M'] .label {
   font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
   letter-spacing: calc(var(--typography-style-body-s-bold-letter-spacing) * 0.01em);
 }
 .root[data-size='L'] .label {
   font-weight: var(--typography-style-headline-s-font-weight);
-  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
-  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
+  font-size: calc(var(--typography-style-headline-s-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-headline-s-line-height) * var(--size-primitive-unit));
   letter-spacing: calc(var(--typography-style-headline-s-letter-spacing) * 0.01em);
 }
 
 /* Loading keeps a hidden label layer, as Figma does; it is the accessible name. */
 .hiddenLabel {
   position: absolute;
-  width: calc(var(--size-primitive-stroke-border) * 1px);
-  height: calc(var(--size-primitive-stroke-border) * 1px);
+  width: calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit));
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
@@ -121,8 +121,8 @@
   align-items: center;
   justify-content: center;
   flex: none;
-  width: calc(var(--button-icon) * 1px);
-  height: calc(var(--button-icon) * 1px);
+  width: calc(var(--button-icon) * var(--size-primitive-unit));
+  height: calc(var(--button-icon) * var(--size-primitive-unit));
 }
 .icon > svg {
   width: 100%;
@@ -142,7 +142,7 @@
 }
 /* Tertiary: no fill, no padding, pill hugs the text on S and M (fixed 56 on L); radius.full sits on the outer frame. */
 .root[data-variant='Tertiary'] {
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
 }
 .root[data-variant='Tertiary'] .pill {
   background: none;

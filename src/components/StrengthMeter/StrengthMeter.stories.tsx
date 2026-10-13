@@ -22,7 +22,7 @@ const meta = {
   parameters: { docs: { description: { component: DESCRIPTION } } },
   argTypes: { fill: { control: { type: 'range', min: 0, max: 100, step: 1 } } },
   args: { fill: 0, label: 'How much you can say unaided' },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}><Story /></div>],
 } satisfies Meta<typeof StrengthMeter>
 
 export default meta
@@ -36,7 +36,7 @@ export const Ramp: Story = {
   name: 'The ramp',
   parameters: { controls: { disable: true } },
   render: () => (
-    <div style={{ display: 'grid', gap: 'calc(var(--size-primitive-space-400) * 1px)' }}>
+    <div style={{ display: 'grid', gap: 'calc(var(--size-primitive-space-400) * var(--size-primitive-unit))' }}>
       {[0, 20, 40, 60, 80, 100].map((f) => (
         <StrengthMeter key={f} fill={f} label={`${f}% unaided`} />
       ))}

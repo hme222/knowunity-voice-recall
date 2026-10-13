@@ -16,12 +16,7 @@ function DrillRecording() {
   const router = useRouter()
   const drillTerm = useDrillTerm()
   const step = Number(useSearchParams().get('step') ?? '1')
-  // Where Done speaking goes. The scaffold's own screens used to hand their mic a
-  // `router.push` to the NEXT screen — /drill/miss/letter's mic went to
-  // /drill/miss/echo, /drill/miss/echo's went to /drill/pass/3 — so the one rung that
-  // asks the student to say a word out loud with Knowie completed without anyone
-  // saying anything, and the mic was a control that advanced rather than recorded.
-  // They route here now and this decides where they land.
+  // Where Done speaking goes. History: docs/code-history.md#h-023
   const stumble = useSearchParams().get('stumble')
   const afterTake =
     stumble === 'letter' ? '/drill/miss/echo' : stumble === 'echo' ? '/drill/pass/3' : `/drill/captured?step=${step}`

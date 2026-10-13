@@ -20,7 +20,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: { docs: { description: { component: FIGMA_DESCRIPTION } } },
   args: { showTitle: false, title: 'Ready when you are', body: 'Say what formal charge means, in your own words.' },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}><Story /></div>],
 } satisfies Meta<typeof ChatBubble>
 
 export default meta

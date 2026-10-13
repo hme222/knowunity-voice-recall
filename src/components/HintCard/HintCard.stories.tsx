@@ -20,7 +20,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: { docs: { description: { component: FIGMA_DESCRIPTION } } },
   args: { body: 'Think about how the electrons in each bond get shared.' },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}><Story /></div>],
 } satisfies Meta<typeof HintCard>
 
 export default meta

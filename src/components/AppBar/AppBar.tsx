@@ -4,15 +4,7 @@ import { Button } from '../Button/Button'
 import { ButtonIcon } from '../ButtonIcon/ButtonIcon'
 import styles from './AppBar.module.css'
 
-// Mirrors the Figma component set `appBar` (9003:8606): a "Top Nav Default" frame
-// holding one Slot, six variants for what sits around it. The left/right controls are
-// the library's "App Bar Button Icon" (48 hit area, no fill, 24 icon) and "App Bar
-// Button" (text, no fill). Both were rebuilt inline here until 2026-09-21; they are now
-// the catalog's own ButtonIcon (Tertiary, L: 48 hit box, 24 icon, no pill fill) and
-// Button (Tertiary, M: 48 hit box, label hugs the text). One difference worth naming:
-// the text button's type is Button's bodySBold rather than the frame's headlineXXSBold.
-// Same size, weight and tracking; only the line-height box differs (20 vs 16), and the
-// label is centred in a 48 box either way, so nothing visible moves.
+// Mirrors the Figma component set `appBar` (9003:8606): a "Top Nav Default" frame holding one Slot, six variants for what sits around it. History: docs/code-history.md#h-098
 
 export const APP_BAR_VARIANTS = [
   'default',

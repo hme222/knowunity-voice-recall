@@ -21,7 +21,7 @@ const meta = {
   parameters: { docs: { description: { component: FIGMA_DESCRIPTION } } },
   argTypes: { state: { control: 'radio', options: OPTION_ROW_STATES } },
   args: { label: '320 km', state: 'Default' },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}><Story /></div>],
 } satisfies Meta<typeof OptionRow>
 
 export default meta
@@ -34,7 +34,7 @@ export const Incorrect: Story = { args: { state: 'Incorrect' } }
 export const AnswerList: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div style={{ display: 'grid', gap: 'calc(var(--size-primitive-space-200) * 1px)' }}>
+    <div style={{ display: 'grid', gap: 'calc(var(--size-primitive-space-200) * var(--size-primitive-unit))' }}>
       <OptionRow label="160 km" />
       <OptionRow label="320 km" state="Selected" />
       <OptionRow label="640 km" />

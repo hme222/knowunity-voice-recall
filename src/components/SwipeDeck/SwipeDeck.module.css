@@ -11,9 +11,9 @@
 }
 
 .root:focus-visible {
-  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
-  outline-offset: calc(var(--size-primitive-space-100) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  outline: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
 }
 
 .track {
@@ -22,7 +22,7 @@
   align-items: stretch;
   /* Room between the card and its pager dots. With none, the dots sat on the chip's
      edge (measured 0px, designer, 2026-10-12). */
-  gap: calc(var(--size-primitive-space-400) * 1px);
+  gap: calc(var(--size-primitive-space-400) * var(--size-primitive-unit));
   /* Settles back, or into the next card, when the finger lifts. Removed while dragging
      so the card tracks the pointer rather than lagging behind it. */
   transition: transform calc(var(--motion-semantic-duration-standard) * 1ms) var(--motion-semantic-easing-standard);

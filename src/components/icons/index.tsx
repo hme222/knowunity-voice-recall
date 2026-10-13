@@ -8,11 +8,7 @@ import { X, Mic, RotateCcw, Eye, Check, Menu, Timer, Zap, Flame, Camera, Layers,
 export { LoadingIcon } from './LoadingIcon'
 export { SquareIcon } from './SquareIcon'
 
-/* Lucide glyphs, matching Figma's micGlyph_lucide / refreshGlyph_lucide, which are
-   exact Lucide geometry. Lucide emits its own width/height from a `size` prop; every
-   icon in this file instead fills its box so the parent slot sizes it. `lucide` wraps
-   one to that house convention — without it, a Lucide icon in AppBar's 24px slot
-   ignores the slot. Stroke stays currentColor like the rest. */
+/* Lucide glyphs, matching Figma's micGlyph_lucide / refreshGlyph_lucide, which are exact Lucide geometry. History: docs/code-history.md#h-132 */
 function lucide(Glyph: ComponentType<{ className?: string }>) {
   return function LucideIcon({ className }: { className?: string }) {
     return (
@@ -38,11 +34,7 @@ export const EyeIcon = lucide(Eye)
 /** Snackbar variant="Success". Without it the component falls back to `square`. */
 export const CheckIcon = lucide(Check)
 
-/* The host app's home chrome — Figma frame "Home card — where Say It Back lives,
-   native and unmodified" (15674:34093). The frame's own glyphs are bespoke multi-colour
-   artwork exported as rasters and groups; these are the Lucide equivalents, which is
-   the house convention for icons and the only thing reproducible from tokens. The
-   shapes differ from the frame; the slots, sizes and positions do not. */
+/* The host app's home chrome — Figma frame "Home card — where Say It Back lives, native and unmodified" (15674:34093). History: docs/code-history.md#h-133 */
 export const MenuIcon = lucide(Menu)
 export const WifiIcon = lucide(Wifi)
 export const TimerIcon = lucide(Timer)

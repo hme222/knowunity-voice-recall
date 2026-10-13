@@ -24,7 +24,7 @@ const meta = {
     expression: { control: 'radio', options: KNOWIE_EXPRESSIONS },
   },
   args: { size: 'XL', expression: 'determined' },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}><Story /></div>],
 } satisfies Meta<typeof MascotSlot>
 
 export default meta
@@ -37,7 +37,7 @@ export const XL4: Story = { name: '4XL', args: { size: '4XL' } }
 export const Expressions: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'calc(var(--size-primitive-space-400) * 1px)' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'calc(var(--size-primitive-space-400) * var(--size-primitive-unit))' }}>
       {KNOWIE_EXPRESSIONS.map((e) => <MascotSlot key={e} size="2XL" expression={e} />)}
     </div>
   ),

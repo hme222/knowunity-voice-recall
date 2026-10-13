@@ -5,15 +5,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: calc(var(--size-primitive-space-150) * 1px);
+  gap: calc(var(--size-primitive-space-150) * var(--size-primitive-unit));
 }
 
-/* The hit area around an interactive dot.
-   The dot is 6px by design and the target has to clear 44pt, so the target is an
-   overlay rather than a bigger box: growing the button itself made a 48px row out of a
-   6px dot, which pushed the region into overflow and raised the scroll fade over a row
-   that was not actually cut. The button keeps the dot's footprint; `::after` reaches
-   out to 48 on both axes without touching layout. */
+/* The hit area around an interactive dot. History: docs/code-history.md#h-127 */
 .target {
   position: relative;
   display: grid;
@@ -25,17 +20,13 @@
   line-height: 0;
 }
 
-/* Each target is a tapTarget-wide slot, edge to edge, so the hit areas TILE.
-   They used to be 6px dots 6px apart, each with a 48 overlay — so every overlay covered
-   its neighbours, the last one painted on top, and tapping dot 1 or 2 selected dot 3
-   (measured 2026-10-12). Centres 48 apart is the price of three real targets; the
-   non-interactive dots (one quiz, no pager) keep the frame's tight gap. */
+/* Each target is a tapTarget-wide slot, edge to edge, so the hit areas TILE. History: docs/code-history.md#h-128 */
 .root:has(.target) {
   gap: 0;
 }
 
 .target {
-  width: calc(var(--spacing-semantic-tap-target) * 1px);
+  width: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
 }
 
 .target::after {
@@ -44,20 +35,20 @@
   top: 50%;
   left: 0;
   right: 0;
-  height: calc(var(--spacing-semantic-tap-target) * 1px);
+  height: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
   transform: translateY(-50%);
 }
 
 .target:focus-visible {
-  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
-  outline-offset: calc(var(--size-primitive-space-050) * -1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  outline: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * -1 * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
 }
 
 .dot {
-  width: calc(var(--size-primitive-space-150) * 1px);
-  height: calc(var(--size-primitive-space-150) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  width: calc(var(--size-primitive-space-150) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-space-150) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   background: var(--color-semantic-border-strong);
   transition: background-color calc(var(--motion-semantic-duration-swipe) * 1ms) var(--motion-semantic-easing-standard);
 }

@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import { Button, Chips, MascotSlot, RecallResult, ScreenShell } from '@/components'
 import { CheckIcon } from '@/components/icons'
-import { answerFor, getTerm, nextAfter, outcomeFor, recordOutcome, useSession, XP, isPractising } from '@/lib/session'
+import { answerFor, getTerm, nextAfter, outcomeFor, readSession, recordOutcome, spendEarned, termHref, useSession, XP, isPractising } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // 04 Pass — Figma frame "04 Pass" (15672:24247). Knowie's in-character reaction, not a
@@ -23,20 +23,24 @@ function PassScreen({ index }: { index: number }) {
   const outcome = outcomeFor(state, index)
   const practising = isPractising(state)
   const calibration = outcome?.calibration ?? 0
-  // The chip says how it was got, not only that it was (usability review, 2026-10-12):
-  // a hinted or typed pass and a clean spoken one read identically but for the XP. The
-  // bucket is the store's (it backstops a hint the URL dropped), except in practice,
-  // where the stored outcome is the original run's, not this attempt's. Typed reads the
-  // current attempt, which a spoken take clears.
+  // The chip says how it was got, not only that it was (usability review, 2026-10-12): a hinted or typed pass and a clean spoken one read identically but for the XP. History: docs/code-history.md#h-061
   const withHint = hinted || (!practising && outcome?.bucket === 'Hinted')
   const typed = Boolean(state.sentTyped?.[index])
   const verdict = ['Correct', typed && 'typed', withHint && 'with a hint'].filter(Boolean).join(', ')
 
+  // Pays only against a judged take's receipt (engineering review, 2026-10-13). Opened
+  // cold, with no receipt and nothing passed on this term, it goes back to the question
+  // rather than recording an Unaided +10 for a term never attempted.
   useEffect(() => {
-    recordOutcome(index, hinted ? 'Hinted' : 'Unaided', { wasSure })
-  }, [index, hinted, wasSure])
+    if (spendEarned(index, 'Pass')) {
+      recordOutcome(index, hinted ? 'Hinted' : 'Unaided', { wasSure })
+      return
+    }
+    const prior = outcomeFor(readSession(), index)
+    if (!prior || (prior.bucket !== 'Unaided' && prior.bucket !== 'Hinted')) router.replace(termHref(index))
+  }, [index, hinted, wasSure, router])
 
-  useRedirect(!current, '/session/intro')
+  useRedirect(!current, '/session/resume')
 
   if (!current) return null
 

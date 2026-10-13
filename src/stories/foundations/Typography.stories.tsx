@@ -34,8 +34,8 @@ function Sample({ token }: { token: Token }) {
         margin: 0,
         // Family is inherited from the page root (Greed VF via --font-greed), never the token's string name.
         fontWeight: `var(${v}-font-weight)`,
-        fontSize: `calc(var(${v}-font-size) * 1px)`,
-        lineHeight: `calc(var(${v}-line-height) * 1px)`,
+        fontSize: `calc(var(${v}-font-size) * var(--size-primitive-unit))`,
+        lineHeight: `calc(var(${v}-line-height) * var(--size-primitive-unit))`,
         letterSpacing: `calc(var(${v}-letter-spacing) * 0.01em)`,
         ...(hasStretch ? { fontStretch: `calc(var(${v}-font-stretch) * 1%)` } : {}),
         color: 'var(--color-semantic-text-primary)',
@@ -57,9 +57,9 @@ function Typography() {
             style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: 'calc(var(--size-primitive-space-200) * 1px)',
-              paddingBottom: 'calc(var(--size-primitive-space-400) * 1px)',
-              borderBottom: 'calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default)',
+              gap: 'calc(var(--size-primitive-space-200) * var(--size-primitive-unit))',
+              paddingBottom: 'calc(var(--size-primitive-space-400) * var(--size-primitive-unit))',
+              borderBottom: 'calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-default)',
             }}
           >
             <Sample token={token} />

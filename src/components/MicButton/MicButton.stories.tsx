@@ -24,7 +24,7 @@ const meta = {
   parameters: { docs: { description: { component: FIGMA_DESCRIPTION } } },
   argTypes: { state: { control: 'radio', options: MIC_BUTTON_STATES } },
   args: { state: 'Idle' },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-between-sections) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit))' }}><Story /></div>],
 } satisfies Meta<typeof MicButton>
 
 export default meta

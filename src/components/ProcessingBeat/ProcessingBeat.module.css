@@ -27,7 +27,7 @@
   justify-content: center;
   flex: 1;
   min-height: 0;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  gap: calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit));
   text-align: center;
 }
 
@@ -46,19 +46,19 @@
   margin: 0;
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * var(--size-primitive-unit));
 }
 
 .dots {
   display: flex;
-  gap: calc(var(--size-primitive-space-150) * 1px);
+  gap: calc(var(--size-primitive-space-150) * var(--size-primitive-unit));
 }
 
 .dot {
-  width: calc(var(--size-primitive-space-300) * 1px);
-  height: calc(var(--size-primitive-space-300) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  width: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   background: var(--color-semantic-brand-bold);
   animation: blink calc(var(--beat) / 2) var(--motion-semantic-easing-ambient) infinite alternate;
 }
@@ -68,7 +68,7 @@
 
 @keyframes blink {
   from { transform: translateY(0); }
-  to { transform: translateY(calc(var(--size-primitive-space-negative-100) * 1px)); }
+  to { transform: translateY(calc(var(--size-primitive-space-negative-100) * var(--size-primitive-unit))); }
 }
 
 /* LAST IN THE FILE ON PURPOSE. Equal specificity means source order decides, and in

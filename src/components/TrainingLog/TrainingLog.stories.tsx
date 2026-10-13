@@ -26,7 +26,7 @@ const meta = {
       { label: 'Round 4 · All you', final: true },
     ],
   },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}><Story /></div>],
 } satisfies Meta<typeof TrainingLog>
 
 export default meta

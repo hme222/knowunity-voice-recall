@@ -12,35 +12,25 @@ import {
   MicCaption,
   ScreenShell,
 } from '@/components'
-import { getTerm, micGate, nextAfter, recordOutcome, useSticky, XP } from '@/lib/session'
+import { confidenceFor, getTerm, micGate, nextAfter, recordOutcome, useSession, useSticky, XP } from '@/lib/session'
 import styles from './reveal.module.css'
 
-// 05a Reveal answer — Figma frame "05a Reveal answer result" (15752:17156), which
-// matches the real reference IMG_7513: no verdict badge, a plain answer bubble, the
-// offer to say it back, and a quiet way on.
-//
-// Revealed earns 0 (docs/sprint-context.md § "XP model", revised 2026-09-20). The
-// optional repeat carries +3, because saying it unaided under a cue is retrieval and
-// being told the answer is not. The repeat never changes the bucket: a revealed term
-// stays revealed however well it is repeated.
+// 05a Reveal answer — Figma frame "05a Reveal answer result" (15752:17156), which matches the real reference IMG_7513:… History: docs/code-history.md#h-081
 
 export default function RevealPage({ params }: { params: Promise<{ term: string }> }) {
   const router = useRouter()
   const { term } = use(params)
   const index = Number(term)
   const sticky = useSticky()
+  const wasSure = Boolean(confidenceFor(useSession(), index)?.wasSure)
 
-  // voice-ux.md §3: a denied mic stays denied for the SESSION, not for one turn. This
-  // screen was mic-only, so a student already moved to typing could reach it from
-  // /text/turn's "I don't know this one" and be handed a microphone they had refused —
-  // the recording screen then rendered "LISTENING" with a running timer on a mic with
-  // no permission. 01 Idle has had this redirect all along; blank and reveal did not.
+  // voice-ux.md §3: a denied mic stays denied for the SESSION, not for one turn. History: docs/code-history.md#h-082
   useEffect(() => {
     if (sticky) router.replace(`/text/turn?term=${index}&sticky=1`)
   }, [sticky, index, router])
 
   const current = getTerm(index)
-  useRedirect(!current, '/session/intro')
+  useRedirect(!current, '/session/resume')
   if (sticky) return null
 
   if (!current) return null
@@ -78,6 +68,8 @@ export default function RevealPage({ params }: { params: Promise<{ term: string 
           body={current.answer}
           className={styles.bubble}
         />
+        {/* The confident miss, named at the answer (Duolingo design review). */}
+        {wasSure && <p className={styles.sure}>You were sure. This one&rsquo;s worth remembering.</p>}
       </div>
     </ScreenShell>
   )

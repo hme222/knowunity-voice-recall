@@ -25,7 +25,7 @@ const meta = {
     progress: { control: 'radio', options: PROGRESS_STEPS },
   },
   args: { variant: 'Primary', thickness: '24', progress: '50', showText: false, current: 6, total: 12 },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}><Story /></div>],
 } satisfies Meta<typeof ProgressIndicator>
 
 export default meta
@@ -39,7 +39,7 @@ export const WithText: Story = { name: 'showText=true', args: { showText: true }
 export const Steps: Story = {
   parameters: { controls: { disable: true } },
   render: (args) => (
-    <div style={{ display: 'grid', gap: 'calc(var(--size-primitive-space-300) * 1px)' }}>
+    <div style={{ display: 'grid', gap: 'calc(var(--size-primitive-space-300) * var(--size-primitive-unit))' }}>
       {PROGRESS_STEPS.map((p) => <ProgressIndicator key={p} {...args} progress={p} current={(Number(p) / 100) * 12} total={12} showText />)}
     </div>
   ),

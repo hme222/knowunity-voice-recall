@@ -7,15 +7,7 @@ import { CloseIcon } from '@/components/icons'
 import { PICKER_DRILLS, PICKER_TOPICS, setDrillTerm, setPractising, startRun } from '@/lib/session'
 import styles from './picker.module.css'
 
-// Picker — Figma frame "Picker page — Say It Back + drill down" (15810:11285).
-// Where a student chooses what to practice: a topic for a full recall session, or a
-// single definition to drill out loud.
-//
-// Gated, decided 2026-09-20: topic rows offer only revised material, drill rows only
-// definitions already attempted. Because the chip can be unlocked from the chat door
-// where nothing was revised, the picker is seeded with the material from whichever
-// session unlocked it — so the first visit is never empty. The seeded row says how it
-// got there, which is what stops one stale row reading as a broken picker.
+// Picker — Figma frame "Picker page — Say It Back + drill down" (15810:11285). History: docs/code-history.md#h-045
 
 export default function PickerPage() {
   const router = useRouter()

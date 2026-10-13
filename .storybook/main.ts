@@ -15,7 +15,10 @@ const config: StorybookConfig = {
   ],
   "framework": "@storybook/nextjs-vite",
   "staticDirs": [
-    "../public"
+    "../public",
+    // The Knowie peek frames are Storybook-only, so they live outside public/ and do
+    // not ship with the app (engineering review, 2026-10-13).
+    { "from": "../storybook-assets/knowie-peek", "to": "/knowie-peek" }
   ]
 };
 export default config;

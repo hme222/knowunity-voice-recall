@@ -20,7 +20,7 @@ const meta = {
   parameters: { docs: { description: { component: DESCRIPTION } } },
   argTypes: { variant: { control: 'radio', options: PICKER_ROW_VARIANTS } },
   args: { variant: 'topic', label: 'Chemistry: bonding' },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}><Story /></div>],
 } satisfies Meta<typeof PickerRow>
 
 export default meta

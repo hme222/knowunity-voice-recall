@@ -4,7 +4,7 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 .ask {
@@ -12,13 +12,13 @@
   text-align: center;
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-body-m-bold-font-weight);
-  font-size: calc(var(--typography-style-body-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-bold-line-height) * var(--size-primitive-unit));
 }
 
 .pair {
   display: flex;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 .pair > * {

@@ -1,28 +1,14 @@
 'use client'
 
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ConfidenceAsk, ProcessingBeat, ScreenShell } from '@/components'
 import { confidenceGrace, processingDwell } from '@/lib/motion'
 import { SessionBar } from '../../session/SessionBar'
-import { recordConfidence, recordMiss } from '@/lib/session'
+import { DRILL_TOTAL_RUNGS, markEarned, recordConfidence, recordMiss, useSession } from '@/lib/session'
+import { doorResultHref } from '@/app/door/doors'
 
-// The typed path's equivalent of 03 Processing.
-//
-// IT NOW ASKS THE CONFIDENCE QUESTION TOO. It used to be "a brief checking beat, no
-// confidence tap", and that opened a hole in the one mechanic the Design Brief asks
-// for by name: a typist could never be confidently wrong, so the -3 never applied to
-// them and Recap's confidently-wrong sort was blind to typed answers. The cost the
-// brief demands could be dodged by typing. Verified before the fix: a typed pass
-// stored `wasSure:false, calibration:0` with no tap recorded at all.
-//
-// sprint-context.md § "Added 2026-09-20" says the tap "occupies a wait the design
-// already had to cover" — this screen is exactly such a wait, so asking here follows
-// that decision rather than bending it. The dwell still runs first, so the question
-// arrives after the judging beat, never before it.
-//
-// A drill turn is exempt: the drill is not graded and has no XP, so there is nothing
-// for a confidence signal to price.
+// The typed path's equivalent of 03 Processing. History: docs/code-history.md#h-089
 
 function CheckingScreen() {
   const router = useRouter()
@@ -43,29 +29,39 @@ function CheckingScreen() {
 
   const [asking, setAsking] = useState(false)
 
+  // Once only: the grace timer and a tap can both land, and a double tap on Sure ran
+  // this twice — recordMiss twice for one miss (engineering review, 2026-10-13).
+  const doneRef = useRef(false)
+  const state = useSession()
+
   const onward = (sure?: boolean) => {
+    if (doneRef.current) return
+    doneRef.current = true
     if (drillStep) {
-      router.push(verdict === 'pass' ? `/drill/pass/${Number(drillStep) + 1}` : '/drill/miss')
+      // The last rung finishes the drill, as the spoken path does. Typed, rung 4's pass
+      // pushed /drill/pass/5, which does not exist, and bounced to the drill intro.
+      const step = Number(drillStep)
+      router.replace(verdict === 'pass' ? (step >= DRILL_TOTAL_RUNGS ? '/drill/complete' : `/drill/pass/${step + 1}`) : '/drill/miss')
       return
     }
     if (sure !== undefined) {
-      // Same call 03 Processing makes, so a typed turn lands in the same ledger — but
-      // with THIS path's own verdict, not a duration fed through the spoken mock.
-      //
-      // It used to synthesise a fake take (`verdictFor(index, len >= 40 ? 6000 : 3000, 1)`)
-      // and `verdictFor` returns CouldntHear unconditionally for the scripted mishear
-      // term on attempt 1, while `recordConfidence` drops a CouldntHear on the grounds
-      // that a take nobody heard is not evidence about belief. Both are right on their
-      // own terms and wrong together: on term 1 of every typed run the screen asked how
-      // sure the student was and threw the answer away. A typed answer cannot be
-      // misheard, so this path has no business asking the mishear mock anything.
+      // Same call 03 Processing makes, so a typed turn lands in the same ledger — but with THIS path's own verdict, not a duration fed through the spoken mock. History: docs/code-history.md#h-090
       recordConfidence(index, sure, verdict === 'pass' ? 'Pass' : 'Miss')
     }
     const q = new URLSearchParams()
     if (sure !== undefined) q.set('sure', sure ? '1' : '0')
     if (verdict === 'miss' && thin) q.set('thin', '1')
     if (verdict === 'miss') recordMiss(index)
-    router.push(`/session/${verdict}/${index}?${q}`)
+    if (verdict === 'pass') {
+      // A door run's typed pass goes to the door's own result, as a spoken one does.
+      const doorResult = doorResultHref(state.door ?? null)
+      if (doorResult) {
+        router.replace(doorResult)
+        return
+      }
+      markEarned(index, 'Pass')
+    }
+    router.replace(`/session/${verdict}/${index}?${q}`)
   }
 
   // Too short to check means no confidence question either (usability review,
@@ -89,11 +85,7 @@ function CheckingScreen() {
   return (
     <ScreenShell
       topNavigation={<SessionBar index={index} />}
-      // Reserve the action zone before the question arrives. ScreenShell's own doc
-      // says this flag exists so "a region that is on still reserves its height even
-      // with nothing in it, which is what keeps the action zone in the same place from
-      // screen to screen" — and here it keeps it in the same place from MOMENT to
-      // moment: without it the wait jumped 60px the instant the ask appeared.
+      // Reserve the action zone before the question arrives. History: docs/code-history.md#h-091
       showBottomNavSlot
       bottomContent={
         asking ? <ConfidenceAsk onAnswer={onward} /> : undefined

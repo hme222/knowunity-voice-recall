@@ -9,11 +9,7 @@ import { useFocusTrap } from '@/lib/useFocusTrap'
 import { HomeShell } from '../HomeShell'
 import styles from '../home.module.css'
 
-// Home, first-time reveal, after any door. Home with the Say It Back chip in its place
-// in the tool row, dimmed under a popup that says the feature is unlocked and why; the
-// chip alone stays lit, so "the chip below" points at something (designer, 2026-10-12:
-// a popup that darkens the rest of the screen). Reached by every door's back arrow and
-// its "Not now" — showing Say It Back is what unlocks it, not completing it.
+// Home, first-time reveal, after any door. History: docs/code-history.md#h-042
 
 export default function UnlockPage() {
   const router = useRouter()

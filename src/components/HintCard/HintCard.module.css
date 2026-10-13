@@ -6,9 +6,9 @@
   width: fit-content; /* Figma: hugs content */
   max-width: 100%;
   box-sizing: border-box;
-  gap: calc(var(--spacing-semantic-card-label-gap) * 1px);
-  padding: calc(var(--spacing-semantic-card-padding) * 1px);
-  border-radius: calc(var(--size-primitive-radius-200) * 1px);
+  gap: calc(var(--spacing-semantic-card-label-gap) * var(--size-primitive-unit));
+  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-200) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
 }
 .label,
@@ -23,14 +23,14 @@
 .label {
   color: var(--color-semantic-text-tertiary);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
   letter-spacing: calc(var(--typography-style-caption-m-bold-letter-spacing) * 0.01em);
 }
 .body {
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * var(--size-primitive-unit));
   letter-spacing: calc(var(--typography-style-body-m-regular-letter-spacing) * 0.01em);
 }

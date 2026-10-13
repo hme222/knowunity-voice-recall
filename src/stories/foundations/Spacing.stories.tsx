@@ -22,17 +22,17 @@ function Bar({ token }: { token: Token }) {
             display: 'flex',
             justifyContent: negative ? 'flex-end' : 'flex-start',
             alignItems: 'center',
-            height: 'calc(var(--size-primitive-space-600) * 1px)',
+            height: 'calc(var(--size-primitive-space-600) * var(--size-primitive-unit))',
           }}
         >
           <div
             title={negative ? 'Negative step, drawn at its absolute size' : undefined}
             style={{
               width: `calc(var(${token.cssVar}) * ${negative ? -1 : 1}px)`,
-              height: 'calc(var(--size-primitive-space-400) * 1px)',
+              height: 'calc(var(--size-primitive-space-400) * var(--size-primitive-unit))',
               background: negative ? 'var(--color-semantic-accent-coral-bold)' : 'var(--color-semantic-brand-bold)',
-              borderRadius: 'calc(var(--size-primitive-radius-100) * 1px)',
-              minWidth: n === 0 ? 'calc(var(--size-primitive-stroke-heavy-border) * 1px)' : undefined,
+              borderRadius: 'calc(var(--size-primitive-radius-100) * var(--size-primitive-unit))',
+              minWidth: n === 0 ? 'calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit))' : undefined,
             }}
           />
         </div>

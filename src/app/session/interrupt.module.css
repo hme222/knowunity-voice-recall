@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: center;
   flex: 1;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  gap: calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit));
   text-align: center;
 }
 
@@ -23,7 +23,7 @@
   /* The MicButton is a fixed 120 diameter; without this it falls to flex-start and
      renders visibly left of a centred mascot and bubble. */
   align-items: center;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 .actions > button:not([class*='MicButton']) {

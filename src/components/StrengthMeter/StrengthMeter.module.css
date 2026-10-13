@@ -1,37 +1,26 @@
-/* The Definition Drill Down coverage meter.
-
-   IT BRIGHTENS AS IT FILLS, and that is the inversion of Figma, not a match to it.
-   This comment used to say "ALIGNED TO THE FIGMA RENDER 2026-09-21… Figma's ramp
-   darkens as it fills", which described the decision that was overturned rather than
-   the one that shipped — and the tokens file said both things at once, in two
-   descriptions dated the same day. Settled by rendering: 25% computes rgb(59,109,17),
-   100% computes rgb(192,221,151). Figma's own ramp does darken, which put a full meter
-   at 1.03:1 against the track and made the reward state the invisible one. Every hue
-   is still Figma's; only which rung carries which changed.
-
-   Every value here is a token. */
+/* The Definition Drill Down coverage meter. History: docs/code-history.md#h-122 */
 
 .root {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 .track {
   /* 220, the component's own width, centred — not stretched to the screen margin.
      Full-bleed it read as a page-wide banner rather than a small coverage gauge. */
-  width: calc(var(--component-strength-meter-track-width) * 1px);
+  width: calc(var(--component-strength-meter-track-width) * var(--size-primitive-unit));
   max-width: 100%;
-  height: calc(var(--component-strength-meter-track-height) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  height: calc(var(--component-strength-meter-track-height) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   background: var(--component-strength-meter-track);
   overflow: hidden;
 }
 
 .fill {
   height: 100%;
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   background: var(--component-strength-meter-fill-low);
   transition:
     width calc(var(--motion-semantic-duration-standard) * 1ms) var(--motion-semantic-easing-standard),
@@ -51,6 +40,6 @@
 .label {
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-caption-m-regular-font-weight);
-  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * var(--size-primitive-unit));
 }

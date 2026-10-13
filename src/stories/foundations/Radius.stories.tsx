@@ -17,10 +17,10 @@ function Box({ token }: { token: Token }) {
         <div
           style={{
             width: BOX,
-            height: 'calc(var(--size-primitive-illustration-800) * 1px)',
-            borderRadius: `calc(var(${token.cssVar}) * 1px)`,
+            height: 'calc(var(--size-primitive-illustration-800) * var(--size-primitive-unit))',
+            borderRadius: `calc(var(${token.cssVar}) * var(--size-primitive-unit))`,
             background: 'var(--color-semantic-background-surface)',
-            border: 'calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-brand-bold)',
+            border: 'calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid var(--color-semantic-brand-bold)',
           }}
         />
       }

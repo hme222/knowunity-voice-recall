@@ -3,7 +3,8 @@ import type { Meta as StoryMeta, StoryObj } from '@storybook/nextjs-vite'
 import { expect } from 'storybook/test'
 import { Page, Section } from './Foundation'
 
-// Every Knowie file in public/knowie/, by name — the whole range, not only the four
+// Every Knowie file, by name: the four faces in public/knowie/ and the peek frames in
+// storybook-assets/knowie-peek/ (Storybook-only, so they do not ship with the app) — the whole range, not only the four
 // faces MascotSlot exposes (designer, 2026-10-12: "are all Knowie faces in Storybook?").
 // CLAUDE.md: expressions come from these files; none are drawn or generated.
 //
@@ -16,18 +17,18 @@ const FACES = ['excited', 'laughing', 'determined', 'dazed'] as const
 const EXCITED_PEEK = ['excited-1', 'excited-2'] as const
 const LAUGHING_PEEK = Array.from({ length: 19 }, (_, i) => `laughing-${i + 1}`)
 
-const SIZE = 'calc(var(--size-primitive-illustration-1500) * 1px)'
+const SIZE = 'calc(var(--size-primitive-illustration-1500) * var(--size-primitive-unit))'
 
 function Art({ name }: { name: string }) {
   return (
-    <figure style={{ margin: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'calc(var(--size-primitive-space-100) * 1px)' }}>
+    <figure style={{ margin: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'calc(var(--size-primitive-space-100) * var(--size-primitive-unit))' }}>
       {/* eslint-disable-next-line @next/next/no-img-element -- static SVG from public/ */}
-      <img src={`/knowie/${name}.svg`} alt={`Knowie, ${name}`} style={{ width: SIZE, height: SIZE, objectFit: 'contain' }} />
+      <img src={`${name.includes('-') ? '/knowie-peek' : '/knowie'}/${name}.svg`} alt={`Knowie, ${name}`} style={{ width: SIZE, height: SIZE, objectFit: 'contain' }} />
       <figcaption
         style={{
           color: 'var(--color-semantic-text-secondary)',
-          fontSize: 'calc(var(--typography-style-caption-m-regular-font-size) * 1px)',
-          lineHeight: 'calc(var(--typography-style-caption-m-regular-line-height) * 1px)',
+          fontSize: 'calc(var(--typography-style-caption-m-regular-font-size) * var(--size-primitive-unit))',
+          lineHeight: 'calc(var(--typography-style-caption-m-regular-line-height) * var(--size-primitive-unit))',
         }}
       >
         {name}
@@ -38,7 +39,7 @@ function Art({ name }: { name: string }) {
 
 function Grid({ names }: { names: readonly string[] }) {
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'calc(var(--size-primitive-space-400) * 1px)' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'calc(var(--size-primitive-space-400) * var(--size-primitive-unit))' }}>
       {names.map((n) => (
         <Art key={n} name={n} />
       ))}

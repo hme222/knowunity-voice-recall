@@ -1,11 +1,6 @@
 import styles from './TrainingLog.module.css'
 
-// Mirrors the Figma component `trainingLog` (15813:37292) — the "what you climbed"
-// list on the drill's Complete screen.
-//
-// Row count is VARIABLE. The drill has no fixed length, so this shows however many
-// passes actually happened. Figma's sample has four and its footer says "all four
-// takes"; that copy is a leftover from the fixed ladder and is not reproduced here.
+// Mirrors the Figma component `trainingLog` (15813:37292) — the "what you climbed" list on the drill's Complete screen. History: docs/code-history.md#h-131
 
 export type TrainingLogRound = {
   /** e.g. "Round 2 · One word gone". */

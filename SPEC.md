@@ -139,9 +139,10 @@ Two things this does **not** override:
   `topNavigation`, so home and picker (which have no app bar) use the same
   shell unchanged.
 
-  The scaffold's `showBottomSheetBackground` toggle is deliberately **not**
-  reproduced as a convenience prop. A sheet lives on its own branch screen —
-  making it easy to bake into a default-state screen is the exact mistake
+  The scaffold's `showBottomSheetBackground` toggle **is** a ScreenShell prop
+  (corrected 2026-10-13: this said it was not reproduced). It is used only on a
+  sheet's own branch screen — the transcript sheet, the drill round sheet and the
+  mic primer — never baked into a default-state screen, which is the mistake
   `docs/sprint-context.md` § "Process notes" records three times.
 - **Mascot poses** follow the table in `docs/design-system.md` §
   "Mascot poses — the mapping". Read it; don't re-decide per screen.
@@ -314,15 +315,17 @@ And for the prototype specifically:
 - Any device width other than 390. The `scaffold` component's larger
   `L - 17 Pro Max` size is out of scope.
 - Light mode.
-- Real persistence. Session state lives in memory for the length of a run.
+- Real persistence. Session state lives in `sessionStorage` for the length of a
+  tab (corrected 2026-10-13: this said "in memory"); production needs a server-side
+  session.
 - Real notifications, and the notification-permission flow the journey map
   sketches for the exit sheet.
 - ~~**Pause/resume during recording.**~~ **Superseded — see Open 12.** This entry
   predates the tap-to-pause decision and contradicted it inside the same file. The
-  built interaction is: **tap the mic to pause or resume**, `Done speaking` ends the
-  take. What stays out of scope is a *visible* paused state: `MicButton` gains no
-  Paused variant and its appearance does not change, which is the accepted risk
-  recorded in Open 12.
+  built interaction is: **tap the mic to pause or resume**, `Submit` ends the take,
+  `Start over` discards it. `MicButton` **has** a `Paused` state (corrected
+  2026-10-13: this said it gained none) — a dark disc with the pause glyph, added
+  when the identical-states gate failed (see the MicButton story).
 - **Cancel-the-take during recording.** `/session/captured/[term]` already
   offers Re-record, so discarding a take is one tap through a screen that
   exists. Recording has one action.
@@ -336,7 +339,7 @@ There is no speech recognition and no judging model. The prototype is designing
 the states, not building the engine.
 
 1. **Recording duration selects the verdict.** Tapping the mic stops the take;
-   the `Done speaking` button sends it. Stop under ~2s → `CouldntHear`.
+   the `Submit` button sends it. Stop under ~2s → `CouldntHear`.
    A short take → `Miss`. A sustained take → `Pass`. This is a mock trigger for
    reaching states, not a claim about how the real feature scores.
 2. **One term is scripted to `CouldntHear` on its first attempt**, so 04a
@@ -365,7 +368,8 @@ the states, not building the engine.
      frame read "Send it, or say it again.")
 
 7. **Verdicts accumulate in `sessionStorage`** as each term resolves, so Recap
-   can report the actual run. Cleared when a session starts from 00 Intro.
+   can report the actual run. Cleared when a run starts (`startRun()`: the popup,
+   the chips, the due card, the picker, resume); 00 Intro is retired (2026-10-12).
 
 ---
 
@@ -465,10 +469,10 @@ with their answer so the reasoning isn't re-derived.
    the next nested surface without adding the token properly.
 8. **Swipe timing** is a guess. 300ms, matched to common iOS carousel timing,
    not verified against a reference or a prototype.
-9. **Worst-case session length is unbounded** against the 70% completion
-   target. The decision was to let it run and let requeue absorb it — taken
-   deliberately, with nothing capping it. If completion is the number that
-   matters most, this is the first thing to revisit.
+9. **Session length against the 70% completion target.** There is no requeue
+   (removed 2026-10-08), so the bound is four terms × at most three attempts on
+   the hint ladder; corrected 2026-10-13 (this item still described the requeue
+   absorbing an unbounded run). Practice rounds are opt-in after the Recap.
 10. ~~**What a chat-unlocked student's picker shows on a second visit.**~~
     **RESOLVED — the seeded material persists, with a note explaining how it
     got there.** The note is what stops a single stale row reading as a broken

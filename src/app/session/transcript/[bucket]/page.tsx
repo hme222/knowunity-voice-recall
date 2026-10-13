@@ -7,15 +7,7 @@ import { BottomSheet, ScreenShell } from '@/components'
 import { answerFor, getTerm, shownAnswer, TERMS, useSession } from '@/lib/session'
 import styles from '../../../drill/drill.module.css'
 
-// The transcript sheet, reachable from the Miss result's eye icon and every Recap row.
-// Its own branch screen, per the sheet rule.
-//
-// It ADAPTS by bucket, because not every term has a transcript:
-//   passed   → what the student said
-//   revealed → the attempt plus the answer they were given
-//   skipped  → the answer alone, since nothing was said
-// One sheet, three content states. Without this, Recap would have rows that open
-// nothing, or an eye icon on some rows and not others.
+// The transcript sheet, reachable from the Miss result's eye icon and every Recap row. History: docs/code-history.md#h-084
 
 const COPY = {
   passed: {

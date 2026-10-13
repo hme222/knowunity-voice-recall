@@ -1,15 +1,11 @@
-/* 01 Idle / Commit — the resting state of every term. Figma frame 15672:26255.
-
-   The frame stacks mascot, bubble, mic from the top with even spacing. The build used
-   margin-top:auto on the mascot to push it down, which is what produced the 170px gap
-   between the bubble and Knowie. */
+/* 01 Idle / Commit — the resting state of every term. History: docs/code-history.md#h-053 */
 
 .body {
   display: flex;
   flex-direction: column;
   align-items: center;
   flex: 1;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  gap: calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit));
 }
 
 .body > * {
@@ -24,7 +20,7 @@
 .actions {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 /* The idle hierarchy (senior review, 2026-10-12): the mic is the primary action, so its

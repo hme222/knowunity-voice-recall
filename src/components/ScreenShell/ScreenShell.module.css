@@ -1,9 +1,4 @@
-/* Mirrors the Figma `scaffold` component set (variant size=iPhone 13), whose regions
-   are Panel Header 48 / topNavigation 56 / middleContent 570 / actionZone 136 /
-   bottomSheetOnly 34 = 844. The four chrome regions are fixed from tokens; the middle
-   flexes, so at an 844-tall viewport it computes to 570, and at
-   any other height it absorbs the difference rather than the shell scrolling itself.
-   `flex: 1` on .middle is a sanctioned exception — see SPEC.md § Conventions. */
+/* Mirrors the Figma `scaffold` component set (variant size=iPhone 13), whose regions are Panel Header 48 /… History: docs/code-history.md#h-111 */
 
 .root {
   position: relative;
@@ -15,7 +10,7 @@
 }
 
 .panelHeader {
-  height: calc(var(--component-scaffold-panel-header-height) * 1px);
+  height: calc(var(--component-scaffold-panel-header-height) * var(--size-primitive-unit));
   flex-shrink: 0;
 }
 
@@ -25,7 +20,7 @@
      centered over the progress ring". Stacking it needed ~80px in a 56px box, so it
      bled into middleContent and was painted over by the first card. */
   position: relative;
-  height: calc(var(--component-scaffold-top-navigation-height) * 1px);
+  height: calc(var(--component-scaffold-top-navigation-height) * var(--size-primitive-unit));
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -36,16 +31,12 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
-  padding-block: calc(var(--size-primitive-space-200) * 1px);
-  padding-inline: calc(var(--spacing-semantic-screen-margin) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+  padding-block: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+  padding-inline: calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit));
 }
 
-/* A fade at the foot of the region when it overflows, so a cut row reads as "more
-   below". Applied by the shell rather than per screen: four screens were slicing a row
-   mid-height with nothing to say more existed, and the only cue was the half-row
-   itself. `mask-image` rather than a gradient overlay so it works over any background
-   and costs no element. */
+/* A fade at the foot of the region when it overflows, so a cut row reads as "more below". History: docs/code-history.md#h-112 */
 .middle[data-overflowing='true'] {
   /* A mask reads only the ALPHA channel, so the colour here is not a colour decision
      and has no token to bind to — `black` means "fully opaque" and nothing else. Was
@@ -53,17 +44,12 @@
      source should always have to justify itself. */
   mask-image: linear-gradient(
     to bottom,
-    black calc(100% - var(--component-scaffold-scroll-fade-height) * 1px),
+    black calc(100% - var(--component-scaffold-scroll-fade-height) * var(--size-primitive-unit)),
     transparent 100%
   );
 }
 
-/* The mic's region, at the foot of middleContent on every voice screen.
-   It is a PREFERRED height, not a fixed one. Fixed at 200 it clipped: at 390x600 the
-   mic rendered at 454-574 with the content region ending at 430, so the primary
-   control of the screen was entirely below the fold and the fade masked the empty
-   clear-space above it — nothing on screen said a mic existed. The control must
-   survive a short window; the clear space around it is what gives way. */
+/* The mic's region, at the foot of middleContent on every voice screen. History: docs/code-history.md#h-113 */
 .micRegion {
   display: flex;
   /* TOP of the region, not centred in it. 02 Recording needs the space under the
@@ -76,16 +62,10 @@
      the region and run the full column. The mic stays centred either way. */
   position: relative;
   width: 100%;
-  height: calc(var(--component-scaffold-mic-region-height) * 1px);
+  height: calc(var(--component-scaffold-mic-region-height) * var(--size-primitive-unit));
   /* Never smaller than the control plus a step of breathing room. */
-  min-height: calc((var(--component-mic-button-diameter) + var(--size-primitive-space-400)) * 1px);
-  /* DOES NOT SHRINK. It used to, so that a short viewport could reclaim the clear space
-     around the control — but shrink is not viewport-aware, and the drill's taller stack
-     (mascot + meter + term pill + cue card) claimed it at full height too. Measured at
-     390x844: the mic sat at 466 on every session screen and on /drill/recording, and at
-     478, 488 and 526 on /drill/pass/4, /drill/miss/letter and /drill/pass/1 — four
-     heights for the one control this region exists to pin. A short window is handled
-     by the content above scrolling in its own box, not by this region giving way. */
+  min-height: calc((var(--component-mic-button-diameter) + var(--size-primitive-space-400)) * var(--size-primitive-unit));
+  /* DOES NOT SHRINK. It used to, so that a short viewport could reclaim the clear space around the control — but shrink… History: docs/code-history.md#h-114 */
   flex-shrink: 0;
   /* No longer pinned with sticky inside the scroller: it lives in ScreenShell's own
      mic slot now (the `mic` prop), so content scrolls in its own box above it and can
@@ -101,13 +81,13 @@
   flex-shrink: 0;
   display: flex;
   justify-content: center;
-  padding-bottom: calc(var(--size-primitive-space-200) * 1px);
+  padding-bottom: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 /* With the mic outside, the content needs its own clear space above the control; the
    region's 8 of padding would put a scrolled card edge right against it. */
 .middle[data-has-mic] {
-  padding-bottom: calc(var(--spacing-semantic-between-sections) * 1px);
+  padding-bottom: calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit));
 }
 
 /* Knowie gives way before the words do. Set by the shell's measure, on any screen, only
@@ -125,23 +105,19 @@
   flex-shrink: 0;
 }
 
-/* FIXED, not min-height. It used to grow to whatever a screen stacked in it — six
-   values across 44 routes, 120 to 248 — so the zone's top moved by up to 128px as you
-   advanced and no control landed twice in the same place. It holds one row of up to two
-   controls, plus optionally one tertiary link beneath. Anything more belongs in
-   middleContent. See docs/sprint-context.md, 2026-09-22. */
+/* FIXED, not min-height. History: docs/code-history.md#h-115 */
 .bottom {
-  height: calc(var(--component-scaffold-action-zone-height) * 1px);
+  height: calc(var(--component-scaffold-action-zone-height) * var(--size-primitive-unit));
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: calc(var(--size-primitive-space-100) * 1px);
-  padding-inline: calc(var(--spacing-semantic-screen-margin) * 1px);
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
+  padding-inline: calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit));
 }
 
 .sheetOnly {
-  height: calc(var(--component-scaffold-bottom-sheet-only-height) * 1px);
+  height: calc(var(--component-scaffold-bottom-sheet-only-height) * var(--size-primitive-unit));
   flex-shrink: 0;
 }
 
@@ -160,14 +136,10 @@
   z-index: 2;
 }
 
-/* The frames' action row: two pills that HUG their labels, pushed to the edges of the
-   zone. 01 Idle and DD 01 both draw "Type instead" left and "Skip" right with open
-   space between them, not two equal half-width slabs — which is what `flex: 1` on the
-   children was producing, and why a Tertiary Skip measured 173px here, 358px on one
-   screen and 48px on another. */
+/* The frames' action row: two pills that HUG their labels, pushed to the edges of the zone. History: docs/code-history.md#h-116 */
 .actionRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
 }

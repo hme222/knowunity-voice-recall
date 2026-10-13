@@ -21,7 +21,7 @@ const meta = {
   parameters: { docs: { description: { component: FIGMA_DESCRIPTION } } },
   argTypes: { stat: { control: 'radio', options: STAT_CHIP_STATS } },
   args: { stat: 'XP', value: '+75' },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}><Story /></div>],
 } satisfies Meta<typeof StatChip>
 
 export default meta
@@ -33,7 +33,7 @@ export const Time: Story = { args: { stat: 'Time', value: '2:28' } }
 export const Row: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'calc(var(--size-primitive-space-200) * 1px)' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'calc(var(--size-primitive-space-200) * var(--size-primitive-unit))' }}>
       <StatChip stat="XP" value="+75" />
       <StatChip stat="Score" value="75%" />
       <StatChip stat="Time" value="2:28" />

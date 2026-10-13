@@ -1,28 +1,6 @@
 import styles from './SessionFraction.module.css'
 
-// The session fraction, e.g. "1/4". In Figma this is a loose text node in the
-// scaffold's topNavigation slot, centred under the progress ring — not part of appBar.
-// It is deliberately NOT bundled with appBar into a SessionHeader: 07 Recap has an
-// app bar and no fraction, and a component that forced one would change that screen's
-// design to suit the component. See SPEC.md § Conventions.
-//
-// The ring beside it carries the same information visually; this is its text
-// equivalent, so it is aria-hidden and ProgressIndicator's own label does the
-// announcing. Two announcements of one fact is noise.
-//
-// TWO THINGS IT NOW SAYS THAT IT DID NOT (2026-09-21). A student could not tell how
-// far off the end was:
-//   1. On the last term it says so — but only when it IS the last thing. "4/4" alone
-//      does not read as an ending until it is already over, and "4/4 · last one" is a
-//      lie if a requeued term is still owed. See `moreToCome`.
-//   2. The requeue is a named round, not a term number. The frames drew 06 Lock It In
-//      as 3/4 at 75%, which ran the bar 100% -> 75% -> 100% and made the session look
-//      like it had gone backwards.
-//
-// It paints its own backing (2026-09-21). Overlaid on the ring, text.primary measured
-// 13.95:1 over the empty track and 3.15:1 over the filled brand.bold — it got harder to
-// read as the session went on. No single text colour clears 4.5:1 against both, so the
-// text sits in a background.page pill: a cut-out in the bar, readable at any progress.
+// The session fraction, e.g. History: docs/code-history.md#h-121
 
 export type SessionFractionProps = {
   /** The term the student is on, 1-based. Omit when `label` names the round instead. */

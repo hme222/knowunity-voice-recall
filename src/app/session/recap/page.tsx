@@ -9,15 +9,7 @@ import { CloseIcon, EyeIcon } from '@/components/icons'
 import { Bucket, getTerm, sessionTotals, setPractising, TOTAL_TERMS, useSession, XP } from '@/lib/session'
 import styles from './recap.module.css'
 
-// 07 Recap — Figma frame "07 Recap (refreshed)" (15672:24456).
-//
-// Four buckets, per-term XP, and the stat chips. Derived from the actual run: a
-// summary whose job is to avoid flattery cannot show a number the reviewer can see is
-// wrong (Design Brief: "overconfidence has to cost something").
-//
-// Confidence reorders rather than relabels — a term the student was sure about and got
-// wrong sorts to the top of Worth revisiting. That is the whole surfacing mechanism;
-// there is no badge (decided 2026-09-20).
+// 07 Recap — Figma frame "07 Recap (refreshed)" (15672:24456). History: docs/code-history.md#h-065
 
 /**
  * Bucket order. Two orders, not one.
@@ -69,11 +61,7 @@ export default function RecapPage() {
   const micTrouble = outcomes.filter((o) => o.micTrouble).length
   const counted = (complete ? TOTAL_TERMS : outcomes.length) - micTrouble
 
-  // Something the student did not have cold and has now: got with a hint, or shown the
-  // answer. That is what this session taught; an unaided pass they already knew.
-  // Every term the student needed help with, not only the first: with two revealed,
-  // the card showed one and the other's definition was nowhere (senior review,
-  // 2026-10-12). Revealed first — those are the real gaps.
+  // Something the student did not have cold and has now: got with a hint, or shown the answer. History: docs/code-history.md#h-066
   const learnedTerms = [...outcomes.filter((o) => o.bucket === 'Revealed'), ...outcomes.filter((o) => o.bucket === 'Hinted')]
     .map((o) => getTerm(o.index))
     .filter((t): t is NonNullable<typeof t> => Boolean(t))
@@ -82,7 +70,11 @@ export default function RecapPage() {
   const sureMissed = outcomes.filter((o) => o.wasSure && o.bucket !== 'Unaided' && !o.micTrouble).length
   // The run, one segment per term, in question order.
   const strip = [...outcomes].sort((a, b) => a.index - b.index)
-  const xpShown = complete ? totals.withBonus : totals.earned
+  const unaidedNames = strip.filter((o) => o.bucket === 'Unaided').map((o) => getTerm(o.index)?.name ?? '')
+  // The finishing bonus is for finishing, not for reaching the end: a run where every
+  // term was skipped or lost to the mic paid +5 for nothing (engineering review).
+  const bonusEarned = complete && resolved > 0
+  const xpShown = bonusEarned ? totals.withBonus : totals.earned
 
   return (
     <ScreenShell
@@ -134,7 +126,10 @@ export default function RecapPage() {
           <h1 className="screenTitleHeading">
             {outcomes.length === 0
               ? 'Session recap'
-              : totals.unaided === counted
+              : counted === 0
+                // Every term lost to the mic: "You said all 0 back" was the headline.
+                ? 'The mic didn’t catch these'
+                : totals.unaided === counted
                 ? `You said all ${counted} back without help`
                 : `You can say ${totals.unaided} of ${counted} back without help`}
           </h1>
@@ -152,6 +147,12 @@ export default function RecapPage() {
               <span key={o.index} className={styles.segment} data-bucket={o.micTrouble ? 'mic' : o.bucket} />
             ))}
           </div>
+        )}
+        {/* The win, named (Knowunity design review): the hero said "2 of 4" and never
+            which two, and the Unaided rows sat below the fold under the misses. The
+            misses-first order stays; this puts the wins in the first viewport. */}
+        {unaidedNames.length > 0 && unaidedNames.length < counted && (
+          <p className={styles.wins}>{`Without help: ${unaidedNames.join(', ')}`}</p>
         )}
         {sureMissed > 0 && (
           <p className={styles.sureMissed}>
@@ -175,7 +176,7 @@ export default function RecapPage() {
               totals.calibration !== 0
                 ? `${totals.calibration > 0 ? '+' : ''}${totals.calibration} for how sure you were`
                 : null,
-              complete ? `+${XP.completionBonus} for finishing` : null,
+              bonusEarned ? `+${XP.completionBonus} for finishing` : null,
             ]
               .filter(Boolean)
               .join(' \u00b7 ')}
@@ -200,11 +201,7 @@ export default function RecapPage() {
                 <div key={row.index} className={styles.row} data-bucket={bucket}>
                   <span className={styles.rowTerm}>
                     {getTerm(row.index)?.name}
-                    {/* Any term the student was sure about and did not get first
-                        time, not only the skipped ones. Gated to 'Worth revisiting' it
-                        missed exactly the case the brief cares about: sure, wrong, and
-                        then hinted or revealed — which since sureWrong went to 0 carries
-                        no cost either, so the run showed nothing at all. */}
+                    {/* Any term the student was sure about and did not get first time, not only the skipped ones. History: docs/code-history.md#h-067 */}
                     {row.micTrouble ? (
                       <span className={styles.rowNote}>The mic missed it. Not counted.</span>
                     ) : (

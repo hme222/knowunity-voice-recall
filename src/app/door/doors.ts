@@ -1,12 +1,4 @@
-// The doors: the three places Say It Back is met for the first time.
-//
-// Until a door has been shown, the feature does not exist on home — there is no chip
-// (docs/sprint-context.md § "Where it lives"). That makes a door the real first screen
-// of this prototype, and the reason the flow previously began one screen after its own
-// beginning, with a demo button standing in.
-//
-// The rule these carry: IT IS THE SHOWING THAT UNLOCKS, NOT THE COMPLETING. Both of a
-// door's actions lead to the reveal, because by then the student has seen the offer.
+// The doors: the three places Say It Back is met for the first time. History: docs/code-history.md#h-004
 
 export type DoorId = 'quiz' | 'exam-plan' | 'chat'
 

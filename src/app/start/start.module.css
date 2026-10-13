@@ -8,13 +8,13 @@
   align-items: center;
   justify-content: safe center;
   flex: 1;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
 }
 
 .block {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
   align-self: stretch;
 }
 
@@ -22,20 +22,20 @@
   margin: 0;
   color: var(--color-semantic-text-tertiary);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
 }
 
 .story,
 .notes {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
   margin: 0;
   /* space.300, not cardPadding: the room Knowie needs at 390x668. */
-  padding: calc(var(--size-primitive-space-300) * 1px);
+  padding: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
   list-style: none;
-  border-radius: calc(var(--size-primitive-radius-200) * 1px);
+  border-radius: calc(var(--size-primitive-radius-200) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
 }
 
@@ -44,22 +44,22 @@
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  width: calc(var(--size-primitive-icon-300) * 1px);
-  height: calc(var(--size-primitive-icon-300) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  width: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   background: var(--color-semantic-interactive-primary);
   color: var(--color-semantic-interactive-on-primary);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
 }
 
 .eyebrow {
   margin: 0;
   color: var(--color-semantic-text-tertiary);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
 }
 
 /* The story: a number, then the step's name and its one line, reading left to right —
@@ -67,21 +67,21 @@
 .storyStep {
   display: flex;
   align-items: flex-start;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
 }
 
 .storyTitle {
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
 }
 
 .storyBody {
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-s-regular-font-weight);
-  font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
 }
 
 /* Name and line on one run of text, with a space between. */
@@ -92,25 +92,25 @@
 /* The testing notes: outlined rather than filled, so they read as notes about the
    prototype, not the student's story — and a real bulleted list. */
 .notes {
-  gap: calc(var(--size-primitive-space-200) * 1px);
-  padding-left: calc((var(--size-primitive-space-300) * 2) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+  padding-left: calc((var(--size-primitive-space-300) * 2) * var(--size-primitive-unit));
   list-style: disc;
   background: transparent;
-  border: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default);
+  border: calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-default);
 }
 
 .note {
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-s-regular-font-weight);
-  font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
 }
 
 /* Knowie and the title side by side. */
 .hero {
   display: flex;
   align-items: center;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
   align-self: stretch;
 }
 
@@ -121,15 +121,15 @@
 .heroText {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-100) * 1px);
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
 }
 
 .heroTitle {
   margin: 0;
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-headline-s-font-weight);
-  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
-  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
+  font-size: calc(var(--typography-style-headline-s-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-headline-s-line-height) * var(--size-primitive-unit));
   letter-spacing: calc(var(--typography-style-headline-s-letter-spacing) * 0.01em);
 }
 
@@ -137,6 +137,6 @@
   margin: 0;
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * var(--size-primitive-unit));
 }

@@ -5,7 +5,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--size-primitive-space-100) * 1px);
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
 }
 
 .label {
@@ -13,8 +13,8 @@
   letter-spacing: calc(var(--typography-primitive-tracking-wide) * 0.01em);
   color: var(--color-semantic-brand-bold);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
 }
 
 .root[data-paused='true'] .label {
@@ -24,14 +24,14 @@
 .timer {
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-headline-xxs-bold-font-weight);
-  font-size: calc(var(--typography-style-headline-xxs-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-headline-xxs-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-headline-xxs-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-headline-xxs-bold-line-height) * var(--size-primitive-unit));
   font-variant-numeric: tabular-nums;
 }
 
 .caption {
   color: var(--color-semantic-text-tertiary);
   font-weight: var(--typography-style-caption-m-regular-font-weight);
-  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * var(--size-primitive-unit));
 }

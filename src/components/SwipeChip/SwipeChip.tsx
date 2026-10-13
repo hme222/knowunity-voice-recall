@@ -2,13 +2,7 @@ import type { ButtonHTMLAttributes } from 'react'
 import { MicGlyphIcon } from '../icons'
 import styles from './SwipeChip.module.css'
 
-// Mirrors the Figma component `swipeChip` (15813:37232). Props carry the Figma names
-// where they exist: `QuizLabel` and `Count` are its two text properties.
-//
-// This is the Say It Back chip on home. With a plan and a due date it gains the amber
-// border and the count badge; without one it is the plain composer chip. Two states of
-// one component, not two components — the same relationship the chip and the
-// due-signal card have (docs/sprint-context.md § "Where it lives").
+// Mirrors the Figma component `swipeChip` (15813:37232). History: docs/code-history.md#h-125
 
 export type SwipeChipProps = {
   /** Figma `QuizLabel`: the term and its due date, e.g. "Formal charge · due 9/15". */

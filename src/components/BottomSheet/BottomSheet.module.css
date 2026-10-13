@@ -16,45 +16,45 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-300) * 1px);
-  padding: calc(var(--spacing-semantic-card-padding) * 1px);
-  padding-bottom: calc(var(--size-primitive-space-600) * 1px);
-  border-top-left-radius: calc(var(--size-primitive-radius-600) * 1px);
-  border-top-right-radius: calc(var(--size-primitive-radius-600) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
+  padding-bottom: calc(var(--size-primitive-space-600) * var(--size-primitive-unit));
+  border-top-left-radius: calc(var(--size-primitive-radius-600) * var(--size-primitive-unit));
+  border-top-right-radius: calc(var(--size-primitive-radius-600) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
 }
 
 .grabber {
   align-self: center;
-  width: calc(var(--component-bottom-sheet-grabber-width) * 1px);
-  height: calc(var(--component-bottom-sheet-grabber-height) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  width: calc(var(--component-bottom-sheet-grabber-width) * var(--size-primitive-unit));
+  height: calc(var(--component-bottom-sheet-grabber-height) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   background: var(--color-semantic-border-strong);
 }
 
 .title {
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-headline-xs-bold-font-weight);
-  font-size: calc(var(--typography-style-headline-xs-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-headline-xs-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-headline-xs-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-headline-xs-bold-line-height) * var(--size-primitive-unit));
 }
 
 .subtitle {
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-s-regular-font-weight);
-  font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 .titleRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
 }

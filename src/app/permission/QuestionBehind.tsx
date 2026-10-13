@@ -20,3 +20,11 @@ export function QuestionBehind({ next }: { next: string }) {
     </div>
   )
 }
+
+/** The idle screen a mic tap came from, for dismissing the primer back to it. */
+export function questionOf(next: string): string {
+  const m = next.match(/\/session\/recording\/(\d+)/)
+  if (m) return `/session/idle/${m[1]}`
+  const d = next.match(/\/drill\/recording\?step=(\d+)/)
+  return d ? `/drill/pass/${d[1]}` : '/session/idle/1'
+}

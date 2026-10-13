@@ -1,19 +1,7 @@
 import { Fragment } from 'react'
 import styles from './drill.module.css'
 
-// A thinned definition, with its blanks DRAWN rather than typed.
-//
-// The cues store their gaps as runs of underscores. Rendered as text in Greed those
-// come out as a row of separate dashes — the glyph does not span its advance width —
-// so a blank read as several small marks instead of one line. Before that they were
-// literal U+25A2 WHITE SQUARE characters, which read as boxes.
-//
-// Both attempts were the same mistake: a blank is a piece of UI, not a character. This
-// draws each run as a rule sized in `ch` from the number of letters removed, so the gap
-// is proportional to the word, continuous at any font size, and independent of whatever
-// the typeface does with `_`.
-//
-// It announces as "blank" rather than letting a screen reader read the underscores out.
+// A thinned definition, with its blanks DRAWN rather than typed. History: docs/code-history.md#h-009
 
 export function Cue({ text, className }: { text: string; className?: string }) {
   const parts = text.split(/(_+)/)

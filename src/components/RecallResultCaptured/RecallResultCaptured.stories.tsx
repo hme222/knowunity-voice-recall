@@ -24,7 +24,7 @@ const meta = {
     transcript:
       "It's the charge on an atom if you split every bond's electrons evenly between the two atoms.",
   },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}><Story /></div>],
 } satisfies Meta<typeof RecallResultCaptured>
 
 export default meta

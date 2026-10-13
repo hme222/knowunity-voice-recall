@@ -5,7 +5,7 @@
   display: flex;
   width: 100%;
   align-items: center;
-  padding: calc(var(--spacing-semantic-card-padding) * 1px);
+  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
   border: 0;
   margin: 0;
   appearance: none;
@@ -13,13 +13,13 @@
   -webkit-tap-highlight-color: transparent;
   font: inherit;
   text-align: left;
-  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  border-radius: calc(var(--size-primitive-radius-400) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
   color: var(--color-semantic-text-primary);
 }
 .root:focus-visible {
-  outline: calc(var(--size-primitive-stroke-heavy-border) * 1px) solid var(--color-semantic-border-focus);
-  outline-offset: calc(var(--size-primitive-space-050) * 1px);
+  outline: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-focus);
+  outline-offset: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
 }
 .root[aria-disabled] {
   cursor: default;
@@ -27,7 +27,7 @@
 
 .root[data-state='Selected'] {
   background: var(--color-semantic-highlight-surface);
-  box-shadow: inset 0 0 0 calc(var(--size-primitive-stroke-border) * 1px) var(--color-semantic-highlight-border);
+  box-shadow: inset 0 0 0 calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit)) var(--color-semantic-highlight-border);
 }
 .root[data-state='Correct'] {
   background: var(--color-semantic-feedback-success-subtle);
@@ -40,8 +40,8 @@
 
 .label {
   font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * var(--size-primitive-unit));
   letter-spacing: calc(var(--typography-style-body-m-regular-letter-spacing) * 0.01em);
 }
 
@@ -52,8 +52,8 @@
 
 .check {
   flex-shrink: 0;
-  width: calc(var(--size-primitive-icon-300) * 1px);
-  height: calc(var(--size-primitive-icon-300) * 1px);
-  margin-left: calc(var(--size-primitive-space-200) * 1px);
+  width: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
+  margin-left: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
   color: var(--color-semantic-highlight-border);
 }

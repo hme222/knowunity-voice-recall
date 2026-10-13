@@ -3,24 +3,7 @@
 import { useRef, useState, type ReactNode } from 'react'
 import styles from './SwipeDeck.module.css'
 
-// The gesture behind the due-signal carousel on home.
-//
-// sprint-context.md § "Where it lives" says "the card is swipeable… each swipe shows a
-// different quiz". It was not: the only way to advance was a tertiary button reading
-// "Swipe to the next due quiz", which told the student to swipe and then required a tap.
-// Dragging the card did nothing and tapping it started the session.
-//
-// Pointer events rather than touch events, so the same code serves a finger, a trackpad
-// drag and a mouse — and so a reviewer on a desktop browser can exercise it at all.
-//
-// Three things this has to get right beyond "it moves":
-//   - Vertical scrolling must survive. `touch-action: pan-y` hands the browser the
-//     vertical axis and keeps the horizontal one.
-//   - A drag must not fire the card's own onClick. The card navigates into a session,
-//     so a swipe that also started the session would be worse than no swipe at all.
-//     `onClickCapture` swallows the click when the pointer actually travelled.
-//   - It must work without a pointer. Arrow keys move the deck, and the whole thing is
-//     a labelled group that reports its position.
+// The gesture behind the due-signal carousel on home. History: docs/code-history.md#h-126
 
 /** How far the pointer must travel before it counts as a swipe rather than a tap. */
 const THRESHOLD = 48

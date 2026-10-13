@@ -5,11 +5,7 @@ import { Button, MascotSlot, ScreenShell, StatChip } from '@/components'
 import { sessionTotals, TOTAL_TERMS, useSession, firstUnanswered, termHref, startRun } from '@/lib/session'
 import styles from '../interrupt.module.css'
 
-// Session resume. Implied by banking per-term XP on leaving — the Design Brief says
-// progress saves and returning resumes, and nothing in the 39 frames covers returning.
-//
-// The XP already earned is shown because that is the point: leaving cost the +5
-// finishing bonus, not the work.
+// Session resume. Implied by banking per-term XP on leaving — the Design Brief says progress saves and returning… History: docs/code-history.md#h-080
 
 export default function ResumePage() {
   const router = useRouter()

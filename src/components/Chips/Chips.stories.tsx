@@ -26,7 +26,7 @@ const meta = {
     rightIcon: { control: false },
   },
   args: { Text: 'Chemistry', size: 'S', color: 'Primary', active: false, showLeftIcon: true, showRightIcon: true },
-  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * 1px)' }}><Story /></div>],
+  decorators: [(Story) => <div style={{ padding: 'calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit))' }}><Story /></div>],
 } satisfies Meta<typeof Chips>
 
 export default meta
@@ -45,9 +45,9 @@ export const M: Story = { args: { size: 'M' } }
 export const AllVariants: Story = {
   parameters: { controls: { disable: true } },
   render: (args) => (
-    <div style={{ display: 'grid', gap: 'calc(var(--size-primitive-space-300) * 1px)' }}>
+    <div style={{ display: 'grid', gap: 'calc(var(--size-primitive-space-300) * var(--size-primitive-unit))' }}>
       {CHIPS_SIZES.map((size) => (
-        <div key={size} style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'calc(var(--size-primitive-space-200) * 1px)' }}>
+        <div key={size} style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 'calc(var(--size-primitive-space-200) * var(--size-primitive-unit))' }}>
           <Chips {...args} size={size} color="Primary" active={false} Text={`${size} Primary`} />
           <Chips {...args} size={size} color="Primary" active Text={`${size} active`} />
           <Chips {...args} size={size} color="pro" active Text={`${size} pro`} />

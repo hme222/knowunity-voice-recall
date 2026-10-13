@@ -1,33 +1,20 @@
-/* 07 Recap — Figma frame "07 Recap (refreshed)" (15672:24456). No fraction here, which
-   is correct: the run is over, so there is no "N of 4" left to report.
-
-   Deduped 2026-09-23. The file was three concatenated copies of an overlapping rule
-   set — 35 selectors in 260 lines, twelve of them defined more than once, and the
-   header comment repeated three times. It came from restoring classes a regex had
-   eaten by appending the recovered block rather than merging it. Nothing rendered
-   wrong, because the cascade takes the last definition, which is exactly what this
-   keeps. */
+/* 07 Recap — Figma frame "07 Recap (refreshed)" (15672:24456). History: docs/code-history.md#h-069 */
 
 
 
 .buckets {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--spacing-semantic-between-sections) * 1px);
+  gap: calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit));
 }
 
 .bucket {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-150) * 1px);
+  gap: calc(var(--size-primitive-space-150) * var(--size-primitive-unit));
 }
 
-/* Pinned. The region's overflow fade used to land on a bucket header — the label faded
-   to nothing and the row under it was invisible with no trace, which is a weaker cue
-   than the half-row the fade exists to replace ("a half-row is not an affordance",
-   ScreenShell). A sticky header cannot be the thing that fades: it holds at the top of
-   the region and the rows travel under it, so whatever the fade catches is always a
-   row. */
+/* Pinned. The region's overflow fade used to land on a bucket header — the label faded to nothing and the row under it… History: docs/code-history.md#h-070 */
 .bucketLabel {
   position: sticky;
   top: 0;
@@ -35,24 +22,19 @@
   background: var(--color-semantic-background-page);
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
 }
 
 .row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: calc(var(--size-primitive-space-200) * 1px);
-  padding: calc(var(--spacing-semantic-card-padding) * 1px);
-  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-400) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
-  /* A leading rule, coloured by bucket. Every row rendered identically — same fill,
-     same name colour, same XP colour whether the term paid 10 or 0 — so the only thing
-     separating "nailed it cold" from "flagged for revisit" was a grey section header
-     and the digit itself. The bucket is the one thing the Recap exists to communicate.
-     A left edge, not a card tint: the tint reads as a verdict, and this screen groups
-     rather than grades. */
+  /* A leading rule, coloured by bucket. History: docs/code-history.md#h-071 */
   border-left: calc(var(--size-primitive-stroke-heavy-border) * 2px) solid transparent;
 }
 
@@ -78,8 +60,8 @@
   min-width: 0;
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * var(--size-primitive-unit));
 }
 
 .rowNote {
@@ -87,28 +69,28 @@
   color: var(--color-semantic-text-warning);
   /* Body S, not a caption: these notes carry the confidence signal (senior review). */
   font-weight: var(--typography-style-body-s-regular-font-weight);
-  font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
 }
 
 .rowXp {
   text-align: right;
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
   white-space: nowrap;
 }
 
 /* The XP sum, shown so it can be checked against the rows. Quieter than the chips —
    it explains them, it is not a fourth stat. */
 .working {
-  margin: calc(var(--size-primitive-space-100) * 1px) 0 0;
+  margin: calc(var(--size-primitive-space-100) * var(--size-primitive-unit)) 0 0;
   text-align: center;
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-s-regular-font-weight);
-  font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
 }
 
 /* text-align centres the text but not the mascot, which is a 120px block. It needs a
@@ -117,20 +99,20 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
   text-align: center;
 }
 
 .actions {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 .empty {
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
 }
 
 /* The mascot is a fixed 120px box in a column that stretches its children, so without
@@ -144,11 +126,11 @@
 /* The closing takeaway: heading over the "New today" card, centred like the screen
    title, the card full width like every card in the 390 column. */
 .learned {
-  margin-top: calc(var(--spacing-semantic-between-sections) * 1px);
+  margin-top: calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit));
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
   text-align: center;
 }
 
@@ -163,14 +145,14 @@
    component-gaps.md. */
 .strip {
   display: flex;
-  gap: calc(var(--size-primitive-space-100) * 1px);
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
   width: 100%;
 }
 
 .segment {
   flex: 1;
-  height: calc(var(--size-primitive-space-200) * 1px);
-  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  height: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
   background: var(--color-semantic-border-strong);
 }
 
@@ -186,8 +168,8 @@
   margin: 0;
   color: var(--color-semantic-text-warning);
   font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
 }
 
 .summary {
@@ -195,8 +177,8 @@
   text-align: center;
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
 }
 
 /* The XP line is a disclosure: tap for the working. The marker is replaced by the
@@ -208,11 +190,11 @@
 .summary {
   cursor: pointer;
   list-style: none;
-  min-height: calc(var(--spacing-semantic-tap-target) * 1px);
+  min-height: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: calc(var(--size-primitive-space-100) * 1px);
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
 }
 
 .summary::-webkit-details-marker {
@@ -224,5 +206,14 @@
   color: var(--color-semantic-text-link-hover);
   font-weight: var(--typography-style-body-s-regular-font-weight);
   text-decoration: underline;
-  text-underline-offset: calc(var(--size-primitive-space-050) * 1px);
+  text-underline-offset: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
+}
+
+/* The terms said back unaided, by name. */
+.wins {
+  margin: 0;
+  color: var(--color-semantic-text-success);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
 }

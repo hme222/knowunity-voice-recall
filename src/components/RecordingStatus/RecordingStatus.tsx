@@ -1,16 +1,7 @@
 import { formatElapsed } from '@/lib/session'
 import styles from './RecordingStatus.module.css'
 
-// The three text elements on the recording screens: the LISTENING label, the elapsed
-// timer, and the pause caption under the mic. Loose text nodes in Figma; one component
-// here because all three describe the same state and must never disagree.
-//
-// It does NOT own the clock. The page ticks and passes `seconds` — a component that ran
-// its own interval would make its story non-deterministic and flake the a11y run.
-//
-// Only the state word is live. The whole block was one role="status" region, so a
-// screen reader re-read "Listening 0:05 Tap to pause" on every tick. The timer stays
-// in the DOM and readable on demand; it just no longer announces itself each second.
+// The three text elements on the recording screens: the LISTENING label, the elapsed timer, and the pause caption under the mic. History: docs/code-history.md#h-110
 
 export type RecordingStatusProps = {
   /** Elapsed recording time. The page owns the interval. */

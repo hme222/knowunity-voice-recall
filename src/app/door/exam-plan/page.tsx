@@ -6,12 +6,7 @@ import { getTerm, startSession, SUBJECT } from '@/lib/session'
 import { proveItHref } from '../doors'
 import styles from '../door.module.css'
 
-// Door 2, the exam plan — Figma frame "Exam plan (placeholder — existing door,
-// refreshed)" (15672:23959). A step inside a plan the student already has, so Knowie
-// asks in a bubble rather than announcing a feature.
-//
-// The frame marks this a placeholder: the plan around it is the real app's and is not
-// ours to reproduce. What is real is the door itself and where it leads.
+// Door 2, the exam plan — Figma frame "Exam plan (placeholder — existing door, refreshed)" (15672:23959). History: docs/code-history.md#h-005
 
 export default function ExamPlanDoor() {
   const router = useRouter()

@@ -44,16 +44,12 @@ function IdleScreen({ index }: { index: number }) {
   useEffect(() => {
     if (sticky) router.replace(`/text/turn?term=${index}&sticky=1`)
   }, [sticky, index, router])
-  // Start the session clock here rather than only on 00 Intro. The doors go straight
-  // to /session/idle/1?door=…, so a door run never ran startSession and the Recap's
-  // Time chip read 0:00 on a session the student had just spent minutes on. 01 Idle is
-  // the first screen of every entry path; the helper no-ops once the clock is running,
-  // so terms 2-4 do not restart it.
+  // Start the session clock here rather than only on 00 Intro. History: docs/code-history.md#h-054
   useEffect(() => {
     ensureSessionStarted()
   }, [])
 
-  useRedirect(!current, '/session/intro')
+  useRedirect(!current, '/session/resume')
   if (sticky) return null
 
   if (!current) return null

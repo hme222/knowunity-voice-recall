@@ -4,9 +4,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: calc(var(--spacing-semantic-card-label-gap) * 1px);
-  padding: calc(var(--spacing-semantic-card-padding) * 1px);
-  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  gap: calc(var(--spacing-semantic-card-label-gap) * var(--size-primitive-unit));
+  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-400) * var(--size-primitive-unit));
 }
 .root[data-state='Pass'] {
   background: var(--color-semantic-feedback-success-subtle);
@@ -36,20 +36,16 @@
 .title {
   color: var(--result-title);
   font-weight: var(--typography-style-headline-s-font-weight);
-  font-size: calc(var(--typography-style-headline-s-font-size) * 1px);
-  line-height: calc(var(--typography-style-headline-s-line-height) * 1px);
+  font-size: calc(var(--typography-style-headline-s-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-headline-s-line-height) * var(--size-primitive-unit));
   letter-spacing: calc(var(--typography-style-headline-s-letter-spacing) * 0.01em);
 }
-/* One eyebrow style for every state. It used to carry only a colour here and pick up
-   the body's 16px/400, while the Miss override set 12px/600 and RecallResultCaptured
-   set 12px/600 again — three renderings of the same "You said" label across three
-   cards that sit next to each other in the flow. captionMBold is the one the other two
-   already agreed on. */
+/* One eyebrow style for every state. History: docs/code-history.md#h-108 */
 .label {
   color: var(--color-semantic-text-tertiary);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
   letter-spacing: calc(var(--typography-style-caption-m-bold-letter-spacing) * 0.01em);
 }
 /* Colour only. On the error tint text.tertiary reads at 3.8:1; the token made for this
@@ -60,8 +56,8 @@
 .body {
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * var(--size-primitive-unit));
   letter-spacing: calc(var(--typography-style-body-m-regular-letter-spacing) * 0.01em);
 }
 
@@ -70,7 +66,7 @@
 .root[data-state='CouldntHear'] .label {
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
   letter-spacing: normal;
 }

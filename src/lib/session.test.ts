@@ -1,6 +1,10 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import {
   SCRIPTED_COULDNT_HEAR_TERM,
+  markEarned,
+  spendEarned,
+  safeInternalPath,
+  micTurnedBackOn,
   recommendedMode,
   micGate,
   setMicGranted,
@@ -232,5 +236,30 @@ describe('recommendedMode (what Practice suggests)', () => {
   })
   it('rule A wins over rule C', () => {
     expect(recommendedMode('Revealed', false, { wasSure: true, typed: true })).toBe('drill')
+  })
+})
+
+describe('engineering-review fixes', () => {
+  it('never replays the scripted mishear in a practice round', () => {
+    expect(verdictFor(SCRIPTED_COULDNT_HEAR_TERM, 9000, 1, { practising: true })).toBe('Pass')
+  })
+  it('pays a pass only against a judged take, once', () => {
+    expect(spendEarned(3, 'Pass')).toBe(false)
+    markEarned(3, 'Pass')
+    expect(spendEarned(3, 'Repeat')).toBe(false)
+    expect(spendEarned(3, 'Pass')).toBe(true)
+    expect(spendEarned(3, 'Pass')).toBe(false)
+  })
+  it('only follows internal paths from the query string', () => {
+    expect(safeInternalPath('/text/turn?term=2', '/x')).toBe('/text/turn?term=2')
+    expect(safeInternalPath('https://example.com', '/x')).toBe('/x')
+    expect(safeInternalPath('//example.com', '/x')).toBe('/x')
+    expect(safeInternalPath(null, '/x')).toBe('/x')
+  })
+  it('undoes a denied mic', () => {
+    setSticky()
+    micTurnedBackOn()
+    expect(readSession().sticky).toBeUndefined()
+    expect(readSession().micGranted).toBe(true)
   })
 })

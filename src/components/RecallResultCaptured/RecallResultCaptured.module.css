@@ -4,9 +4,9 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-150) * 1px);
-  padding: calc(var(--spacing-semantic-card-padding) * 1px);
-  border-radius: calc(var(--size-primitive-radius-400) * 1px);
+  gap: calc(var(--size-primitive-space-150) * var(--size-primitive-unit));
+  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-400) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
 }
 
@@ -17,20 +17,20 @@
 .title {
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-headline-xxs-bold-font-weight);
-  font-size: calc(var(--typography-style-headline-xxs-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-headline-xxs-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-headline-xxs-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-headline-xxs-bold-line-height) * var(--size-primitive-unit));
 }
 
 .label {
   color: var(--color-semantic-text-tertiary);
   font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
 }
 
 .transcript {
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-m-regular-font-weight);
-  font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-regular-line-height) * var(--size-primitive-unit));
 }

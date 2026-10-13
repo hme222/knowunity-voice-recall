@@ -11,16 +11,10 @@ import {
   RecordingStatus,
   ScreenShell,
 } from '@/components'
-import { getTerm, verdictFor, SUBJECT } from '@/lib/session'
+import { getTerm, isPractising, markEarned, verdictFor, SUBJECT } from '@/lib/session'
 import styles from './recording.module.css'
 
-// 02 Recording — Figma frame "02 Recording" (15672:20100).
-// Tap the mic to pause or resume; "Submit" ends the take and goes to review.
-// There is no cancel here — 02a Captured already offers Re-record, so discarding a
-// take is one tap through a screen that exists (SPEC.md § "Explicitly out of scope").
-//
-// The take's duration selects the verdict downstream. It is carried in the query so it
-// survives the navigation without needing session state for a value used once.
+// 02 Recording — Figma frame "02 Recording" (15672:20100). History: docs/code-history.md#h-072
 
 function RecordingScreen({ index }: { index: number }) {
   const router = useRouter()
@@ -39,14 +33,7 @@ function RecordingScreen({ index }: { index: number }) {
 
   const [seconds, setSeconds] = useState(0)
   const [paused, setPaused] = useState(false)
-  // Start of the CURRENT un-paused stretch, plus everything banked before it.
-  //
-  // The take used to be scored as `Date.now() - startedAt` with `startedAt` set once on
-  // mount, while `paused` only stopped the display interval. So the on-screen timer and
-  // the scored duration disagreed the moment anyone paused: 0:12 on screen against
-  // ms=31690 logged, and a student who paused to think was graded as though they had
-  // been talking the whole time. The timer is the thing they trust, so the timer is the
-  // thing the verdict is now taken from.
+  // Start of the CURRENT un-paused stretch, plus everything banked before it. History: docs/code-history.md#h-073
   const segmentStart = useRef(0)
   const banked = useRef(0)
   const doneRef = useRef(false)
@@ -80,9 +67,16 @@ function RecordingScreen({ index }: { index: number }) {
     setPaused((was) => !was)
   }
 
-  useRedirect(!current, '/session/intro')
+  useRedirect(!current, '/session/resume')
 
   if (!current) return null
+
+  function startOver() {
+    banked.current = 0
+    segmentStart.current = Date.now()
+    setSeconds(0)
+    setPaused(false)
+  }
 
   function done() {
     // Once only: a double tap on Submit pushed the next screen twice.
@@ -98,21 +92,22 @@ function RecordingScreen({ index }: { index: number }) {
       return
     }
     if (isRepeat) {
-      router.push(`/session/repeat/${index}`)
+      // A say-it-back is paid (+3), so it has to be a take: under the couldn't-hear
+      // floor it goes back to the reveal to try again, and pays nothing. A 0.3s tap used
+      // to earn "That's it, in your own voice" (engineering review, 2026-10-13).
+      if (verdictFor(index, took, 2) === 'CouldntHear') {
+        router.replace(`/session/reveal/${index}`)
+        return
+      }
+      markEarned(index, 'Repeat')
+      router.replace(`/session/repeat/${index}`)
       return
     }
     const q = new URLSearchParams({ ms: String(took), attempt })
     if (hinted) q.set('hinted', '1')
     if (door) q.set('door', door)
-    // A take the mock already knows is unusable does NOT get a review screen. 02a
-    // Captured is "here's what I heard, send it or say it again" — it prints a clean,
-    // complete transcript and asks the student to confirm it. On term 1 the scripted
-    // mishear fired anyway, so confirming "Looks right" led straight to "That one
-    // didn't come through", on the first term of the session. The app cannot show you
-    // your words and then say it never heard them. Nothing was captured, so there is
-    // nothing to review: go to the judging beat, which already routes an unusable take
-    // to 04a without asking the confidence question either.
-    if (verdictFor(index, took, Number(attempt)) === 'CouldntHear') {
+    // A take the mock already knows is unusable does NOT get a review screen. History: docs/code-history.md#h-074
+    if (verdictFor(index, took, Number(attempt), { practising: isPractising() }) === 'CouldntHear') {
       router.push(`/session/processing/${index}?${q}`)
       return
     }
@@ -126,11 +121,7 @@ function RecordingScreen({ index }: { index: number }) {
       // the same height on the tap that starts the recording.
       mic={
         <div className={styles.micWrap} data-paused={paused || undefined}>
-          {/* The rings are centred on the MIC, not on the region. They are absolute
-              with no offsets, so they take their static position from this stack —
-              once the mic moved to the top of the region, a stack of its own is what
-              keeps them concentric. Offsets would not work: the pulse animates
-              `transform`, so a centring translate would be overwritten every frame. */}
+          {/* The rings are centred on the MIC, not on the region. History: docs/code-history.md#h-075 */}
           <div className={styles.micStack}>
           <span className={styles.ring} aria-hidden="true" />
           <span className={styles.ring} aria-hidden="true" />
@@ -155,6 +146,10 @@ function RecordingScreen({ index }: { index: number }) {
       bottomContent={
         <div className={styles.actions}>
           <Button CTA="Submit" variant="Primary" size="M" fullWidth onClick={done} />
+          {/* Discard and re-record before anything is sent (voice-ux Must; Duolingo
+              design review, 2026-10-13): a fumbled first sentence never has to be
+              submitted. Resets the take in place, still listening. */}
+          <Button CTA="Start over" variant="Tertiary" size="S" fullWidth onClick={startOver} />
         </div>
       }
     >

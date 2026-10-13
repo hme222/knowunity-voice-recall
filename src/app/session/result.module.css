@@ -13,13 +13,13 @@
   /* space-400, not betweenSections. 05 Miss carries the most of any result screen —
      mascot, verdict, result card, hint, transcript link — and at 24 the section gap
      alone was 96px, which is what forced Knowie down to the 64 box. */
-  gap: calc(var(--size-primitive-space-400) * 1px);
+  gap: calc(var(--size-primitive-space-400) * var(--size-primitive-unit));
 }
 
 .actions {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 /* The miss screen's action row with one button left in it. */
@@ -31,7 +31,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
 }
 
 /* A verdict chip hugs its text. The body stretches its children, so the chip spanned
@@ -45,15 +45,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 .xp {
   text-align: center;
   color: var(--color-semantic-accent-blue-bold);
   font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
 }
 
 /* The mascot is a fixed 120px box in a column that stretches its children, so without
@@ -71,8 +71,8 @@
   text-align: center;
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-body-m-bold-font-weight);
-  font-size: calc(var(--typography-style-body-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-m-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-m-bold-line-height) * var(--size-primitive-unit));
 }
 
 /* The pass reaction. Knowie hops once, then the card rises into place. Transform and
@@ -84,7 +84,7 @@
 
 @keyframes hop {
   0% { transform: translateY(0); }
-  40% { transform: translateY(calc(var(--size-primitive-space-400) * -1px)); }
+  40% { transform: translateY(calc(var(--size-primitive-space-400) * -1 * var(--size-primitive-unit))); }
   100% { transform: translateY(0); }
 }
 
@@ -93,7 +93,7 @@
 }
 
 @keyframes rise {
-  from { opacity: 0; transform: translateY(calc(var(--size-primitive-space-400) * 1px)); }
+  from { opacity: 0; transform: translateY(calc(var(--size-primitive-space-400) * var(--size-primitive-unit))); }
   to { opacity: 1; transform: translateY(0); }
 }
 

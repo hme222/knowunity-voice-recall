@@ -7,15 +7,7 @@ import { DRILL_TOTAL_RUNGS } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import { processingDwell } from '@/lib/motion'
 
-// DD 03 Processing — Figma frame "DD 03 Processing" (15782:11891).
-//
-// Load-bearing in a way the core loop's Processing is not: this is where the pass is
-// scored for unaided coverage, and that score drives the meter. If the coverage judge
-// can't be built, this step becomes a pass counter and most of the drill's copy is
-// wrong. See docs/sprint-context.md open question 7.
-//
-// No confidence tap here. That exists to make Recap honest about belief, and the drill
-// has no Recap and no XP.
+// DD 03 Processing — Figma frame "DD 03 Processing" (15782:11891). History: docs/code-history.md#h-022
 
 function DrillProcessing() {
   const router = useRouter()

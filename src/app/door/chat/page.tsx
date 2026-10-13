@@ -16,12 +16,7 @@ import { getTerm, startSession, SUBJECT } from '@/lib/session'
 import { proveItHref } from '../doors'
 import styles from '../door.module.css'
 
-// Door 3, chat — Figma frame "Chat (placeholder — existing door, refreshed)"
-// (15672:24166). The content-aware door: the offer is prefilled off a real
-// conversation, so it arrives already about something.
-//
-// The frame shows the XP line above the mascot. It is the only door that does, because
-// chat is the one that already has a running XP context around it.
+// Door 3, chat — Figma frame "Chat (placeholder — existing door, refreshed)" (15672:24166). History: docs/code-history.md#h-001
 
 export default function ChatDoor() {
   const router = useRouter()

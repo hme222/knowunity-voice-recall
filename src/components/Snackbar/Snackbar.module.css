@@ -4,14 +4,14 @@
 .root {
   box-sizing: border-box;
   width: 100%;
-  padding: calc(var(--size-primitive-space-200) * 1px);
+  padding: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 .card {
   display: flex;
   align-items: center;
-  gap: calc(var(--size-primitive-space-400) * 1px);
-  padding: calc(var(--size-primitive-space-200) * 1px) calc(var(--size-primitive-space-400) * 1px);
-  border-radius: calc(var(--size-primitive-radius-800) * 1px);
+  gap: calc(var(--size-primitive-space-400) * var(--size-primitive-unit));
+  padding: calc(var(--size-primitive-space-200) * var(--size-primitive-unit)) calc(var(--size-primitive-space-400) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-800) * var(--size-primitive-unit));
   background: var(--color-semantic-background-inverse);
   color: var(--color-semantic-text-inverse);
 }
@@ -21,28 +21,28 @@
   align-items: center;
   justify-content: center;
   flex: none;
-  width: calc(var(--size-primitive-space-700) * 1px);
-  height: calc(var(--spacing-semantic-tap-target) * 1px);
+  width: calc(var(--size-primitive-space-700) * var(--size-primitive-unit));
+  height: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
 }
 .icon > svg {
-  width: calc(var(--size-primitive-icon-300) * 1px);
-  height: calc(var(--size-primitive-icon-300) * 1px);
+  width: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-icon-300) * var(--size-primitive-unit));
 }
 .container {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
   justify-content: center;
-  gap: calc(var(--size-primitive-space-100) * 1px);
-  min-height: calc(var(--spacing-semantic-tap-target) * 1px);
-  padding: calc(var(--size-primitive-space-100) * 1px) calc(var(--size-primitive-space-100) * 1px) calc(var(--size-primitive-space-100) * 1px) 0;
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
+  min-height: calc(var(--spacing-semantic-tap-target) * var(--size-primitive-unit));
+  padding: calc(var(--size-primitive-space-100) * var(--size-primitive-unit)) calc(var(--size-primitive-space-100) * var(--size-primitive-unit)) calc(var(--size-primitive-space-100) * var(--size-primitive-unit)) 0;
   min-width: 0;
 }
 .label {
   margin: 0;
   font-weight: var(--typography-style-body-s-regular-font-weight);
-  font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
   letter-spacing: calc(var(--typography-style-body-s-regular-letter-spacing) * 0.01em);
 }
 /* The hidden Button Container holds a Tertiary S button ("Check it"). */
@@ -55,8 +55,8 @@
   cursor: pointer;
   font: inherit;
   font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
   letter-spacing: calc(var(--typography-style-body-s-bold-letter-spacing) * 0.01em);
 }
 

@@ -6,23 +6,7 @@ import { STUMBLES, useDrillTerm, advancePractice, isPractising } from '@/lib/ses
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
 
-// DD 07 — first stumble. Figma frame "DD 07 Miss — local correction, keep going"
-// (15782:12362).
-//
-// Reveal the missed word, retake the pass. The meter HOLDS — it does not drop. A
-// student must never watch progress go backwards for asking for help, which is the
-// second of the two rules the whole variable-length design rests on.
-//
-// The transcript trails off mid-sentence, as on the frame: it shows where they got to,
-// which is what makes the missed word land.
-//
-// REBUILT TO THE FRAME 2026-09-21, two differences worth naming:
-//   1. NO METER. The frame does not show one here at all. The built screen carried one
-//      labelled "Held while you get this one", which was explaining an absence.
-//   2. The result card is NEUTRAL. RecallResult state="Miss" paints it #532831 with a
-//      red title; the frame is a grey card with a white title. The drill is practice,
-//      not scored performance, so a miss here is not an error and must not be dressed
-//      as one. Built inline — see component-gaps.md.
+// DD 07 — first stumble. History: docs/code-history.md#h-020
 
 export default function DrillMissPage() {
   const router = useRouter()

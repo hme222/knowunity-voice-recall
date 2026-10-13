@@ -3,11 +3,7 @@ import { Clock } from 'lucide-react'
 import { MicGlyphIcon } from '../icons'
 import styles from './DueSignalCard.module.css'
 
-// Mirrors the Figma component `dueSignalCard` (15812:15287). `DueLabel` is its one
-// text property.
-//
-// The simpler one-quiz case. With several due, the swipeable swipeChip carousel
-// supersedes it on the flow — this is kept because one quiz due doesn't need a pager.
+// Mirrors the Figma component `dueSignalCard` (15812:15287). History: docs/code-history.md#h-105
 
 export type DueSignalCardProps = {
   /** Figma `DueLabel`, e.g. "Quiz due 9/15". */

@@ -22,23 +22,7 @@ import {
 import { HOME_GREETING, STUDENT_INITIAL } from '@/lib/session'
 import styles from './home.module.css'
 
-// The host app's home, built to Figma frame "Home card — where Say It Back lives,
-// native and unmodified" (15674:34093).
-//
-// It used to be a stand-in: a left-aligned greeting and two grey "Your study plan" /
-// "Recent notes" boxes that appear on no frame. The point of this screen is that Say
-// It Back is judged where it actually lives, and a placeholder cannot show that — the
-// chip's competition for attention IS the design question. So this is the frame:
-// status bar, app bar with the streak chips, Knowie over a centred greeting, the tool
-// chips, the composer, the tab bar. Say It Back's own surfaces arrive as `children`,
-// in the frame's slot, 64 below the greeting.
-//
-// Two honest differences, both recorded in the build report:
-//   - The tool and tab glyphs in Figma are bespoke multi-colour artwork exported as
-//     rasters. These are the Lucide equivalents, which is the house icon convention.
-//   - The frame's chips row stacks duplicates at identical positions (Flashcards and
-//     Summarize each appear twice, one under the other). That is a layering artifact,
-//     not six chips: the distinct set, in the frame's order, is what renders here.
+// The host app's home, built to Figma frame "Home card — where Say It Back lives, native and unmodified" (15674:34093). History: docs/code-history.md#h-026
 
 /** iOS status bar. Real chrome on the frame, so real chrome here. */
 function StatusBar() {

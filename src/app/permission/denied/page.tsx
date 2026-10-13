@@ -2,22 +2,18 @@
 
 import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { setSticky } from '@/lib/session'
+import { micTurnedBackOn, safeInternalPath, setSticky } from '@/lib/session'
 import { Button, MascotSlot, ScreenShell, TextBlock } from '@/components'
 import styles from '../permission.module.css'
 
-// Permission denied — a session-level choice, not a dead end.
-// voice-ux Principle 3: design the "No". The student must still have a way forward,
-// and that way is the text fallback. Telling them what they're missing and how to
-// re-enable is the difference between a fork and a trap.
-//
-// Denied makes text sticky for the session: the mic can't work, so re-offering it
-// every term would be asking someone to do something they've already said they can't.
+// Permission denied — a session-level choice, not a dead end. History: docs/code-history.md#h-043
 
 function Denied() {
   const router = useRouter()
   // Back to the turn the student was on, typed, not always question 1.
-  const alt = useSearchParams().get('alt') ?? '/text/turn?term=1'
+  const params = useSearchParams()
+  const alt = safeInternalPath(params.get('alt'), '/text/turn?term=1')
+  const next = safeInternalPath(params.get('next'), '/session/recording/1')
   const [showHow, setShowHow] = useState(false)
   return (
     <ScreenShell
@@ -36,12 +32,18 @@ function Denied() {
             }}
           />
           <Button
-            CTA={showHow ? 'Got it' : 'How to turn the mic on'}
+            // Once the steps are open, the way back: the screen promised "speaking will
+            // work straight away" and nothing ever undid the denial (engineering review).
+            CTA={showHow ? 'I’ve turned it on' : 'How to turn the mic on'}
             variant="Secondary"
             size="M"
             fullWidth
             aria-expanded={showHow}
-            onClick={() => setShowHow((v) => !v)}
+            onClick={() => {
+              if (!showHow) return setShowHow(true)
+              micTurnedBackOn()
+              router.replace(next)
+            }}
           />
         </div>
       }

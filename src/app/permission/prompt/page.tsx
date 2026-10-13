@@ -3,7 +3,7 @@
 import { Suspense, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ScreenShell } from '@/components'
-import { setMicGranted } from '@/lib/session'
+import { safeInternalPath, setMicGranted } from '@/lib/session'
 import { QuestionBehind } from '../QuestionBehind'
 import { useFocusTrap } from '@/lib/useFocusTrap'
 import styles from '../permission.module.css'
@@ -16,8 +16,8 @@ import styles from '../permission.module.css'
 function Prompt() {
   const router = useRouter()
   const params = useSearchParams()
-  const next = params.get('next') ?? '/session/recording/1'
-  const alt = params.get('alt') ?? '/text/turn?term=1'
+  const next = safeInternalPath(params.get('next'), '/session/recording/1')
+  const alt = safeInternalPath(params.get('alt'), '/text/turn?term=1')
   // The other real dialog in the app, and it had the same defect BottomSheet did:
   // aria-modal="true" with focus left on <body> and the screen behind it still in the
   // tab order, so nothing announced that a dialog had opened and Tab walked out of it.
@@ -46,7 +46,7 @@ function Prompt() {
             </p>
           </div>
           <div className={styles.dialogActions}>
-            <button className={styles.dialogButton} onClick={() => router.push(`/permission/denied?alt=${encodeURIComponent(alt)}`)}>
+            <button className={styles.dialogButton} onClick={() => router.push(`/permission/denied?next=${encodeURIComponent(next)}&alt=${encodeURIComponent(alt)}`)}>
               Don&rsquo;t Allow
             </button>
             <button className={styles.dialogButton} onClick={() => {

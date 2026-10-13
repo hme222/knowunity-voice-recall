@@ -1,23 +1,12 @@
-/* The four door screens. All are the same shape as the frames: a centred content block
-   in middleContent, and a two-button action row.
+/* The four door screens. History: docs/code-history.md#h-002 */
 
-   Deduped 2026-09-24. This file carried two `.body` and two `.doorActions` definitions
-   and the header comment twice — the cascade took the later one, so an edit to the
-   first silently did nothing. Found while fixing the door mics, when a gap change had
-   no effect at all. Same shape as recap.module.css, which was three concatenated
-   copies. */
-
-/* Gap at space.400, not betweenSections — the same trade the drill makes, for the same
-   reason. These screens carry a long question bubble above the mic's fixed region, and
-   at 24 they ran 6 to 8px past it, which is enough that margin-top:auto cannot pull the
-   region back: the mic landed at 480 and 482 against 466 everywhere else. The gaps give
-   way so the control does not. */
+/* Gap at space.400, not betweenSections — the same trade the drill makes, for the same reason. History: docs/code-history.md#h-003 */
 .body {
   display: flex;
   flex-direction: column;
   flex: 1;
   min-height: 0;
-  gap: calc(var(--size-primitive-space-400) * 1px);
+  gap: calc(var(--size-primitive-space-400) * var(--size-primitive-unit));
 }
 
 /* The chat door's XP line, above the mascot as on the frame. */
@@ -25,14 +14,14 @@
   text-align: center;
   color: var(--color-semantic-accent-blue-bold);
   font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
 }
 
 .actions {
   display: flex;
   flex-direction: column;
-  gap: calc(var(--size-primitive-space-200) * 1px);
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 /* The result frame centres a single Continue button rather than filling the width. */
@@ -46,7 +35,7 @@
 .doorActions {
   display: flex;
   align-items: center;
-  gap: calc(var(--size-primitive-space-300) * 1px);
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
 }
 
 .doorActions > :first-child {
@@ -56,7 +45,7 @@
 
 /* The frame fixes the primary's width while the dismissal flexes. */
 .doorActions > :last-child {
-  min-width: calc(var(--component-button-inline-primary-min-width) * 1px);
+  min-width: calc(var(--component-button-inline-primary-min-width) * var(--size-primitive-unit));
 }
 
 /* The frame's `Content` block: gap 24, pt 32, pb 16, centred. */
@@ -66,7 +55,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: calc(var(--size-primitive-space-600) * 1px);
-  padding-top: calc(var(--size-primitive-space-800) * 1px);
-  padding-bottom: calc(var(--size-primitive-space-400) * 1px);
+  gap: calc(var(--size-primitive-space-600) * var(--size-primitive-unit));
+  padding-top: calc(var(--size-primitive-space-800) * var(--size-primitive-unit));
+  padding-bottom: calc(var(--size-primitive-space-400) * var(--size-primitive-unit));
 }
