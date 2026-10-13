@@ -11,7 +11,7 @@ import {
   RecordingStatus,
   ScreenShell,
 } from '@/components'
-import { getTerm, isPractising, markEarned, verdictFor, SUBJECT } from '@/lib/session'
+import { getTerm, isPractising, markEarned, verdictFor, SUBJECT, nextAfter, recordOutcome } from '@/lib/session'
 import styles from './recording.module.css'
 
 // 02 Recording — Figma frame "02 Recording" (15672:20100). History: docs/code-history.md#h-072
@@ -142,7 +142,18 @@ function RecordingScreen({ index }: { index: number }) {
           </div>
         </div>
       }
-      topNavigation={<SessionBar index={index} door={door} />}
+      topNavigation={
+        // The same Skip as 01 Idle, so the top bar does not change shape across the
+        // turn (coherence critic, 2026-10-13).
+        <SessionBar
+          index={index}
+          door={door}
+          onSkip={() => {
+            recordOutcome(index, 'Worth revisiting')
+            router.push(nextAfter(index))
+          }}
+        />
+      }
       bottomContent={
         <div className={styles.actions}>
           <Button CTA="Submit" variant="Primary" size="M" fullWidth onClick={done} />

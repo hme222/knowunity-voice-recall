@@ -18,7 +18,7 @@ function DrillIntro() {
       bottomContent={
         <div className={styles.stack}>
           <Button CTA="Let’s go" variant="Primary" size="M" fullWidth onClick={() => router.push('/drill/pass/1')} />
-          <Button CTA="Skip" variant="Tertiary" size="M" fullWidth onClick={() => router.push(isPractising() ? advancePractice() : '/picker')} />
+          <Button CTA="Not now" variant="Tertiary" size="M" fullWidth onClick={() => router.push(isPractising() ? advancePractice() : '/picker')} />
         </div>
       }
     >

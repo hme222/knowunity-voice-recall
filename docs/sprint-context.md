@@ -205,6 +205,17 @@ above.
         "Not enough to check".
       - **The drill pays +2 XP (9a, 2026-10-13),** once per term per run, against a
         receipt from its last judged round; shown on drill complete and the Recap.
+      - **One grammar for the turn (coherence critic, 2026-10-13).** The action zone
+        is top-anchored, so every screen's first row is at the same y (690 at 844,
+        it drifted 688–718). Skip is the top-right slot on idle, recording, captured,
+        miss and mishear, and never anything else (Reveal's "Continue" moved to the
+        action zone). "Type instead" is text-weight everywhere except the second
+        mishear, where typing leads by decision. Captured's optional-confidence exit
+        is "Just check it", not "Skip", which means skip the TERM. Deliberately kept:
+        "Start over" on Recording (it discards a take in progress, which "Say it
+        again" would misname); Knowie stepping out on Recording (the question and the
+        mic own the screen while the student speaks); Captured's "Say it again / Type
+        instead" inline under the transcript, beside the words they correct.
       - **Practice suggests by two more rules (5, A and C).** Sure and still needed
         help → Drill it, even when hinted (a confident miss is a wrong idea to
         rebuild). Typed → Say it again, aloud (the point of the feature). A wins over C;

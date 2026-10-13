@@ -46,3 +46,9 @@
 .mascotCentred {
   align-self: center;
 }
+
+/* The typed turn's escapes, centred with a gap like 01 Idle's single link. */
+.rowCentred {
+  justify-content: center;
+  column-gap: calc(var(--size-primitive-space-600) * var(--size-primitive-unit));
+}

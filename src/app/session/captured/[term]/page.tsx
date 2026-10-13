@@ -12,7 +12,7 @@ import {
   RecallResultCaptured,
   ScreenShell,
 } from '@/components'
-import { getTerm, isPractising, recordConfidence, shownAnswer, verdictFor, useSession } from '@/lib/session'
+import { getTerm, isPractising, recordConfidence, shownAnswer, verdictFor, useSession, nextAfter, recordOutcome } from '@/lib/session'
 import styles from './captured.module.css'
 
 // 02a Captured — Figma frame "02a Captured — review before sending" (15785:13098). History: docs/code-history.md#h-051
@@ -60,13 +60,19 @@ function CapturedScreen({ index }: { index: number }) {
 
   return (
     <ScreenShell
-      topNavigation={<SessionBar index={index} door={door} />}
-      bottomContent={
-        <div className={styles.actions}>
-          <ConfidenceAsk onAnswer={answer} />
-          <Button CTA="Skip the question" variant="Tertiary" size="S" fullWidth onClick={() => answer()} />
-        </div>
+      topNavigation={
+        // The same Skip as 01 Idle, so the top bar does not change shape across the
+        // turn (coherence critic, 2026-10-13).
+        <SessionBar
+          index={index}
+          door={door}
+          onSkip={() => {
+            recordOutcome(index, 'Worth revisiting')
+            router.push(nextAfter(index))
+          }}
+        />
       }
+      bottomContent={<ConfidenceAsk onAnswer={answer} />}
     >
       <div className={styles.body}>
         {/* Knowie has just heard you and is holding it up — "here's what I heard". */}
@@ -103,6 +109,10 @@ function CapturedScreen({ index }: { index: number }) {
             }}
           />
         </div>
+        {/* The confidence ask is optional: "Just check it" moves on without one. Not
+            "Skip", which everywhere else skips the TERM (coherence critic, 2026-10-13).
+            Up here rather than in the action zone, which the ask fills. */}
+        <Button CTA="Just check it" variant="Tertiary" size="S" onClick={() => answer()} />
       </div>
     </ScreenShell>
   )

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import {
   micRegionClass,
+  Button,
   ChatBubble,
   MascotSlot,
   MicButton,
@@ -51,10 +52,11 @@ export default function RevealPage({ params }: { params: Promise<{ term: string 
           <MicCaption label="Optional" body={`Say it back once for +${XP.repeat} XP`} />
         </div>
       }
-      topNavigation={<SessionBar index={index} onSkip={moveOn} skipLabel="Continue" />}
-      // Skip moved to the SessionBar. The zone stays reserved so the mic lands where it
-      // does on every other voice screen.
-      showBottomNavSlot
+      topNavigation={<SessionBar index={index} />}
+      // "Continue" in the action zone, text-weight: the say-it-back mic is the invitation
+      // and this is the quiet way past it. The top-right slot only ever means Skip, so it
+      // no longer reads "Continue" on this one screen (coherence critic, 2026-10-13).
+      bottomContent={<Button CTA="Continue" variant="Tertiary" size="M" fullWidth onClick={moveOn} />}
     >
       <div className={styles.body}>
         <MascotSlot size="2XL" expression="determined" />

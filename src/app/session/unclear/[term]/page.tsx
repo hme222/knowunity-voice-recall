@@ -57,7 +57,7 @@ function UnclearScreen({ index }: { index: number }) {
           {/* On a repeat mishear typing leads, because the mic has now failed twice. */}
           <Button
             CTA="Type instead"
-            variant={repeated ? 'Primary' : 'Secondary'}
+            variant={repeated ? 'Primary' : 'Tertiary'}
             size="M"
             fullWidth
             onClick={() => router.push(`/text/turn?term=${index}`)}

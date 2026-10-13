@@ -111,7 +111,12 @@
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* Top-anchored at a fixed inset, not centred: centred, a one-row zone put its button
+     at 718 and a two-row zone at 688, so the thumb target jumped up to 30px between
+     consecutive turns (craft critic, 2026-10-13). Now the first row is at the same y
+     on every screen. */
+  justify-content: flex-start;
+  padding-top: calc(var(--size-primitive-space-400) * var(--size-primitive-unit));
   gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
   padding-inline: calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit));
 }

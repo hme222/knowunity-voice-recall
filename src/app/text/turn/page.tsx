@@ -81,7 +81,9 @@ function TextTurnScreen() {
               )
             }}
           />
-          <div className={actionRowClass}>
+          {/* Centred, as 01 Idle centres "Type instead": the pair reads as one family
+              (coherence critic, 2026-10-13). */}
+          <div className={`${actionRowClass} ${styles.rowCentred}`}>
             {!sticky && (
               <Button
                 CTA="Say it instead"
