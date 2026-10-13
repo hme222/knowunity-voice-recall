@@ -44,8 +44,9 @@ function DrillIntro() {
             showTitle
             title="Definition drill"
             body={
-              "Four rounds. Each one takes more words away until you\u2019re saying it on your own. " +
-              "Not graded, no XP watching. Miss a word and I\u2019ll show it to you."
+              // Plainer (senior review, 2026-10-12): "no XP watching" read as unfinished.
+              "Four rounds. Each one hides more of the definition until you can say it on your own. " +
+              "Nothing\u2019s graded. Miss a word and I\u2019ll show you."
             }
           />
         )}

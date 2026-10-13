@@ -514,11 +514,14 @@
   position: fixed;
   inset: 0;
   z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: calc(var(--spacing-semantic-screen-margin) * 1px);
   background: var(--color-semantic-background-scrim-strong);
+}
+
+/* The popup's card, above the dim like the lit chip. */
+.popupCard {
+  position: relative;
+  z-index: 2;
+  width: 100%;
 }
 
 .toolChipSlot {
@@ -531,16 +534,73 @@
   z-index: 2;
 }
 
-/* The unlock popup's card. */
-.unlockNote {
+/* The unlock popup, on Knowunity's own feature-intro pattern (reference/screenshots
+   36, 49, 61; designer, 2026-10-12: "the colors feel off brand"). The live app never
+   tints a panel violet or rings it: colour comes from one violet hero (here Knowie,
+   rising from behind the card's top edge as in 36), a small violet label with an icon
+   above the title, an all-white title and a grey line. A violet-filled, violet-edged
+   card with a violet word in the title was tried first and read as off brand. */
+.unlockWrap {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Knowie behind the card: the card overlaps his lower half, so only the head and
+   eyes show, peeking over the edge. */
+.unlockPeek {
+  margin-bottom: calc(var(--size-primitive-space-1600) * -1px);
+}
+
+.unlockNote {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: calc(var(--size-primitive-space-300) * 1px);
   width: 100%;
   padding: calc(var(--spacing-semantic-card-padding) * 1px);
   border-radius: calc(var(--size-primitive-radius-400) * 1px);
   background: var(--color-semantic-background-surface);
+  border: calc(var(--size-primitive-stroke-border) * 1px) solid var(--color-semantic-border-default);
   text-align: center;
+}
+
+.unlockActions {
+  align-self: stretch;
+}
+
+.unlockActions > :first-child {
+  flex: 1;
+}
+
+/* The live app's violet label above a feature title ("Your AI study space"), in
+   sentence case: design-system.md flags the app's full caps as the thing not to copy. */
+.unlockEyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  margin: 0;
+  color: var(--color-semantic-brand-on-surface);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+}
+
+.unlockEyebrowGlyph {
+  width: calc(var(--size-primitive-icon-200) * 1px);
+  height: calc(var(--size-primitive-icon-200) * 1px);
+}
+
+/* Headline M, white: the intros' titles are the largest thing on the card. */
+.unlockTitle {
+  margin: 0;
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-headline-m-font-weight);
+  font-size: calc(var(--typography-style-headline-m-font-size) * 1px);
+  line-height: calc(var(--typography-style-headline-m-line-height) * 1px);
+  letter-spacing: calc(var(--typography-style-headline-m-letter-spacing) * 0.01em);
 }
 
 /* Baseline home only: the three doors, standing in for arriving at one in the real
@@ -564,6 +624,9 @@
 .deck {
   display: flex;
   flex-direction: column;
+  /* Centred, so the due chip hugs its content as the frame draws it rather than
+     stretching to the column (designer, 2026-10-12). */
+  align-items: center;
   width: 100%;
 }
 

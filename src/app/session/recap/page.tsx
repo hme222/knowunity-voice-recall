@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 
 import { useRouter } from 'next/navigation'
 import { openSheet } from '@/lib/navigation'
-import { AppBar, Button, ButtonIcon, HintCard, MascotSlot, ScreenShell, StatChip } from '@/components'
+import { AppBar, Button, ButtonIcon, HintCard, MascotSlot, ScreenShell } from '@/components'
 import { CloseIcon, EyeIcon } from '@/components/icons'
 import { Bucket, getTerm, sessionTotals, setPractising, TOTAL_TERMS, useSession, XP } from '@/lib/session'
 import styles from './recap.module.css'
@@ -71,8 +71,18 @@ export default function RecapPage() {
 
   // Something the student did not have cold and has now: got with a hint, or shown the
   // answer. That is what this session taught; an unaided pass they already knew.
-  const learned = outcomes.find((o) => o.bucket === 'Hinted') ?? outcomes.find((o) => o.bucket === 'Revealed')
-  const learnedTerm = learned ? getTerm(learned.index) : undefined
+  // Every term the student needed help with, not only the first: with two revealed,
+  // the card showed one and the other's definition was nowhere (senior review,
+  // 2026-10-12). Revealed first — those are the real gaps.
+  const learnedTerms = [...outcomes.filter((o) => o.bucket === 'Revealed'), ...outcomes.filter((o) => o.bucket === 'Hinted')]
+    .map((o) => getTerm(o.index))
+    .filter((t): t is NonNullable<typeof t> => Boolean(t))
+  // The confidence signal, said out loud at the top rather than as an 11px line on a
+  // row (senior review, 2026-10-12): the brief's "overconfidence has to cost something".
+  const sureMissed = outcomes.filter((o) => o.wasSure && o.bucket !== 'Unaided' && !o.micTrouble).length
+  // The run, one segment per term, in question order.
+  const strip = [...outcomes].sort((a, b) => a.index - b.index)
+  const xpShown = complete ? totals.withBonus : totals.earned
 
   return (
     <ScreenShell
@@ -117,55 +127,60 @@ export default function RecapPage() {
             TextBlock's L, which renders 44px. See door.module.css for the same note;
             the evidence there is a direct read of the Quiz complete frame. */}
         <div className="screenTitle">
-          <h1 className="screenTitleHeading">Session recap</h1>
-          {/* Leads with where the student ENDED UP, then how much of it was cold.
-              It used to say only "You explained N of 4 without help" — true, and the
-              only thing on the screen, so a student who got three of four right in the
-              end read a flat 1-of-4 as the verdict on the session. Both halves are
-              facts; showing only the deficit is a choice, and it was making an honest
-              screen read as an accusation. `resolved` is the same Unaided+Hinted count
-              the action row already uses to decide what to offer next. */}
-          {outcomes.length > 0 && (
-            <p className="screenTitleCaption">
-              {`You got ${resolved} of ${counted} in the end. ` +
-                `${totals.unaided} first time, no help.`}
-            </p>
+          {/* ONE earned sentence, then the run as a strip (senior review, 2026-10-12).
+              "You got 2 of 4 in the end. 2 first time, no help." was two numbers in one
+              line that read as a contradiction, under three rainbow tiles. The hero is
+              what the student can do cold; the caption says what the rest was. */}
+          <h1 className="screenTitleHeading">
+            {outcomes.length === 0
+              ? 'Session recap'
+              : totals.unaided === counted
+                ? `You said all ${counted} back without help`
+                : `You can say ${totals.unaided} of ${counted} back without help`}
+          </h1>
+          {outcomes.length > 0 && resolved > totals.unaided && (
+            <p className="screenTitleCaption">{`${resolved - totals.unaided} more with a hint.`}</p>
           )}
         </div>
+        {strip.length > 0 && (
+          <div
+            className={styles.strip}
+            role="img"
+            aria-label={strip.map((o) => `${getTerm(o.index)?.name}: ${o.micTrouble ? 'mic missed it' : o.bucket}`).join(', ')}
+          >
+            {strip.map((o) => (
+              <span key={o.index} className={styles.segment} data-bucket={o.micTrouble ? 'mic' : o.bucket} />
+            ))}
+          </div>
+        )}
+        {sureMissed > 0 && (
+          <p className={styles.sureMissed}>
+            {sureMissed === 1 ? 'You were sure about 1 you missed.' : `You were sure about ${sureMissed} you missed.`}
+          </p>
+        )}
       </div>
 
+      {/* XP and time, one line, not three coloured tiles with 9px labels; the working
+          behind it on a tap (senior review, 2026-10-12). The sum still has to be on
+          the screen and add up, so it is one tap away rather than gone. */}
       {outcomes.length > 0 && (
-        <div className={styles.stats}>
-          {/* The bonus is only real once the set is finished, which is the whole reason
-              it exists. Before that it is still up for grabs, as the exit sheet says. */}
-          <StatChip stat="XP" value={`+${complete ? totals.withBonus : totals.earned}`} />
-          {/* Not a percentage, and not called a score. The chip measured
-              first-attempt-with-no-help and printed it as "SCORE 25%", which invites
-              comparison with a test mark — and a count cannot be misread that way.
-              The `Score` variant is unchanged; only its label is. */}
-          <StatChip stat="Score" label="FIRST TRY" value={`${totals.unaided} of ${counted}`} />
-          <StatChip stat="Time" value={totals.elapsed} />
-        </div>
-      )}
-
-      {/* THE WORKING. The XP chip folds in the confidence adjustment and the finishing
-          bonus; the rows below show each term's base XP. So the chip read +19 while the
-          rows added to 20, and nothing on screen reconciled them — on the one screen
-          whose job is to avoid flattery, and whose own header comment quotes the brief:
-          "a summary cannot show a number the reviewer can see is wrong". Every part of
-          the sum is now on screen and adds up. */}
-      {outcomes.length > 0 && (totals.calibration !== 0 || complete) && (
-        <p className={styles.working}>
-          {[
-            `+${totals.termXp} from the terms below`,
-            totals.calibration !== 0
-              ? `${totals.calibration > 0 ? '+' : ''}${totals.calibration} for how sure you were`
-              : null,
-            complete ? `+${XP.completionBonus} for finishing` : null,
-          ]
-            .filter(Boolean)
-            .join(' · ')}
-        </p>
+        <details className={styles.summaryGroup}>
+          <summary className={styles.summary}>
+            {`\u26a1 +${xpShown} XP \u00b7 ${totals.elapsed}`}
+            <span className={styles.summaryCue}>How it adds up</span>
+          </summary>
+          <p className={styles.working}>
+            {[
+              `+${totals.termXp} from the terms below`,
+              totals.calibration !== 0
+                ? `${totals.calibration > 0 ? '+' : ''}${totals.calibration} for how sure you were`
+                : null,
+              complete ? `+${XP.completionBonus} for finishing` : null,
+            ]
+              .filter(Boolean)
+              .join(' \u00b7 ')}
+          </p>
+        </details>
       )}
 
       <div className={styles.buckets}>
@@ -201,7 +216,10 @@ export default function RecapPage() {
                         (usability review, 2026-10-12). */}
                     {row.typed && !row.micTrouble && <span className={styles.rowNote}>Typed, not said aloud.</span>}
                   </span>
-                  <span className={styles.rowXp}>{`+${row.xp} XP`}</span>
+                  {/* "Not yet", not "+0 XP", on a term still to learn (senior review). */}
+                  <span className={styles.rowXp}>
+                    {row.xp === 0 && (bucket === 'Revealed' || bucket === 'Worth revisiting') ? 'Not yet' : `+${row.xp} XP`}
+                  </span>
                   {/* Every row opens its transcript. The sheet adapts by bucket, so a
                       skipped term shows the answer alone rather than a take that
                       never happened. */}
@@ -223,10 +241,12 @@ export default function RecapPage() {
           term list are the working; this is the takeaway, so it is the last thing the
           student reads before "Practice what I missed" or home. It sat at the top as the
           headline on 2026-10-08. */}
-      {learnedTerm && (
+      {learnedTerms.length > 0 && (
         <section className={styles.learned} aria-labelledby="learned-heading">
           <h2 id="learned-heading" className="screenTitleHeading">You learned something new!</h2>
-          <HintCard className={styles.learnedCard} label={`New today · ${learnedTerm.name}`} body={learnedTerm.answer} />
+          {learnedTerms.map((t) => (
+            <HintCard key={t.index} className={styles.learnedCard} label={`New today · ${t.name}`} body={t.answer} />
+          ))}
         </section>
       )}
     </ScreenShell>

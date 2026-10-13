@@ -49,6 +49,7 @@ function RecordingScreen({ index }: { index: number }) {
   // thing the verdict is now taken from.
   const segmentStart = useRef(0)
   const banked = useRef(0)
+  const doneRef = useRef(false)
 
   useEffect(() => {
     segmentStart.current = Date.now()
@@ -84,6 +85,9 @@ function RecordingScreen({ index }: { index: number }) {
   if (!current) return null
 
   function done() {
+    // Once only: a double tap on Submit pushed the next screen twice.
+    if (doneRef.current) return
+    doneRef.current = true
     const took = elapsed()
     // A blank turn is not judged. The student said they knew none of it, made the
     // attempt anyway, and voice-ux's rule for this state is "one encouraged attempt,

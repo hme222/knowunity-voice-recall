@@ -49,14 +49,22 @@ function PassScreen({ index }: { index: number }) {
         </div>
       }
     >
-      <div className={styles.body}>
-        <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
+      {/* Centred in the region: the payoff sat in the top half and the screen emptied
+          out below it (senior review, 2026-10-12). */}
+      <div className={`${styles.body} ${styles.bodyCentred}`}>
+        {/* Knowie reacts: one bounce on arrival, and the card rises after it (senior
+            review, 2026-10-12: "Knowie never visibly reacts"). Not on a practice round,
+            which is a second look, not a first win. */}
+        {/* 3XL on a first-time pass: the win is the one moment Knowie is bigger than
+            the ask, and the space under the card was empty anyway. Gives way on short
+            screens like every other mascot. */}
+        <MascotSlot size={practising ? '2XL' : '3XL'} expression="excited" className={`${styles.mascotCentred} ${practising ? '' : styles.celebrate}`} />
         {/* A "Correct" chip, matching the partial's "Partially right": the verdict is
             not carried by the green card alone (designer, 2026-10-12). */}
         <div className={styles.verdictRow}>
           <Chips Text={verdict} size="S" color="Primary" active showLeftIcon leftIcon={<CheckIcon />} showRightIcon={false} />
         </div>
-        <RecallResult state="Pass" title={current.passTitle} transcript={`“${answerFor(index, state)}”`} />
+        <RecallResult state="Pass" title={current.passTitle} transcript={`“${answerFor(index, state)}”`} className={practising ? undefined : styles.rise} />
         {/* The XP and the confidence line live here, in the content, not in the action
             zone: there they pushed Continue 14px below every other single button
             (critic panel, 2026-10-12). */}
@@ -67,9 +75,14 @@ function PassScreen({ index }: { index: number }) {
             then never mentioned again. */}
         {!practising && calibration !== 0 && (
           <p className={styles.calibration}>
+            {/* A sentence at reading size, not "+1 · called it" at 11px: the confidence
+                call is the brief's own mechanic and was the least visible thing on the
+                screen (senior review, 2026-10-12). */}
             {calibration > 0
-              ? `+${calibration} · ${outcome?.wasSure ? 'called it' : 'knew more than you thought'}`
-              : `${calibration} · you were sure`}
+              ? outcome?.wasSure
+                ? `You said you were sure, and you were. +${calibration} XP`
+                : `You weren’t sure, and you nailed it. +${calibration} XP`
+              : `You were sure about this one. ${calibration} XP`}
           </p>
         )}
         {/* Removed for the same reason as 05 Miss: the card above already shows "You

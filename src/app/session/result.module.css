@@ -2,6 +2,11 @@
    All three are the same shape — mascot, a recallResult card, then actions — and
    differ only in the card's state and which actions appear. */
 
+.bodyCentred {
+  flex: 1;
+  justify-content: center;
+}
+
 .body {
   display: flex;
   flex-direction: column;
@@ -64,9 +69,38 @@
 .calibration {
   margin: 0;
   text-align: center;
-  color: var(--color-semantic-text-secondary);
-  font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-m-bold-font-weight);
+  font-size: calc(var(--typography-style-body-m-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-m-bold-line-height) * 1px);
+}
+
+/* The pass reaction. Knowie hops once, then the card rises into place. Transform and
+   opacity only, on the standard curve; durations from tokens (the hop is two standard
+   beats, the rise one, after the hop's first). Nothing moves under reduced motion. */
+.celebrate {
+  animation: hop calc(var(--motion-semantic-duration-standard) * 2ms) var(--motion-semantic-easing-standard) both;
+}
+
+@keyframes hop {
+  0% { transform: translateY(0); }
+  40% { transform: translateY(calc(var(--size-primitive-space-400) * -1px)); }
+  100% { transform: translateY(0); }
+}
+
+.rise {
+  animation: rise calc(var(--motion-semantic-duration-standard) * 1ms) var(--motion-semantic-easing-standard) calc(var(--motion-semantic-duration-standard) * 1ms) both;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(calc(var(--size-primitive-space-400) * 1px)); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .celebrate,
+  .rise {
+    animation: none;
+  }
 }
 

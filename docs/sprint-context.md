@@ -163,6 +163,25 @@ above.
       show you the answer." (it was a faint caption in the action zone); the third
       is "That's three tries. Let's look at the answer." (Try again used to vanish
       without a word).
+    - **The prototype opens on `/home/unlock`** (same day): `/` redirects there, and
+      the popup's Say It Back chip goes to 00 Intro (`/session/intro`), then the primer
+      and the four terms. The testing brief moved to `/start`, and its Start goes to
+      `/home/unlock` too. It used to open on the brief and go to the quiz door; the
+      doors stay reachable from baseline home (`/home`).
+    - **From the senior design review (same day):** the Recap leads with one
+      earned sentence ("You can say 2 of 4 back without help"), a run strip, and
+      "You were sure about N you missed"; XP and time fold into one line; missed rows
+      say "Not yet"; the learned card shows every revealed and hinted term. The pass
+      screen states the confidence call as a sentence and Knowie hops once (none
+      under reduced motion). "Type instead" is text-weight on idle screens and the
+      idle mic is captioned "Start speaking"; the reveal mic is "Optional · +3 XP";
+      the mishear card drops its dead "Say it again" pill and the mic is captioned.
+      The unlock popup's primary is "Try it now" → 00 Intro, with "Later". Practice
+      rows share one layout; the intro is two lines; the exam-plan door uses the
+      session's question card. Processing and Submit fire once only. NOT changed,
+      because each reverses a recorded decision: merging the intro and primer, cutting
+      02a Captured, moving the scripted mishear off term 1, and giving the chip one
+      destination (`/home/unlock` → intro, `/home/unlocked` → picker).
     - **02a Captured asks a question** (option 3b, same day): "Here's what I heard.
       Did I get it?" over the frame's "Looks right" / "Say it again". The frame's
       "Send it, or say it again." disagreed with its own button. Same in the drill.

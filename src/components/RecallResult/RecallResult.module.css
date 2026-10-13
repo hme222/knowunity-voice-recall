@@ -64,3 +64,13 @@
   line-height: calc(var(--typography-style-body-m-regular-line-height) * 1px);
   letter-spacing: calc(var(--typography-style-body-m-regular-letter-spacing) * 0.01em);
 }
+
+/* "Not a wrong answer" is the most important reassurance in the product, and it was
+   the smallest text on the card (senior review, 2026-10-12). */
+.root[data-state='CouldntHear'] .label {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+  letter-spacing: normal;
+}

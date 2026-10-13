@@ -41,7 +41,10 @@ export type RecallResultProps = {
 export function RecallResult({ state = 'Pass', title, transcript, showTranscript = true, onRetry, className }: RecallResultProps) {
   return (
     <div className={[styles.root, className].filter(Boolean).join(' ')} data-state={state} role="status">
-      {state === 'CouldntHear' && (
+      {/* Only with somewhere to go. Drawn without `onRetry` it was a filled pill that
+          looked like a button and did nothing (senior review, 2026-10-12); a screen
+          whose mic is the retry labels the mic instead. */}
+      {state === 'CouldntHear' && onRetry && (
         // "Say it again" in Primary, not "Try again" in Coral: coral is the error colour
         // and "try again" is what you say after a wrong answer. This screen means the mic
         // missed it (designer, 2026-10-08).

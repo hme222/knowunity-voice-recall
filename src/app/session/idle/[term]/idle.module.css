@@ -26,3 +26,15 @@
   flex-direction: column;
   gap: calc(var(--size-primitive-space-200) * 1px);
 }
+
+/* The idle hierarchy (senior review, 2026-10-12): the mic is the primary action, so its
+   caption is the brightest line in the zone; "Type instead" is the alternate path at
+   full white; "I don't know this one" is the escape, a step quieter than both. */
+.micCaptionLead p {
+  color: var(--color-semantic-text-primary);
+}
+
+/* Through Button's own pill, which sets the Tertiary colour three selectors deep. */
+.escapeQuiet[data-variant='Tertiary'] [class*='pill'] {
+  color: var(--color-semantic-text-secondary);
+}

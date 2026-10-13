@@ -21,6 +21,18 @@
    a solid fill. Without a plan there is no deadline, so there is no border. */
 .root[data-due='true'] {
   border-color: var(--color-semantic-feedback-warning-border);
+  /* Back to the frame's size (designer, 2026-10-12: "way too big"). It rendered
+     358x70: stretched to the column by its parent, 12 all round, an 18 title. The
+     frame hugs at 221x59 with pad 10/12 and a 16 title; 10 and 16 are not steps in
+     this scale, so 8 and Body S (15) are the nearest that are. */
+  padding: calc(var(--size-primitive-space-200) * 1px) calc(var(--size-primitive-space-300) * 1px);
+  max-width: 100%;
+}
+
+.root[data-due='true'] .label {
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
 }
 
 .root:focus-visible {

@@ -47,7 +47,7 @@ export default function ChatDoor() {
         </AppBar>
       }
       bottomContent={
-        <Button CTA="Type instead" variant="Secondary" size="M" fullWidth onClick={() => {
+        <Button CTA="Type instead" variant="Tertiary" size="M" fullWidth onClick={() => {
             // Typing is the same one-definition door run as speaking (dev review).
             startSession({ door: 'chat' })
             router.push('/text/turn?term=1')

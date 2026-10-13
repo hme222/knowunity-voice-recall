@@ -66,7 +66,11 @@ export default function PracticePage() {
           <h1 className="screenTitleHeading">Go back over what you missed</h1>
           {plan.length > 0 && (
             <p className="screenTitleCaption">
-              {plan.length > 1 ? 'Knowie picked a way for each.' : 'Knowie picked a way to practice it.'}
+              {/* True whatever was picked: "Knowie picked a way for each" over rows that all
+                  said the same thing read as nothing having been picked (senior review). */}
+              {plan.every((i) => i.mode === plan[0].mode)
+                ? `Knowie suggests ${plan[0].mode === 'drill' ? 'drilling' : 'saying'} ${plan.length > 1 ? 'them' : 'it'}${plan[0].mode === 'say' ? ' again' : ''}. Tap the other if you’d rather.`
+                : 'Knowie suggests a way for each. Tap the other if you’d rather.'}
             </p>
           )}
         </div>
@@ -89,6 +93,8 @@ export default function PracticePage() {
               <li key={o.index} className={styles.row}>
                 <div className={styles.rowText}>
                   <p className={styles.rowTerm}>{term?.name}</p>
+                  {/* What they are about to work on, at a glance (senior review). */}
+                  <p className={styles.rowDefinition}>{term?.answer}</p>
                   {/* The reason, then the other method as a quiet link on the same line:
                       one line instead of two keeps three rows and Knowie on a phone. */}
                   <div className={styles.rowMeta}>

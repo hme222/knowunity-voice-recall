@@ -8,12 +8,7 @@
    wrong, because the cascade takes the last definition, which is exactly what this
    keeps. */
 
-.stats {
-  display: flex;
-  gap: calc(var(--size-primitive-space-200) * 1px);
-}
 
-.stats > * { flex: 1; }
 
 .buckets {
   display: flex;
@@ -38,11 +33,10 @@
   top: 0;
   z-index: 1;
   background: var(--color-semantic-background-page);
-  color: var(--color-semantic-text-tertiary);
-  font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
-  letter-spacing: calc(var(--typography-primitive-tracking-wide) * 0.01em);
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
 }
 
 .row {
@@ -78,6 +72,10 @@
 }
 
 .rowTerm {
+  /* Takes the slack, so the XP and the eye sit in fixed columns on every row: with
+     space-between the XP floated to a different x per row (senior review). */
+  flex: 1;
+  min-width: 0;
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-body-m-regular-font-weight);
   font-size: calc(var(--typography-style-body-m-regular-font-size) * 1px);
@@ -87,28 +85,30 @@
 .rowNote {
   display: block;
   color: var(--color-semantic-text-warning);
-  font-weight: var(--typography-style-caption-m-regular-font-weight);
-  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+  /* Body S, not a caption: these notes carry the confidence signal (senior review). */
+  font-weight: var(--typography-style-body-s-regular-font-weight);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
 }
 
 .rowXp {
+  text-align: right;
   color: var(--color-semantic-text-secondary);
-  font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * 1px);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
   white-space: nowrap;
 }
 
 /* The XP sum, shown so it can be checked against the rows. Quieter than the chips —
    it explains them, it is not a fourth stat. */
 .working {
-  margin: 0;
+  margin: calc(var(--size-primitive-space-100) * 1px) 0 0;
   text-align: center;
-  color: var(--color-semantic-text-tertiary);
-  font-weight: var(--typography-style-caption-m-regular-font-weight);
-  font-size: calc(var(--typography-style-caption-m-regular-font-size) * 1px);
-  line-height: calc(var(--typography-style-caption-m-regular-line-height) * 1px);
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-s-regular-font-weight);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
 }
 
 /* text-align centres the text but not the mascot, which is a 120px block. It needs a
@@ -144,6 +144,7 @@
 /* The closing takeaway: heading over the "New today" card, centred like the screen
    title, the card full width like every card in the 390 column. */
 .learned {
+  margin-top: calc(var(--spacing-semantic-between-sections) * 1px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -154,4 +155,74 @@
 .learnedCard {
   width: 100%;
   text-align: left;
+}
+
+/* The run as a strip: one segment per term, in question order, coloured by how it
+   went. The hero sentence and the rows below carry the meaning in words; the strip is
+   the at-a-glance shape of it (senior review, 2026-10-12). Built inline: see
+   component-gaps.md. */
+.strip {
+  display: flex;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+  width: 100%;
+}
+
+.segment {
+  flex: 1;
+  height: calc(var(--size-primitive-space-200) * 1px);
+  border-radius: calc(var(--size-primitive-radius-full) * 1px);
+  background: var(--color-semantic-border-strong);
+}
+
+.segment[data-bucket='Unaided'] {
+  background: var(--color-semantic-feedback-success-bold);
+}
+
+.segment[data-bucket='Hinted'] {
+  background: var(--color-semantic-feedback-partial-bold);
+}
+
+.sureMissed {
+  margin: 0;
+  color: var(--color-semantic-text-warning);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+}
+
+.summary {
+  margin: 0;
+  text-align: center;
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * 1px);
+}
+
+/* The XP line is a disclosure: tap for the working. The marker is replaced by the
+   line itself reading as tappable (underline on the numbers would fight the bolt). */
+.summaryGroup {
+  text-align: center;
+}
+
+.summary {
+  cursor: pointer;
+  list-style: none;
+  min-height: calc(var(--spacing-semantic-tap-target) * 1px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--size-primitive-space-100) * 1px);
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+/* The cue is words, not a chevron. */
+.summaryCue {
+  color: var(--color-semantic-text-link-hover);
+  font-weight: var(--typography-style-body-s-regular-font-weight);
+  text-decoration: underline;
+  text-underline-offset: calc(var(--size-primitive-space-050) * 1px);
 }

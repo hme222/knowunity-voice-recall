@@ -67,9 +67,12 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
         <div className={styles.actions}>
           {/* This screen removed the typing option at the exact moment a student said
               they were stuck — speak or be shown the answer, nothing in between. */}
+          {/* Text-weight, not a filled bar: the mic is the primary action and the filled
+              "Type instead" outweighed it (senior review, 2026-10-12). Still full width
+              and in the same place on every voice screen. */}
           <Button
             CTA="Type instead"
-            variant="Secondary"
+            variant="Tertiary"
             size="M"
             fullWidth
             onClick={() => router.push(`/text/turn?term=${index}`)}

@@ -44,7 +44,9 @@ export default function IntroPage() {
           // The subject is named before anything starts — designer, 2026-10-08; one
           // subject for the whole set from 2026-10-09. The
           // "anything you miss comes back once at the end" line went with the requeue.
-          body={`After you study a section, say the key ideas back in your own words. Speaking proves you actually know it, not just recognize it. Knowie listens and tells you how it landed.\n\n${TOTAL_TERMS} definitions, starting with formal charge.`}
+          // Two lines, not five sentences (senior review, 2026-10-12): the unlock popup has
+          // already said what this is, so the intro only has to say what happens next.
+          body={`Say what you know, in your own words. Knowie tells you how it landed.\n\n${TOTAL_TERMS} definitions, starting with formal charge.`}
         />
       </div>
     </ScreenShell>

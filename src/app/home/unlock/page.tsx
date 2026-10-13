@@ -2,7 +2,8 @@
 
 import { useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button, SwipeChip } from '@/components'
+import { actionRowClass, Button, MascotSlot, SwipeChip } from '@/components'
+import { MicGlyphIcon } from '@/components/icons'
 import { useFocusTrap } from '@/lib/useFocusTrap'
 import { HomeShell } from '../HomeShell'
 import styles from '../home.module.css'
@@ -21,23 +22,39 @@ export default function UnlockPage() {
 
   return (
     <HomeShell
-      toolChip={<SwipeChip onClick={() => router.push('/picker')} />}
+      // The chip is the way in: it starts the session at 00 Intro, the second screen of
+      // the prototype (designer, 2026-10-12). It went to the picker.
+      toolChip={<SwipeChip onClick={() => router.push('/session/intro')} />}
       popup={
         <div
           ref={dialogRef}
           tabIndex={-1}
-          className={styles.unlockNote}
+          className={styles.unlockWrap}
           role="dialog"
           aria-modal="true"
           aria-labelledby="unlock-title"
         >
-          <div className="screenTitle">
-            <h2 id="unlock-title" className="screenTitleHeading">Say It Back feature unlocked</h2>
-            <p className="screenTitleCaption">
-              Saying a definition back in your own words is the quickest way to know it stuck. Tap the chip below anytime.
+          {/* `excited`: the invitation face (design-system.md § Mascot poses). */}
+          <MascotSlot size="2XL" expression="excited" className={styles.unlockPeek} />
+          <div className={styles.unlockNote}>
+            <p className={styles.unlockEyebrow}>
+              <span className={styles.unlockEyebrowGlyph} aria-hidden="true">
+                <MicGlyphIcon />
+              </span>
+              New on Knowunity
             </p>
+            <h2 id="unlock-title" className={styles.unlockTitle}>Say It Back unlocked</h2>
+            <p className="screenTitleCaption">
+              Say a definition back in your own words to know it stuck. It lives on the chip below.
+            </p>
+            {/* Straight in, or later (senior review, 2026-10-12): "Got it" closed the
+                popup and left the student to tap the chip as a second step. */}
+            <div className={`${actionRowClass} ${styles.unlockActions}`}>
+              {/* Primary first, so the dialog's initial focus lands on it. */}
+              <Button CTA="Try it now" variant="Primary" size="M" fullWidth onClick={() => router.push('/session/intro')} />
+              <Button CTA="Later" variant="Tertiary" size="M" onClick={() => router.push('/home/unlocked')} />
+            </div>
           </div>
-          <Button CTA="Got it" variant="Primary" size="M" fullWidth onClick={() => router.push('/home/unlocked')} />
         </div>
       }
     >

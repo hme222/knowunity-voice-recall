@@ -4,7 +4,7 @@ import { Suspense, use, useEffect } from 'react'
 import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
-import { micRegionClass, Button, MascotSlot, MicButton, RecallResult, ScreenShell } from '@/components'
+import { micRegionClass, Button, MascotSlot, MicButton, MicCaption, RecallResult, ScreenShell } from '@/components'
 import { getTerm, nextAfter, recordOutcome, markMicFault } from '@/lib/session'
 import styles from './unclear.module.css'
 
@@ -51,6 +51,8 @@ function UnclearScreen({ index }: { index: number }) {
       mic={
         <div className={micRegionClass}>
           <MicButton state="Idle" label="Say it again" onClick={retry} />
+          {/* The retry, named where it is (senior review, 2026-10-12). */}
+          <MicCaption body="Say it again" />
         </div>
       }
       topNavigation={<SessionBar index={index} door={door} onSkip={skip} />}

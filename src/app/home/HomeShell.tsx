@@ -188,7 +188,10 @@ export function HomeShell({ children, toolChip, popup }: {
             </div>
             <h1 className={styles.greeting}>{HOME_GREETING}</h1>
           </div>
-          <div className={styles.slot}>{children}</div>
+          {/* The popup sits in home's own content slot, above the tool row in the flow,
+              lifted over the dim. Centred on the whole screen it overlapped the lit chip
+              it points at on a 390x668 phone once it grew a badge (2026-10-12). */}
+          <div className={styles.slot}>{popup ? <div className={styles.popupCard}>{popup}</div> : children}</div>
         </div>
 
         {/* bottomContent on the frame. Not ScreenShell's action zone: that is fixed at
@@ -229,7 +232,7 @@ export function HomeShell({ children, toolChip, popup }: {
             <span />
           </div>
         </div>
-        {popup && <div className={styles.popupScrim}>{popup}</div>}
+        {popup && <div className={styles.popupScrim} aria-hidden="true" />}
       </div>
     </ScreenShell>
   )

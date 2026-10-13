@@ -43,7 +43,7 @@ export default function ExamPlanDoor() {
         </AppBar>
       }
       bottomContent={
-        <Button CTA="Type instead" variant="Secondary" size="M" fullWidth onClick={() => {
+        <Button CTA="Type instead" variant="Tertiary" size="M" fullWidth onClick={() => {
             // Typing is the same one-definition door run as speaking (dev review).
             startSession({ door: 'exam-plan' })
             router.push('/text/turn?term=1')
@@ -56,7 +56,10 @@ export default function ExamPlanDoor() {
           <h1 className="srOnly">{`${SUBJECT}: ${getTerm(1)?.name}`}</h1>
           <MascotSlot size="2XL" expression="determined" />
         </div>
-        <ChatBubble body="Let's test your understanding of organic foundations with some active-recall. To begin, please explain the concept of formal charge and the formula used to calculate it for an atom in a molecule." />
+        {/* The session's own question card (senior review, 2026-10-12): a long formal
+            paragraph here read as a different product from the "Explain: X" cards the
+            student meets one tap later. */}
+        <ChatBubble showTitle title={`${SUBJECT} · Explain: `} titleAccent={getTerm(1)?.name ?? ''} body={`${(getTerm(1)?.prompt ?? '').split('. ')[0]}.`} />
       </div>
     </ScreenShell>
   )

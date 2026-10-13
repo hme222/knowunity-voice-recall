@@ -28,6 +28,7 @@
 }
 
 .root[data-state='Idle'] {
+  background: var(--component-mic-button-idle-fill);
   box-shadow: inset 0 0 0 calc(var(--size-primitive-stroke-border) * 1px) var(--component-mic-button-idle-stroke);
   color: var(--component-mic-button-idle-glyph);
 }

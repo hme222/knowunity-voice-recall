@@ -216,7 +216,8 @@ the completing, so both of a door's actions lead to `/home/unlock`.
 | 0c | `/door/exam-plan` | Exam plan | `15672:23959` | one (placeholder) | `ChatBubble`; `MicButton state="Idle"`; `Button CTA="Type instead" variant="Secondary"` + `Button CTA="Skip" variant="Tertiary"` | Answer aloud; type; skip | Mic → `/session/idle/1?door=exam-plan`. Type → `/text/turn`. Skip → `/home/unlock` |
 | 0d | `/door/chat` | Chat, content-aware | `15672:24166` | one (placeholder) | `ChatBubble showTitle`; `MascotSlot size="2XL"`; XP line; `Button` ×3 | Say it back; type; skip | Say it back → `/session/idle/1?door=chat`. Skip → `/home/unlock` |
 | 0e | `/home` | Home, baseline | none — this state is in no frame | one | `HomeShell`; `Button variant="Tertiary"` ×3, one per door | Reach a door | → the three door routes |
-| 0f | `/` | Start screen (reviewer-facing, not product) | none | one | `MascotSlot size="2XL" expression="laughing"`; title + one-line caption; `Button variant="Primary" CTA="Start"` | Start | → `/permission/primer` |
+| 0f | `/` | Redirect (2026-10-12) | none | — | Server redirect | — | → `/home/unlock`, where the prototype opens; the popup's chip → `/session/intro` |
+| 0f′ | `/start` | Start screen (reviewer-facing, not product; moved from `/` 2026-10-12) | none | one | `MascotSlot size="2XL" expression="excited"`; title + caption; the three-step story; the testing notes; `Button variant="Primary" CTA="Start"` | Start | → `/home/unlock` |
 
 A run that arrives through a door carries `?door=<id>` from `/session/idle`
 through recording and captured to processing. On a Pass, the quiz door lands on

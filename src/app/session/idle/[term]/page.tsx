@@ -72,7 +72,9 @@ function IdleScreen({ index }: { index: number }) {
               designer 2026-10-07. As a card it could not fit: at 390x668 the question
               alone fills the content box, and the hint scrolled out of sight. Here it
               is on screen at every height, beside the control it is for. */}
-          {hinted && <MicCaption label="Hint" body={current.hint} />}
+          {/* The idle mic says what it does (senior review, 2026-10-12): an outlined
+              ring with no words read as decoration. The accessible name, verbatim. */}
+          {hinted ? <MicCaption label="Hint" body={current.hint} /> : <MicCaption body="Start speaking" className={styles.micCaptionLead} />}
         </div>
       }
       topNavigation={<SessionBar index={index} door={door} onSkip={skip} label={practising ? `Practice · ${current.name}` : undefined} />}
@@ -83,15 +85,19 @@ function IdleScreen({ index }: { index: number }) {
               or take the no-XP exit. Same escape, both paths. */}
           {/* Type instead first, full width, in the same place on every voice screen;
               Skip is top right in the SessionBar (designer, 2026-10-08). */}
+          {/* Text-weight, not a filled bar: the mic is the primary action and the filled
+              "Type instead" outweighed it (senior review, 2026-10-12). Still full width
+              and in the same place on every voice screen. */}
           <Button
             CTA="Type instead"
-            variant="Secondary"
+            variant="Tertiary"
             size="M"
             fullWidth
             onClick={() => router.push(`/text/turn?term=${index}`)}
           />
           <Button
             CTA="I don't know this one"
+            className={styles.escapeQuiet}
             variant="Tertiary"
             size="S"
             fullWidth

@@ -54,6 +54,7 @@ function ProcessingScreen({ index }: { index: number }) {
   // fair chance — after the slow threshold, so "still thinking" still shows first. Through a ref, so the re-render at the slow threshold does not
   // restart the clock.
   const answerRef = useRef<(sure?: boolean) => void>(() => {})
+  const answeredRef = useRef(false)
   useEffect(() => {
     answerRef.current = answer
   })
@@ -71,6 +72,11 @@ function ProcessingScreen({ index }: { index: number }) {
   // 2026-10-09), so after confidenceGrace the turn moves on with no confidence recorded
   // — no reward and no cost, rather than guessing one for them.
   function answer(sure?: boolean) {
+    // Once only. The grace timer and a tap can both land (a tap in the last frame
+    // before confidenceGrace), and a second run recorded the miss twice and pushed
+    // twice (senior review, 2026-10-12: "make sure a double tap can't strand a student").
+    if (answeredRef.current) return
+    answeredRef.current = true
     const verdict = verdictFor(index, ms, attempt)
     // This take was spoken: a typed answer from an earlier try no longer speaks for it.
     markSpokenTake(index)

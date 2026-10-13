@@ -45,10 +45,11 @@
 }
 
 .rowMeta {
+  /* Reason, then the other method on its own line, on EVERY row. Wrapping by width
+     put the link inline on one row and below on the next (senior review). */
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  column-gap: calc(var(--size-primitive-space-200) * 1px);
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .rowTerm {
@@ -69,10 +70,23 @@
    classes so it outranks the catalog Button's own padding. */
 .rowText .rowAlt {
   padding-inline: 0;
+  /* Underlined, so the quiet alternative reads as a control, not a bold word. */
+  text-decoration: underline;
+  text-underline-offset: calc(var(--size-primitive-space-050) * 1px);
 }
 
 .empty {
   margin: 0;
   color: var(--color-semantic-text-secondary);
   text-align: center;
+}
+
+/* The definition under the term, in full: a clamp cut it mid-sentence on the one
+   screen that tells the student what they missed (senior review, 2026-10-12). */
+.rowDefinition {
+  margin: 0;
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-body-s-regular-font-weight);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * 1px);
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * 1px);
 }
