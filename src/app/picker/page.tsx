@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { AppBar, Button, PickerRow, ScreenShell, TextInput } from '@/components'
 import { CloseIcon } from '@/components/icons'
-import { PICKER_DRILLS, PICKER_TOPICS, setDrillTerm, setPractising, startRun } from '@/lib/session'
+import { PICKER_DRILLS, PICKER_TOPICS, setDrillTerm, setPractising, startRun, TOTAL_TERMS } from '@/lib/session'
 import styles from './picker.module.css'
 
 // Picker — Figma frame "Picker page — Say It Back + drill down" (15810:11285). History: docs/code-history.md#h-045
@@ -36,7 +36,8 @@ export default function PickerPage() {
       <div className={styles.body}>
         <div className="screenTitle">
           <h1 className="screenTitleHeading">Say It Back</h1>
-          <p className="screenTitleCaption">Run a recall session, or drill one definition.</p>
+          {/* The guide (designer, 2026-10-13): name the quiz to pick, here and on the row. */}
+          <p className="screenTitleCaption">{`Pick ${resumeTopic.label} to start: ${TOTAL_TERMS} definitions, said back in your own words.`}</p>
         </div>
         <TextInput type="search" label="Search your topics" placeholder="Search your topics" value={query} onChange={setQuery} />
         {/* Announced, so a screen-reader user hears that the lists emptied. */}
@@ -46,15 +47,19 @@ export default function PickerPage() {
 
         {topics.length > 0 && (
           <section className={styles.group}>
-            <h2 className={styles.groupLabel}>Or pick a topic</h2>
-            {topics.map((topic) => (
-              <PickerRow
-                key={topic.label}
-                variant="topic"
-                label={topic.label}
-                onClick={() => router.push(startRun())}
-              />
-            ))}
+            <h2 className={styles.groupLabel}>Your topics</h2>
+            {topics.map((topic) =>
+              topic.seeded ? (
+                // The quiz this session runs: ringed in the brand colour, labelled "Start
+                // here", so the first choice on the screen is never a guess.
+                <div key={topic.label} className={styles.guided}>
+                  <p className={styles.guidedLabel} id="start-here">Start here</p>
+                  <PickerRow variant="topic" label={topic.label} aria-describedby="start-here" onClick={() => router.push(startRun())} />
+                </div>
+              ) : (
+                <PickerRow key={topic.label} variant="topic" label={topic.label} onClick={() => router.push(startRun())} />
+              ),
+            )}
           </section>
         )}
 

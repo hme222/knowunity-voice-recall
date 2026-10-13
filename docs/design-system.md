@@ -1117,7 +1117,31 @@ Figma never built are extrapolated from the same tokens.
 
 ---
 
-## Mascot poses — the mapping, resolved 2026-09-20
+## Mascot poses — the mapping, fourteen faces since 2026-10-13
+
+**Superseded 2026-10-13 (designer: "Knowie's faces all look the same… I see 14
+different Knowies on Figma, update Knowie").** The Figma set (🎨 Mascot &
+components → Knowie, 9003:19697) has fourteen faces; all are exported to
+`public/knowie/` and listed in `KNOWIE_EXPRESSIONS`. With fourteen, each moment
+gets the face that FEELS like it, and the happy faces mean different things. The
+four-face history below is kept for its reasoning; this table is the rule.
+
+| `expression` | The moment | Screens |
+| --- | --- | --- |
+| `standby` | Ready, listening — the student's turn | 01 Idle (first try), the typed turn, 05a Reveal, resume with nothing to pick up, the question behind the primer |
+| `thinking` | Working it out | 03 Processing and every judging beat, 01 Idle on a retry with the hint, 05 Miss on a half-right answer, the drill's rungs and first stumble, a typed drill turn |
+| `questioning` | Prompting a guess | The drill's first-letter rung. Not on Captured: next to the student's own words its squint read as suspicion (2026-10-13), so Captured keeps `excited` |
+| `confused` | A wrong idea, or a run that needs another look | 05 Miss on a wrong idea / typed / too-short answer, 07 Recap with anything to revisit (designer: "confused or dazed", not the half-lidded face, which read as mad) |
+| `sad` | Gently, it did not land | 05 Miss on the third try, the door run that ended without a pass |
+| `dazed` | The app failed, not the student | 04a Couldn't hear, DD mishear, mic denied, a door run lost to the mic |
+| `excited` | An invitation with energy, or "I caught that" | 02a Captured, DD 02a and the typed check (the 2026-09-23 decision, kept), the start brief, home, the mic primer, resume partway, practice, drill intro, the chat and exam-plan doors |
+| `amazed` | Something new appeared | The unlock popup ("Say It Back unlocked") |
+| `approving` | Got it, with help, or a good step | 04 Pass with a hint / typed / in practice, the say-it-back repeat, the quiz door's result, a drill round's review |
+| `laughing` | The big win | 04 Pass clean and unaided, 07 Recap on a clean run, DD 08 drill complete, the quiz-complete door |
+| `giggling` | Light, playful warmth | `session/blank` ("I don't know this one"), the returning drill intro, DD 07c "say this with me" |
+| `determined`, `over-it`, `angry` | Exported, not used | Kept for completeness; `determined` read as mad on every screen it held |
+
+### Before 2026-10-13: the four-face mapping (resolved 2026-09-20)
 
 Figma names five mascot poses. `public/knowie/` holds four SVGs, and
 `MASCOT_SLOT_SIZES`' sibling union `KNOWIE_EXPRESSIONS` in

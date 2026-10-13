@@ -35,11 +35,11 @@ export default function DrillPassPage({ params }: { params: Promise<{ step: stri
       }
       topNavigation={<DrillBar step={n} onExit={() => router.push('/picker')} />}
       bottomContent={
-        <Button CTA="Type instead" variant="Tertiary" size="M" fullWidth onClick={() => router.push(`/text/turn?term=${drillTerm.index}&drill=${n}`)} />
+        <Button CTA="Type instead" variant="Secondary" size="M" fullWidth onClick={() => router.push(`/text/turn?term=${drillTerm.index}&drill=${n}`)} />
       }
     >
       <div className={styles.frameBody}>
-        <MascotSlot size="2XL" expression="determined" />
+        <MascotSlot size="2XL" expression="thinking" />
         <p className={styles.termPill}>
           Define: <span className={styles.termPillName}>{drillTerm.name}</span>
         </p>

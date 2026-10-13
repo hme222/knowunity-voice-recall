@@ -45,7 +45,7 @@ The `storybook` MCP server is registered in `.mcp.json` and needs Storybook runn
 | `reference/screenshots/01–31` | How the live beta's recall loop, hints, reveal, session end, and exit sheet actually look. |
 | `reference/screenshots/32–64` | Onboarding, study plan, revision reader, home composer, tools, profile. `52` is the mic-denied sheet. |
 | `reference/say-it-back-flow-screen-recording.mp4` | Motion and timing of the live beta flow. |
-| `public/knowie/*.svg` | Picking a Knowie expression: dazed, determined, excited, laughing. |
+| `public/knowie/*.svg` | Picking a Knowie expression: fourteen Figma faces (standby, thinking, questioning, confused, sad, dazed, excited, amazed, approving, laughing, giggling, determined, over-it, angry). The moment-to-face table is in `docs/design-system.md` § Mascot poses. |
 | `component-gaps.md` | Before building a new screen. A running list of things built inline during a screen build, one line each; a second entry for the same thing means promote it to a real component. |
 | `src/components/<Name>/` | Using or changing a component. Built from the Figma set of the same name; props are the Figma variant names. Stories carry the Figma description. |
 | `src/app/layout.tsx`, `page.tsx`, `globals.css` | Editing the prototype shell. Loads Greed VF and `build/css/tokens.css`; `page.tsx` is still a placeholder. |

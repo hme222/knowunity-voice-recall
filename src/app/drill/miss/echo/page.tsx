@@ -33,7 +33,7 @@ export default function DrillEchoPage() {
       showBottomNavSlot
     >
       <div className={styles.frameBody}>
-        <MascotSlot size="2XL" expression="laughing" />
+        <MascotSlot size="2XL" expression="giggling" />
         <div className={[styles.fullWidth, styles.verdictRow].join(' ')}>
           <Chips
             Text={STUMBLES.third.verdict}

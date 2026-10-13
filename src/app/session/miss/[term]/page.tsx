@@ -75,33 +75,30 @@ function MissScreen({ index }: { index: number }) {
       topNavigation={<SessionBar index={index} onSkip={skip} />}
       bottomContent={
         <div className={styles.actions}>
-          {/* The frame's `primaryRow`: two buttons side by side, with Skip as plain
-              text beneath. The XP line moves up into the content region, where the
-              frame puts it in the app bar area rather than the action zone. */}
-          {/* On the last rung Reveal is the only button, so it centres rather than
-              sitting at the row's left edge (designer, 2026-10-12). */}
-          <div className={lastRung ? `${actionRowClass} ${styles.rowSingle}` : actionRowClass}>
-            {/* Reveal is the Secondary and Try again is the Primary, per the frame
-                and SPEC #5. They were inverted, which made giving up the emphasised
-                choice on a screen whose whole job is to invite another attempt. */}
-            <Button
-              CTA="Reveal answer"
-              variant={step?.canRetry ? 'Secondary' : 'Primary'}
-              size="M"
-              onClick={() => router.push(`/session/reveal/${index}`)}
-            />
-            {/* Try again goes to an IDLE beat, not a live mic. History: docs/code-history.md#h-058 */}
-            {step?.canRetry && (
+          {/* Button tiers by role (designer, 2026-10-13): Try again moves forward, so
+              it is the full-width Primary; Reveal answer gives up the attempt, so it is
+              the Tertiary link centred beneath. The frame's side-by-side pair made
+              Reveal a grey pill identical to 01 Idle's "Type instead". On the last
+              rung Reveal is the only way on, so it is the Primary, centred. */}
+          {step?.canRetry ? (
+            <>
+              {/* Try again goes to an IDLE beat, not a live mic. History: docs/code-history.md#h-058 */}
               <Button
                 CTA="Try again"
                 variant="Primary"
                 size="M"
+                fullWidth
                 // Back the way they answered: a typed miss retries typed, with the hint,
                 // not on the mic screen (UX critic, 2026-10-13).
                 onClick={() => router.push(typedMiss ? `/text/turn?term=${index}&hinted=1` : `/session/idle/${index}?attempt=${step.nextAttempt}&hinted=1`)}
               />
-            )}
-          </div>
+              <Button CTA="Reveal answer" variant="Tertiary" size="S" fullWidth onClick={() => router.push(`/session/reveal/${index}`)} />
+            </>
+          ) : (
+            <div className={`${actionRowClass} ${styles.rowSingle}`}>
+              <Button CTA="Reveal answer" variant="Primary" size="M" onClick={() => router.push(`/session/reveal/${index}`)} />
+            </div>
+          )}
           {/* No "See the full transcript" here. History: docs/code-history.md#h-059 */}
           {/* "Skip", like the other ten. sprint-context: "Skip has one placement and one
               label… two labels for one escape was the clearer problem." This screen was
@@ -111,30 +108,32 @@ function MissScreen({ index }: { index: number }) {
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="determined" className={styles.mascotCentred} />
+        <MascotSlot size="2XL" expression={lastRung ? 'sad' : partialCredit ? 'thinking' : 'confused'} className={styles.mascotCentred} />
         {/* No PROVISIONAL XP here. History: docs/code-history.md#h-060 */}
         {/* No "Partially right" on the last rung: it sat over "That's three tries" and
             read as a contradiction (Duolingo design review, 2026-10-13). */}
-        {!lastRung && (
-          // The chip is visual; its words are announced in the card's live region.
-          <div className={styles.verdictRow} aria-hidden="true">
-            {/* Amber is partial CREDIT, so it is kept for a real half-answer (8a). A wrong
-                idea, a typed miss the mock cannot judge, and "too short" get the neutral
-                chip instead of amber credit for something not said. */}
-            <Chips
-              Text={partialCredit ? 'Partially right' : thin ? 'Not enough to check' : 'Not quite yet'}
-              size="S"
-              color={partialCredit ? 'Partial' : 'Primary'}
-              active={partialCredit}
-              showLeftIcon={false}
-              showRightIcon={false}
-            />
+        {/* The chip, and the confident miss named quietly on the same line: as a bold
+            line of its own it outweighed the card's title (designer, 2026-10-13: "the
+            UI looks off"). On the last rung, the note alone. */}
+        {(!lastRung || wasSureHere) && (
+          <div className={styles.verdictRow}>
+            {!lastRung && (
+              // The chip is visual; its words are announced in the card's live region.
+              <span aria-hidden="true">
+                <Chips
+                  Text={partialCredit ? 'Partially right' : thin ? 'Not enough to check' : 'Not quite yet'}
+                  size="S"
+                  color={partialCredit ? 'Partial' : 'Primary'}
+                  active={partialCredit}
+                  showLeftIcon={false}
+                  showRightIcon={false}
+                />
+              </span>
+            )}
+            {wasSureHere && <p className={styles.sureNote}>You were sure about this one.</p>}
           </div>
         )}
-        {/* Said here, at the miss, not only on the Recap: sure and wrong is the moment a
-            correction sticks best (Duolingo design review). Costs nothing since
-            2026-09-23; it is a sentence, not a penalty. */}
-        {wasSureHere && <p className={styles.calibration}>You were sure. This one&rsquo;s worth remembering.</p>}
+
         {/* Attempt 2 drops "You said" so the hint is on screen without scrolling —
             designer, 2026-10-08. The first miss still echoes the take. */}
         {/* Neutral card, amber chip: "partially right" is not "wrong", and the red Miss

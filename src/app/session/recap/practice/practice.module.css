@@ -80,3 +80,11 @@
   color: var(--color-semantic-text-secondary);
   text-align: center;
 }
+
+/* The row's methods: the Say It Back mic (when saying is the alternative) beside the
+   suggested one. */
+.rowActions {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+}

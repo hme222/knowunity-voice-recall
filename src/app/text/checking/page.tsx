@@ -2,14 +2,15 @@
 
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Chips, ConfidenceAsk, ProcessingBeat, RecallResultCaptured, ScreenShell } from '@/components'
+import { Button, Chips, MascotSlot, ProcessingBeat, RecallResultCaptured, ScreenShell } from '@/components'
+import capturedStyles from '../../session/captured/[term]/captured.module.css'
 import { CheckIcon } from '@/components/icons'
 import { DrillBar } from '../../drill/DrillBar'
 import drillStyles from '../../drill/drill.module.css'
 import styles from '../text.module.css'
 import { processingDwell, verdictHold } from '@/lib/motion'
 import { SessionBar } from '../../session/SessionBar'
-import { DRILL_TOTAL_RUNGS, markEarned, recordConfidence, recordMiss, typedVerdict, useSession } from '@/lib/session'
+import { DRILL_TOTAL_RUNGS, markEarned, recordConfidence, recordMiss, typedVerdict, unsendTypedAnswer, useSession } from '@/lib/session'
 import { doorResultHref } from '@/app/door/doors'
 
 // The typed path's equivalent of 03 Processing. History: docs/code-history.md#h-089
@@ -32,6 +33,9 @@ function CheckingScreen() {
   const drillStep = searchParams.get('drill')
 
   const [asking, setAsking] = useState(false)
+  // The optional confidence call, as on 02a Captured: two small chips, read on "Looks
+  // good" (designer, 2026-10-13: "match the chips").
+  const [sure, setSure] = useState<boolean | undefined>(undefined)
   // A typed drill round that passed says "Got it" before the next, as a spoken one does.
   const [got, setGot] = useState(false)
 
@@ -85,18 +89,48 @@ function CheckingScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, router, verdict, drillStep])
 
-  // The ask is optional through "Just check it", not a timer: the same exit as the
-  // spoken path's Captured (UX critic, 2026-10-13: the typed path, the accessibility
-  // path, was the stricter one, waiting with no way past).
+  // Asking is now 02a Captured's shape exactly: the words, "How sure?" chips, then
+  // "Looks good" / "Not quite right" (designer, 2026-10-13). "Not quite right" reopens
+  // the typed turn with the student's words in it, to edit rather than retype.
+  if (asking && !drillStep) {
+    return (
+      <ScreenShell
+        topNavigation={<SessionBar index={index} />}
+        bottomContent={
+          <div className={capturedStyles.actions}>
+            <Button CTA="Looks good" variant="Primary" size="M" fullWidth onClick={() => onward(sure)} />
+            <Button
+              CTA="Not quite right"
+              variant="Tertiary"
+              size="S"
+              fullWidth
+              onClick={() => {
+                doneRef.current = true
+                unsendTypedAnswer(index)
+                router.replace(`/text/turn?term=${index}${searchParams.get('sticky') === '1' ? '&sticky=1' : ''}`)
+              }}
+            />
+          </div>
+        }
+      >
+        <div className={capturedStyles.body}>
+          <MascotSlot size="2XL" expression="excited" />
+          <RecallResultCaptured className={capturedStyles.card} title="Here’s what you wrote." label="You wrote" transcript={typedText.trim()} />
+          <div className={capturedStyles.sure} role="group" aria-label="How sure are you? Optional">
+            <span className={capturedStyles.sureLabel}>How sure?</span>
+            <Chips Text="Sure" size="S" color="Primary" toggle active={sure === true} showLeftIcon={false} showRightIcon={false} onClick={() => setSure(sure === true ? undefined : true)} />
+            <Chips Text="Not sure" size="S" color="Primary" toggle active={sure === false} showLeftIcon={false} showRightIcon={false} onClick={() => setSure(sure === false ? undefined : false)} />
+          </div>
+        </div>
+      </ScreenShell>
+    )
+  }
 
   return (
     <ScreenShell
       topNavigation={drillStep ? <DrillBar step={Number(drillStep)} onExit={() => router.push('/picker')} skip={false} /> : <SessionBar index={index} />}
       // Reserve the action zone before the question arrives. History: docs/code-history.md#h-091
       showBottomNavSlot
-      bottomContent={
-        asking ? <ConfidenceAsk onAnswer={onward} onDecline={() => onward()} /> : undefined
-      }
     >
       <div className={styles.checkingBody}>
         <ProcessingBeat
@@ -105,12 +139,10 @@ function CheckingScreen() {
               ? Number(drillStep) >= DRILL_TOTAL_RUNGS
                 ? 'Got it. That’s the whole definition.'
                 : `Got it. On to round ${Number(drillStep) + 1}.`
-              : asking
-                ? 'Before I show you — how did that feel?'
-                : 'Checking that against the definition…'
+              : 'Checking that against the definition…'
           }
           // No "working" dots while the question waits on the student, or once judged.
-          working={!asking && !got}
+          working={!got}
           // The typed answer shown back before judging, as the spoken path shows its
           // transcript (UX critic, 2026-10-13).
           above={
@@ -118,8 +150,6 @@ function CheckingScreen() {
               <div className={drillStyles.verdictRow}>
                 <Chips Text="Got it" size="S" color="Primary" active showLeftIcon leftIcon={<CheckIcon />} showRightIcon={false} />
               </div>
-            ) : asking && typedText ? (
-              <RecallResultCaptured title="Here’s what you wrote." label="You wrote" transcript={typedText.trim()} />
             ) : undefined
           }
         />

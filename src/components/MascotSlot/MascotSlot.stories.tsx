@@ -11,7 +11,7 @@ const FIGMA_DESCRIPTION = `
 
 ---
 
-Built 2026-09-16. Expressions come from public/knowie/ (dazed, determined, excited, laughing) per CLAUDE.md; none are drawn here. Height bound in Figma to the same illustration token as width the same day.
+Built 2026-09-16. Expressions come from public/knowie/ (the fourteen Figma faces, exported 2026-10-13) per CLAUDE.md; none are drawn here. Height bound in Figma to the same illustration token as width the same day.
 `
 
 const meta = {

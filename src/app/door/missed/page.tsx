@@ -48,7 +48,7 @@ export default function DoorMissedPage() {
           {/* `determined`, as on a Recap with something to revisit: "let's go", never
               dazed at the student. On mic trouble the app failed, which is `dazed`'s
               job (design-system.md § Mascot poses). */}
-          <MascotSlot size="2XL" expression={micTrouble ? 'dazed' : 'determined'} />
+          <MascotSlot size="2XL" expression={micTrouble ? 'dazed' : 'sad'} />
           <div className="screenTitle">
             <h1 className="screenTitleHeading">{micTrouble ? 'The mic didn’t catch that one' : 'Not this one yet'}</h1>
             <p className="screenTitleCaption">

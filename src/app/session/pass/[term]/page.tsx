@@ -53,6 +53,9 @@ function PassScreen({ index }: { index: number }) {
 
   return (
     <ScreenShell
+      // Knowie stays on a pass, smaller on a short screen, never gone (designer,
+      // 2026-10-13). The XP lines scroll under the fade at 390x668 if they must.
+      mascotGivesWay="shrink"
       topNavigation={<SessionBar index={index} />}
       bottomContent={
         <div className={styles.actions}>
@@ -71,7 +74,7 @@ function PassScreen({ index }: { index: number }) {
         {/* 3XL on a first-time pass: the win is the one moment Knowie is bigger than
             the ask, and the space under the card was empty anyway. Gives way on short
             screens like every other mascot. */}
-        <MascotSlot size={practising || firstTake ? '2XL' : '3XL'} expression="excited" className={`${styles.mascotCentred} ${practising ? '' : styles.celebrate}`} />
+        <MascotSlot size={practising || firstTake ? '2XL' : '3XL'} expression={withHint || typed || practising ? 'approving' : 'laughing'} className={`${styles.mascotCentred} ${practising ? '' : styles.celebrate}`} />
         {/* A "Correct" chip, matching the partial's "Partially right": the verdict is
             not carried by the green card alone (designer, 2026-10-12). */}
         <div className={styles.verdictRow} aria-hidden="true">

@@ -244,7 +244,7 @@ Named layout distances.
 | `spacing.semantic.cardPadding` | `{size.primitive.space.400}` | `16` | Interior padding for cards, sheets and the recall turn bubble. Shares its value with screenMargin by design, same base padding unit. |
 | `spacing.semantic.betweenSections` | `{size.primitive.space.600}` | `24` | Vertical gap between major blocks on a screen, e.g. between the prompt bubble and the mic control. |
 | `spacing.semantic.cardLabelGap` | `{size.primitive.space.150}` | `6` | Vertical gap between a card's own label or title and its body text. chatBubble's title-to-body gap, hintCard's label-to-body gap. Not for gaps between separate blocks on a screen, that's betweenSections. |
-| `spacing.semantic.tapTarget` | `48` |  | Minimum height of any tappable control's hit area, 48px. A literal, not a spacing step: it is the touch-target floor, not a layout rhythm value. button's outer frame binds its min-height here on every size; the visible pill inside can be shorter (see component.button). |
+| `spacing.semantic.tapTarget` | `44` |  | 44 since 2026-10-13 (designer: "buttons feel too big for the screen"): the platform minimum and the rubric's gate, so every control stays reachable while the action zone gives 16px back to content. Was 48. Minimum height of any tappable control's hit area, 48px. A literal, not a spacing step: it is the touch-target floor, not a layout rhythm value. button's outer frame binds its min-height here on every size; the visible pill inside can be shorter (see component.button). |
 
 ## Typography primitives
 
@@ -319,7 +319,7 @@ The composed text styles. Each resolves to a family, weight, size, line height a
 
 ## Motion primitives
 
-`motion.primitive.*` — 12 tokens
+`motion.primitive.*` — 13 tokens
 
 Durations in milliseconds, and easing curves.
 
@@ -334,13 +334,14 @@ Durations in milliseconds, and easing curves.
 | `motion.primitive.duration.600` | `600` |  | 600ms. When the proof lands on 04 Pass: after the card's rise (250 delay + 250) and a beat. |
 | `motion.primitive.duration.1100` | `1100` |  | 1100ms, loops. Mic-pulse timing, matched to iOS dictation / WhatsApp voice-note comparables. |
 | `motion.primitive.duration.1400` | `1400` |  | 1400ms. The judging dwell: how long a Processing beat holds before resolving. UNCONFIRMED against a real round trip, like the 300ms swipe. |
+| `motion.primitive.duration.2200` | `2200` |  | 2200ms. The Recap's confetti fall: long enough to watch, once the student has stopped scrolling. |
 | `motion.primitive.duration.6000` | `6000` |  | 6000ms. When a judge counts as slow and Processing escalates its copy in place. Past the Design Brief's <4s target with headroom, so an ordinary wait never trips it. |
 | `motion.primitive.duration.10000` | `10000` |  | 10000ms. How long the confidence ask waits before Processing moves on without it. Added 2026-10-09: the designer decided the ask must not be required. Longer than the 6000 slow threshold on purpose, so 'still thinking' shows before the screen advances. |
 | `motion.primitive.easing.standard` | `cubic-bezier(0.4, 0, 0.2, 1)` |  | Standard ease-out, decelerates into rest. |
 
 ## Motion semantics
 
-`motion.semantic.*` — 15 tokens
+`motion.semantic.*` — 16 tokens
 
 Named timings.
 
@@ -358,6 +359,7 @@ Named timings.
 | `motion.semantic.duration.celebrate` | `{motion.primitive.duration.500}` | `500` | 04 Pass's Knowie hop. Was standard × 2 typed into result.module.css (system critic, 2026-10-13). |
 | `motion.semantic.duration.breathe` | `{motion.primitive.duration.550}` | `550` | Knowie's breathe on the interrupt screens, each way. Was ambient × 0.5 typed into interrupt.module.css (system critic, 2026-10-13). |
 | `motion.semantic.duration.proofDelay` | `{motion.primitive.duration.600}` | `600` | 04 Pass stages its payoff (designer, 2026-10-13, reach C1): the verdict line lands with the card, and the student's own words rise this long after mount, as the proof. A tap shows everything at once; reduced motion shows it at once. |
+| `motion.semantic.duration.confetti` | `{motion.primitive.duration.2200}` | `2200` | The Recap's confetti burst over "You learned something new!" (designer, 2026-10-13): each piece falls and fades over this long, starting once the heading is fully in view and scrolling has stopped. Was 1400, which ran out before the student had finished scrolling. Off under reduced motion. |
 | `motion.semantic.easing.standard` | `{motion.primitive.easing.standard}` | `cubic-bezier(0.4, 0, 0.2, 1)` | The curve fast, standard and ambient durations all use. |
 | `motion.semantic.easing.ambient` | `cubic-bezier(0.4, 0, 0.6, 1)` |  | Symmetric ease for motion that loops back to where it started — the mic pulse, Knowie's breathe, the processing dots. `standard` is asymmetric and made a looping animation read as a sawtooth, which is why `ease-in-out` had been typed directly into six stylesheets. |
 | `motion.semantic.easing.linear` | `linear` |  | For continuous rotation only — a spinner. Every other easing in this file shapes a start and an end; a spin has neither, and putting it on a curve makes each turn visibly speed up and slow down. Added because `linear` was otherwise being typed directly into two component stylesheets. |
@@ -390,7 +392,7 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 | Token | Value | Resolves to | Notes |
 | --- | --- | --- | --- |
 | `component.button.s.height` | `32` |  | Size S pill height. Inside a 48px tap target (spacing.semantic.tapTarget). |
-| `component.button.m.height` | `40` |  | Size M pill height. Inside a 48px tap target (spacing.semantic.tapTarget). |
+| `component.button.m.height` | `36` |  | 36 since 2026-10-13 (designer: buttons too big for the screen); the 44 tap box around it is unchanged by this. Was 40. Size M pill height. Inside a 48px tap target (spacing.semantic.tapTarget). |
 | `component.button.l.height` | `56` |  | Size L pill height. Taller than the tap target, so the pill is the hit area. |
 | `component.button.inlinePrimaryMinWidth` | `157` |  | Minimum width for a primary that shares a row with a filling dismissal. The Quiz complete frame (15672:24061) fixes its 'Prove it' at 157 while 'Not now' flexes; letting the primary hug shrank it to 109 and the row read as a text link beside a small pill. |
 | `component.scaffold.panelHeader.height` | `48` |  | Status-bar region at the top of every screen. A literal: 48 here is the iOS status-bar area, unrelated to size.primitive.space.1200 (a spacing step) or spacing.semantic.tapTarget (a hit-area floor, which its own description says is not a layout rhythm value). |
@@ -398,7 +400,7 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 | `component.scaffold.bottomSheetOnly.height` | `34` |  | Home-indicator region, and the slot a bottom sheet occupies on its own branch screen. No primitive of this value exists. |
 | `component.scaffold.micRegionHeight` | `200` |  | The fixed region the mic sits in at the foot of middleContent, on every voice screen. 120 for the control plus 40 clear above and below. It exists because the mic used to sit at EIGHT different heights and moved 91px on the very tap that starts recording — the content above absorbs the difference now, and the control does not move under the finger. |
 | `component.scaffold.scrollFadeHeight` | `40` |  | Height of the fade at the foot of a content region that overflows. Four screens sliced a row mid-height with no cue that more existed; a half-row is not an affordance. |
-| `component.scaffold.actionZoneHeight` | `136` |  | The action zone, FIXED on every screen. It holds one row of up to two controls, and optionally one tertiary link beneath: 48 + 8 + 48 + 32 padding. It was a min-height and grew to whatever a screen stacked in it — measured across 44 routes it took six values, 120 to 248, so the action zone's top moved by 128px as you advanced and no control ever landed twice in the same place. The scaffold's own region is 120 and the frames put a single row in it; 136 is that row plus the tertiary link 05 Miss's frame shows beneath it. |
+| `component.scaffold.actionZoneHeight` | `120` |  | 120 since 2026-10-13, the scaffold's own Figma value: 16 inset + a 44 row + 4 + a 44 link = 108, with room to spare (designer: more space for content). Was 136. The action zone, FIXED on every screen. It holds one row of up to two controls, and optionally one tertiary link beneath: 48 + 8 + 48 + 32 padding. It was a min-height and grew to whatever a screen stacked in it — measured across 44 routes it took six values, 120 to 248, so the action zone's top moved by 128px as you advanced and no control ever landed twice in the same place. The scaffold's own region is 120 and the frames put a single row in it; 136 is that row plus the tertiary link 05 Miss's frame shows beneath it. |
 | `component.micButton.idle.stroke` | `{color.semantic.brand.onSubtle}` | `#7B65E0` | Idle mic circle outline. brand.onSubtle from 2026-10-12 (senior design review: on the tinted idle fill the grey ring left the disc low-contrast against the page; the brand ring makes the primary control unmistakable). Was border.strong: the Figma Idle frame had always rendered at this value, bound to border/strong directly; rebound through this token 2026-09-16 (the token had said border.default). |
 | `component.micButton.idle.fill` | `{color.semantic.brand.subtle}` | `#15103A` | Idle mic circle fill. Added 2026-10-12 (senior design review: the outlined ring was the quietest shape on the idle screen, while voice is the primary action). The tinted brand panel, so it reads as the brand control at rest and stays clearly distinct from Listening (solid brand.bold), Paused (interactive.secondary) and Captured. |
 | `component.micButton.idle.glyph` | `{color.semantic.text.primary}` | `#F4F2FF` | Idle mic circle icon color. |
@@ -433,4 +435,4 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ---
 
-333 tokens across 10 groups.
+335 tokens across 10 groups.

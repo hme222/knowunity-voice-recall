@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 import { openSheet } from '@/lib/navigation'
-import { AppBar, Button, ButtonIcon, HintCard, MascotSlot, ScreenShell } from '@/components'
+import { AppBar, Button, ButtonIcon, HintCard, MascotSlot, ScreenShell, StatChip } from '@/components'
 import { CloseIcon, EyeIcon } from '@/components/icons'
 import { answerFor, Bucket, getTerm, keyPhrase, sessionTotals, setPractising, TOTAL_TERMS, typedByChoice, useSession, XP } from '@/lib/session'
 import styles from './recap.module.css'
@@ -25,6 +25,21 @@ import styles from './recap.module.css'
  * regraded and nothing is relabelled — the same rows in the same buckets, in the
  * order that puts the thing worth acting on first.
  */
+/**
+ * The confetti, fixed rather than random so every render agrees (and React's purity
+ * rule holds): 24 pieces spread across the width, each with its own drift, spin, delay
+ * and one of five brand tones. Numbers are data, like StrengthMeter's fill: x is a
+ * percentage across, drift a percentage sideways, spin degrees, delay a fraction of the
+ * burst.
+ */
+const CONFETTI = Array.from({ length: 24 }, (_, i) => ({
+  x: (i * 37) % 100,
+  drift: ((i * 53) % 41) - 20,
+  spin: ((i * 97) % 360) + 180,
+  delay: ((i * 29) % 30) / 100,
+  tone: ['brand', 'success', 'partial', 'coral', 'blue'][i % 5],
+}))
+
 const ORDER_SETTLED: Bucket[] = ['Unaided', 'Hinted', 'Revealed', 'Worth revisiting']
 const ORDER_WITH_MISSES: Bucket[] = ['Worth revisiting', 'Revealed', 'Hinted', 'Unaided']
 
@@ -48,6 +63,40 @@ export default function RecapPage() {
   }, [])
 
   const outcomes = state.outcomes
+  // Confetti when "You learned something new!" is on screen and the student has stopped
+  // scrolling (designer, 2026-10-13): firing at 60% visible, it burst mid-scroll and
+  // was over before they got there. The heading must be fully in view, clear of the
+  // bottom fifth (the fade and the action zone), then the scroller must sit still for a
+  // standard beat. Once per visit, never under reduced motion.
+  const learnedRef = useRef<HTMLElement>(null)
+  const [burst, setBurst] = useState(false)
+  useEffect(() => {
+    const heading = learnedRef.current?.querySelector('h2')
+    const scroller = learnedRef.current?.closest('main')
+    if (!heading || !scroller || typeof IntersectionObserver === 'undefined') return
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+    const settle = Number(getComputedStyle(document.documentElement).getPropertyValue('--motion-semantic-duration-standard')) * 2
+    let inView = false
+    let timer = 0
+    const arm = () => {
+      window.clearTimeout(timer)
+      if (inView) timer = window.setTimeout(() => setBurst(true), settle)
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        inView = entry.isIntersecting
+        arm()
+      },
+      { root: scroller, threshold: 1, rootMargin: '0px 0px -20% 0px' },
+    )
+    io.observe(heading)
+    scroller.addEventListener('scroll', arm, { passive: true })
+    return () => {
+      io.disconnect()
+      scroller.removeEventListener('scroll', arm)
+      window.clearTimeout(timer)
+    }
+  }, [outcomes.length])
   const totals = sessionTotals(state)
   const complete = outcomes.length === TOTAL_TERMS
   const needsRevisiting = outcomes.some(
@@ -124,9 +173,9 @@ export default function RecapPage() {
         {/* Knowie reads the run (designer, 2026-10-12, from the Reach critic): laughing
             when nothing needs revisiting, determined — "let's go", never dazed — when
             something does. It laughed over a 2-of-4 recap whose job is not to flatter. */}
-        {/* XL, not 2XL: the rows are the content, and at 2XL only one showed above the
-            fold at 390x668 (UX critic, 2026-10-13). */}
-        <MascotSlot size="XL" expression={needsRevisiting ? 'determined' : 'laughing'} className={styles.mascotCentred} />
+        {/* 2XL: at XL Knowie read as too small for the screen's face (designer,
+            2026-10-13). */}
+        <MascotSlot size="2XL" expression={needsRevisiting ? 'confused' : 'laughing'} className={styles.mascotCentred} />
         {/* Headline S over Body M Regular, as the frames set a screen title — not
             TextBlock's L, which renders 44px. See door.module.css for the same note;
             the evidence there is a direct read of the Quiz complete frame. */}
@@ -159,15 +208,11 @@ export default function RecapPage() {
             </p>
           )}
         </div>
-        {strip.length > 0 && (
-          <div
-            className={styles.strip}
-            role="img"
-            aria-label={strip.map((o) => `${getTerm(o.index)?.name}: ${o.micTrouble ? 'mic missed it' : o.bucket}`).join(', ')}
-          >
-            {strip.map((o) => (
-              <span key={o.index} className={styles.segment} data-bucket={o.micTrouble ? 'mic' : o.bucket} />
-            ))}
+        {/* No coloured strip (designer, 2026-10-13): XP and time as chips instead. */}
+        {outcomes.length > 0 && (
+          <div className={styles.stats}>
+            <StatChip stat="XP" value={`+${xpShown}`} />
+            <StatChip stat="Time" value={totals.elapsed} />
           </div>
         )}
         {climb && (
@@ -191,7 +236,6 @@ export default function RecapPage() {
       {outcomes.length > 0 && (
         <details className={styles.summaryGroup}>
           <summary className={styles.summary}>
-            {`\u26a1 +${xpShown} XP \u00b7 ${totals.elapsed}`}
             <span className={styles.summaryCue}>How it adds up</span>
           </summary>
           {/* The secondary lines live here, under the one line that opens them: the
@@ -293,7 +337,19 @@ export default function RecapPage() {
           student reads before "Practice what I missed" or home. It sat at the top as the
           headline on 2026-10-08. */}
       {learnedTerms.length > 0 && (
-        <section className={styles.learned} aria-labelledby="learned-heading">
+        <section ref={learnedRef} className={styles.learned} aria-labelledby="learned-heading">
+          {burst && (
+            <div className={styles.confetti} aria-hidden="true">
+              {CONFETTI.map((c, i) => (
+                <span
+                  key={i}
+                  className={styles.piece}
+                  data-tone={c.tone}
+                  style={{ ['--confetti-x' as string]: c.x, ['--confetti-drift' as string]: c.drift, ['--confetti-spin' as string]: c.spin, ['--confetti-delay' as string]: c.delay }}
+                />
+              ))}
+            </div>
+          )}
           <h2 id="learned-heading" className="screenTitleHeading">You learned something new!</h2>
           {learnedTerms.map((t) => (
             <HintCard key={t.index} className={styles.learnedCard} label={`New today · ${t.name}`} body={t.answer} />

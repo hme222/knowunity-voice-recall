@@ -1,8 +1,8 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { AppBar, Button, MascotSlot, ScreenShell } from '@/components'
-import { CloseIcon } from '@/components/icons'
+import { AppBar, Button, ButtonIcon, MascotSlot, ScreenShell } from '@/components'
+import { CloseIcon, MicGlyphIcon } from '@/components/icons'
 import { type Bucket, getTerm, type PracticeItem, recommendedMode, startPractice, type TermOutcome, useSession } from '@/lib/session'
 import styles from './practice.module.css'
 
@@ -50,7 +50,7 @@ export default function PracticePage() {
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="laughing" />
+        <MascotSlot size="2XL" expression="excited" />
         <div className="screenTitle">
           <h1 className="screenTitleHeading">Practice what you missed</h1>
           {plan.length > 0 && (
@@ -94,19 +94,36 @@ export default function PracticePage() {
                       {/* Says why the method differs: rule C. */}
                       {o.typed && !o.micTrouble ? ' · typed' : ''}
                     </p>
-                    <Button
-                      CTA={ALT[mode]}
-                      variant="Tertiary"
-                      size="S"
-                      className={styles.rowAlt}
-                      // Named per term: three "or say it" links read identically out of
-                      // context (UX critic, 2026-10-13).
-                      aria-label={`${other === 'drill' ? 'Drill' : 'Say'} ${term?.name} instead`}
-                      onClick={() => go([{ index: o.index, mode: other }])}
-                    />
+                    {other === 'drill' && (
+                      <Button
+                        CTA={ALT[mode]}
+                        variant="Tertiary"
+                        size="S"
+                        className={styles.rowAlt}
+                        // Named per term: three "or drill it" links read identically out
+                        // of context (UX critic, 2026-10-13).
+                        aria-label={`Drill ${term?.name} instead`}
+                        onClick={() => go([{ index: o.index, mode: other }])}
+                      />
+                    )}
                   </div>
                 </div>
-                <Button CTA={CTA[mode]} aria-label={`${CTA[mode]}: ${term?.name}`} variant="Secondary" size="S" onClick={() => go([{ index: o.index, mode }])} />
+                <div className={styles.rowActions}>
+                  {/* Saying it is offered as the Say It Back mic, the feature's own icon,
+                      beside the suggested method (designer, 2026-10-13), not an
+                      underlined "or say it". Drilling, the other way round, stays a word
+                      under the reason: it has no icon of its own. */}
+                  {other === 'say' && (
+                    <ButtonIcon
+                      variant="Secondary"
+                      size="S"
+                      icon={<MicGlyphIcon />}
+                      label={`Say ${term?.name} again instead`}
+                      onClick={() => go([{ index: o.index, mode: other }])}
+                    />
+                  )}
+                  <Button CTA={CTA[mode]} aria-label={`${CTA[mode]}: ${term?.name}`} variant="Secondary" size="S" onClick={() => go([{ index: o.index, mode }])} />
+                </div>
               </li>
             )
           })}

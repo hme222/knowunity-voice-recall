@@ -32,7 +32,7 @@ export default function DrillLetterPage() {
       showBottomNavSlot
     >
       <div className={styles.frameBody}>
-        <MascotSlot size="2XL" expression="determined" />
+        <MascotSlot size="2XL" expression="questioning" />
         <div className={[styles.fullWidth, styles.verdictRow].join(' ')}>
           <Chips
             Text={STUMBLES.second.verdict}

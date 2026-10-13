@@ -5,7 +5,7 @@ import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import { micRegionClass, Button, ChatBubble, MascotSlot, MicButton, MicCaption, RecallResult, ScreenShell } from '@/components'
-import { getTerm, micGate, nextAfter, recordOutcome, markMicFault, SUBJECT } from '@/lib/session'
+import { getTerm, micGate, nextAfter, recordOutcome, markMicFault } from '@/lib/session'
 import styles from './unclear.module.css'
 
 // 04a Couldn't hear — Figma frame "04a Couldn't hear (refreshed)" (15672:24583).
@@ -57,7 +57,7 @@ function UnclearScreen({ index }: { index: number }) {
           {/* On a repeat mishear typing leads, because the mic has now failed twice. */}
           <Button
             CTA="Type instead"
-            variant={repeated ? 'Primary' : 'Tertiary'}
+            variant={repeated ? 'Primary' : 'Secondary'}
             size="M"
             fullWidth
             onClick={() => router.push(`/text/turn?term=${index}`)}
@@ -93,7 +93,7 @@ function UnclearScreen({ index }: { index: number }) {
             a stray outline (craft and system critics, 2026-10-13). The reassurance
             above is the screen's message; the question is on the next take's screen. */}
         <div data-gives-way className={styles.card}>
-          <ChatBubble showTitle title={`${SUBJECT} · Explain: `} titleAccent={current.name} body={current.prompt} />
+          <ChatBubble showTitle title="Explain: " titleAccent={current.name} body={current.prompt} />
         </div>
 
         {/* The same fixed region as every other voice screen, so the control the

@@ -1,7 +1,7 @@
 'use client'
 
 import { ChatBubble, MascotSlot } from '@/components'
-import { getTerm, SUBJECT, useDrillTerm } from '@/lib/session'
+import { getTerm, useDrillTerm } from '@/lib/session'
 import styles from './permission.module.css'
 
 // The question the student just tapped the mic for, drawn behind the primer sheet and
@@ -15,8 +15,8 @@ export function QuestionBehind({ next }: { next: string }) {
   if (!term) return null
   return (
     <div className={styles.behind}>
-      <MascotSlot size="2XL" expression="excited" />
-      <ChatBubble showTitle title={`${SUBJECT} · Explain: `} titleAccent={term.name} body={term.prompt} className={styles.behindBubble} />
+      <MascotSlot size="2XL" expression="standby" />
+      <ChatBubble showTitle title="Explain: " titleAccent={term.name} body={term.prompt} className={styles.behindBubble} />
     </div>
   )
 }

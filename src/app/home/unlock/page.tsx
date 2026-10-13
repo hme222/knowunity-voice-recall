@@ -2,7 +2,6 @@
 
 import { useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { startRun } from '@/lib/session'
 import { actionRowClass, Button, MascotSlot, SwipeChip } from '@/components'
 import { MicGlyphIcon } from '@/components/icons'
 import { useFocusTrap } from '@/lib/useFocusTrap'
@@ -19,9 +18,10 @@ export default function UnlockPage() {
 
   return (
     <HomeShell
-      // The chip is the way in: it starts the session at 00 Intro, the second screen of
-      // the prototype (designer, 2026-10-12). It went to the picker.
-      toolChip={<SwipeChip onClick={() => router.push(startRun())} />}
+      // The chip and "Try it now" open the picker, which points at the Chemistry quiz
+      // the session runs (designer, 2026-10-13: "add the picker before Chemistry Say It
+      // Back begins, and guide them to select the quiz"). They went straight to Q1.
+      toolChip={<SwipeChip onClick={() => router.push('/picker')} />}
       popup={
         <div
           ref={dialogRef}
@@ -31,8 +31,8 @@ export default function UnlockPage() {
           aria-modal="true"
           aria-labelledby="unlock-title"
         >
-          {/* `excited`: the invitation face (design-system.md § Mascot poses). */}
-          <MascotSlot size="2XL" expression="excited" className={styles.unlockPeek} />
+          {/* `amazed`: something new appeared (design-system.md § Mascot poses). */}
+          <MascotSlot size="2XL" expression="amazed" className={styles.unlockPeek} />
           <div className={styles.unlockNote}>
             <p className={styles.unlockEyebrow}>
               <span className={styles.unlockEyebrowGlyph} aria-hidden="true">
@@ -48,7 +48,7 @@ export default function UnlockPage() {
                 popup and left the student to tap the chip as a second step. */}
             <div className={`${actionRowClass} ${styles.unlockActions}`}>
               {/* Primary first, so the dialog's initial focus lands on it. */}
-              <Button CTA="Try it now" variant="Primary" size="M" fullWidth onClick={() => router.push(startRun())} />
+              <Button CTA="Try it now" variant="Primary" size="M" fullWidth onClick={() => router.push('/picker')} />
               <Button CTA="Later" variant="Tertiary" size="M" onClick={() => router.push('/home/unlocked')} />
             </div>
           </div>

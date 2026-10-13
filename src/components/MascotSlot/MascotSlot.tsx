@@ -3,7 +3,12 @@ import styles from './MascotSlot.module.css'
 // Mirrors the Figma component set `mascotSlot` (9003:8873): wraps a mascot pose at one of four sizes.
 
 export const MASCOT_SLOT_SIZES = ['XL', '2XL', '3XL', '4XL'] as const
-export const KNOWIE_EXPRESSIONS = ['dazed', 'determined', 'excited', 'laughing'] as const
+// All fourteen faces of the Figma Knowie set (🎨 Mascot & components → Knowie, 9003:19697),
+// exported 2026-10-13 (designer: "I see 14 different Knowies on Figma"). None are drawn.
+export const KNOWIE_EXPRESSIONS = [
+  'standby', 'confused', 'approving', 'over-it', 'laughing', 'angry', 'amazed',
+  'dazed', 'excited', 'giggling', 'questioning', 'thinking', 'sad', 'determined',
+] as const
 
 export type MascotSlotProps = {
   /** Figma `size`: illustration.800 / 1500 / 2500 / 4000. */

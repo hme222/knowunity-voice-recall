@@ -42,7 +42,7 @@ export default function ChatDoor() {
         </AppBar>
       }
       bottomContent={
-        <Button CTA="Type instead" variant="Tertiary" size="M" fullWidth onClick={() => {
+        <Button CTA="Type instead" variant="Secondary" size="M" fullWidth onClick={() => {
             // Typing is the same one-definition door run as speaking (dev review).
             startSession({ door: 'chat' })
             router.push('/text/turn?term=1')
@@ -57,7 +57,7 @@ export default function ChatDoor() {
             Knowie at 390x668 — with the h1 inside, its 48px of padding stayed. */}
         <h1 className="srOnly">{`${SUBJECT}: ${getTerm(1)?.name}`}</h1>
         <div className={styles.content}>
-          <MascotSlot size="2XL" expression="determined" />
+          <MascotSlot size="2XL" expression="excited" />
         </div>
         <ChatBubble
           showTitle

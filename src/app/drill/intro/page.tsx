@@ -25,7 +25,7 @@ function DrillIntro() {
       <div className={styles.centred}>
         {/* The screen's h1, for screen readers; the visible title is in the bubble. */}
         <h1 className="srOnly">{`Drill: ${drillTerm.name}`}</h1>
-        <MascotSlot size="2XL" expression={returning ? 'laughing' : 'determined'} />
+        <MascotSlot size="2XL" expression={returning ? 'giggling' : 'excited'} />
         {returning ? (
           <ChatBubble
             showTitle

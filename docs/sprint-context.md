@@ -278,6 +278,39 @@ above.
         - *C2. Knowie does not grow across the run.* Size already means "the pass
           moment" (3XL); tying it to score would read as a judgement on a student who
           is struggling.
+        - *01 Idle's action zone, restored.* "Type instead" is a Secondary (filled)
+          pill over the "I don't know this one" Tertiary link, as before the senior
+          review made it text-weight (2026-10-12). No "Start speaking" caption under
+          the mic on a first try; the mic's accessible name is unchanged and the hint
+          caption still shows on a retry.
+        - *Button tiers by role (designer, 2026-10-13).* Primary moves forward;
+          Secondary is another way to answer ("Type instead" as the screen's
+          alternative to the mic — idle, blank, primer, doors, drill rungs, the first
+          mishear; "Show full definition"; "Try it again"); Tertiary gives up or
+          leaves ("Reveal answer" on misses 1–2, under a full-width "Try again";
+          "I don't know this one", "Leave anyway", "Later", "Start over"). "Type
+          instead" is an inline link only where it corrects a take, and Primary only
+          where typing is the recommendation (exit sheet, second mishear). Reveal
+          answer and Type instead were the same grey pill.
+        - *The subject is said once.* The top bar says "Chemistry · 3/4"; question
+          cards say "Explain: <term>" (the exam-plan door, whose bar does not name the
+          subject, keeps it).
+        - *Recording.* The question card sits above the pulse rings, which pass behind
+          it at 390x668 instead of drawing across the text. Paused shows no caption
+          ("Tap to resume" removed).
+        - *02a Captured, simplified.* "Looks good" (Primary) and "Not quite right"
+          (Tertiary, back to the question to say it again or type). The confidence
+          call is a small optional "How sure? Sure / Not sure" chip pair under the
+          card, read on "Looks good"; untapped scores nothing. Supersedes 2b's
+          ask-in-the-action-zone and "Just check it" on this screen.
+        - *The picker comes first.* "Try it now" and the unlock chip open `/picker`,
+          which says "Pick Chemistry: bonding to start" and rings that row with a
+          "Start here" label; it, or the Start button, begins the run.
+        - *The typed check matches Captured.* "Here's what you wrote.", the small
+          "How sure?" chips, "Looks good" / "Not quite right"; "Not quite right"
+          reopens the typed box with the words in it (`unsendTypedAnswer`).
+        - *Knowie: fourteen faces from Figma,* mapped one meaning each in
+          design-system.md § Mascot poses.
         - *The brief is the first page again.* `/` → `/start` (what the prototype
           is, how to test it) → Start → `/home/unlock`.
         - *C3. The Recap shows one climb.* The first Hinted term with a stored first

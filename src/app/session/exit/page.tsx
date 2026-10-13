@@ -61,7 +61,8 @@ export default function ExitPage() {
           )}
           <Button
             CTA="Leave anyway"
-            variant="Secondary"
+            // Leaving is the Tertiary tier (button tiers by role, 2026-10-13).
+            variant="Tertiary"
             size="M"
             fullWidth
             onClick={() => {

@@ -27,10 +27,9 @@ export function RecordingStatus({ seconds, paused = false, className }: Recordin
         {paused ? 'Paused' : 'Listening'}
       </span>
       <span className={styles.timer}>{formatElapsed(seconds * 1000)}</span>
-      {/* What a tap does, in both states. Paused used to show nothing here, leaving the
-          way back to the pause symbol alone (UX critic, 2026-10-13). Hidden from
-          readers: the mic's own name says it. */}
-      <span className={styles.caption} aria-hidden="true">{paused ? 'Tap to resume' : 'Tap to pause'}</span>
+      {/* Gone while paused: the mic's pause symbol says it (designer, 2026-10-08;
+          reaffirmed 2026-10-13 after a day of "Tap to resume" — distracting). */}
+      {!paused && <span className={styles.caption}>Tap to pause</span>}
     </div>
   )
 }

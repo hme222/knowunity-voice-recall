@@ -31,3 +31,24 @@
 
 
 
+
+/* The guided topic: the session's quiz, ringed in the brand colour with a "Start here"
+   label, so a first-time student knows which row to tap (designer, 2026-10-13). */
+.guided {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
+}
+
+.guided > button {
+  outline: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid var(--color-semantic-brand-bold);
+  outline-offset: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
+}
+
+.guidedLabel {
+  margin: 0;
+  color: var(--color-semantic-brand-on-surface);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
+}

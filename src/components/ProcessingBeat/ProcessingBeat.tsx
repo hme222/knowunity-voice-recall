@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { MascotSlot } from '../MascotSlot/MascotSlot'
+import { KNOWIE_EXPRESSIONS, MascotSlot } from '../MascotSlot/MascotSlot'
 import styles from './ProcessingBeat.module.css'
 
 // The wait, wherever it happens. History: docs/code-history.md#h-107
@@ -9,8 +9,8 @@ export type ProcessingBeatProps = {
   line: string
   /** Anything that belongs above the mascot — DD 03 puts its coverage meter here. */
   above?: ReactNode
-  /** Which Knowie. Every wait uses `determined`; the prop exists so it is a choice. */
-  expression?: 'dazed' | 'determined' | 'excited' | 'laughing'
+  /** Which Knowie. Every wait uses `thinking` since 2026-10-13 (it was `determined`); the prop exists so it is a choice. */
+  expression?: (typeof KNOWIE_EXPRESSIONS)[number]
   /**
    * False while the screen waits on the STUDENT, not the judge — the typed checking
    * beat's confidence ask. The dots said "working" over a question (craft critic,
@@ -20,7 +20,7 @@ export type ProcessingBeatProps = {
   className?: string
 }
 
-export function ProcessingBeat({ line, above, expression = 'determined', working = true, className }: ProcessingBeatProps) {
+export function ProcessingBeat({ line, above, expression = 'thinking', working = true, className }: ProcessingBeatProps) {
   return (
     <div className={[styles.root, className].filter(Boolean).join(' ')}>
       {above ? <div className={styles.above}>{above}</div> : null}

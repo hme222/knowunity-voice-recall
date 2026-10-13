@@ -10,9 +10,9 @@ Voice-in / text-out active recall for Knowunity. A student explains a Chemistry 
 
 ```
 /  →  /start (prototype brief) ─Start─►  /home/unlock (popup: "Try it now" / "Later")
-        └─ Try it now or the lit chip → startRun() → Q1
+        └─ Try it now or the lit chip → /picker ("Start here": Chemistry: bonding) → startRun() → Q1
 Q(n): idle ─tap mic─► [first time only: primer sheet → drawn OS prompt → Allow]
-      └► recording ─Submit─► captured (transcript + "How sure are you?" / Skip)
+      └► recording ─Submit─► captured (transcript, optional Sure/Not sure chips; Looks good / Not quite right)
             └► processing (judging beat, moves on by itself)
                  ├─ Pass  → pass   ─Continue─► Q(n+1) or Recap
                  ├─ Miss  → miss (hint ladder, max 3) → Try again → idle | Reveal → reveal
@@ -45,7 +45,7 @@ Invariants enforced in code: judging screens move on with `router.replace`, so b
 - **Verdict (mock).** Spoken: under 2s → couldn't hear, 2–5s → miss, 5s+ → pass. Question 2's first attempt is a scripted couldn't-hear (never in practice, never on a door run). Typed: 40+ chars and at least one of the term's `keywords` → pass, under 15 → "too short to check", else miss. Say-it-back under 2s pays nothing.
 - **Hint ladder.** The hint on the 1st judged miss; the hint plus the drill's first-letter gap ("Fill the gap") on the 2nd, carried onto the retry; from the 3rd only Reveal is offered, with no verdict chip. A mishear does not spend a rung.
 - **XP.** Unaided 10 · Hinted 7 · Revealed 0 (+3 for a judged say-it-back) · Skipped 0 · finishing bonus +5 (only if at least one term was got). Typed by choice pays the Hinted rate (explained once, in the Recap's working); typing after a real couldn't-hear or with the mic denied pays in full. Starting any new run banks the old run's XP into `bankedXp`, so Resume's "Start fresh" loses nothing.
-- **Confidence.** Asked on Captured (optional: Sure / Not sure / Skip). Right first time +1 either way; sure and wrong costs 0 but is named on the miss, the reveal and the Recap.
+- **Confidence.** Optional chips on Captured (Sure / Not sure), read on "Looks good". Right first time +1 either way; sure and wrong costs 0 but is named on the miss, the reveal and the Recap.
 - **Miss labels.** "Partially right" (amber) for a real half-answer; "Not quite yet" (neutral) for a wrong idea (`partialKind: 'wrong'`) or a typed miss; "Not enough to check" under 15 typed characters.
 - **Coming back.** Revealed or skipped terms join `reviewQueue` (survives runs); the Recap says "Comes back tomorrow."; `/home/unlocked` shows them as a due chip; tapping runs `startReview()`, a say-again round; a pass clears them.
 - **Drill.** The bar reads "Drill · term · n/4" with Skip on every turn but the judging beats. Finishing pays +2 XP once per term per run (receipt from the last judged round). A passed round shows "Got it" for `verdictHold` (1100ms) before the next. A take under 2s is a mishear on drill Captured (Say it again / Type instead), no rung spent. Typed drill turns show the rung's "Define:" cue; a typed miss quotes the typed words.

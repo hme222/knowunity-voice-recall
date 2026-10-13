@@ -35,7 +35,7 @@ export default function QuizDoorResult() {
         <div className={styles.content}>
           {/* The screen's h1, for screen readers; the verdict is in the card. */}
           <h1 className="srOnly">{`${SUBJECT}: ${current.name}`}</h1>
-          <MascotSlot size="2XL" expression="excited" />
+          <MascotSlot size="2XL" expression="approving" />
         </div>
         <RecallResult state="Pass" title={current.passTitle} transcript={`“${current.transcript}”`} />
       </div>

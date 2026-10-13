@@ -36,7 +36,7 @@ export default function ResumePage() {
         }
       >
         <div className={styles.body}>
-          <MascotSlot size="2XL" expression="determined" />
+          <MascotSlot size="2XL" expression="standby" />
           <div className="screenTitle">
             <h1 className="screenTitleHeading">{finished ? 'You finished this one' : 'Nothing to pick up'}</h1>
             <p className="screenTitleCaption">

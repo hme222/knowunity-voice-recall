@@ -38,7 +38,7 @@ export default function ExamPlanDoor() {
         </AppBar>
       }
       bottomContent={
-        <Button CTA="Type instead" variant="Tertiary" size="M" fullWidth onClick={() => {
+        <Button CTA="Type instead" variant="Secondary" size="M" fullWidth onClick={() => {
             // Typing is the same one-definition door run as speaking (dev review).
             startSession({ door: 'exam-plan' })
             router.push('/text/turn?term=1')
@@ -49,7 +49,7 @@ export default function ExamPlanDoor() {
         <div className={styles.content}>
           {/* The screen's h1, for screen readers; the visible title is in the bubble. */}
           <h1 className="srOnly">{`${SUBJECT}: ${getTerm(1)?.name}`}</h1>
-          <MascotSlot size="2XL" expression="determined" />
+          <MascotSlot size="2XL" expression="excited" />
         </div>
         {/* The session's own question card (senior review, 2026-10-12): a long formal
             paragraph here read as a different product from the "Explain: X" cards the

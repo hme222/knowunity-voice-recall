@@ -698,11 +698,16 @@ export function startPractice(items: PracticeItem[]): string {
   // Each practised term starts a fresh hint ladder; the run's misses on it are history.
   const misses = { ...(state.misses ?? {}) }
   const firstTakes = { ...(state.firstTakes ?? {}) }
+  // The run's confidence tap belongs to the run: a practice round reading it said "You
+  // were sure" on a take the student never called (designer, 2026-10-13). The Recap
+  // keeps it on the outcome row, which practice never rewrites.
+  const confidence = { ...(state.confidence ?? {}) }
   for (const item of items) {
     delete misses[item.index]
     delete firstTakes[item.index]
+    delete confidence[item.index]
   }
-  const next = { ...state, practising: true, practiceQueue: items, misses, firstTakes, drillTerm: items[0].mode === 'drill' ? items[0].index : state.drillTerm }
+  const next = { ...state, practising: true, practiceQueue: items, misses, firstTakes, confidence, drillTerm: items[0].mode === 'drill' ? items[0].index : state.drillTerm }
   write(next)
   return practiceItemHref(items[0], next)
 }
@@ -1203,6 +1208,18 @@ export function markSpokenTake(index: number) {
   delete typed[index]
   delete sentTyped[index]
   write({ ...state, typed, sentTyped })
+}
+
+/**
+ * Take a typed answer back from "sent" to "draft", so the typed turn reopens with it in
+ * the box: the typed checking beat's "Not quite right" (designer, 2026-10-13).
+ */
+export function unsendTypedAnswer(index: number) {
+  const state = readSession()
+  if (!state.sentTyped?.[index]) return
+  const sentTyped = { ...state.sentTyped }
+  delete sentTyped[index]
+  write({ ...state, sentTyped })
 }
 
 /** Record a typed answer as sent for judging. Call from Send, before routing. */

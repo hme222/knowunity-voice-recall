@@ -38,7 +38,9 @@ function DrillCaptured() {
         bottomContent={
           <div className={styles.actions}>
             <Button CTA="Say it again" variant="Primary" size="M" fullWidth onClick={() => router.replace(again)} />
-            <Button CTA="Type instead" variant="Tertiary" size="S" onClick={() => router.push(typeInstead)} />
+            {/* The screen's other way to answer: Secondary, as on 01 Idle and the
+                session's mishear (button tiers by role, 2026-10-13). */}
+            <Button CTA="Type instead" variant="Secondary" size="M" fullWidth onClick={() => router.push(typeInstead)} />
           </div>
         }
       >

@@ -139,30 +139,9 @@
   text-align: left;
 }
 
-/* The run as a strip: one segment per term, in question order, coloured by how it
-   went. The hero sentence and the rows below carry the meaning in words; the strip is
-   the at-a-glance shape of it (senior review, 2026-10-12). Built inline: see
-   component-gaps.md. */
-.strip {
-  display: flex;
-  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
-  width: 100%;
-}
 
-.segment {
-  flex: 1;
-  height: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
-  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
-  background: var(--color-semantic-border-strong);
-}
 
-.segment[data-bucket='Unaided'] {
-  background: var(--color-semantic-feedback-success-bold);
-}
 
-.segment[data-bucket='Hinted'] {
-  background: var(--color-semantic-feedback-partial-bold);
-}
 
 
 .summary {
@@ -283,4 +262,64 @@
 
 .climbAfter .climbTag {
   color: var(--color-semantic-text-success);
+}
+
+/* XP and time, two chips side by side (designer, 2026-10-13, back from one line). */
+.stats {
+  display: flex;
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+}
+
+.stats > * {
+  flex: 1;
+}
+
+/* Confetti over "You learned something new!": a layer over the section that does not
+   take taps or space. Pieces start above the heading and fall through it, spinning and
+   fading. Rendered only when the section comes into view and never under reduced
+   motion; the CSS guard is the belt to that brace. */
+.learned {
+  position: relative;
+}
+
+.confetti {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.piece {
+  position: absolute;
+  top: 0;
+  left: calc(var(--confetti-x) * 1%);
+  width: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-100) * var(--size-primitive-unit));
+  opacity: 0;
+  animation: confettiFall calc(var(--motion-semantic-duration-confetti) * 1ms) var(--motion-semantic-easing-standard)
+    calc(var(--confetti-delay) * var(--motion-semantic-duration-confetti) * 1ms) both;
+}
+
+.piece[data-tone='brand'] { background: var(--color-semantic-brand-bold); }
+.piece[data-tone='success'] { background: var(--color-semantic-feedback-success-bold); }
+.piece[data-tone='partial'] { background: var(--color-semantic-feedback-partial-bold); }
+.piece[data-tone='coral'] { background: var(--color-semantic-feedback-unclear-bold); }
+.piece[data-tone='blue'] { background: var(--color-semantic-accent-blue-bold); }
+
+@keyframes confettiFall {
+  0% {
+    opacity: 1;
+    transform: translate(0, calc(var(--size-primitive-space-800) * -1 * var(--size-primitive-unit))) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--confetti-drift) * 1%), calc(var(--size-primitive-space-2400) * var(--size-primitive-unit))) rotate(calc(var(--confetti-spin) * 1deg));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confetti {
+    display: none;
+  }
 }

@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import {
+  unsendTypedAnswer,
+  recordConfidence,
   keyPhrase,
   runXp,
   SCRIPTED_COULDNT_HEAR_TERM,
@@ -355,5 +357,22 @@ describe('keyPhrase (reach 2: the student’s own words on the Recap)', () => {
   it('is empty when nothing matches, never a fixture word', () => {
     sendTypedAnswer(2, 'no idea at all really')
     expect(keyPhrase(2, readSession())).toBe('')
+  })
+})
+
+describe('practice forgets the run’s confidence tap', () => {
+  it('does not carry "you were sure" into a practice take', () => {
+    recordConfidence(3, true, 'Miss')
+    startPractice([{ index: 3, mode: 'say' }])
+    expect(readSession().confidence?.[3]).toBeUndefined()
+  })
+})
+
+describe('unsendTypedAnswer (typed check → Not quite right)', () => {
+  it('puts the sent answer back in the box as a draft', () => {
+    sendTypedAnswer(2, 'atoms share electrons in pairs')
+    expect(typedDraft(readSession(), 2)).toBe('')
+    unsendTypedAnswer(2)
+    expect(typedDraft(readSession(), 2)).toBe('atoms share electrons in pairs')
   })
 })

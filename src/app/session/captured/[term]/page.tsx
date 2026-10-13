@@ -1,13 +1,13 @@
 'use client'
 
-import { use, useRef } from 'react'
+import { use, useRef, useState } from 'react'
 import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import { Suspense } from 'react'
 import {
   Button,
-  ConfidenceAsk,
+  Chips,
   MascotSlot,
   RecallResultCaptured,
   ScreenShell,
@@ -35,8 +35,12 @@ function CapturedScreen({ index }: { index: number }) {
   const hinted = searchParams.get('hinted') === '1'
   const ms = Number(searchParams.get('ms') ?? '0')
 
-  // Once only: the grace timer and a tap can both land.
+  // Once only: a double tap on "Looks good" must not judge twice.
   const answeredRef = useRef(false)
+  // The confidence call, optional and small (designer, 2026-10-13): a pair of chips
+  // under the card, read when the student taps "Looks good". Untapped, nothing is
+  // scored, as "Just check it" did.
+  const [sure, setSure] = useState<boolean | undefined>(undefined)
   // The ask stays optional (designer, 2026-10-09) through a "Skip", not a timer. A
   // 10s auto-advance put dead air on every unanswered turn (Duolingo design review)
   // and moved a screen-reader user on mid-transcript (WCAG 2.2.1; Knowunity
@@ -72,9 +76,24 @@ function CapturedScreen({ index }: { index: number }) {
           }}
         />
       }
-      // "Just check it" under the pair it declines, not above it in the content
-      // (craft critic, 2026-10-13: the order read reversed).
-      bottomContent={<ConfidenceAsk onAnswer={answer} onDecline={() => answer()} />}
+      // Two answers to "is that what you said?", as the frame had them (designer,
+      // 2026-10-13: the ask-in-the-zone version was "awful"). "Not quite right" goes
+      // back to the question, where the student can say it again or type.
+      bottomContent={
+        <div className={styles.actions}>
+          <Button CTA="Looks good" variant="Primary" size="M" fullWidth onClick={() => answer(sure)} />
+          <Button
+            CTA="Not quite right"
+            variant="Tertiary"
+            size="S"
+            fullWidth
+            onClick={() => {
+              answeredRef.current = true
+              router.push(`/session/idle/${index}?attempt=${attempt}${hinted ? '&hinted=1' : ''}${door ? `&door=${door}` : ''}`)
+            }}
+          />
+        </div>
+      }
     >
       <div className={styles.body}>
         {/* Knowie has just heard you and is holding it up — "here's what I heard". */}
@@ -84,32 +103,12 @@ function CapturedScreen({ index }: { index: number }) {
           title="Here&rsquo;s what I heard."
           transcript={shownAnswer(index, verdictFor(index, ms, Number(attempt), { practising: isPractising(state) }), state)}
         />
-        {/* The corrections sit with the words they correct, not in the action zone,
-            which now holds the confidence call. */}
-        <div className={styles.fix}>
-          <span className={styles.fixLabel}>Not what you said?</span>
-          <Button
-            CTA="Say it again"
-            variant="Tertiary"
-            size="S"
-            onClick={() => {
-              answeredRef.current = true
-              router.push(`/session/recording/${index}?attempt=${attempt}${hinted ? '&hinted=1' : ''}${door ? `&door=${door}` : ''}`)
-            }}
-          />
-          <Button
-            CTA="Type instead"
-            variant="Tertiary"
-            size="S"
-            onClick={() => {
-              answeredRef.current = true
-              // No markMicFault here: nothing failed — the take was heard and is on
-              // screen. Marking it paid a typed answer the full 10 XP, so recording
-              // anything and then typing beat the typed-by-choice rate (engineering
-              // review, 2026-10-13). A real couldn't-hear still marks it, on 04a.
-              router.push(`/text/turn?term=${index}`)
-            }}
-          />
+        {/* How sure, small and optional: two chips under the card, not a question
+            filling the action zone (designer, 2026-10-13). */}
+        <div className={styles.sure} role="group" aria-label="How sure are you? Optional">
+          <span className={styles.sureLabel}>How sure?</span>
+          <Chips Text="Sure" size="S" color="Primary" toggle active={sure === true} showLeftIcon={false} showRightIcon={false} onClick={() => setSure(sure === true ? undefined : true)} />
+          <Chips Text="Not sure" size="S" color="Primary" toggle active={sure === false} showLeftIcon={false} showRightIcon={false} onClick={() => setSure(sure === false ? undefined : false)} />
         </div>
       </div>
     </ScreenShell>

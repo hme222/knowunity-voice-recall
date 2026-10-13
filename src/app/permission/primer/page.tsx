@@ -35,7 +35,8 @@ function Primer() {
           </div>
           <div className={styles.actions}>
             <Button CTA="Turn on the mic" variant="Primary" size="M" fullWidth onClick={() => router.push(`/permission/prompt?${forward}`)} />
-            <Button CTA="Type instead" variant="Tertiary" size="M" fullWidth onClick={() => router.push(alt)} />
+            {/* Secondary: the other way to answer, as on 01 Idle (button tiers by role, 2026-10-13). */}
+            <Button CTA="Type instead" variant="Secondary" size="M" fullWidth onClick={() => router.push(alt)} />
           </div>
         </BottomSheet>
       }

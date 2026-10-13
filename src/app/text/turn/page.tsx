@@ -7,7 +7,7 @@ import { SessionBar } from '../../session/SessionBar'
 import { actionRowClass, Button, ChatBubble, MascotSlot, ScreenShell, HintCard, TextInput } from '@/components'
 import { Cue, CueText } from '@/app/drill/Cue'
 import drillStyles from '../../drill/drill.module.css'
-import { hintFor, missCount, getTerm, nextAfter, recordOutcome, setSticky, sendTypedAnswer, setTypedAnswer, typedDraft, useSticky, SUBJECT, advancePractice, isPractising, useSession, drillRung, useDrillTerm } from '@/lib/session'
+import { hintFor, missCount, getTerm, nextAfter, recordOutcome, setSticky, sendTypedAnswer, setTypedAnswer, typedDraft, useSticky, advancePractice, isPractising, useSession, drillRung, useDrillTerm } from '@/lib/session'
 import { DrillBar } from '../../drill/DrillBar'
 import styles from '../text.module.css'
 
@@ -130,7 +130,7 @@ function TextTurnScreen() {
     >
       <div className={styles.body}>
         {/* Knowie and the accented term, as on every voice screen. History: docs/code-history.md#h-096 */}
-        <MascotSlot size="2XL" expression="excited" className={styles.mascotCentred} />
+        <MascotSlot size="2XL" expression={rung ? 'thinking' : 'standby'} className={styles.mascotCentred} />
         {rung ? (
           <>
             <p className={`${drillStyles.termPill} ${styles.pill}`}>
@@ -141,7 +141,7 @@ function TextTurnScreen() {
             </div>
           </>
         ) : (
-          <ChatBubble showTitle title={`${SUBJECT} · Explain: `} titleAccent={current.name} body={current.prompt} />
+          <ChatBubble showTitle title="Explain: " titleAccent={current.name} body={current.prompt} />
         )}
         {/* A typed retry carries its hint, as the spoken retry does under the mic. */}
         {hinted && (() => {

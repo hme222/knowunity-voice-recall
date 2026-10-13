@@ -60,7 +60,7 @@ export default function RevealPage({ params }: { params: Promise<{ term: string 
       bottomContent={<Button CTA="Continue" variant="Secondary" size="M" fullWidth onClick={moveOn} />}
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="determined" />
+        <MascotSlot size="2XL" expression="standby" />
         {/* One bubble, not two. The title said "Now say it back.", the second bubble said
             "Say it back, in your own words" and the mic is named "Say it back" — the same
             sentence three times, and the 72px it cost is what pushed this screen past the

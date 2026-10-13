@@ -120,3 +120,13 @@
 .beforeLabel {
   font-weight: var(--typography-style-body-s-bold-font-weight);
 }
+
+/* "You were sure about this one." beside the verdict chip: the confident miss named,
+   quietly, in the warning text tone the Recap uses for the same fact. */
+.sureNote {
+  margin: 0;
+  color: var(--color-semantic-text-warning);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
+}

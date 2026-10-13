@@ -37,8 +37,12 @@ export type ScreenShellProps = {
    * screen whose content is MEANT to scroll, like the Recap's term list, where the
    * overflow is the list and not a sign the words are being crowded (designer,
    * 2026-10-09: "bring back Knowie in recap").
+   *
+   * `'shrink'`: Knowie never leaves; when the content does not fit it drops to the
+   * smallest size (XL) and the rest scrolls. For a screen where Knowie IS the moment —
+   * 04 Pass (designer, 2026-10-13: "on the correct page can we see Knowie").
    */
-  mascotGivesWay?: boolean
+  mascotGivesWay?: boolean | 'shrink'
   /** Figma `bottomContent`: the action zone. */
   bottomContent?: ReactNode
   /** Figma `showBottomNavSlot`. Same defaulting rule as `showTopNavSlot`. */
@@ -102,7 +106,8 @@ export function ScreenShell({
   // 3 = Knowie out AND anything the screen marks `data-gives-way` (a repeated question,
   // an XP line): the second thing to go, so a short screen never clips a card mid-way
   // (system critic, 2026-10-13: unclear, the chat door at 390x668).
-  const [mascotStage, setMascotStage] = useState<0 | 2 | 3>(0)
+  // 1 = Knowie at its smallest size, kept: only for `mascotGivesWay="shrink"`.
+  const [mascotStage, setMascotStage] = useState<0 | 1 | 2 | 3>(0)
   const measure = useCallback(() => {
     const el = middleRef.current
     if (!el) return
@@ -122,7 +127,8 @@ export function ScreenShell({
       else el.removeAttribute('data-mascot-stage')
       return el.scrollHeight - el.clientHeight
     }
-    const stage = overAt(null) <= 1 ? 0 : !yielding || overAt('2') <= 1 ? 2 : 3
+    const stage =
+      overAt(null) <= 1 ? 0 : mascotGivesWay === 'shrink' ? 1 : !yielding || overAt('2') <= 1 ? 2 : 3
     if (applied) el.setAttribute('data-mascot-stage', applied)
     else el.removeAttribute('data-mascot-stage')
     setMascotStage(stage)

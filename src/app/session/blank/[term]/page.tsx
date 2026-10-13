@@ -13,7 +13,7 @@ import {
   MicCaption,
   ScreenShell,
 } from '@/components'
-import { getTerm, micGate, useSticky, SUBJECT } from '@/lib/session'
+import { getTerm, micGate, useSticky } from '@/lib/session'
 import styles from '../../interrupt.module.css'
 
 // A genuinely blank term — not a near-miss, nothing at all. History: docs/code-history.md#h-048
@@ -50,18 +50,18 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
         <div className={styles.actions}>
           {/* This screen removed the typing option at the exact moment a student said
               they were stuck — speak or be shown the answer, nothing in between. */}
-          {/* Text-weight, not a filled bar: the mic is the primary action and the filled
-              "Type instead" outweighed it (senior review, 2026-10-12). Still full width
-              and in the same place on every voice screen. */}
+          {/* Secondary: another way to answer, the same pill as 01 Idle. Reveal answer
+              is giving up, so it is the text link (button tiers by role, designer,
+              2026-10-13). */}
           <Button
             CTA="Type instead"
-            variant="Tertiary"
+            variant="Secondary"
             size="M"
             fullWidth
             onClick={() => router.push(`/text/turn?term=${index}`)}
           />
           {/* "Reveal answer", the miss screen's name for the same move (craft critic, 2026-10-13). */}
-          <Button CTA="Reveal answer" variant="Tertiary" size="M" fullWidth onClick={() => router.push(`/session/reveal/${index}`)} />
+          <Button CTA="Reveal answer" variant="Tertiary" size="S" fullWidth onClick={() => router.push(`/session/reveal/${index}`)} />
         </div>
       }
     >
@@ -69,11 +69,11 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
         {/* `laughing`, not `determined`, from 2026-10-07 by the designer: the half-lidded
             face read as frustrated at a student who had just said they were stuck.
             design-system.md § Knowie expressions. */}
-        <MascotSlot size="2XL" expression="laughing" />
+        <MascotSlot size="2XL" expression="giggling" />
         {/* The question stays in context — designer, 2026-10-08. The bubble used to be
             replaced by the encouragement, so a student who said "I don't know this one"
             lost sight of what "this one" was. Same bubble as 01 Idle. */}
-        <ChatBubble className={styles.bubble} showTitle title={`${SUBJECT} · Explain: `} titleAccent={current.name} body={current.prompt} />
+        <ChatBubble className={styles.bubble} showTitle title="Explain: " titleAccent={current.name} body={current.prompt} />
       </div>
     </ScreenShell>
   )

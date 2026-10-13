@@ -34,6 +34,12 @@ const RUNTIME_INJECTED = new Map([
   ['--font-greed', 'set by next/font/local in src/app/layout.tsx, on the <html> element'],
   ['--progress', 'set inline per instance by ProgressIndicator, style={{ "--progress": n }}'],
   ['--blank-length', 'set inline per blank by src/app/drill/Cue.tsx, from the number of letters removed'],
+  // The Recap's confetti: per-piece data (position, drift, spin, delay), set inline
+  // from the fixed CONFETTI table in src/app/session/recap/page.tsx.
+  ['--confetti-x', 'set inline per confetti piece by src/app/session/recap/page.tsx'],
+  ['--confetti-drift', 'set inline per confetti piece by src/app/session/recap/page.tsx'],
+  ['--confetti-spin', 'set inline per confetti piece by src/app/session/recap/page.tsx'],
+  ['--confetti-delay', 'set inline per confetti piece by src/app/session/recap/page.tsx'],
 ])
 
 const missing = []

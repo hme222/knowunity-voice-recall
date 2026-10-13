@@ -13,6 +13,18 @@
 
 .bubble {
   align-self: stretch;
+  /* Above the pulse rings: at 390x668 the outer ring rose into the question and drew
+     its arcs across the text (designer, 2026-10-13: "distracting"). The opaque card
+     now covers them, so the rings pass behind it. */
+  position: relative;
+  z-index: 1;
+}
+
+/* The content region too, for when its overflow mask makes it a stacking context of
+   its own: the rings are in the mic slot, after it in the DOM. */
+.root main {
+  position: relative;
+  z-index: 1;
 }
 
 /* Same fixed region as every other voice screen. History: docs/code-history.md#h-077 */

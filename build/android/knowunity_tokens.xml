@@ -88,6 +88,7 @@
   <integer name="motion_primitive_duration_600">600</integer>
   <integer name="motion_primitive_duration_1100">1100</integer>
   <integer name="motion_primitive_duration_1400">1400</integer>
+  <integer name="motion_primitive_duration_2200">2200</integer>
   <integer name="motion_primitive_duration_6000">6000</integer>
   <integer name="motion_primitive_duration_10000">10000</integer>
   <integer name="motion_semantic_duration_fast">150</integer>
@@ -102,6 +103,7 @@
   <integer name="motion_semantic_duration_celebrate">500</integer>
   <integer name="motion_semantic_duration_breathe">550</integer>
   <integer name="motion_semantic_duration_proof_delay">600</integer>
+  <integer name="motion_semantic_duration_confetti">2200</integer>
   <integer name="responsive_primitive_device_width_desktop">1200</integer>
   <integer name="responsive_primitive_device_width_mobile">390</integer>
   <integer name="responsive_primitive_device_width_tablet">768</integer>
@@ -113,9 +115,9 @@
   <integer name="spacing_semantic_card_padding">16</integer>
   <integer name="spacing_semantic_between_sections">24</integer>
   <integer name="spacing_semantic_card_label_gap">6</integer>
-  <integer name="spacing_semantic_tap_target">48</integer>
+  <integer name="spacing_semantic_tap_target">44</integer>
   <integer name="component_button_s_height">32</integer>
-  <integer name="component_button_m_height">40</integer>
+  <integer name="component_button_m_height">36</integer>
   <integer name="component_button_l_height">56</integer>
   <integer name="component_button_inline_primary_min_width">157</integer>
   <integer name="component_scaffold_panel_header_height">48</integer>
@@ -123,7 +125,7 @@
   <integer name="component_scaffold_bottom_sheet_only_height">34</integer>
   <integer name="component_scaffold_mic_region_height">200</integer>
   <integer name="component_scaffold_scroll_fade_height">40</integer>
-  <integer name="component_scaffold_action_zone_height">136</integer>
+  <integer name="component_scaffold_action_zone_height">120</integer>
   <integer name="component_mic_button_pulse_rest_scale">0.92</integer>
   <integer name="component_mic_button_pulse_peak_scale">1.04</integer>
   <integer name="component_mic_button_pulse_paused_opacity">0.3</integer>

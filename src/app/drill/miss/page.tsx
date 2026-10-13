@@ -41,7 +41,7 @@ function DrillMiss() {
       }
     >
       <div className={styles.frameBody}>
-        <MascotSlot size="2XL" expression="determined" />
+        <MascotSlot size="2XL" expression="thinking" />
         <div className={[styles.fullWidth, styles.verdictRow].join(' ')} aria-hidden="true">
           <Chips
             Text={typedText ? 'Not quite yet' : STUMBLES.first.verdict}

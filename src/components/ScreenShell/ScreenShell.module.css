@@ -103,6 +103,13 @@
   display: none;
 }
 
+/* Stage 1: Knowie kept, at the smallest slot size (illustration.800), when a screen
+   says Knowie stays (`mascotGivesWay="shrink"`). Overrides whatever size it was given. */
+.middle[data-mascot-stage='1'] [data-mascot] {
+  width: calc(var(--size-primitive-illustration-800) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-illustration-800) * var(--size-primitive-unit));
+}
+
 /* The control itself never shrinks — only the room around it. */
 .micRegion > * {
   flex-shrink: 0;

@@ -1,3 +1,4 @@
+import { KNOWIE_EXPRESSIONS } from '@/components/MascotSlot/MascotSlot'
 import { useEffect, useState } from 'react'
 import type { Meta as StoryMeta, StoryObj } from '@storybook/nextjs-vite'
 import { expect } from 'storybook/test'
@@ -9,11 +10,11 @@ import { Page, Section } from './Foundation'
 // CLAUDE.md: expressions come from these files; none are drawn or generated.
 //
 // Two poses:
-//   - Full body: dazed, determined, excited, laughing. MascotSlot's `expression`.
+//   - Full body: the fourteen Figma faces, MascotSlot's `expression`.
 //   - Peek: the head rising from a flat bottom edge. excited-1/2 and laughing-1…19,
 //     which differ frame to frame — an animation sequence. Not used in the app yet.
 
-const FACES = ['excited', 'laughing', 'determined', 'dazed'] as const
+const FACES = KNOWIE_EXPRESSIONS
 const EXCITED_PEEK = ['excited-1', 'excited-2'] as const
 const LAUGHING_PEEK = Array.from({ length: 19 }, (_, i) => `laughing-${i + 1}`)
 
@@ -23,7 +24,7 @@ function Art({ name }: { name: string }) {
   return (
     <figure style={{ margin: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'calc(var(--size-primitive-space-100) * var(--size-primitive-unit))' }}>
       {/* eslint-disable-next-line @next/next/no-img-element -- static SVG from public/ */}
-      <img src={`${name.includes('-') ? '/knowie-peek' : '/knowie'}/${name}.svg`} alt={`Knowie, ${name}`} style={{ width: SIZE, height: SIZE, objectFit: 'contain' }} />
+      <img src={`${/-\d+$/.test(name) ? '/knowie-peek' : '/knowie'}/${name}.svg`} alt={`Knowie, ${name}`} style={{ width: SIZE, height: SIZE, objectFit: 'contain' }} />
       <figcaption
         style={{
           color: 'var(--color-semantic-text-secondary)',
