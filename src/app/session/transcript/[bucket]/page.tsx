@@ -3,7 +3,7 @@
 import { Suspense, use } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { returnBack } from '@/lib/navigation'
-import { BottomSheet, ScreenShell } from '@/components'
+import { BottomSheet, MascotSlot, ScreenShell } from '@/components'
 import { answerFor, getTerm, shownAnswer, TERMS, useSession } from '@/lib/session'
 import styles from '../../../drill/drill.module.css'
 
@@ -20,7 +20,7 @@ const COPY = {
   },
   skipped: {
     title: 'The answer',
-    subtitle: "You skipped this one, so there's no take to play back.",
+    subtitle: "You skipped this one, so there’s no take to play back.",
   },
   // A typed pass: nothing was heard, so the sheet does not say it was.
   typed: {
@@ -30,7 +30,7 @@ const COPY = {
   // A skip after the mic failed: the app's fault, not a choice (dev review, 2026-10-12).
   mic: {
     title: 'The answer',
-    subtitle: "The mic missed this one, so there's no take to play back.",
+    subtitle: "The mic missed this one, so there’s no take to play back.",
   },
 } as const
 
@@ -59,6 +59,9 @@ function TranscriptScreen({ bucket }: { bucket: string }) {
       showBottomSheetBackground
       bottomSheetOnly={
       <BottomSheet Title={copy.title} subtitle={copy.subtitle} onDismiss={() => returnBack(router, '/session/recap')}>
+          {/* Knowie in the sheet, as the primer carries it (designer, 2026-10-14: Knowie
+              on every screen). */}
+          <MascotSlot size="2XL" expression="standby" className={styles.mascotCentred} />
           {key !== 'skipped' && key !== 'mic' && (
             <>
               {/* A quote, not a control. This was a PickerRow, which renders a <button> — so

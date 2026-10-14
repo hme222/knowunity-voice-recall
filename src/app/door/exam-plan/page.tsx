@@ -27,9 +27,9 @@ export default function ExamPlanDoor() {
               caption out BESIDE the button — both starting at y466, the caption clipping
               its upper edge. Same placement the recording screens use. */}
           {/* The mic's accessible name, word for word (UX critic, 2026-10-12): "Tap to answer"
-              beside a control named "Start speaking" gave a voice-control user a label
+              beside a control named "Tap to answer" (was "Start speaking") gave a voice-control user a label
               to say that matched nothing (WCAG 2.5.3). */}
-          <MicCaption body="Start speaking" />
+          <MicCaption body="Tap to answer" />
         </div>
       }
       topNavigation={

@@ -17,7 +17,7 @@ const meta = {
   component: ProcessingBeat,
   tags: ['autodocs'],
   parameters: { docs: { description: { component: DESCRIPTION } } },
-  args: { line: 'Let me check that against the definition…' },
+  args: { line: 'Checking that against the definition…' },
   decorators: [(Story) => <div style={{ height: 420, display: 'flex' }}><Story /></div>],
 } satisfies Meta<typeof ProcessingBeat>
 
@@ -28,13 +28,13 @@ export const Default: Story = {}
 
 /** The slow-judge escalation. Same screen, same shape, different words. */
 export const Slow: Story = {
-  args: { line: 'Still thinking — hang on, this one is taking a moment.' },
+  args: { line: 'Still checking. This one’s taking a moment.' },
 }
 
 /** DD 03, which puts its coverage meter above the wait. */
 export const WithMeter: Story = {
   args: {
-    line: 'Checking how much of that was you…',
+    line: 'Checking that against the definition…',
     above: <StrengthMeter fill={50} label="Scoring what you said unaided" />,
   },
 }

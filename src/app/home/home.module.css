@@ -221,17 +221,17 @@
   height: calc(var(--size-primitive-illustration-1500) * var(--size-primitive-unit));
 }
 
-/* Still too tall at 2XL: Knowie steps out and the greeting stays. */
-.middle[data-compact='2'] .mascotGroup {
-  display: none;
-}
+/* Knowie never steps out (designer, 2026-10-14: Knowie on every screen, one size);
+   a short home scrolls under its fade instead. */
 
 /* The frame's ground ellipse: 134 x 24, at the foot of the 200 box. History: docs/code-history.md#h-034 */
 .groundShadow {
   position: absolute;
   bottom: 0;
-  width: calc((var(--size-primitive-space-4000) - var(--size-primitive-space-700)) * var(--size-primitive-unit));
-  height: calc(var(--size-primitive-space-600) * var(--size-primitive-unit));
+  /* Scaled with Knowie from the frame's 3XL (134 x 24 under a 200 box) to 2XL (72 x
+     12 under 120), since Knowie is one size on every screen (2026-10-14). */
+  width: calc((var(--size-primitive-space-1600) + var(--size-primitive-space-200)) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
   background: radial-gradient(ellipse at center, var(--color-semantic-background-scrim) 0%, transparent 72%);
 }
 

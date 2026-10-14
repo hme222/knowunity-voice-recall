@@ -8,7 +8,7 @@ export const MIC_BUTTON_STATES = ['Idle', 'Listening', 'Paused', 'Captured', 'Di
 export type MicButtonState = (typeof MIC_BUTTON_STATES)[number]
 
 const LABELS: Record<MicButtonState, string> = {
-  Idle: 'Start speaking',
+  Idle: 'Tap to answer',
   Listening: 'Listening, tap to pause',
   Paused: 'Paused, tap to resume',
   Captured: 'Answer captured',

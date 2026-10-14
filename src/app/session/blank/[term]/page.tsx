@@ -41,7 +41,7 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
       mic={
         <div className={micRegionClass}>
           {/* One encouraged attempt, then the answer — voice-ux.md marks this state Must and specifies exactly that. History: docs/code-history.md#h-050 */}
-          <MicButton state="Idle" label="Say whatever you've got" onClick={() => router.push(micGate(`/session/recording/${index}?blank=1`, `/text/turn?term=${index}`))} />
+          <MicButton state="Idle" label="Say whatever you’ve got" onClick={() => router.push(micGate(`/session/recording/${index}?blank=1`, `/text/turn?term=${index}`))} />
           {/* The encouragement moved under the mic so the question can stay on screen. */}
           <MicCaption label="Drawing a blank?" body="Say whatever you’ve got, even half of it." />
         </div>
@@ -62,7 +62,7 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
             onClick={() => router.push(`/text/turn?term=${index}`)}
           />
           {/* "Reveal answer", the miss screen's name for the same move (craft critic, 2026-10-13). */}
-          <Button CTA="Reveal answer" variant="Tertiary" size="S" fullWidth onClick={() => router.push(`/session/reveal/${index}`)} />
+          <Button CTA="Show the answer" variant="Tertiary" size="S" fullWidth onClick={() => router.push(`/session/reveal/${index}`)} />
         </div>
       }
     >

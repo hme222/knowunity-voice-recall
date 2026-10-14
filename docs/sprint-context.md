@@ -92,8 +92,8 @@ above.
   - **Second Miss** drops "You said" so the hint shows without scrolling.
   - **Blank term keeps the question** on screen; the encouragement moves under
     the mic as a `MicCaption`.
-  - **Knowie is full size or absent.** When content does not fit, Knowie steps
-    out (any screen); there is no shrunk size.
+  - ~~**Knowie is full size or absent.**~~ Superseded 2026-10-14: Knowie is on every
+    screen at one size (2XL); short screens tighten the mic area instead.
   - **One subject, decided 2026-10-09:** the whole set is Chemistry: bonding —
     formal charge, covalent bond, electronegativity, octet rule — replacing three
     Biology terms. The due quizzes and picker topics are Chemistry too. The intro
@@ -374,6 +374,38 @@ above.
         - *Mic denied* has a close (back to the question) and numbered steps.
         - *Drill Captured keeps "Submit".*
         - *Not taken:* opening the Recap with the student's own words (reach 3).
+      - **Same day, later (designer, 2026-10-14).**
+        - *Knowie on every screen, one size.* 2XL (120, the size Figma's screen frames
+          place `mascotSlot` at; the four Figma sizes XL/2XL/3XL/4XL = 64/120/200/320
+          with a 12 inset are matched in code). Knowie never gives way or shrinks
+          (`mascotGivesWay` is off by default); added to Recording (session and drill),
+          the exit sheet (`questioning`) and the transcript sheet. Home drops from the
+          frame's 3XL to 2XL, its ground shadow scaled with it. **Supersedes "Knowie is
+          full size or absent" (2026-10-08) and the give-way stages.**
+        - *Short screens make room around the mic instead.* Under
+          `component.scaffold.shortHeight` (720) ScreenShell marks `data-short`: the
+          mic region is 184 (was 200), the section gap 16 (was 24), the space under the
+          mic and above it tighter, the ring fade follows. At 390x668 the voice screens
+          still scroll 40-80px (the question's first lines show): accepted, as the
+          option said.
+        - *Pass: Knowie 2XL, the card compact* (Headline XS, Body S, 12 padding); the
+          confidence sentence gives way on a short screen.
+        - *Couldn't hear keeps Knowie;* its repeated question gives way first.
+        - *Sure / Not sure at hint scale:* Secondary S, hugging their labels, under a
+          Caption M "How sure are you?" with "Optional" beside it.
+        - *Microcopy pass, P1 and P2* (senior UX writing review). Recap groups in the
+          student's words ("Knew it", "Got it with a hint", "Saw the answer",
+          "Skipped"); the picker note names the pill, not its colour; the bar no
+          longer says "· last one" (the card does); "+2 XP" with a sign; curly
+          apostrophes; US "practice". Captured's correction is "That's not what I
+          said" (typed: "…wrote"), reversing "Not quite right". One verb set: "Send"
+          (was "Submit" on Recording and drill Captured), "Show the answer" (was
+          "Reveal answer" / "Show full definition"), "Say it instead", the mic's name
+          and caption "Tap to answer" (was "Start speaking"). Knowie speaks as "I"
+          (primer), contractions throughout, miss titles end on a question, one
+          checking line ("Checking that against the definition…", slow: "Still
+          checking. This one's taking a moment."), one mishear line, "Sure, and
+          right. Bonus XP added.", "You felt sure about this one. Worth a second look."
     - **02a Captured asks a question** (option 3b, same day): "Here's what I heard.
       Did I get it?" over the frame's "Looks right" / "Say it again". The frame's
       "Send it, or say it again." disagreed with its own button. Same in the drill.

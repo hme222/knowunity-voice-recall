@@ -58,9 +58,10 @@ function PassScreen({ index }: { index: number }) {
 
   return (
     <ScreenShell
-      // Knowie stays on a pass, smaller on a short screen, never gone (designer,
-      // 2026-10-13). The XP lines scroll under the fade at 390x668 if they must.
-      mascotGivesWay="shrink"
+      // Knowie stays on a pass at its normal size, never shrunk (designer, 2026-10-14:
+      // "Knowie needs to be normal size, make the correct card smaller"). On a short
+      // screen the confidence sentence gives way instead; the XP total keeps the bonus.
+      mascotGivesWay={false}
       topNavigation={<SessionBar index={index} />}
       bottomContent={
         <div className={styles.actions}>
@@ -76,10 +77,9 @@ function PassScreen({ index }: { index: number }) {
         {/* Knowie reacts: one bounce on arrival, and the card rises after it (senior
             review, 2026-10-12: "Knowie never visibly reacts"). Not on a practice round,
             which is a second look, not a first win. */}
-        {/* 3XL on a first-time pass: the win is the one moment Knowie is bigger than
-            the ask, and the space under the card was empty anyway. Gives way on short
-            screens like every other mascot. */}
-        <MascotSlot size={practising || firstTake ? '2XL' : '3XL'} expression={withHint || typed || practising ? 'approving' : 'laughing'} className={`${styles.mascotCentred} ${practising ? '' : styles.celebrate}`} />
+        {/* 2XL, the normal size, on every pass (designer, 2026-10-14). It was 3XL on a
+            first-time pass, which pushed the card off a short screen and shrank Knowie. */}
+        <MascotSlot size="2XL" expression={withHint || typed || practising ? 'approving' : 'laughing'} className={`${styles.mascotCentred} ${practising ? '' : styles.celebrate}`} />
         {/* A "Correct" chip, matching the partial's "Partially right": the verdict is
             not carried by the green card alone (designer, 2026-10-12). */}
         <div className={styles.verdictRow} aria-hidden="true">
@@ -120,12 +120,12 @@ function PassScreen({ index }: { index: number }) {
         )}
         {/* What the confidence call did, in words: the number is in the total above. */}
         {!practising && calibration !== 0 && (
-          <p className={styles.calibration}>
+          <p className={styles.calibration} data-gives-way>
             {calibration > 0
               ? outcome?.wasSure
-                ? 'You said you were sure, and you were. Bonus included.'
-                : 'You weren’t sure, and you nailed it. Bonus included.'
-              : 'You were sure about this one.'}
+                ? 'Sure, and right. Bonus XP added.'
+                : 'Not sure, but right. Bonus XP added.'
+              : 'You felt sure about this one.'}
           </p>
         )}
         {/* Removed for the same reason as 05 Miss: the card above already shows "You

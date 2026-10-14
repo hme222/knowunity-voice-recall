@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { rememberedTerm, returnBack } from '@/lib/navigation'
-import { Button, OptionRow, ScreenShell } from '@/components'
+import { Button, MascotSlot, OptionRow, ScreenShell } from '@/components'
 import { setSticky, useSession, XP, setPractising } from '@/lib/session'
 import styles from './exit.module.css'
 
@@ -75,6 +75,9 @@ export default function ExitPage() {
       }
     >
       <div className={styles.body}>
+        {/* Knowie on every screen (designer, 2026-10-14): `questioning`, asking, not
+            `sad` — leaving is allowed and should not be guilt-tripped. */}
+        <MascotSlot size="2XL" expression="questioning" className={styles.mascot} />
         <div className="screenTitle">
           <h1 className="screenTitleHeading">What made you stop?</h1>
           <p className="screenTitleCaption">Optional — it helps us make this better.</p>
@@ -88,7 +91,7 @@ export default function ExitPage() {
         <p className={styles.note}>
           {started
             ? `Your progress is saved. You'll keep the XP you've earned — only the +${XP.completionBonus} finishing bonus goes.`
-            : "You haven't answered anything yet, so there's nothing to lose."}
+            : "You haven’t answered anything yet, so there’s nothing to lose."}
         </p>
         {/* One question, one answer, so it announces as one group. It was eight
             independent aria-pressed toggles with nothing tying them together.

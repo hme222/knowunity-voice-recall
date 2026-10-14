@@ -52,6 +52,9 @@ function UnclearScreen({ index }: { index: number }) {
           <MicCaption body="Say it again" />
         </div>
       }
+      // Knowie stays (designer, 2026-10-14: "bring back Knowie on I didn't catch that"):
+      // on a short screen the repeated question gives way, never the mascot.
+      mascotGivesWay={false}
       topNavigation={<SessionBar index={index} door={door} onSkip={skip} />}
       bottomContent={
         <div className={styles.actions}>
@@ -81,7 +84,7 @@ function UnclearScreen({ index }: { index: number }) {
               // Was "…Type X instead, or try once more", which narrated the two
               // controls already on the screen. The line's job is to say whose fault
               // it is; the mic and "Type instead" say what to do about it.
-              ? `That is twice now, so it is probably the mic and not you.`
+              ? `Twice now. That’s the mic, not you.`
               // Attempt 1 is a say-again, not a retry of the answer: the mic missed it, so
               // the same answer is fine (designer, 2026-10-08).
               : `The mic didn’t pick you up. Say the same answer again, a little closer.`

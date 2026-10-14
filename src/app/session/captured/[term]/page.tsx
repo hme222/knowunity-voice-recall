@@ -84,7 +84,7 @@ function CapturedScreen({ index }: { index: number }) {
         <div className={styles.actions}>
           <Button CTA="Looks good" variant="Primary" size="M" fullWidth onClick={() => answer(sure)} />
           <Button
-            CTA="Not quite right"
+            CTA="That’s not what I said"
             variant="Tertiary"
             size="S"
             fullWidth

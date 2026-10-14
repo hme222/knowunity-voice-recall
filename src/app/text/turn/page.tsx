@@ -95,7 +95,7 @@ function TextTurnScreen() {
               can return through the permission prompt (designer, 2026-10-13, option C). */}
           {sticky && !drillStep ? (
             <Button
-              CTA="Mic back on? Speak instead"
+              CTA="Mic back on? Say it instead"
               variant="Tertiary"
               size="S"
               fullWidth
@@ -135,7 +135,7 @@ function TextTurnScreen() {
             {/* Under the question it answers, not in the action zone (designer,
                 2026-10-14). Not in a drill: the blank path is the session's. */}
             <Button
-              CTA="I don't know this one"
+              CTA="I don’t know this one"
               variant="Tertiary"
               size="S"
               className={styles.dontKnow}

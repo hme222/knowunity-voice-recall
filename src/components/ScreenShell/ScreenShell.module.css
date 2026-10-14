@@ -95,6 +95,7 @@
 .middle[data-mascot-stage='2'] [data-mascot],
 .middle[data-mascot-stage='3'] [data-mascot],
 .middle[data-mascot-stage='3'] [data-gives-way],
+.middle[data-mascot-stage='y'] [data-gives-way],
 .middle[data-mascot-stage='3'] :has(> [data-mascot]:only-child),
 /* A wrapper that exists only to hold Knowie goes with it. The doors' `.content` block
    kept its 32/16 padding and both flex gaps — 80 of nothing between the chat door's XP
@@ -116,6 +117,29 @@
 .middle[data-mascot-stage='m'] [data-mascot] {
   width: calc(var(--size-primitive-illustration-1500) * var(--size-primitive-unit));
   height: calc(var(--size-primitive-illustration-1500) * var(--size-primitive-unit));
+}
+
+/* A short frame (data-short, under component.scaffold.shortHeight): the room around the
+   mic and the section gaps tighten, so Knowie can stay at its one size (designer,
+   2026-10-14, "Smaller mic area"). The section gap is rebound for this subtree only,
+   so every screen's own `between-sections` gaps follow without a rule each; the ring
+   fade follows the region, whose status line now sits 68 below the mic's centre. */
+.root[data-short] {
+  --spacing-semantic-between-sections: var(--size-primitive-space-400);
+  --component-mic-button-pulse-ring-fade-from: var(--component-mic-button-pulse-ring-fade-from-short);
+  --component-mic-button-pulse-ring-fade-to: var(--component-mic-button-pulse-ring-fade-to-short);
+}
+
+.root[data-short] .micRegion {
+  height: calc(var(--component-scaffold-mic-region-height-short) * var(--size-primitive-unit));
+}
+
+.root[data-short] .micSlot {
+  padding-bottom: 0;
+}
+
+.root[data-short] .middle[data-has-mic] {
+  padding-bottom: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 /* The control itself never shrinks — only the room around it. */

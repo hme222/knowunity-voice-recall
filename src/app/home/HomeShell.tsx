@@ -168,7 +168,7 @@ export function HomeShell({ children, toolChip, popup }: {
             <div className={styles.mascotGroup}>
               {/* The frame's ground ellipse under Knowie. Decorative. */}
               <span className={styles.groundShadow} aria-hidden="true" />
-              <MascotSlot size="3XL" expression="excited" className={styles.mascot} />
+              <MascotSlot size="2XL" expression="excited" className={styles.mascot} />
             </div>
             <h1 className={styles.greeting}>{HOME_GREETING}</h1>
           </div>

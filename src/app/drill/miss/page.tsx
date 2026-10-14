@@ -26,7 +26,7 @@ function DrillMiss() {
         // width, and the way out is a link under it.
         <div className={styles.stack}>
           <Button CTA="Try again" variant="Primary" size="M" fullWidth onClick={() => router.push('/drill/miss/letter')} />
-          <Button CTA="Show full definition" variant="Tertiary" size="S" fullWidth onClick={() => router.push('/drill/pass/1')} />
+          <Button CTA="Show the answer" variant="Tertiary" size="S" fullWidth onClick={() => router.push('/drill/pass/1')} />
         </div>
       }
     >

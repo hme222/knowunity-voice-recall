@@ -82,7 +82,10 @@ export function ScreenShell({
   showTopNavSlot,
   children,
   mic,
-  mascotGivesWay = true,
+  // Knowie stays, at one size, on every screen (designer, 2026-10-14: "I want Knowie
+  // on all screens… adjust so Knowie stays the same size"). Off by default now; a
+  // short screen drops its `data-gives-way` content, then scrolls.
+  mascotGivesWay = false,
   bottomContent,
   showBottomNavSlot,
   bottomSheetOnly,
@@ -96,6 +99,22 @@ export function ScreenShell({
   // not an affordance. Measured rather than guessed, and re-measured on resize and
   // whenever the content changes, because most of these screens are state-dependent.
   const middleRef = useRef<HTMLElement>(null)
+  // A short frame (under component.scaffold.shortHeight, e.g. 390x668) tightens the
+  // room around the mic and the section gaps, so Knowie can stay at one size on every
+  // screen (designer, 2026-10-14). Measured on the shell's own box, not the window,
+  // so it holds inside the desktop phone frame too.
+  const rootRef = useRef<HTMLDivElement>(null)
+  const [short, setShort] = useState(false)
+  useLayoutEffect(() => {
+    const el = rootRef.current
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const limit = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--component-scaffold-short-height')) || 720
+    const check = () => setShort(el.getBoundingClientRect().height < limit() * (parseFloat(getComputedStyle(document.documentElement).fontSize) / 16))
+    check()
+    const ro = new ResizeObserver(check)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
   const [overflowing, setOverflowing] = useState(false)
   // When the content does not fit, Knowie gives way before the words do: 0 = as designed, 2 = out. History: docs/code-history.md#h-118
   const hasMic = mic != null
@@ -110,7 +129,10 @@ export function ScreenShell({
   // 'm' = one step first: a 3XL Knowie tries 2XL before dropping to XL. Adding the
   // Pass card's strength notches tipped 04 Pass over at 390x844, and Knowie fell from
   // 200 straight to 64 for want of 30px (2026-10-14).
-  const [mascotStage, setMascotStage] = useState<0 | 'm' | 1 | 2 | 3>(0)
+  // 'y' = Knowie stays as drawn and only `data-gives-way` content goes: for a screen
+  // that says Knowie never yields (`mascotGivesWay={false}`) but still has something
+  // optional to drop (designer, 2026-10-14: Knowie back on "I didn't catch that").
+  const [mascotStage, setMascotStage] = useState<0 | 'm' | 1 | 2 | 3 | 'y'>(0)
   const measure = useCallback(() => {
     const el = middleRef.current
     if (!el) return
@@ -133,7 +155,9 @@ export function ScreenShell({
     const stage =
       overAt(null) <= 1
         ? 0
-        : mascotGivesWay === 'shrink'
+        : !mascot
+          ? 'y'
+          : mascotGivesWay === 'shrink'
           ? overAt('m') <= 1
             ? 'm'
             : 1
@@ -170,7 +194,7 @@ export function ScreenShell({
   }, [measure, children])
 
   return (
-    <div className={[styles.root, className].filter(Boolean).join(' ')} data-sheet={showBottomSheetBackground}>
+    <div ref={rootRef} className={[styles.root, className].filter(Boolean).join(' ')} data-sheet={showBottomSheetBackground} data-short={short || undefined}>
       {/* Panel Header — the status-bar region, and a real slot as of 2026-09-23. History: docs/code-history.md#h-119 */}
       <div className={styles.panelHeader} aria-hidden={panelHeader ? undefined : true}>
         {panelHeader}

@@ -134,30 +134,30 @@ export const TERMS: Term[] = [
     prompt: "Say what formal charge means, in your own words. However you’d explain it to a friend.",
     // from the frame — 02a Captured
     transcript:
-      "It's the charge on an atom if you split every bond's electrons evenly between the two atoms.",
+      "It’s the charge on an atom if you split every bond’s electrons evenly between the two atoms.",
     partialTranscript:
-      "It's the charge on an atom, worked out from its bonds.",
+      "It’s the charge on an atom, worked out from its bonds.",
     // from the RecallResult stories, which carry the frame's copy
-    passTitle: "Nailed it — that's the whole definition.",
+    passTitle: "Nailed it — that’s the whole definition.",
     // from the frame — 05 Miss + Hint
     missTitle:
       'You\u2019ve got the \u201ccharge on an atom\u201d part right. The \u201cevenly split\u201d piece is what\u2019s missing.',
     hint: 'Think about how the electrons\nin each bond get divided up.',
     // from the frame — 05a Reveal answer
     answer:
-      "Formal charge is the charge on an atom when every bond's electrons are split evenly between the two atoms.",
+      "Formal charge is the charge on an atom when every bond’s electrons are split evenly between the two atoms.",
     drillTitle: 'Define: Formal charge',
     drill: {
       cues: [
-        "Formal charge is the charge on an atom when every bond's electrons are split evenly between the two atoms.",
-        "Formal charge is the charge on an atom when every bond's _________ are split evenly between the two atoms.",
-        "Formal charge is the ______ on an atom when every bond's _________ are split ______ between the two atoms.",
+        "Formal charge is the charge on an atom when every bond’s electrons are split evenly between the two atoms.",
+        "Formal charge is the charge on an atom when every bond’s _________ are split evenly between the two atoms.",
+        "Formal charge is the ______ on an atom when every bond’s _________ are split ______ between the two atoms.",
       ],
       // `electrons` on every stumble frame — the whole scaffold hangs off one word.
       missedWord: 'electrons',
       // DD 07 used to hardcode a different string with an invented "um…" in it, while
       // /drill/captured showed the CLEAN transcript; one string now feeds both.
-      partial: "It's the charge on an atom if you split every bond's… evenly between the two atoms.",
+      partial: "It’s the charge on an atom if you split every bond’s… evenly between the two atoms.",
     },
   },
   // Terms 2-4 are Chemistry: bonding, the same topic as formal charge — decided 2026-10-09 by the designer: one subject, like a normal Say It Back session. History: docs/code-history.md#h-136
@@ -171,8 +171,8 @@ export const TERMS: Term[] = [
     transcript: 'It is when two atoms share a pair of electrons, and both nuclei pulling on that shared pair is what holds them together.',
     // Names the atoms, says nothing about the electrons — which is what `missTitle` names.
     partialTranscript: 'It is a bond between two atoms, usually two non-metals.',
-    passTitle: 'That is it — shared electrons, and why they hold.',
-    missTitle: 'Right atoms. What they do with their electrons is the piece that is missing.',
+    passTitle: 'That’s it: shared electrons, and why they hold.',
+    missTitle: 'Right atoms. What do they do with their electrons?',
     hint: 'Think about what the two atoms do with their electrons.',
     answer:
       'A covalent bond is a pair of electrons shared between two atoms, held together by both nuclei attracting the shared pair.',
@@ -184,7 +184,7 @@ export const TERMS: Term[] = [
         'A covalent bond is a pair of _________ ______ between two atoms, held together by both ______ attracting the shared pair.',
       ],
       missedWord: 'nuclei',
-      partial: "It's a pair of electrons shared between two atoms, held together by both… attracting the shared pair.",
+      partial: "It’s a pair of electrons shared between two atoms, held together by both… attracting the shared pair.",
     },
   },
   {
@@ -199,7 +199,7 @@ export const TERMS: Term[] = [
     partialKind: 'wrong',
     partialTranscript: 'It is a number each element has on the periodic table.',
     passTitle: 'Yes — the pull on shared electrons, and what it does.',
-    missTitle: 'True, but that is where you look it up. What it measures is the piece that is missing.',
+    missTitle: 'True, but that’s where you’d look it up. What does it measure?',
     hint: 'In a bond, which atom gets more of the shared electrons?',
     answer:
       'Electronegativity is how strongly an atom attracts the shared electrons in a bond toward itself.',
@@ -211,7 +211,7 @@ export const TERMS: Term[] = [
         'Electronegativity is how ________ an atom ________ the ______ electrons in a bond toward itself.',
       ],
       missedWord: 'attracts',
-      partial: "It's how strongly an atom… the shared electrons in a bond toward itself.",
+      partial: "It’s how strongly an atom… the shared electrons in a bond toward itself.",
     },
   },
   {
@@ -225,7 +225,7 @@ export const TERMS: Term[] = [
     // The number, with neither where the eight are nor how an atom gets them.
     partialTranscript: 'Atoms want to have eight electrons.',
     passTitle: 'Nailed it — eight in the outer shell, and how they get there.',
-    missTitle: 'That is the right number. Where the eight are, and how atoms get them, is what is missing.',
+    missTitle: 'Right number. Eight where, and how do atoms get there?',
     hint: 'Eight electrons where? And how does an atom reach it?',
     answer:
       'The octet rule says atoms tend to gain, lose or share electrons until they have eight in their outer shell.',
@@ -443,9 +443,9 @@ export function useDrillTerm(): Term {
  */
 export const STUMBLES = {
   // The verdict escalates with the rung. History: docs/code-history.md#h-140
-  first: { verdict: 'Partially right', copy: "One word off. It's below, then take it again." },
-  second: { verdict: 'Same word again', copy: "Still tricky? Here's a nudge." },
-  third: { verdict: 'Let\u2019s do this one together', copy: "Let's say this one together." },
+  first: { verdict: 'Partially right', copy: "One word off. It’s below, then take it again." },
+  second: { verdict: 'Same word again', copy: "Still tricky? Here’s a nudge." },
+  third: { verdict: 'Let\u2019s do this one together', copy: "Let’s say this one together." },
 } as const
 
 // --------------------------------------------------------------------------- Session state… History: docs/code-history.md#h-141

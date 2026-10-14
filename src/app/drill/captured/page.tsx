@@ -50,7 +50,7 @@ function DrillCaptured() {
           <RecallResult
             state="CouldntHear"
             title="I didn’t catch that."
-            transcript="That was too short to hear. Say the same thing again, a little closer."
+            transcript="The mic didn’t pick you up. Say the same answer again, a little closer."
           />
         </div>
       </ScreenShell>
@@ -62,12 +62,13 @@ function DrillCaptured() {
       topNavigation={<DrillBar step={step} onExit={() => router.push('/picker')} />}
       bottomContent={
         <div className={styles.actions}>
-          {/* "Submit", as on Recording, not "Looks right": the student was confirming a
+          {/* "Send", as on Recording and the typed turn: one word for "I'm done answering"
+              (microcopy review, 2026-10-14; was "Submit"). Not "Looks right": the student was confirming a
               take and was then told "Partially right" on the next screen — agreeing,
               then being contradicted (UX critic, 2026-10-13). Not "Check it" either, one
               word from the session's "Just check it" (craft critic, same day). */}
           <Button
-            CTA="Submit"
+            CTA="Send"
             variant="Primary"
             size="M"
             fullWidth

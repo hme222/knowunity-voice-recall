@@ -72,7 +72,7 @@ export default function PracticePage() {
         {state.outcomes.length === 0 ? (
           <p className={styles.empty}>Nothing recorded yet — this session hasn&rsquo;t been run.</p>
         ) : (
-          plan.length === 0 && <p className={styles.empty}>You got everything unaided. Nothing to practice.</p>
+          plan.length === 0 && <p className={styles.empty}>You knew every one without help. Nothing to practice.</p>
         )}
 
         <ul className={styles.rows}>

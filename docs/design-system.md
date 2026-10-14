@@ -1134,6 +1134,8 @@ components → Knowie, 9003:19697) has fourteen faces; all are exported to
 gets the face that FEELS like it, and the happy faces mean different things. The
 four-face history below is kept for its reasoning; this table is the rule.
 
+**Size (2026-10-14):** one size, 2XL (120), on every screen, never hidden or shrunk. The Figma set's four sizes (XL 64, 2XL 120, 3XL 200, 4XL 320, art inset 12) all exist in `MascotSlot`; screens use 2XL, as the Figma screen frames do.
+
 | `expression` | The moment | Screens |
 | --- | --- | --- |
 | `standby` | Ready, listening — the student's turn | 01 Idle (first try), the typed turn, 05a Reveal, resume with nothing to pick up, the question behind the primer |

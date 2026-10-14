@@ -25,7 +25,7 @@ const FIGMA_DESCRIPTION = `
 
 **The mic slot (\`mic\`), 2026-10-07.** Voice screens pass their \`micRegionClass\` wrapper as \`mic\`, not as a child. It renders between middleContent and the action zone, outside the scroller, so content can never run under the control, and the mic lands at the same height on every voice screen (466 at 390×844).
 
-**Knowie gives way, 2026-10-08.** When middleContent's content would not fit, the shell hides the \`MascotSlot\` (and any wrapper holding only it) before the words have to scroll. Full size or absent — there is no shrunk size. Measured before first paint and again when the webfont lands. See the *Short phone* story. **\`mascotGivesWay={false}\`** opts out, for a screen whose content is meant to scroll (07 Recap's term list).
+**Superseded 2026-10-14: Knowie stays, at one size, on every screen; \`mascotGivesWay\` is off by default and a short screen drops its \`data-gives-way\` content, then scrolls.** Was — **Knowie gives way, 2026-10-08.** When middleContent's content would not fit, the shell hides the \`MascotSlot\` (and any wrapper holding only it) before the words have to scroll. Full size or absent — there is no shrunk size. Measured before first paint and again when the webfont lands. See the *Short phone* story. **\`mascotGivesWay={false}\`** opts out, for a screen whose content is meant to scroll (07 Recap's term list).
 
 ---
 

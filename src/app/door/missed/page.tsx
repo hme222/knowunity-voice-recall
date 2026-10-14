@@ -52,7 +52,7 @@ export default function DoorMissedPage() {
           <div className="screenTitle">
             <h1 className="screenTitleHeading">{micTrouble ? 'The mic didn’t catch that one' : 'Not this one yet'}</h1>
             <p className="screenTitleCaption">
-              {`Here’s ${current.name.toLowerCase()}, for next time. Say It Back will have it whenever you want another go.`}
+              {`Here’s ${current.name.toLowerCase()}, for next time. Try it again anytime from Say It Back.`}
             </p>
           </div>
         </div>

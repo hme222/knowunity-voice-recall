@@ -39,7 +39,7 @@ export function SessionBar({
     practiceLabel ??
     (doorRun
       ? SUBJECT
-      : `${SUBJECT} \u00b7 ${index}/${TOTAL_TERMS}${index === TOTAL_TERMS ? ' \u00b7 last one' : ''}`)
+      : `${SUBJECT} \u00b7 ${index}/${TOTAL_TERMS}`)
   const router = useRouter()
   // The screen's h1, for screen readers: which question this is. Visible titles live in
   // ChatBubble and RecallResult, which are not headings.

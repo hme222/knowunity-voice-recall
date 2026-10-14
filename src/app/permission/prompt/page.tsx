@@ -52,7 +52,7 @@ function Prompt() {
             <button className={styles.dialogButton} onClick={() => {
                 // Allowed: straight into the recording the student tapped for, not back
                 // to the idle screen to tap again. Clears a session's denial too: this is
-                // also the way back from typed mode ("Mic back on? Speak instead").
+                // also the way back from typed mode ("Mic back on? Say it instead").
                 micTurnedBackOn()
                 router.replace(next)
               }}>

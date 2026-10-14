@@ -31,9 +31,9 @@ export default function ChatDoor() {
           }} />
           {/* BELOW the mic, out of the flow — see the exam-plan door. */}
           {/* The mic's accessible name, word for word (UX critic, 2026-10-12): "Tap to answer"
-              beside a control named "Start speaking" gave a voice-control user a label
+              beside a control named "Tap to answer" (was "Start speaking") gave a voice-control user a label
               to say that matched nothing (WCAG 2.5.3). */}
-          <MicCaption body="Start speaking" />
+          <MicCaption body="Tap to answer" />
         </div>
       }
       topNavigation={
@@ -51,7 +51,7 @@ export default function ChatDoor() {
     >
       <div className={styles.body}>
         {/* Gives way at 390x668 after Knowie, so the bubble is never cut mid-line. */}
-        <p className={styles.xp} data-gives-way>{'⚡ 2 XP'}</p>
+        <p className={styles.xp} data-gives-way>{'⚡ +2 XP'}</p>
         {/* The screen's h1, for screen readers; the visible title is in the bubble.
             Outside the mascot's wrapper, so the wrapper is Knowie alone and goes with
             Knowie at 390x668 — with the h1 inside, its 48px of padding stayed. */}

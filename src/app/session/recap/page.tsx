@@ -44,6 +44,15 @@ const ORDER_SETTLED: Bucket[] = ['Unaided', 'Hinted', 'Revealed', 'Worth revisit
 const ORDER_WITH_MISSES: Bucket[] = ['Worth revisiting', 'Revealed', 'Hinted', 'Unaided']
 
 /** Which of the sheet's three content states a bucket opens. */
+// The groups in the student's words, not the store's (microcopy review, 2026-10-14):
+// "Revealed" said what the app did, "Unaided" is our word for theirs.
+const BUCKET_HEADING: Record<Bucket, string> = {
+  Unaided: 'Knew it',
+  Hinted: 'Got it with a hint',
+  Revealed: 'Saw the answer',
+  'Worth revisiting': 'Skipped',
+}
+
 const TRANSCRIPT_BUCKET: Record<Bucket, string> = {
   Unaided: 'passed',
   Hinted: 'passed',
@@ -252,7 +261,7 @@ export default function RecapPage() {
             </p>
           )}
           {anyTypedByChoice && (
-            <p className={styles.working}>{`Typed answers earn ${XP.hinted} XP and said ones ${XP.unaided}: saying it out loud is the skill this practises.`}</p>
+            <p className={styles.working}>{`Typed answers earn ${XP.hinted} XP and said ones ${XP.unaided}: saying it out loud is the skill this practices.`}</p>
           )}
           <p className={styles.working}>
             {[
@@ -281,7 +290,7 @@ export default function RecapPage() {
           if (!rows.length) return null
           return (
             <section key={bucket} className={styles.bucket}>
-              <h2 className={styles.bucketLabel}>{`${bucket} · ${rows.length}`}</h2>
+              <h2 className={styles.bucketLabel}>{`${BUCKET_HEADING[bucket]} · ${rows.length}`}</h2>
               {rows.map((row) => {
                 const phrase = bucket === 'Unaided' || bucket === 'Hinted' ? keyPhrase(row.index, state) : ''
                 return (
@@ -296,7 +305,7 @@ export default function RecapPage() {
                       <span className={styles.rowNote}>The mic missed it. Not counted.</span>
                     ) : (
                       row.wasSure && bucket !== 'Unaided' && (
-                        <span className={styles.rowNote}>You were sure about this one.</span>
+                        <span className={styles.rowNote}>You felt sure about this one.</span>
                       )
                     )}
                     {/* Typed, said so: "Unaided" on its own read as said aloud

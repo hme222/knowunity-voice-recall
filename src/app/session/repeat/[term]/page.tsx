@@ -51,7 +51,7 @@ export default function RepeatPage({ params }: { params: Promise<{ term: string 
         <MascotSlot size="2XL" expression="approving" className={styles.mascotCentred} />
         <RecallResult
           state="Pass"
-          title="That's it, in your own voice."
+          title="That’s it, in your own voice."
           transcript={`“${current.transcript}”`}
         />
         {/* NOT "said back unaided". History: docs/code-history.md#h-079 */}

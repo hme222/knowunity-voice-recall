@@ -27,3 +27,7 @@
   flex-direction: column;
   gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
+
+.mascot {
+  align-self: center;
+}

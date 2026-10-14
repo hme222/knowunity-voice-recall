@@ -8,6 +8,7 @@ import {
   Button,
   ChatBubble,
   MicButton,
+  MascotSlot,
   RecordingStatus,
   ScreenShell,
 } from '@/components'
@@ -157,7 +158,7 @@ function RecordingScreen({ index }: { index: number }) {
       }
       bottomContent={
         <div className={styles.actions}>
-          <Button CTA="Submit" variant="Primary" size="M" fullWidth onClick={done} />
+          <Button CTA="Send" variant="Primary" size="M" fullWidth onClick={done} />
           {/* Discard and re-record before anything is sent (voice-ux Must; Duolingo
               design review, 2026-10-13): a fumbled first sentence never has to be
               submitted. Resets the take in place, still listening. */}
@@ -169,6 +170,9 @@ function RecordingScreen({ index }: { index: number }) {
           by the designer. The frame's full-screen mic takeover dropped it, so the
           student was explaining a term they could no longer see. */}
       <div className={styles.body}>
+        {/* Knowie over the question, as on 01 Idle, so nothing moves on the tap that
+            starts recording (designer, 2026-10-14: Knowie on every screen). */}
+        <MascotSlot size="2XL" expression="standby" className={styles.mascot} />
         {current && <ChatBubble className={styles.bubble} showTitle title={questionTitle(current.index, isPractising(sessionState))} titleAccent={current.name} body={current.prompt} />}
       </div>
     </ScreenShell>

@@ -129,8 +129,8 @@ function ProcessingScreen({ index }: { index: number }) {
       <ProcessingBeat
         line={
           slow
-            ? 'Still thinking — hang on, this one is taking a moment.'
-            : 'Let me check that against the definition…'
+            ? 'Still checking. This one’s taking a moment.'
+            : 'Checking that against the definition…'
         }
       />
     </ScreenShell>

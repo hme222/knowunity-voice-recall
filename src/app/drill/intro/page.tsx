@@ -30,7 +30,7 @@ function DrillIntro() {
           <ChatBubble
             showTitle
             title={drillTerm.drillTitle ?? drillTerm.title}
-            body="Say it, miss a word, keep going. That's the whole thing."
+            body="Say it, miss a word, keep going. That’s the whole thing."
           />
         ) : (
           <ChatBubble

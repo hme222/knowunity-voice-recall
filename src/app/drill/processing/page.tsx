@@ -47,7 +47,7 @@ function DrillProcessing() {
     >
       {/* Same wait composition as 03 Processing and the typed beat. */}
       <ProcessingBeat
-        line={got ? (last ? 'Got it. That’s the whole definition.' : `Got it. On to round ${step + 1}.`) : 'Checking how much of that was you…'}
+        line={got ? (last ? 'Got it. That’s the whole definition.' : `Got it. On to round ${step + 1}.`) : 'Checking that against the definition…'}
         working={!got}
         above={
           got ? (

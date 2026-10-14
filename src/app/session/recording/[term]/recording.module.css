@@ -9,6 +9,16 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  /* 01 Idle's gap, so Knowie and the question sit exactly where they did a tap ago. */
+  gap: calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit));
+}
+
+.body > * {
+  flex-shrink: 0;
+}
+
+.mascot {
+  align-self: center;
 }
 
 .bubble {

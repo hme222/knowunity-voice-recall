@@ -128,6 +128,8 @@
   <integer name="component_scaffold_mic_region_height">200</integer>
   <integer name="component_scaffold_scroll_fade_height">40</integer>
   <integer name="component_scaffold_action_zone_height">120</integer>
+  <integer name="component_scaffold_short_height">720</integer>
+  <integer name="component_scaffold_mic_region_height_short">184</integer>
   <integer name="component_mic_button_pulse_rest_scale">0.92</integer>
   <integer name="component_mic_button_pulse_peak_scale">1.04</integer>
   <integer name="component_mic_button_pulse_paused_opacity">0.3</integer>
@@ -138,6 +140,8 @@
   <integer name="component_mic_button_pulse_ring_outer">216</integer>
   <integer name="component_mic_button_pulse_ring_fade_from">60</integer>
   <integer name="component_mic_button_pulse_ring_fade_to">76</integer>
+  <integer name="component_mic_button_pulse_ring_fade_from_short">52</integer>
+  <integer name="component_mic_button_pulse_ring_fade_to_short">64</integer>
   <integer name="component_mic_button_diameter">120</integer>
   <integer name="component_mic_button_glyph_size">48</integer>
   <integer name="component_strength_meter_track_height">12</integer>

@@ -100,7 +100,7 @@ function CheckingScreen() {
           <div className={capturedStyles.actions}>
             <Button CTA="Looks good" variant="Primary" size="M" fullWidth onClick={() => onward(sure)} />
             <Button
-              CTA="Not quite right"
+              CTA="That’s not what I wrote"
               variant="Tertiary"
               size="S"
               fullWidth

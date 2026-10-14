@@ -37,12 +37,13 @@
   text-align: left;
 }
 
-/* Toggle mode: a quiet question with "Optional" on the right, over the pair. */
+/* Toggle mode: a quiet question with "Optional" on the right, over the pair. Caption M
+   bold, the HintCard label's scale, so the whole ask reads as an aside. */
 .askQuiet {
-  color: var(--color-semantic-text-primary);
-  font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
+  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
 }
 
 .optional {
@@ -52,8 +53,19 @@
   line-height: calc(var(--typography-style-caption-m-regular-line-height) * var(--size-primitive-unit));
 }
 
-p.askRow {
+/* The question and "Optional" side by side, left: with the pair hugging, "Optional"
+   pushed to the far edge read as unrelated to it. */
+.askInline {
+  display: flex;
+  align-items: baseline;
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
   margin: 0;
+}
+
+/* In toggle mode the pair hugs its labels, left under the question: hint scale, not
+   a second action row (designer, 2026-10-14). */
+.pair[data-toggle] > * {
+  flex: none;
 }
 
 /* The picked one: the app's "chosen" look, as OptionRow's Selected — a highlight fill

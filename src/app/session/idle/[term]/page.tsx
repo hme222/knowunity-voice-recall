@@ -79,7 +79,7 @@ function IdleScreen({ index }: { index: number }) {
               alone fills the content box, and the hint scrolled out of sight. Here it
               is on screen at every height, beside the control it is for. */}
           {/* No "Start speaking" caption on a first try (designer, 2026-10-13): the mic
-              speaks for itself and its accessible name is still "Start speaking". The
+              speaks for itself and its accessible name is "Tap to answer". The
               caption under the mic is kept for the hint on a retry. */}
           {hinted && gap ? (
             <MicCaption label="Fill the gap" body={<CueText text={gap} />} />
@@ -109,7 +109,7 @@ function IdleScreen({ index }: { index: number }) {
             onClick={() => router.push(`/text/turn?term=${index}`)}
           />
           <Button
-            CTA="I don't know this one"
+            CTA="I don’t know this one"
             variant="Tertiary"
             size="S"
             fullWidth

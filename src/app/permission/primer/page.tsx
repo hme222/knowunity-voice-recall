@@ -23,7 +23,7 @@ function Primer() {
       bottomSheetOnly={
         <BottomSheet
           Title="Knowie needs your mic"
-          subtitle="To hear your answer. It only listens while you’re recording, and you can always type instead."
+          subtitle="So I can hear your answer. I only listen while you’re recording, and you can always type instead."
           // Back to the question, never router.back(): on a cold load that leaves the
           // app (navigation.ts). The question is where the mic tap came from.
           onDismiss={() => router.replace(questionOf(next))}

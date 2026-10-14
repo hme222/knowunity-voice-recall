@@ -40,8 +40,9 @@ export function ConfidenceAsk({ onAnswer, prompt = 'How sure are you?', onDeclin
       <Button
         CTA={CTA}
         variant="Secondary"
-        size="M"
-        fullWidth
+        // S, at hint scale: an optional aside, not a second answer to the screen
+        // (designer, 2026-10-14: "should feel like hint size").
+        size="S"
         aria-pressed={value === sure}
         showLeftIcon={value === sure}
         leftIcon={<CheckIcon />}
@@ -50,7 +51,7 @@ export function ConfidenceAsk({ onAnswer, prompt = 'How sure are you?', onDeclin
     )
     return (
       <div className={[styles.root, className].filter(Boolean).join(' ')} role="group" aria-labelledby={askId}>
-        <p className={styles.askRow}>
+        <p className={styles.askInline}>
           <span id={askId} className={styles.askQuiet}>{prompt}</span>
           <span className={styles.optional}>Optional</span>
         </p>

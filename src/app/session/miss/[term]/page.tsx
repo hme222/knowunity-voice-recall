@@ -73,7 +73,6 @@ function MissScreen({ index }: { index: number }) {
   return (
     <ScreenShell
       // Knowie stays, smaller on a short screen (designer, 2026-10-13: "Knowie missing").
-      mascotGivesWay="shrink"
       topNavigation={<SessionBar index={index} onSkip={skip} />}
       bottomContent={
         <div className={styles.actions}>
@@ -94,11 +93,11 @@ function MissScreen({ index }: { index: number }) {
                 // not on the mic screen (UX critic, 2026-10-13).
                 onClick={() => router.push(typedMiss ? `/text/turn?term=${index}&hinted=1` : `/session/idle/${index}?attempt=${step.nextAttempt}&hinted=1`)}
               />
-              <Button CTA="Reveal answer" variant="Tertiary" size="S" fullWidth onClick={() => router.push(`/session/reveal/${index}`)} />
+              <Button CTA="Show the answer" variant="Tertiary" size="S" fullWidth onClick={() => router.push(`/session/reveal/${index}`)} />
             </>
           ) : (
             <div className={`${actionRowClass} ${styles.rowSingle}`}>
-              <Button CTA="Reveal answer" variant="Primary" size="M" onClick={() => router.push(`/session/reveal/${index}`)} />
+              <Button CTA="Show the answer" variant="Primary" size="M" onClick={() => router.push(`/session/reveal/${index}`)} />
             </div>
           )}
           {/* No "See the full transcript" here. History: docs/code-history.md#h-059 */}
@@ -132,7 +131,7 @@ function MissScreen({ index }: { index: number }) {
                 />
               </span>
             )}
-            {wasSureHere && <p className={styles.sureNote}>You were sure about this one.</p>}
+            {wasSureHere && <p className={styles.sureNote}>You felt sure about this one. Worth a second look.</p>}
           </div>
         )}
 

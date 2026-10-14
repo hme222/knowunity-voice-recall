@@ -102,6 +102,25 @@
   letter-spacing: calc(var(--typography-style-headline-xs-bold-letter-spacing) * 0.01em);
 }
 
+/* Pass, compact (designer, 2026-10-14: "make the correct card smaller"): Headline XS
+   over Body S, tighter padding, so Knowie keeps its normal size on 04 Pass at 390x668.
+   The verdict is in the chip above; the card is the proof, not a second headline. */
+.root[data-state='Pass'] {
+  padding: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+}
+.root[data-state='Pass'] .title {
+  font-weight: var(--typography-style-headline-xs-bold-font-weight);
+  font-size: calc(var(--typography-style-headline-xs-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-headline-xs-bold-line-height) * var(--size-primitive-unit));
+  letter-spacing: calc(var(--typography-style-headline-xs-bold-letter-spacing) * 0.01em);
+}
+.root[data-state='Pass'] .body {
+  font-weight: var(--typography-style-body-s-regular-font-weight);
+  font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
+  letter-spacing: calc(var(--typography-style-body-s-regular-letter-spacing) * 0.01em);
+}
+
 /* The footer row (PassNotches on 04 Pass): the card's full width, a step below the
    transcript. Rises with the proof when staged. */
 .footer {

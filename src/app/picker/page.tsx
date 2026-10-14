@@ -23,7 +23,6 @@ export default function PickerPage() {
   return (
     <ScreenShell
       // Knowie stays, smaller if the lists run long; the lists scroll (2026-10-13).
-      mascotGivesWay="shrink"
       topNavigation={
         <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Close" onLeft={() => router.push('/home/unlocked')} />
       }
@@ -73,7 +72,7 @@ export default function PickerPage() {
           <section className={styles.group}>
             <h2 className={styles.groupLabel}>Drill a definition</h2>
             <p className={styles.note}>
-              Definitions you&rsquo;ve attempted. Amber ones need the most work.
+              Definitions you&rsquo;ve attempted. The ones marked &ldquo;Worth a drill&rdquo; need the most work.
             </p>
             {drills.map((d) => (
               <PickerRow

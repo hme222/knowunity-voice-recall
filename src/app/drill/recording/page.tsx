@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { actionRowClass, micRegionClass, Button, MicButton, RecordingStatus, ScreenShell } from '@/components'
+import { actionRowClass, micRegionClass, Button, MascotSlot, MicButton, RecordingStatus, ScreenShell } from '@/components'
 import { DRILL_COULDNT_HEAR_UNDER_MS, drillRung, useDrillTerm } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
@@ -76,7 +76,7 @@ function DrillRecording() {
       bottomContent={
         <div className={styles.actions}>
           <Button
-            CTA="Submit"
+            CTA="Send"
             variant="Primary"
             size="M"
             fullWidth
@@ -102,6 +102,8 @@ function DrillRecording() {
       }
     >
       <div className={styles.body}>
+        {/* Knowie on every screen, the drill rung's face (designer, 2026-10-14). */}
+        <MascotSlot size="2XL" expression="thinking" className={styles.mascotCentred} />
         <p className={styles.cue}>{rung.cue}</p>
       </div>
     </ScreenShell>
