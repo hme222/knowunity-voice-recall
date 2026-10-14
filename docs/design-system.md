@@ -1273,7 +1273,10 @@ tells you which layer it lives in just by shape.
 - **Sentence case, everywhere text is shown to a student.** Buttons,
   headings, labels, sheet titles, empty states, error copy — sentence
   case throughout. Capitals only for actual proper nouns: Knowie,
-  product names, place names. "Continue," not "Continue" written in
+  product names, place names. The two features are proper nouns: **Say It
+  Back** and **Definition Drill Down** (2026-10-14); a sentence around them
+  stays in sentence case ("Say It Back feature", "Or try Definition Drill
+  Down"). "Continue," not "Continue" written in
   Title Case, and never full caps outside of the one instance
   (`spacing/screenMargin`-adjacent eyebrow labels like "YOUR AI STUDY
   SPACE" in the App Inventory are themselves worth flagging as an

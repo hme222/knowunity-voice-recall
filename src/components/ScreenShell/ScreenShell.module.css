@@ -83,6 +83,9 @@
   flex-shrink: 0;
   display: flex;
   justify-content: center;
+  /* A little clear space above the mic so it never crowds the card over it; the
+     region below gives the same 8 back (component.scaffold.micSlotOffset, 2026-10-14). */
+  padding-top: calc(var(--component-scaffold-mic-slot-offset) * var(--size-primitive-unit));
   padding-bottom: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 

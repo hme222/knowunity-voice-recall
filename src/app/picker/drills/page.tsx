@@ -16,7 +16,7 @@ export default function PickerDrillsPage() {
       showBottomSheetBackground
       bottomSheetOnly={
         <BottomSheet
-          Title="Drill a definition"
+          Title="Definition Drill Down"
           subtitle="The ones marked “Worth a drill” need the most work."
           onDismiss={() => router.push('/picker')}
         >

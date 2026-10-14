@@ -455,6 +455,12 @@ above.
             "How it adds up". The climb card gives way first, "How it adds up" only if
             that is not enough (ScreenShell's new `data-gives-way="last"` step).
           Every screen fits at 390x844 and 390x668, all 46 checked.
+        - *Feature names are proper nouns.* "Say It Back feature" on the brief; the
+          drill is "Definition Drill Down" on screen (picker link, sheet title, intro
+          card), the name these docs already used.
+        - *The mic sits 8 lower* (`component.scaffold.micSlotOffset`), taken from the
+          region (208 / 192 short), so nothing else moves and it never crowds the card
+          above; the ring fade follows LISTENING (76 / 60 below the mic's centre).
     - **02a Captured asks a question** (option 3b, same day): "Here's what I heard.
       Did I get it?" over the frame's "Looks right" / "Say it again". The frame's
       "Send it, or say it again." disagreed with its own button. Same in the drill.

@@ -60,7 +60,7 @@ export default function PickerPage() {
 
         {/* The drills as a link, not a section: the four definitions open in their own
             sheet (/picker/drills). A heading and a full row cost 64 more than this. */}
-        <Button CTA={`Or drill a definition (${PICKER_DRILLS.length})`} variant="Tertiary" size="S" fullWidth onClick={() => router.push('/picker/drills')} />
+        <Button CTA={`Or try Definition Drill Down (${PICKER_DRILLS.length})`} variant="Tertiary" size="S" fullWidth onClick={() => router.push('/picker/drills')} />
       </div>
     </ScreenShell>
   )

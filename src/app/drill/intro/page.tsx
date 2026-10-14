@@ -35,7 +35,7 @@ function DrillIntro() {
         ) : (
           <ChatBubble
             showTitle
-            title="Definition drill"
+            title="Definition Drill Down"
             body={
               // Plainer (senior review, 2026-10-12): "no XP watching" read as unfinished.
               "Four rounds. Each one hides more of the definition until you can say it on your own. " +
