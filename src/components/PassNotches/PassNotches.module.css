@@ -1,0 +1,43 @@
+/* The Pass card's footer: "Strength" left, the notches right, over a hairline. */
+
+.root {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+  padding-top: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+  border-top: calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-subtle);
+}
+
+.label {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * var(--size-primitive-unit));
+}
+
+.notches {
+  display: flex;
+  gap: calc(var(--component-pass-notches-gap) * var(--size-primitive-unit));
+}
+
+.notch {
+  display: block;
+  width: calc(var(--component-pass-notches-notch-width) * var(--size-primitive-unit));
+  height: calc(var(--component-pass-notches-notch-height) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-full) * var(--size-primitive-unit));
+  background: var(--component-pass-notches-empty);
+}
+
+.notch[data-state='filled'] {
+  background: var(--component-pass-notches-filled);
+}
+
+/* Today's: brightest, and ringed, so "new" is not carried by colour alone. An outline
+   with an offset, so the gap shows whatever card it sits on and reads as a ring. */
+.notch[data-state='fresh'] {
+  background: var(--component-pass-notches-fresh);
+  outline: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit)) solid var(--component-pass-notches-fresh);
+  outline-offset: calc(var(--size-primitive-stroke-heavy-border) * var(--size-primitive-unit));
+}

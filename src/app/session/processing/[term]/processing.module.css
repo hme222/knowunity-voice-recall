@@ -6,20 +6,31 @@
   --beat: calc(var(--motion-semantic-duration-ambient) * 1ms);
 }
 
-@keyframes breathe {
-  from { transform: scale(0.98); }
-  to { transform: scale(1.02); }
-}
-
-@keyframes blink {
-  from { transform: translateY(0); }
-  to { transform: translateY(calc(var(--size-primitive-space-negative-100) * var(--size-primitive-unit))); }
-}
-
 /* The confidence ask. Separate from the working signal above it: two messages that
    must not be mistaken for each other. */
 .confidence {
   display: flex;
   flex-direction: column;
   gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+}
+
+/* The scripted slow judge's note (question 3): about the prototype, not from Knowie, so
+   a dashed outline and a label rather than a bubble or a card. */
+.protoNote {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
+  margin: 0;
+  padding: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+  border: calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit)) dashed var(--color-semantic-border-default);
+  border-radius: calc(var(--size-primitive-radius-200) * var(--size-primitive-unit));
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * var(--size-primitive-unit));
+}
+
+.protoLabel {
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-caption-m-bold-font-weight);
 }

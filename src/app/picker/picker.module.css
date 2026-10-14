@@ -57,15 +57,43 @@
   align-self: center;
 }
 
-/* The guide's spotlight: the rest recedes, and comes back on hover or focus so a
-   receded row is still plainly a control. Transition on the standard beat. */
-.receded {
-  opacity: var(--component-picker-receded-opacity);
+/* The guide's spotlight: the other rows' CARDS recede, never their words (designer,
+   2026-10-14). Fading whole rows took the labels to 4.47:1 and "Your topics" to
+   2.24:1, under the 4.5:1 gate, and made live rows look disabled. The fill and the
+   icon fade; every label stays at full contrast. Back to full on hover or focus. */
+.recededRow,
+.recededField {
+  transition:
+    background-color calc(var(--motion-semantic-duration-standard) * 1ms) var(--motion-semantic-easing-standard),
+    border-color calc(var(--motion-semantic-duration-standard) * 1ms) var(--motion-semantic-easing-standard);
+}
+
+.recededRow {
+  background: color-mix(in srgb, var(--color-semantic-background-surface) calc(var(--component-picker-receded-card-opacity) * 100%), transparent);
+}
+
+.recededRow svg {
+  opacity: var(--component-picker-receded-card-opacity);
   transition: opacity calc(var(--motion-semantic-duration-standard) * 1ms) var(--motion-semantic-easing-standard);
 }
 
-.receded:hover,
-.receded:focus-visible,
-.receded:focus-within {
+.recededField {
+  background: color-mix(in srgb, var(--color-semantic-background-input) calc(var(--component-picker-receded-card-opacity) * 100%), transparent);
+  border-color: color-mix(in srgb, var(--color-semantic-border-default) calc(var(--component-picker-receded-card-opacity) * 100%), transparent);
+}
+
+.recededRow:hover,
+.recededRow:focus-visible {
+  background: var(--color-semantic-background-surface);
+}
+
+.recededRow:hover svg,
+.recededRow:focus-visible svg {
   opacity: 1;
+}
+
+.recededField:hover,
+.recededField:focus-visible {
+  background: var(--color-semantic-background-input);
+  border-color: var(--color-semantic-border-default);
 }

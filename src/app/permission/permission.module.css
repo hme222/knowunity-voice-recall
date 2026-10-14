@@ -122,6 +122,9 @@
 
 .howSteps {
   margin: 0;
+  /* Numbered, visibly: the reset stripped the ol's numerals, and these are steps done
+     in order in another app (UX critic, 2026-10-14). */
+  list-style: decimal;
   padding-left: calc(var(--size-primitive-space-600) * var(--size-primitive-unit));
   display: flex;
   flex-direction: column;
@@ -130,4 +133,9 @@
   font-weight: var(--typography-style-body-m-regular-font-weight);
   font-size: calc(var(--typography-style-body-m-regular-font-size) * var(--size-primitive-unit));
   line-height: calc(var(--typography-style-body-m-regular-line-height) * var(--size-primitive-unit));
+}
+
+.howSteps ::marker {
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-m-bold-font-weight);
 }

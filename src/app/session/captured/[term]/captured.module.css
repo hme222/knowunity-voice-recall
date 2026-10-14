@@ -22,18 +22,3 @@
   flex-direction: column;
   gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
-
-/* The optional confidence call: a quiet label and two small chips, centred. */
-.sure {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  column-gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
-}
-
-.sureLabel {
-  color: var(--color-semantic-text-secondary);
-  font-weight: var(--typography-style-body-s-regular-font-weight);
-  font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
-}

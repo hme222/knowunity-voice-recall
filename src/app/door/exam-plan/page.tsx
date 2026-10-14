@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { micRegionClass, AppBar, Button, ChatBubble, MascotSlot, MicButton, MicCaption, ProgressIndicator, ScreenShell } from '@/components'
 import { getTerm, startSession, SUBJECT } from '@/lib/session'
-import { proveItHref } from '../doors'
+import { doorMicHref } from '../doors'
 import styles from '../door.module.css'
 
 // Door 2, the exam plan — Figma frame "Exam plan (placeholder — existing door, refreshed)" (15672:23959). History: docs/code-history.md#h-005
@@ -20,7 +20,7 @@ export default function ExamPlanDoor() {
               names, 109px apart. */}
           <MicButton state="Idle" onClick={() => {
             startSession({ door: 'exam-plan' })
-            router.push(proveItHref('exam-plan'))
+            router.push(doorMicHref('exam-plan'))
           }} />
           {/* BELOW the mic, out of the flow. The region aligns its children to the top
               so the control sits at one height on every voice screen, which laid this

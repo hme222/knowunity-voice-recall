@@ -31,7 +31,7 @@ export default function DoorMissedPage() {
               again is offered, not pushed. */}
           <Button CTA="Continue" variant="Primary" size="M" fullWidth onClick={toUnlock} />
           <Button
-            CTA="Try it again"
+            CTA="Try again"
             variant="Secondary"
             size="M"
             fullWidth

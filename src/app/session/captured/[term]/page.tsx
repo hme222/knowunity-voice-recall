@@ -7,7 +7,7 @@ import { SessionBar } from '../../SessionBar'
 import { Suspense } from 'react'
 import {
   Button,
-  Chips,
+  ConfidenceAsk,
   MascotSlot,
   RecallResultCaptured,
   ScreenShell,
@@ -78,7 +78,8 @@ function CapturedScreen({ index }: { index: number }) {
       }
       // Two answers to "is that what you said?", as the frame had them (designer,
       // 2026-10-13: the ask-in-the-zone version was "awful"). "Not quite right" goes
-      // back to the question, where the student can say it again or type.
+      // back to the question, where the student can say it again or type, and Knowie
+      // owns the mishear there ("My mistake. Say it again.", designer, 2026-10-14).
       bottomContent={
         <div className={styles.actions}>
           <Button CTA="Looks good" variant="Primary" size="M" fullWidth onClick={() => answer(sure)} />
@@ -89,7 +90,7 @@ function CapturedScreen({ index }: { index: number }) {
             fullWidth
             onClick={() => {
               answeredRef.current = true
-              router.push(`/session/idle/${index}?attempt=${attempt}${hinted ? '&hinted=1' : ''}${door ? `&door=${door}` : ''}`)
+              router.push(`/session/idle/${index}?attempt=${attempt}&misheard=1${hinted ? '&hinted=1' : ''}${door ? `&door=${door}` : ''}`)
             }}
           />
         </div>
@@ -103,13 +104,9 @@ function CapturedScreen({ index }: { index: number }) {
           title="Here&rsquo;s what I heard."
           transcript={shownAnswer(index, verdictFor(index, ms, Number(attempt), { practising: isPractising(state) }), state)}
         />
-        {/* How sure, small and optional: two chips under the card, not a question
-            filling the action zone (designer, 2026-10-13). */}
-        <div className={styles.sure} role="group" aria-label="How sure are you? Optional">
-          <span className={styles.sureLabel}>How sure?</span>
-          <Chips Text="Sure" size="S" color="Primary" toggle active={sure === true} showLeftIcon={false} showRightIcon={false} onClick={() => setSure(sure === true ? undefined : true)} />
-          <Chips Text="Not sure" size="S" color="Primary" toggle active={sure === false} showLeftIcon={false} showRightIcon={false} onClick={() => setSure(sure === false ? undefined : false)} />
-        </div>
+        {/* How sure, optional: the app's own buttons, the picked one shown as chosen
+            (designer, 2026-10-14: the small chips "don't match the aesthetic"). */}
+        <ConfidenceAsk className={styles.card} value={sure} onChange={setSure} />
       </div>
     </ScreenShell>
   )

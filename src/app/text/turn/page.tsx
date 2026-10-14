@@ -4,10 +4,10 @@ import { Suspense, useEffect, useState } from 'react'
 import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../session/SessionBar'
-import { actionRowClass, Button, ChatBubble, MascotSlot, ScreenShell, HintCard, TextInput } from '@/components'
+import { Button, ChatBubble, MascotSlot, ScreenShell, HintCard, TextInput } from '@/components'
 import { Cue, CueText } from '@/app/drill/Cue'
 import drillStyles from '../../drill/drill.module.css'
-import { hintFor, missCount, getTerm, nextAfter, recordOutcome, setSticky, sendTypedAnswer, setTypedAnswer, typedDraft, useSticky, advancePractice, isPractising, useSession, drillRung, useDrillTerm } from '@/lib/session'
+import { hintFor, missCount, getTerm, nextAfter, recordOutcome, setSticky, sendTypedAnswer, setTypedAnswer, typedDraft, useSticky, advancePractice, isPractising, questionTitle, useSession, drillRung, useDrillTerm } from '@/lib/session'
 import { DrillBar } from '../../drill/DrillBar'
 import styles from '../text.module.css'
 
@@ -88,43 +88,32 @@ function TextTurnScreen() {
               )
             }}
           />
-          {/* Centred, as 01 Idle centres "Type instead": the pair reads as one family
-              (coherence critic, 2026-10-13). */}
-          <div className={`${actionRowClass} ${styles.rowCentred}`}>
-            {/* Typed mode after a denial was for the whole session. Once the mic is back
-                on, the student can go back to it here, through the permission prompt:
-                Allow clears the denial and opens the mic on this question (designer,
-                2026-10-13, option C). */}
-            {sticky && !drillStep && (
-              <Button
-                CTA="Mic back on? Speak instead"
-                variant="Tertiary"
-                size="S"
-                onClick={() =>
-                  router.push(
-                    `/permission/prompt?next=${encodeURIComponent(`/session/recording/${index}`)}&alt=${encodeURIComponent(`/text/turn?term=${index}`)}`,
-                  )
-                }
-              />
-            )}
-            {!sticky && (
-              <Button
-                CTA="Say it instead"
-                variant="Tertiary"
-                size="S"
-                onClick={() => router.push(drillStep ? `/drill/pass/${drillStep}` : `/session/idle/${index}`)}
-              />
-            )}
-            {/* Not in a drill: the blank path is the session's, and it records there. */}
-            {!drillStep && (
-              <Button
-                CTA="I don't know this one"
-                variant="Tertiary"
-                size="S"
-                onClick={() => router.push(`/session/blank/${index}`)}
-              />
-            )}
-          </div>
+          {/* One link under Send: the way back to the mic. "I don't know this one"
+              moved up to the question it answers (designer, 2026-10-14: two links on
+              one row read as clutter), so this zone matches 01 Idle's. Typed mode after
+              a denial was for the whole session; once the mic is back on, the student
+              can return through the permission prompt (designer, 2026-10-13, option C). */}
+          {sticky && !drillStep ? (
+            <Button
+              CTA="Mic back on? Speak instead"
+              variant="Tertiary"
+              size="S"
+              fullWidth
+              onClick={() =>
+                router.push(
+                  `/permission/prompt?next=${encodeURIComponent(`/session/recording/${index}`)}&alt=${encodeURIComponent(`/text/turn?term=${index}`)}`,
+                )
+              }
+            />
+          ) : !sticky ? (
+            <Button
+              CTA="Say it instead"
+              variant="Tertiary"
+              size="S"
+              fullWidth
+              onClick={() => router.push(drillStep ? `/drill/pass/${drillStep}` : `/session/idle/${index}`)}
+            />
+          ) : null}
         </div>
       }
     >
@@ -141,29 +130,33 @@ function TextTurnScreen() {
             </div>
           </>
         ) : (
-          <ChatBubble showTitle title="Explain: " titleAccent={current.name} body={current.prompt} />
+          <div className={styles.question}>
+            <ChatBubble showTitle title={questionTitle(current.index, isPractising(state))} titleAccent={current.name} body={current.prompt} />
+            {/* Under the question it answers, not in the action zone (designer,
+                2026-10-14). Not in a drill: the blank path is the session's. */}
+            <Button
+              CTA="I don't know this one"
+              variant="Tertiary"
+              size="S"
+              className={styles.dontKnow}
+              onClick={() => router.push(`/session/blank/${index}`)}
+            />
+          </div>
         )}
         {/* A typed retry carries its hint, as the spoken retry does under the mic. */}
         {hinted && (() => {
           const gap = hintFor(current, missCount(state, index)).gap
           return gap ? <HintCard label="Fill the gap" body={<CueText text={gap} />} /> : <HintCard body={current.hint} />
         })()}
-        {/* The field and its note as one group, so the note sits under the field rather
-            than a section's gap away. */}
-        <div className={styles.fieldGroup}>
-          <TextInput
-            variant="multi"
-            label="Your answer"
-            placeholder="Type your answer…"
-            value={answer}
-            onChange={(v) => { setAnswer(v); setTypedAnswer(index, v) }}
-            describedBy="send-note"
-          />
-          {/* Why Send is disabled, said rather than left to be guessed (UX critic). */}
-          <p id="send-note" className={styles.note}>
-            {answer.trim() ? 'Send when you’re ready.' : 'Type your answer to send it.'}
-          </p>
-        </div>
+        {/* No helper line under the field: "Type your answer to send it." repeated the
+            placeholder, and a disabled Send says the rest (designer, 2026-10-14). */}
+        <TextInput
+          variant="multi"
+          label="Your answer"
+          placeholder="Type your answer…"
+          value={answer}
+          onChange={(v) => { setAnswer(v); setTypedAnswer(index, v) }}
+        />
       </div>
     </ScreenShell>
   )

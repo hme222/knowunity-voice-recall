@@ -13,13 +13,14 @@ import {
   MicCaption,
   ScreenShell,
 } from '@/components'
-import { getTerm, micGate, useSticky } from '@/lib/session'
+import { getTerm, micGate, useSticky, isPractising, questionTitle, useSession } from '@/lib/session'
 import styles from '../../interrupt.module.css'
 
 // A genuinely blank term — not a near-miss, nothing at all. History: docs/code-history.md#h-048
 
 export default function BlankPage({ params }: { params: Promise<{ term: string }> }) {
   const router = useRouter()
+  const sessionState = useSession()
   const sticky = useSticky()
   const { term } = use(params)
   const index = Number(term)
@@ -73,7 +74,7 @@ export default function BlankPage({ params }: { params: Promise<{ term: string }
         {/* The question stays in context — designer, 2026-10-08. The bubble used to be
             replaced by the encouragement, so a student who said "I don't know this one"
             lost sight of what "this one" was. Same bubble as 01 Idle. */}
-        <ChatBubble className={styles.bubble} showTitle title="Explain: " titleAccent={current.name} body={current.prompt} />
+        <ChatBubble className={styles.bubble} showTitle title={questionTitle(current.index, isPractising(sessionState))} titleAccent={current.name} body={current.prompt} />
       </div>
     </ScreenShell>
   )

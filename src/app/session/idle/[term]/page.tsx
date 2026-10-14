@@ -13,7 +13,7 @@ import {
   MicCaption,
   ScreenShell,
 } from '@/components'
-import { ensureSessionStarted, getTerm, hintFor, micGate, missCount, isPractising, nextAfter, recordOutcome, useSession, useSticky } from '@/lib/session'
+import { ensureSessionStarted, getTerm, hintFor, micGate, missCount, isPractising, nextAfter, questionTitle, recordOutcome, useSession, useSticky } from '@/lib/session'
 import { CueText } from '@/app/drill/Cue'
 import styles from './idle.module.css'
 
@@ -32,6 +32,10 @@ function IdleScreen({ index }: { index: number }) {
   // number so the ladder does not reset.
   const retryAttempt = params.get('attempt')
   const hinted = params.get('hinted') === '1'
+  // Back from Captured's "Not quite right": the mic got the words wrong, and Knowie
+  // says so, once, rather than the question returning as if nothing had happened
+  // (designer, 2026-10-14). Not forwarded: the next take starts clean.
+  const misheard = params.get('misheard') === '1'
   const forward = new URLSearchParams()
   if (door) forward.set('door', door)
   if (retryAttempt) forward.set('attempt', retryAttempt)
@@ -43,6 +47,8 @@ function IdleScreen({ index }: { index: number }) {
   const sticky = useSticky()
   const state = useSession()
   const practising = isPractising(state)
+  // The run's final question: "Last one:" and Knowie excited for the finish line.
+  const lastOne = questionTitle(index, practising) === 'Last one: '
   // The rung the last miss reached: from the second, the retry carries the gap.
   const gap = current && hinted ? hintFor(current, missCount(state, index)).gap : undefined
   useEffect(() => {
@@ -77,7 +83,12 @@ function IdleScreen({ index }: { index: number }) {
               caption under the mic is kept for the hint on a retry. */}
           {hinted && gap ? (
             <MicCaption label="Fill the gap" body={<CueText text={gap} />} />
-          ) : hinted ? <MicCaption label="Hint" body={current.hint} /> : null}
+          ) : hinted ? (
+            <MicCaption label="Hint" body={current.hint} />
+          ) : misheard ? (
+            // On a retry the hint keeps the caption and dazed Knowie carries the apology.
+            <MicCaption body="My mistake. Say it again." />
+          ) : null}
         </div>
       }
       topNavigation={<SessionBar index={index} door={door} onSkip={skip} label={practising ? `Practice · ${current.name}` : undefined} />}
@@ -115,11 +126,13 @@ function IdleScreen({ index }: { index: number }) {
         {/* `excited` from 2026-09-23. This is the ask — "Explain: formal charge" — and
             the half-lidded working face read as unimpressed at the student before they
             had said anything. The invitation faces are the excited ones. */}
-        <MascotSlot size="2XL" expression={hinted ? 'thinking' : 'standby'} />
+        {/* `dazed` after a mishear: the app failed, which is dazed's job (design-system.md
+            § Mascot poses). */}
+        <MascotSlot size="2XL" expression={misheard ? 'dazed' : hinted ? 'thinking' : lastOne ? 'excited' : 'standby'} />
         <ChatBubble
           className={styles.bubble}
           showTitle
-          title="Explain: "
+          title={questionTitle(index, practising)}
           titleAccent={current.name}
           body={current.prompt}
         />

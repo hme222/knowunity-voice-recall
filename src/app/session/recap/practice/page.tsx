@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { AppBar, Button, ButtonIcon, MascotSlot, ScreenShell } from '@/components'
+import { AppBar, Button, MascotSlot, ScreenShell } from '@/components'
 import { CloseIcon, MicGlyphIcon } from '@/components/icons'
 import { type Bucket, getTerm, type PracticeItem, recommendedMode, startPractice, type TermOutcome, useSession } from '@/lib/session'
 import styles from './practice.module.css'
@@ -18,8 +18,10 @@ const REASON: Record<Exclude<Bucket, 'Unaided'>, string> = {
 /** Same order the Recap uses when there are misses: the least-known first. */
 const ORDER: Bucket[] = ['Worth revisiting', 'Revealed', 'Hinted']
 
-const CTA: Record<PracticeItem['mode'], string> = { drill: 'Drill it', say: 'Say it again' }
-const ALT: Record<PracticeItem['mode'], string> = { drill: 'or say it', say: 'or drill it' }
+// "Try again", not "Say it again": that one means the mic missed you (retry names by
+// what is redone, designer, 2026-10-14).
+const CTA: Record<PracticeItem['mode'], string> = { drill: 'Drill it', say: 'Try again' }
+const ALT: Record<PracticeItem['mode'], string> = { drill: 'Say it', say: 'or drill it' }
 
 export default function PracticePage() {
   const router = useRouter()
@@ -94,34 +96,26 @@ export default function PracticePage() {
                       {/* Says why the method differs: rule C. */}
                       {o.typed && !o.micTrouble ? ' · typed' : ''}
                     </p>
-                    {other === 'drill' && (
-                      <Button
-                        CTA={ALT[mode]}
-                        variant="Tertiary"
-                        size="S"
-                        className={styles.rowAlt}
-                        // Named per term: three "or drill it" links read identically out
-                        // of context (UX critic, 2026-10-13).
-                        aria-label={`Drill ${term?.name} instead`}
-                        onClick={() => go([{ index: o.index, mode: other }])}
-                      />
-                    )}
+                    {/* The other method, under the reason, on every row. Saying it keeps
+                        the Say It Back mic the designer asked for (2026-10-13), now with
+                        its word beside it (2026-10-14): an icon alone had no visible name
+                        to match the one a screen reader heard. */}
+                    <Button
+                      CTA={ALT[mode]}
+                      variant="Tertiary"
+                      size="S"
+                      className={styles.rowAlt}
+                      showLeftIcon={other === 'say'}
+                      leftIcon={other === 'say' ? <MicGlyphIcon /> : undefined}
+                      // Named per term: three identical links read the same out of
+                      // context (UX critic, 2026-10-13). The visible words come first, so
+                      // the spoken name contains what is on screen.
+                      aria-label={`${ALT[mode]}: ${term?.name}`}
+                      onClick={() => go([{ index: o.index, mode: other }])}
+                    />
                   </div>
                 </div>
                 <div className={styles.rowActions}>
-                  {/* Saying it is offered as the Say It Back mic, the feature's own icon,
-                      beside the suggested method (designer, 2026-10-13), not an
-                      underlined "or say it". Drilling, the other way round, stays a word
-                      under the reason: it has no icon of its own. */}
-                  {other === 'say' && (
-                    <ButtonIcon
-                      variant="Secondary"
-                      size="S"
-                      icon={<MicGlyphIcon />}
-                      label={`Say ${term?.name} again instead`}
-                      onClick={() => go([{ index: o.index, mode: other }])}
-                    />
-                  )}
                   <Button CTA={CTA[mode]} aria-label={`${CTA[mode]}: ${term?.name}`} variant="Secondary" size="S" onClick={() => go([{ index: o.index, mode }])} />
                 </div>
               </li>

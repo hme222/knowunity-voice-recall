@@ -5,9 +5,9 @@ import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import { ProcessingBeat, ScreenShell } from '@/components'
-import { getTerm, isPractising, markEarned, markSpokenTake, verdictFor, recordMiss, useSession } from '@/lib/session'
+import { getTerm, isPractising, markEarned, markSpokenTake, verdictFor, recordMiss, SLOW_JUDGE_TERM, useSession } from '@/lib/session'
 import { doorResultHref } from '@/app/door/doors'
-import { processingDwell, slowThreshold } from '@/lib/motion'
+import { processingDwell, scriptedSlowDwell, slowThreshold } from '@/lib/motion'
 import styles from './processing.module.css'
 
 // 03 Processing — Figma frame "03 Processing" (15672:20190), plus the confidence tap
@@ -31,6 +31,8 @@ function ProcessingScreen({ index }: { index: number }) {
 
   // The second state SPEC lists: judge slow past target. History: docs/code-history.md#h-062
   const unusable = verdictFor(index, ms, attempt, { practising }) === 'CouldntHear'
+  // The scripted slow judge: question 3's first spoken take, in the run (not practice).
+  const scriptedSlow = index === SLOW_JUDGE_TERM && attempt === 1 && !practising && !unusable
 
   const [slow, setSlow] = useState(false)
   useEffect(() => {
@@ -95,7 +97,7 @@ function ProcessingScreen({ index }: { index: number }) {
   })
   useEffect(() => {
     if (unusable) return
-    const id = window.setTimeout(() => answerRef.current(sure), processingDwell())
+    const id = window.setTimeout(() => answerRef.current(sure), scriptedSlow ? scriptedSlowDwell() : processingDwell())
     return () => window.clearTimeout(id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unusable])
@@ -110,7 +112,19 @@ function ProcessingScreen({ index }: { index: number }) {
       topNavigation={<SessionBar index={index} door={door} />}
       // Reserve the action zone before the question arrives. History: docs/code-history.md#h-064
       showBottomNavSlot
-      bottomContent={<div className={styles.confidence} />}
+      bottomContent={
+        scriptedSlow ? (
+          // Said on the screen, not left for a tester to wonder whether it hung
+          // (designer, 2026-10-14). Framed as a note about the prototype, apart from
+          // Knowie's own line.
+          <p className={styles.protoNote}>
+            <span className={styles.protoLabel}>Prototype note</span>
+            This check is slowed down on purpose, so you can see what a slow one looks like.
+          </p>
+        ) : (
+          <div className={styles.confidence} />
+        )
+      }
     >
       <ProcessingBeat
         line={

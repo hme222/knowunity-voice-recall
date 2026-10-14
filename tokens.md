@@ -319,7 +319,7 @@ The composed text styles. Each resolves to a family, weight, size, line height a
 
 ## Motion primitives
 
-`motion.primitive.*` — 13 tokens
+`motion.primitive.*` — 14 tokens
 
 Durations in milliseconds, and easing curves.
 
@@ -336,12 +336,13 @@ Durations in milliseconds, and easing curves.
 | `motion.primitive.duration.1400` | `1400` |  | 1400ms. The judging dwell: how long a Processing beat holds before resolving. UNCONFIRMED against a real round trip, like the 300ms swipe. |
 | `motion.primitive.duration.2200` | `2200` |  | 2200ms. The Recap's confetti fall: long enough to watch, once the student has stopped scrolling. |
 | `motion.primitive.duration.6000` | `6000` |  | 6000ms. When a judge counts as slow and Processing escalates its copy in place. Past the Design Brief's <4s target with headroom, so an ordinary wait never trips it. |
+| `motion.primitive.duration.7500` | `7500` |  | 7.5s. Only for the scripted slow judge: past slowThreshold (6000) with room to read the slow line. |
 | `motion.primitive.duration.10000` | `10000` |  | 10000ms. How long the confidence ask waits before Processing moves on without it. Added 2026-10-09: the designer decided the ask must not be required. Longer than the 6000 slow threshold on purpose, so 'still thinking' shows before the screen advances. |
 | `motion.primitive.easing.standard` | `cubic-bezier(0.4, 0, 0.2, 1)` |  | Standard ease-out, decelerates into rest. |
 
 ## Motion semantics
 
-`motion.semantic.*` — 16 tokens
+`motion.semantic.*` — 17 tokens
 
 Named timings.
 
@@ -360,6 +361,7 @@ Named timings.
 | `motion.semantic.duration.breathe` | `{motion.primitive.duration.550}` | `550` | Knowie's breathe on the interrupt screens, each way. Was ambient × 0.5 typed into interrupt.module.css (system critic, 2026-10-13). |
 | `motion.semantic.duration.proofDelay` | `{motion.primitive.duration.600}` | `600` | 04 Pass stages its payoff (designer, 2026-10-13, reach C1): the verdict line lands with the card, and the student's own words rise this long after mount, as the proof. A tap shows everything at once; reduced motion shows it at once. |
 | `motion.semantic.duration.confetti` | `{motion.primitive.duration.2200}` | `2200` | The Recap's confetti burst over "You learned something new!" (designer, 2026-10-13): each piece falls and fades over this long, starting once the heading is fully in view and scrolling has stopped. Was 1400, which ran out before the student had finished scrolling. Off under reduced motion. |
+| `motion.semantic.duration.scriptedSlowDwell` | `{motion.primitive.duration.7500}` | `7500` | PROTOTYPE ONLY. The judging beat on question 3's first spoken take, held past slowThreshold so the slow state ("Still thinking…") is reachable by clicking (designer, 2026-10-14). With processingDwell at 1400 and slowThreshold at 6000 it could not be seen at all. A screen note says the wait is staged. A real build has no such value: the judge is slow or it is not. |
 | `motion.semantic.easing.standard` | `{motion.primitive.easing.standard}` | `cubic-bezier(0.4, 0, 0.2, 1)` | The curve fast, standard and ambient durations all use. |
 | `motion.semantic.easing.ambient` | `cubic-bezier(0.4, 0, 0.6, 1)` |  | Symmetric ease for motion that loops back to where it started — the mic pulse, Knowie's breathe, the processing dots. `standard` is asymmetric and made a looping animation read as a sawtooth, which is why `ease-in-out` had been typed directly into six stylesheets. |
 | `motion.semantic.easing.linear` | `linear` |  | For continuous rotation only — a spinner. Every other easing in this file shapes a start and an end; a spin has neither, and putting it on a curve makes each turn visibly speed up and slow down. Added because `linear` was otherwise being typed directly into two component stylesheets. |
@@ -385,7 +387,7 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ## Component tokens
 
-`component.*` — 42 tokens
+`component.*` — 51 tokens
 
 > Component tokens exist only when a component's bindings actually branch by state or variant in a way that benefits from its own indirection layer between it and the semantic tokens, not as documentation-only aliases for a value that never changes. The group holds button, scaffold, micButton, strengthMeter and bottomSheet (corrected 2026-10-13, system critic: this said micButton was the only entry). micButton is here because its four states each pair with a different semantic token, and these tokens are the real thing its Figma variables are bound to, not a restatement of them; scaffold, button and bottomSheet carry component dimensions with no semantic equivalent; strengthMeter carries a colour ramp the semantic layer does not have (the recorded exception in docs/design-system.md). chatBubble and hintCard never branch, they bind straight to semantic tokens with nothing in between, so a component.chatBubble.* or component.hintCard.* entry here would just be a second name for a value already named once. optionRow does branch by state the same way micButton does, four variants, four different fills, but its Figma variants bind straight to the semantic tokens directly rather than through a component-specific layer. That's an inconsistency with micButton's pattern, not a mistake exactly, treat micButton's indirection layer as the older, legacy approach rather than the template: an indirection layer that never diverges from what it aliases is upkeep with no payoff. Don't add one to a new component by default. Add one only when there's a concrete reason a component's own token might need to move independently of the semantic token it currently matches.
 
@@ -420,6 +422,8 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 | `component.micButton.pulse.ring.inner` | `152` |  | Innermost ring: mic diameter (120) plus 16 clear on each side. |
 | `component.micButton.pulse.ring.middle` | `184` |  | Middle ring, one 32 step out from inner. |
 | `component.micButton.pulse.ring.outer` | `216` |  | Outermost ring, one 32 step out from middle. Widest point of the pulse at peakScale: 216 x 1.04 = 225, inside the 358 content width. |
+| `component.micButton.pulse.ring.fadeFrom` | `60` |  | How far below the mic's centre the rings stay fully drawn, before fading out under it. The control's own radius (60), so every ring reads complete around the mic itself. |
+| `component.micButton.pulse.ring.fadeTo` | `76` |  | How far below the mic's centre the rings are fully gone. The LISTENING label starts 84 below the centre on both 390x844 and 390x668; at peakScale (1.04) 76 reaches 79, so a ring never crosses the word (UX critic, 2026-10-14). The rings keep their full reach above and to the sides. |
 | `component.micButton.diameter` | `{size.primitive.illustration.1500}` | `120` | Mic circle diameter, the primary tap target in the recall loop. |
 | `component.micButton.glyph.size` | `48` |  | Mic glyph box inside the 120px circle. A literal, bound in Figma on every state's glyph frame; no primitive of the right kind is 48 (tapTarget is a hit-area rule, not an icon size). |
 | `component.strengthMeter.track` | `{color.primitive.neutral.600}` | `#615E63` | The unfilled track. Opaque mid grey; it was background.stacking, a 10% white alpha that read as near-black on the page and made an empty meter look like no meter. |
@@ -432,8 +436,15 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 | `component.bottomSheet.grabber.width` | `32` |  | Grabber width, 32. Was space.800, a spacing step standing in for a size. |
 | `component.bottomSheet.grabber.height` | `4` |  | Grabber height, 4. Was space.100. |
 | `component.bottomSheet.maxHeight` | `85` |  | Sheet ceiling as a percentage of the frame, so a long sheet still shows the screen it sits over. |
-| `component.picker.recededOpacity` | `0.5` |  | Opacity of everything on the picker except the title and the "Start here" row, while the guide is showing. Full again on hover or focus, so a receded row is still plainly usable. Below this, receded labels drop under 3:1. |
+| `component.picker.recededCardOpacity` | `0.5` |  | How much of its fill a receded picker row (or the search field) keeps while the guide shows, applied to the CARD's background, border and icon only, never to text. Fading whole rows failed the 4.5:1 gate (labels 4.47:1, "Your topics" 2.24:1; UX critic, 2026-10-14), so every label stays at full contrast and the ring and "Start here" carry the spotlight. Full again on hover or focus. |
+| `component.passNotches.count` | `5` |  | Notches to full. Five unaided passes reads as 'locked in' without being a streak that resets. |
+| `component.passNotches.notchWidth` | `{size.primitive.space.700}` | `28` | One notch's width, 28: countable at a glance on a 390 card's footer, five of them plus gaps under half the width. |
+| `component.passNotches.notchHeight` | `{size.primitive.space.200}` | `8` | One notch's height, 8: a bar, not a dot, so it reads as part of a meter. |
+| `component.passNotches.gap` | `{size.primitive.space.150}` | `6` | Between notches, 6: separate enough to count. |
+| `component.passNotches.empty` | `{color.primitive.neutral.600}` | `#615E63` | An unearned notch. The same opaque mid grey as the drill meter's track, so an empty notch is still visibly there. |
+| `component.passNotches.filled` | `{color.primitive.moss.400}` | `#97C459` | An earned notch from before today. The drill meter's 'high' green, the app's colour for unaided recall. |
+| `component.passNotches.fresh` | `{color.primitive.moss.200}` | `#C0DD97` | Today's notch: the brightest green, and ringed, so the new one is not carried by colour alone. |
 
 ---
 
-336 tokens across 10 groups.
+347 tokens across 10 groups.

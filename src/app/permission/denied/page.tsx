@@ -3,7 +3,9 @@
 import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { micTurnedBackOn, safeInternalPath, setSticky } from '@/lib/session'
-import { Button, MascotSlot, ScreenShell } from '@/components'
+import { AppBar, Button, MascotSlot, ScreenShell } from '@/components'
+import { CloseIcon } from '@/components/icons'
+import { questionOf } from '../QuestionBehind'
 import styles from '../permission.module.css'
 
 // Permission denied — a session-level choice, not a dead end. History: docs/code-history.md#h-043
@@ -17,6 +19,9 @@ function Denied() {
   const [showHow, setShowHow] = useState(false)
   return (
     <ScreenShell
+      // A close, as the primer's sheet has: back to the question, the choice left for
+      // later (UX critic, 2026-10-14: the screen had no way out but its two buttons).
+      topNavigation={<AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Close" onLeft={() => router.replace(questionOf(next))} />}
       bottomContent={
         <div className={styles.actions}>
           <Button

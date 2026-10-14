@@ -212,6 +212,10 @@ export default function RecapPage() {
         {outcomes.length > 0 && (
           <div className={styles.stats}>
             <StatChip stat="XP" value={`+${xpShown}`} />
+            {/* Accuracy over the run, not per answer (designer, 2026-10-14): how many
+                were said back first time with no help. The Score variant, with its
+                label saying what it counts rather than "SCORE". */}
+            {counted > 0 && <StatChip stat="Score" label="FIRST TRY" value={`${totals.unaided}/${counted}`} />}
             <StatChip stat="Time" value={totals.elapsed} />
           </div>
         )}

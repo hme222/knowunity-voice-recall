@@ -6,18 +6,10 @@
   gap: calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit));
 }
 
-
-
-
 .actions {
   display: flex;
   flex-direction: column;
   gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
-}
-
-@keyframes breathe {
-  from { transform: scale(0.98); }
-  to { transform: scale(1.02); }
 }
 
 /* The mascot is a fixed illustration box in a column that stretches its children, so
@@ -26,10 +18,16 @@
   align-self: center;
 }
 
-/* The typed turn's escapes, centred with a gap like 01 Idle's single link. */
-.rowCentred {
-  justify-content: center;
-  column-gap: calc(var(--size-primitive-space-600) * var(--size-primitive-unit));
+/* The question and its "I don't know this one" link, held together: a section's gap
+   between them read as two unrelated things. */
+.question {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
+}
+
+.question .dontKnow {
+  align-self: center;
 }
 
 /* The checking beat: the wait, the typed answer shown back, and the optional exit at
@@ -47,19 +45,4 @@
 /* The drill's "Define:" pill hugs its label in this stretched column. */
 .pill {
   align-self: center;
-}
-
-/* Under the field: what Send needs. Quiet, it is not an instruction to read twice. */
-.note {
-  margin: 0;
-  color: var(--color-semantic-text-secondary);
-  font-weight: var(--typography-style-body-s-regular-font-weight);
-  font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
-}
-
-.fieldGroup {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
 }

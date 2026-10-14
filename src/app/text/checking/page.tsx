@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Button, Chips, MascotSlot, ProcessingBeat, RecallResultCaptured, ScreenShell } from '@/components'
+import { Button, Chips, ConfidenceAsk, MascotSlot, ProcessingBeat, RecallResultCaptured, ScreenShell } from '@/components'
 import capturedStyles from '../../session/captured/[term]/captured.module.css'
 import { CheckIcon } from '@/components/icons'
 import { DrillBar } from '../../drill/DrillBar'
@@ -116,11 +116,7 @@ function CheckingScreen() {
         <div className={capturedStyles.body}>
           <MascotSlot size="2XL" expression="excited" />
           <RecallResultCaptured className={capturedStyles.card} title="Here’s what you wrote." label="You wrote" transcript={typedText.trim()} />
-          <div className={capturedStyles.sure} role="group" aria-label="How sure are you? Optional">
-            <span className={capturedStyles.sureLabel}>How sure?</span>
-            <Chips Text="Sure" size="S" color="Primary" toggle active={sure === true} showLeftIcon={false} showRightIcon={false} onClick={() => setSure(sure === true ? undefined : true)} />
-            <Chips Text="Not sure" size="S" color="Primary" toggle active={sure === false} showLeftIcon={false} showRightIcon={false} onClick={() => setSure(sure === false ? undefined : false)} />
-          </div>
+          <ConfidenceAsk className={capturedStyles.card} value={sure} onChange={setSure} />
         </div>
       </ScreenShell>
     )

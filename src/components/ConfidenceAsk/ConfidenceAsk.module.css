@@ -36,3 +36,30 @@
 .askRow .ask {
   text-align: left;
 }
+
+/* Toggle mode: a quiet question with "Optional" on the right, over the pair. */
+.askQuiet {
+  color: var(--color-semantic-text-primary);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
+}
+
+.optional {
+  color: var(--color-semantic-text-secondary);
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * var(--size-primitive-unit));
+}
+
+p.askRow {
+  margin: 0;
+}
+
+/* The picked one: the app's "chosen" look, as OptionRow's Selected — a highlight fill
+   and edge, plus the check — so the choice reads as chosen, not as a second Primary.
+   Button's pill is its only child span. */
+.pair[data-toggle] > [aria-pressed='true'] > span {
+  background: var(--color-semantic-highlight-surface);
+  box-shadow: inset 0 0 0 calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit)) var(--color-semantic-highlight-border);
+}

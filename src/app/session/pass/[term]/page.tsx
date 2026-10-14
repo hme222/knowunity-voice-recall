@@ -4,7 +4,7 @@ import { Suspense, use, useEffect, useState } from 'react'
 import { useRedirect } from '@/lib/navigation'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
-import { Button, Chips, MascotSlot, RecallResult, ScreenShell } from '@/components'
+import { Button, Chips, MascotSlot, PassNotches, RecallResult, ScreenShell } from '@/components'
 import { CheckIcon } from '@/components/icons'
 import { answerFor, getTerm, nextAfter, outcomeFor, readSession, recordOutcome, spendEarned, termHref, useSession, XP, isPractising } from '@/lib/session'
 import styles from '../../result.module.css'
@@ -34,6 +34,11 @@ function PassScreen({ index }: { index: number }) {
   // The payoff is staged (reach C1): the verdict, then their own words as the proof. A
   // tap anywhere shows it all at once, so a student passing quickly never waits.
   const [staged, setStaged] = useState(true)
+  const unaidedNow = !practising && !withHint
+  // One XP figure: the term and the confidence call together (designer, 2026-10-14).
+  // "⚡ +10" over "+1 XP" was two formats for one number.
+  const base = outcome?.xp ?? (hinted ? XP.hinted : XP.unaided)
+  const total = base + Math.max(0, calibration)
 
   // Pays only against a judged take's receipt (engineering review, 2026-10-13). Opened
   // cold, with no receipt and nothing passed on this term, it goes back to the question
@@ -96,25 +101,31 @@ function PassScreen({ index }: { index: number }) {
           transcript={`“${answerFor(index, state)}”`}
           label={firstTake ? (typed ? 'Just now, you wrote' : 'Just now') : typed ? 'You wrote' : undefined}
           className={practising ? undefined : styles.rise}
+          // Strength in unaided passes, never dropping (designer, 2026-10-14, option B).
+          // An unaided pass in the run adds today's notch; a hinted one, or a practice
+          // round, shows the meter as it stands.
+          footer={<PassNotches filled={current.unaidedBefore + (unaidedNow ? 1 : 0)} fresh={unaidedNow} />}
         />
         {/* The XP and the confidence line live here, in the content, not in the action
             zone: there they pushed Continue 14px below every other single button
             (critic panel, 2026-10-12). */}
         {/* No XP line in a practice round: practice never rewrites the run, so the
             figure here was the earlier outcome's (+0 on a skipped term) (dev review). */}
-        {!practising && <p className={styles.xp}>{`\u26a1 +${outcome?.xp ?? (hinted ? XP.hinted : XP.unaided)}`}</p>}
-        {/* What the confidence tap was worth. Without this the tap is asked for and
-            then never mentioned again. */}
+        {/* The ⚡ is decoration; the figure is said as "plus 11 XP", never "high voltage". */}
+        {!practising && (
+          <p className={styles.xp}>
+            <span aria-hidden="true">{'\u26a1 '}</span>
+            {`+${total} XP`}
+          </p>
+        )}
+        {/* What the confidence call did, in words: the number is in the total above. */}
         {!practising && calibration !== 0 && (
           <p className={styles.calibration}>
-            {/* A sentence at reading size, not "+1 · called it" at 11px: the confidence
-                call is the brief's own mechanic and was the least visible thing on the
-                screen (senior review, 2026-10-12). */}
             {calibration > 0
               ? outcome?.wasSure
-                ? `You said you were sure, and you were. +${calibration} XP`
-                : `You weren’t sure, and you nailed it. +${calibration} XP`
-              : `You were sure about this one. ${calibration} XP`}
+                ? 'You said you were sure, and you were. Bonus included.'
+                : 'You weren’t sure, and you nailed it. Bonus included.'
+              : 'You were sure about this one.'}
           </p>
         )}
         {/* Removed for the same reason as 05 Miss: the card above already shows "You

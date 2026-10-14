@@ -42,7 +42,7 @@ Must.
 | --- | --- | --- | --- |
 | Empty / silent recording | ⚠️ folded into 04a | ✅ | shares `/session/unclear/[term]` with garbled |
 | Very noisy / garbled transcript | ✅ 04a | ✅ | `/session/unclear/[term]` |
-| Judge slow / times out | ❌ no frame | ✅ | escalated copy in place on 03, after ~6s |
+| Judge slow / times out | ❌ no frame | ✅ | escalated copy in place on 03, after ~6s; reachable by clicking on question 3's first spoken take, which is scripted slow with an on-screen prototype note (2026-10-14) |
 | No / dropped network mid-answer | ❌ no frame | ✅ | `/session/offline` |
 | Say-it-back repeat after a reveal | ✅ 05a | ✅ | `/session/repeat/[term]` |
 

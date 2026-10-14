@@ -1,3 +1,5 @@
+import { micGate } from '@/lib/session'
+
 // The doors: the three places Say It Back is met for the first time. History: docs/code-history.md#h-004
 
 export type DoorId = 'quiz' | 'exam-plan' | 'chat'
@@ -19,6 +21,16 @@ export const DOORS: Door[] = [
 /** Where a door sends the student to speak: the real recall turn, term 1. */
 export function proveItHref(door: DoorId, term = 1): string {
   return `/session/idle/${term}?door=${door}`
+}
+
+/**
+ * Where a door's own mic goes: straight to recording on term 1, through the permission
+ * primer if the mic is not granted yet. The chat and exam-plan doors already show the
+ * question with a mic under it, so landing on 01 Idle asked for a second tap on the
+ * same control (designer, 2026-10-14).
+ */
+export function doorMicHref(door: DoorId, term = 1): string {
+  return micGate(`/session/recording/${term}?door=${door}`, `/text/turn?term=${term}`)
 }
 
 /**

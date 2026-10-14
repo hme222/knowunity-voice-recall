@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { Chips } from '../Chips/Chips'
 import { RetryIcon } from '../icons'
 import styles from './RecallResult.module.css'
@@ -53,10 +54,15 @@ export type RecallResultProps = {
   stagger?: boolean
   /** Tap on the CouldntHear retry tag. */
   onRetry?: () => void
+  /**
+   * A footer row at the foot of the card, under the transcript: the Pass card's
+   * PassNotches (designer, 2026-10-14). Added in code, not yet in the Figma set.
+   */
+  footer?: ReactNode
   className?: string
 }
 
-export function RecallResult({ state = 'Pass', title, transcript, showTranscript = true, label, verdict, stagger = false, onRetry, className }: RecallResultProps) {
+export function RecallResult({ state = 'Pass', title, transcript, showTranscript = true, label, verdict, stagger = false, onRetry, footer, className }: RecallResultProps) {
   return (
     <div className={[styles.root, className].filter(Boolean).join(' ')} data-state={state} data-stagger={stagger || undefined} role="status">
       {/* Only with somewhere to go. Drawn without `onRetry` it was a filled pill that
@@ -78,6 +84,7 @@ export function RecallResult({ state = 'Pass', title, transcript, showTranscript
           <p className={styles.body}>{transcript}</p>
         </>
       )}
+      {footer && <div className={styles.footer}>{footer}</div>}
     </div>
   )
 }

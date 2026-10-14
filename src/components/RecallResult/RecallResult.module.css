@@ -73,7 +73,8 @@
 
 /* The staged payoff: the label and the student's words rise after the title. */
 .root[data-stagger] .label,
-.root[data-stagger] .body {
+.root[data-stagger] .body,
+.root[data-stagger] .footer {
   animation: proofIn calc(var(--motion-semantic-duration-standard) * 1ms) var(--motion-semantic-easing-standard)
     calc(var(--motion-semantic-duration-proof-delay) * 1ms) both;
 }
@@ -85,7 +86,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .root[data-stagger] .label,
-  .root[data-stagger] .body {
+  .root[data-stagger] .body,
+  .root[data-stagger] .footer {
     animation: none;
   }
 }
@@ -98,4 +100,11 @@
   font-size: calc(var(--typography-style-headline-xs-bold-font-size) * var(--size-primitive-unit));
   line-height: calc(var(--typography-style-headline-xs-bold-line-height) * var(--size-primitive-unit));
   letter-spacing: calc(var(--typography-style-headline-xs-bold-letter-spacing) * 0.01em);
+}
+
+/* The footer row (PassNotches on 04 Pass): the card's full width, a step below the
+   transcript. Rises with the proof when staged. */
+.footer {
+  align-self: stretch;
+  margin-top: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
 }

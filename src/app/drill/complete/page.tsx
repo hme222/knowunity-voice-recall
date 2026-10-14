@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { actionRowClass, Button, MascotSlot, RecallResult, ScreenShell } from '@/components'
+import { Button, MascotSlot, RecallResult, ScreenShell } from '@/components'
 import { advancePractice, isPractising, useDrillTerm, markDrilled, spendEarned, useSession, XP } from '@/lib/session'
 import styles from '../drill.module.css'
 
@@ -28,21 +28,26 @@ export default function DrillCompletePage() {
   return (
     <ScreenShell
       bottomContent={
-        // The same SHAPE as 07 Recap, not just the same variants. History: docs/code-history.md#h-012
-        <div className={actionRowClass}>
+        // Stacked like every session screen: the way on leads, full width, and the
+        // replay sits under it. The side-by-side pair copied the Recap's old shape, and
+        // "Done" went from the Recap on 2026-10-08 (designer, 2026-10-14).
+        <div className={styles.stack}>
+          <Button
+            CTA="Continue"
+            variant="Primary"
+            size="M"
+            fullWidth
+            // In a practice round from the Recap, on to the next term (or back to the
+            // Recap); otherwise back to the picker it came from.
+            onClick={() => router.push(isPractising() ? advancePractice() : '/picker')}
+          />
+          {/* "Run it again" redoes the whole drill; "Try again" is for one question. */}
           <Button
             CTA="Run it again"
             variant="Secondary"
             size="M"
+            fullWidth
             onClick={() => router.push('/drill/intro?returning=1')}
-          />
-          <Button
-            CTA="Done"
-            variant="Primary"
-            size="M"
-            // In a practice round from the Recap, on to the next term (or back to the
-            // Recap); otherwise back to the picker it came from.
-            onClick={() => router.push(isPractising() ? advancePractice() : '/picker')}
           />
         </div>
       }

@@ -44,8 +44,8 @@ export default function PickerPage() {
           <p className="screenTitleCaption">{`Pick ${resumeTopic.label} to start: ${TOTAL_TERMS} definitions, said back in your own words.`}</p>
         </div>
         {/* Everything but the title and the "Start here" row recedes while the guide
-            shows (designer, 2026-10-13); hover or focus brings a row back to full. */}
-        <TextInput className={styles.receded} type="search" label="Search your topics" placeholder="Search your topics" value={query} onChange={setQuery} />
+            shows (designer, 2026-10-13): the cards, not the words (2026-10-14). */}
+        <TextInput className={styles.recededField} type="search" label="Search your topics" placeholder="Search your topics" value={query} onChange={setQuery} />
         {/* Announced, so a screen-reader user hears that the lists emptied. */}
         <p className={empty ? styles.note : 'srOnly'} role="status">
           {empty ? `Nothing matches \u201c${query.trim()}\u201d.` : ''}
@@ -53,7 +53,7 @@ export default function PickerPage() {
 
         {topics.length > 0 && (
           <section className={styles.group}>
-            <h2 className={`${styles.groupLabel} ${styles.receded}`}>Your topics</h2>
+            <h2 className={styles.groupLabel}>Your topics</h2>
             {topics.map((topic) =>
               topic.seeded ? (
                 // The quiz this session runs: ringed in the brand colour, labelled "Start
@@ -63,14 +63,14 @@ export default function PickerPage() {
                   <PickerRow variant="topic" label={topic.label} aria-describedby="start-here" onClick={() => router.push(startRun())} />
                 </div>
               ) : (
-                <PickerRow key={topic.label} className={styles.receded} variant="topic" label={topic.label} onClick={() => router.push(startRun())} />
+                <PickerRow key={topic.label} className={styles.recededRow} variant="topic" label={topic.label} onClick={() => router.push(startRun())} />
               ),
             )}
           </section>
         )}
 
         {drills.length > 0 && (
-          <section className={`${styles.group} ${styles.receded}`}>
+          <section className={styles.group}>
             <h2 className={styles.groupLabel}>Drill a definition</h2>
             <p className={styles.note}>
               Definitions you&rsquo;ve attempted. Amber ones need the most work.
@@ -78,6 +78,7 @@ export default function PickerPage() {
             {drills.map((d) => (
               <PickerRow
                 key={d.label}
+                className={styles.recededRow}
                 variant="drill"
                 label={d.label}
                 state={d.state}

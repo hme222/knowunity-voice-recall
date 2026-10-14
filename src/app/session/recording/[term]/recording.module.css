@@ -66,6 +66,15 @@
      then snapped to 0.923 in a single frame, every 1.1s, because direction defaulted
      to normal. A pulse that jumps is a sawtooth. */
   animation: pulse calc(var(--pulse-duration) / 2) var(--motion-semantic-easing-ambient) infinite alternate;
+  /* The rings fade out under the mic before they reach LISTENING: the outer one cut
+     through the word (UX critic, 2026-10-14). Measured from each ring's own centre
+     (50%), so one rule holds for all three sizes. A mask reads alpha only; black means
+     "drawn", not a colour. */
+  mask-image: linear-gradient(
+    to bottom,
+    black calc(50% + var(--component-mic-button-pulse-ring-fade-from) * var(--size-primitive-unit)),
+    transparent calc(50% + var(--component-mic-button-pulse-ring-fade-to) * var(--size-primitive-unit))
+  );
 }
 
 .ring:nth-child(1) {

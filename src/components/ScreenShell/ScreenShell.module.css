@@ -110,6 +110,14 @@
   height: calc(var(--size-primitive-illustration-800) * var(--size-primitive-unit));
 }
 
+/* Stage 'm': a step down first, to 2XL (illustration.1500), for a Knowie drawn bigger.
+   The measure only lands here when it fits, which a mascot already at or under 2XL
+   never does, so this never grows one. */
+.middle[data-mascot-stage='m'] [data-mascot] {
+  width: calc(var(--size-primitive-illustration-1500) * var(--size-primitive-unit));
+  height: calc(var(--size-primitive-illustration-1500) * var(--size-primitive-unit));
+}
+
 /* The control itself never shrinks — only the room around it. */
 .micRegion > * {
   flex-shrink: 0;

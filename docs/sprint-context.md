@@ -156,7 +156,7 @@ above.
       the usability review, same day). A reveal or a skip used to go straight to the
       "unlocked" popup, a celebration with nothing about the definition, against the
       start screen's own step 3, "See how it landed". It now goes to `/door/missed`:
-      the definition, "Continue" on to the unlock, or "Try it again". A pass is
+      the definition, "Continue" on to the unlock, or "Try again" (was "Try it again" until 2026-10-14). A pass is
       unchanged (the quiz door's result, or 04 Pass).
     - **The miss ladder says where you are, in the card** (options 2a and 2b, same
       day). Still one hint. The second miss's headline is "One more go, then I'll
@@ -316,6 +316,64 @@ above.
         - *C3. The Recap shows one climb.* The first Hinted term with a stored first
           take: "First try" faded over "Then" and their key phrase. Absent when
           nothing climbed.
+      - **Panel interview, round three (designer, 2026-10-14, after the fifth critic
+        run).** Supersedes anything above it that disagrees.
+        - *Stacked, not side by side.* Drill complete: "Continue" (Primary, full width)
+          over "Run it again" (Secondary); "Done" is gone, as on the Recap. Drill miss:
+          "Try again" (Primary) over a "Show full definition" link, the session miss's
+          shape. The door quiz card keeps its side-by-side pair: it copies the live
+          app's quiz card. The only side-by-side rows left are that card and the
+          unlock popup.
+        - *Retry names, by what is redone.* "Try again" redoes one question (the door
+          missed screen's "Try it again" and the practice row's "Say it again" now
+          say it). "Run it again" redoes a whole drill. "Say it again" means only "the
+          mic didn't catch you".
+        - *Picker spotlight: the cards fade, never the words.* Fading whole rows put
+          "Your topics" at 2.24:1 and the row labels at 4.47:1 (contrast gate fail).
+          Now only the other rows' fill, edge and icon recede
+          (`component.picker.recededCardOpacity`); every label is full contrast. The
+          ring and "Start here" carry the spotlight.
+        - *Typed turn.* "I don't know this one" sits under the question it answers;
+          under Send there is one link ("Say it instead", or "Mic back on? Speak
+          instead" after a denial). The helper line under the box is gone.
+        - *Sure / Not sure are buttons.* `ConfidenceAsk` in its optional toggle mode,
+          on Captured and the typed check: "How sure are you?" with "Optional", two
+          half-width Secondary buttons; the picked one shows the app's chosen look
+          (highlight fill and edge, a check); a second tap clears it.
+        - *Pass shows one XP figure.* "⚡ +11 XP" (the term plus the confidence
+          bonus); the sentence says "Bonus included." with no number; the ⚡ is
+          hidden from screen readers.
+        - *Pass strength notches (option B of four mocked).* A new `PassNotches`
+          component in the Pass card's footer: five notches, one per unaided pass on
+          the term, today's ringed; never drops; a hinted pass or practice shows it
+          without adding. **Not** the StrengthMeter, which stays the drill's
+          continuous coverage bar. **The long-run count is mocked** per term
+          (`Term.unaidedBefore`: 2/1/0/3); the prototype has no cross-session history
+          and this is not a streak model.
+        - *Recap: run accuracy, compact chips.* A third chip, "2/4 FIRST TRY" (the
+          Score variant), beside XP and Time. StatChip is one row now, value then
+          label, the label at the 12px floor (was 9px), so the first term row shows at
+          390x668 with Knowie unchanged.
+        - *"Not quite right" on Captured* returns to the question with "My mistake.
+          Say it again." under the mic and `dazed` Knowie (the hint keeps the caption
+          on a retry).
+        - *Door mics record.* The chat and exam-plan doors' mic goes straight to
+          Recording on question 1 (through the primer if the mic is not granted), not
+          to 01 Idle for a second tap.
+        - *Slow judge, scripted.* Question 3's first spoken take is judged in
+          `scriptedSlowDwell` (7.5s, past `slowThreshold`), so "Still thinking…" is
+          reachable by clicking; a dashed "Prototype note" on that screen says the wait
+          is staged. Prototype only, like the scripted mishear on question 2.
+        - *"Last one:" on question 4.* The final question's card reads "Last one:
+          Octet rule" (not in practice) and Knowie is `excited` on its first try.
+        - *Practice rows.* "Say it" with the Say It Back mic beside it, in the same
+          place as "or drill it": both alternatives are words.
+        - *Recording.* The pulse rings fade out under the mic
+          (`pulse.ring.fadeFrom/fadeTo`) and never cross LISTENING; their reach above
+          and to the sides is unchanged.
+        - *Mic denied* has a close (back to the question) and numbered steps.
+        - *Drill Captured keeps "Submit".*
+        - *Not taken:* opening the Recap with the student's own words (reach 3).
     - **02a Captured asks a question** (option 3b, same day): "Here's what I heard.
       Did I get it?" over the frame's "Looks right" / "Say it again". The frame's
       "Send it, or say it again." disagreed with its own button. Same in the drill.
@@ -939,7 +997,8 @@ decision above, not a wishlist.
 `swipeChip`, `swipeDots`, `bottomSheet`, `dueSignalCard`,
 `pickerTopicRow`, `pickerDrillRow`, `trainingLog`, plus the earlier
 `sessionHeader`, `drillListItem`, `strengthMeter`, and the Lucide
-`micGlyph` / `refreshGlyph`.
+`micGlyph` / `refreshGlyph`. Code-only, 2026-10-14: `PassNotches` (04 Pass's strength
+notches), and `RecallResult`'s `footer` slot that holds it — not yet in the Figma set.
 
 The obsolete four-segment `strengthMeter` was deleted; the
 continuous-fill version is the only one.

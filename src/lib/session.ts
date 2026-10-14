@@ -41,6 +41,13 @@ export type Term = {
   partialKind?: 'wrong'
   /** Figma `recallResult` title, state=Pass. */
   passTitle: string
+  /**
+   * MOCKED: unaided passes on this term before today, for 04 Pass's PassNotches
+   * (designer, 2026-10-14). The prototype has no cross-session history; a real build
+   * reads this from the student's record. Varied per term so the four Pass screens
+   * show the meter at different strengths.
+   */
+  unaidedBefore: number
   /** Figma `recallResult` title, state=Miss. */
   missTitle: string
   /** Figma `hintCard` body — one line, one direction, no reply expected. */
@@ -120,6 +127,7 @@ export const TERMS: Term[] = [
   {
     index: 1,
     name: 'Formal charge',
+    unaidedBefore: 2,
     keywords: ['split', 'even', 'assign'],
     // from the frame — 01 Idle (refreshed 2)
     title: 'Explain: Formal charge',
@@ -156,6 +164,7 @@ export const TERMS: Term[] = [
   {
     index: 2,
     name: 'Covalent bond',
+    unaidedBefore: 1,
     keywords: ['shar'],
     title: 'Explain: Covalent bond',
     prompt: 'Say what a covalent bond is and what holds it together, in your own words. However you’d explain it to a friend.',
@@ -181,6 +190,7 @@ export const TERMS: Term[] = [
   {
     index: 3,
     name: 'Electronegativity',
+    unaidedBefore: 0,
     keywords: ['attract', 'pull', 'draw'],
     title: 'Explain: Electronegativity',
     prompt: 'Say what electronegativity means, in your own words. However you’d explain it to a friend.',
@@ -207,6 +217,7 @@ export const TERMS: Term[] = [
   {
     index: 4,
     name: 'Octet rule',
+    unaidedBefore: 3,
     keywords: ['eight', '8 ', 'outer shell', 'valence'],
     title: 'Explain: Octet rule',
     prompt: 'Say what the octet rule is, in your own words. However you’d explain it to a friend.',
@@ -232,6 +243,15 @@ export const TERMS: Term[] = [
 ]
 
 export const TOTAL_TERMS = TERMS.length
+
+/**
+ * The question card's lead-in: "Explain: ", or "Last one: " on the run's final term
+ * (designer, 2026-10-14, from the reach critic) so the finish line is marked without a
+ * screen of its own. Not in a practice round, whose last term is not the run's.
+ */
+export function questionTitle(index: number, practising: boolean): string {
+  return index === TOTAL_TERMS && !practising ? 'Last one: ' : 'Explain: '
+}
 
 /** The set's subject, named on every session screen so the run never loses it. */
 export const SUBJECT = 'Chemistry'
@@ -1063,6 +1083,13 @@ export function setMicGranted() {
  * 2026-10-12, option 1b). `alt` is the typed route the primer's "Type instead" and the
  * denied screen fall back to. Call from a tap handler.
  */
+/**
+ * PROTOTYPE ONLY: the question whose first spoken take is judged slowly, so the slow
+ * state ("Still thinking…") can be reached by clicking (designer, 2026-10-14). Like the
+ * scripted mishear on question 2, it is the mock choosing a path; a screen note says so.
+ */
+export const SLOW_JUDGE_TERM = 3
+
 export function micGate(next: string, alt: string, state: SessionState = readSession()): string {
   if (state.micGranted) return next
   return `/permission/primer?next=${encodeURIComponent(next)}&alt=${encodeURIComponent(alt)}`

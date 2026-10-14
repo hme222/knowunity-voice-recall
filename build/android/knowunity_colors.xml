@@ -177,4 +177,7 @@
   <color name="component_strength_meter_fill_mid">#ff639922</color>
   <color name="component_strength_meter_fill_high">#ff97c459</color>
   <color name="component_strength_meter_fill_full">#ffc0dd97</color>
+  <color name="component_pass_notches_empty">#ff615e63</color>
+  <color name="component_pass_notches_filled">#ff97c459</color>
+  <color name="component_pass_notches_fresh">#ffc0dd97</color>
 </resources>

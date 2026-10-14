@@ -1,12 +1,15 @@
 /* statChip — mirrors the Figma component set `statChip` (15729:11868). */
 
+/* One row, value then label (designer, 2026-10-14: "fix chip sizing"): stacked, three
+   of them pushed the Recap's term rows under the fold at 390x668, and the label was
+   9px. Departs from the Figma set's stacked layout on purpose. */
 .root {
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse;
   align-items: center;
   justify-content: center;
   gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
-  padding: calc(var(--size-primitive-space-300) * var(--size-primitive-unit)) calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+  padding: calc(var(--size-primitive-space-200) * var(--size-primitive-unit)) calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
   border-radius: calc(var(--size-primitive-radius-400) * var(--size-primitive-unit));
   box-shadow: inset 0 0 0 calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit)) var(--stat-accent);
   background: var(--stat-subtle);
@@ -26,10 +29,11 @@
 }
 
 .label {
-  font-weight: var(--typography-style-caption-s-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-s-bold-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-caption-s-bold-line-height) * var(--size-primitive-unit));
-  letter-spacing: calc(var(--typography-style-caption-s-bold-letter-spacing) * 0.01em);
+  /* Caption M, the 12px floor; it was Caption S at 9px (UX critic, 2026-10-14). */
+  font-weight: var(--typography-style-caption-m-regular-font-weight);
+  font-size: calc(var(--typography-style-caption-m-regular-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-caption-m-regular-line-height) * var(--size-primitive-unit));
+  white-space: nowrap;
 }
 .valueRow {
   display: inline-flex;
@@ -43,8 +47,8 @@
   height: calc(var(--size-primitive-icon-200) * var(--size-primitive-unit));
 }
 .value {
-  font-weight: var(--typography-style-caption-m-bold-font-weight);
-  font-size: calc(var(--typography-style-caption-m-bold-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-caption-m-bold-line-height) * var(--size-primitive-unit));
-  letter-spacing: calc(var(--typography-style-caption-m-bold-letter-spacing) * 0.01em);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
+  white-space: nowrap;
 }

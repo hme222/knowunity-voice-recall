@@ -2,7 +2,7 @@
 
 import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { actionRowClass, Button, Chips, HintCard, MascotSlot, RecallResult, ScreenShell } from '@/components'
+import { Button, Chips, HintCard, MascotSlot, RecallResult, ScreenShell } from '@/components'
 import { STUMBLES, useDrillTerm, useSession } from '@/lib/session'
 import { DrillBar } from '../DrillBar'
 import styles from '../drill.module.css'
@@ -22,21 +22,11 @@ function DrillMiss() {
     <ScreenShell
       topNavigation={<DrillBar step={2} onExit={() => router.push('/picker')} />}
       bottomContent={
+        // The session miss's shape (designer, 2026-10-14): the retry leads, full
+        // width, and the way out is a link under it.
         <div className={styles.stack}>
-          <div className={actionRowClass}>
-            <Button
-              CTA="Show full definition"
-              variant="Secondary"
-              size="M"
-              onClick={() => router.push('/drill/pass/1')}
-            />
-            <Button
-              CTA="Try again"
-              variant="Primary"
-              size="M"
-              onClick={() => router.push('/drill/miss/letter')}
-            />
-          </div>
+          <Button CTA="Try again" variant="Primary" size="M" fullWidth onClick={() => router.push('/drill/miss/letter')} />
+          <Button CTA="Show full definition" variant="Tertiary" size="S" fullWidth onClick={() => router.push('/drill/pass/1')} />
         </div>
       }
     >

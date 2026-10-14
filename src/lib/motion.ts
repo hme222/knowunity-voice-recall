@@ -13,6 +13,8 @@ function ms(name: string, fallback: number): number {
 export const processingDwell = () => ms('--motion-semantic-duration-processing-dwell', 1400)
 /** motion.semantic.duration.slowThreshold */
 export const slowThreshold = () => ms('--motion-semantic-duration-slow-threshold', 6000)
+/** motion.semantic.duration.scriptedSlowDwell — prototype only, question 3's judge. */
+export const scriptedSlowDwell = () => ms('--motion-semantic-duration-scripted-slow-dwell', 7500)
 /** motion.semantic.duration.confidenceGrace */
 export const confidenceGrace = () => ms('--motion-semantic-duration-confidence-grace', 10000)
 /** motion.semantic.duration.verdictHold */

@@ -383,7 +383,15 @@ own.
 copies once a second screen needed them): `MicCaption`, `ProcessingBeat`,
 `ConfidenceAsk`, `RecallResultCaptured`, and, since 2026-10-13,
 `TextInput` (`single` for the picker's search, `multi` for the typed
-answer box). Any typed input is a `TextInput`.
+answer box). Any typed input is a `TextInput`. Since 2026-10-14:
+`PassNotches` (04 Pass's strength in unaided passes, in `RecallResult`'s new
+`footer` slot; never the StrengthMeter, which is the drill's coverage bar), and
+`ConfidenceAsk`'s optional toggle mode (`value` / `onChange`), which replaced the
+small "How sure?" chips on Captured and the typed check.
+
+**StatChip departs from its Figma set on purpose (2026-10-14):** one row, value
+then label, the label at Caption M (12px) instead of Caption S (9px). Stacked, three
+chips pushed the Recap's term rows below the fold at 390x668.
 
 **Before adding anything not on this list:** search the file first —
 that's still the rule, and it now covers two tiers instead of one.
@@ -1133,8 +1141,8 @@ four-face history below is kept for its reasoning; this table is the rule.
 | `questioning` | Prompting a guess | The drill's first-letter rung. Not on Captured: next to the student's own words its squint read as suspicion (2026-10-13), so Captured keeps `excited` |
 | `confused` | A wrong idea, or a run that needs another look | 05 Miss on a wrong idea / typed / too-short answer, 07 Recap with anything to revisit (designer: "confused or dazed", not the half-lidded face, which read as mad) |
 | `sad` | Gently, it did not land | 05 Miss on the third try, the door run that ended without a pass |
-| `dazed` | The app failed, not the student | 04a Couldn't hear, DD mishear, mic denied, a door run lost to the mic |
-| `excited` | An invitation with energy, or "I caught that" | 02a Captured, DD 02a and the typed check (the 2026-09-23 decision, kept), the start brief, home, the mic primer, resume partway, practice, drill intro, the chat and exam-plan doors |
+| `dazed` | The app failed, not the student | 04a Couldn't hear, DD mishear, mic denied, a door run lost to the mic, 01 Idle after Captured's "Not quite right" ("My mistake. Say it again.", 2026-10-14) |
+| `excited` | An invitation with energy, or "I caught that" | 02a Captured, DD 02a and the typed check (the 2026-09-23 decision, kept), the start brief, home, the mic primer, resume partway, practice, drill intro, the chat and exam-plan doors, 01 Idle on the run's last question ("Last one:", 2026-10-14) |
 | `amazed` | Something new appeared | Not on a screen: over the unlock popup its stare pulled focus from the card (2026-10-13); the popup peeks `giggling` |
 | `approving` | Got it, with help, or a good step | 04 Pass with a hint / typed / in practice, the say-it-back repeat, the quiz door's result, a drill round's review |
 | `laughing` | The big win | 04 Pass clean and unaided, 07 Recap on a clean run, DD 08 drill complete, the quiz-complete door |

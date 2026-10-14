@@ -13,7 +13,7 @@ import {
   ScreenShell,
 } from '@/components'
 import { getTerm, startSession, SUBJECT } from '@/lib/session'
-import { proveItHref } from '../doors'
+import { doorMicHref } from '../doors'
 import styles from '../door.module.css'
 
 // Door 3, chat — Figma frame "Chat (placeholder — existing door, refreshed)" (15672:24166). History: docs/code-history.md#h-001
@@ -27,7 +27,7 @@ export default function ChatDoor() {
         <div className={micRegionClass}>
           <MicButton state="Idle" onClick={() => {
             startSession({ door: 'chat' })
-            router.push(proveItHref('chat'))
+            router.push(doorMicHref('chat'))
           }} />
           {/* BELOW the mic, out of the flow — see the exam-plan door. */}
           {/* The mic's accessible name, word for word (UX critic, 2026-10-12): "Tap to answer"

@@ -107,7 +107,10 @@ export function ScreenShell({
   // an XP line): the second thing to go, so a short screen never clips a card mid-way
   // (system critic, 2026-10-13: unclear, the chat door at 390x668).
   // 1 = Knowie at its smallest size, kept: only for `mascotGivesWay="shrink"`.
-  const [mascotStage, setMascotStage] = useState<0 | 1 | 2 | 3>(0)
+  // 'm' = one step first: a 3XL Knowie tries 2XL before dropping to XL. Adding the
+  // Pass card's strength notches tipped 04 Pass over at 390x844, and Knowie fell from
+  // 200 straight to 64 for want of 30px (2026-10-14).
+  const [mascotStage, setMascotStage] = useState<0 | 'm' | 1 | 2 | 3>(0)
   const measure = useCallback(() => {
     const el = middleRef.current
     if (!el) return
@@ -128,7 +131,15 @@ export function ScreenShell({
       return el.scrollHeight - el.clientHeight
     }
     const stage =
-      overAt(null) <= 1 ? 0 : mascotGivesWay === 'shrink' ? 1 : !yielding || overAt('2') <= 1 ? 2 : 3
+      overAt(null) <= 1
+        ? 0
+        : mascotGivesWay === 'shrink'
+          ? overAt('m') <= 1
+            ? 'm'
+            : 1
+          : !yielding || overAt('2') <= 1
+            ? 2
+            : 3
     if (applied) el.setAttribute('data-mascot-stage', applied)
     else el.removeAttribute('data-mascot-stage')
     setMascotStage(stage)
