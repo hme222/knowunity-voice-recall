@@ -97,3 +97,9 @@
   background: var(--color-semantic-background-input);
   border-color: var(--color-semantic-border-default);
 }
+
+/* Knowie in the drills sheet, centred, as the primer's sheet carries it. */
+.sheetMascot {
+  display: flex;
+  justify-content: center;
+}

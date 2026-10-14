@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 import { openSheet } from '@/lib/navigation'
-import { AppBar, Button, ButtonIcon, HintCard, MascotSlot, ScreenShell, StatChip } from '@/components'
+import { AppBar, Button, ButtonIcon, MascotSlot, ScreenShell, StatChip } from '@/components'
 import { CloseIcon, EyeIcon } from '@/components/icons'
 import { answerFor, Bucket, getTerm, keyPhrase, sessionTotals, setPractising, TOTAL_TERMS, typedByChoice, useSession, XP } from '@/lib/session'
 import styles from './recap.module.css'
@@ -44,11 +44,11 @@ const ORDER_SETTLED: Bucket[] = ['Unaided', 'Hinted', 'Revealed', 'Worth revisit
 const ORDER_WITH_MISSES: Bucket[] = ['Worth revisiting', 'Revealed', 'Hinted', 'Unaided']
 
 /** Which of the sheet's three content states a bucket opens. */
-// The groups in the student's words, not the store's (microcopy review, 2026-10-14):
-// "Revealed" said what the app did, "Unaided" is our word for theirs.
-const BUCKET_HEADING: Record<Bucket, string> = {
+
+// A row's status: short enough that the term never wraps (2026-10-14).
+const ROW_STATUS: Record<Bucket, string> = {
   Unaided: 'Knew it',
-  Hinted: 'Got it with a hint',
+  Hinted: 'With a hint',
   Revealed: 'Saw the answer',
   'Worth revisiting': 'Skipped',
 }
@@ -209,16 +209,42 @@ export default function RecapPage() {
               : counted === 0
                 // Every term lost to the mic: "You said all 0 back" was the headline.
                 ? 'The mic didn’t catch these'
+                // One line each, so the whole Recap fits without scrolling (designer,
+                // 2026-10-14).
                 : totals.unaided === counted
-                ? `You said all ${counted} back without help`
+                ? `All ${counted}, no help needed!`
                 : strong
-                  ? `Nice work! You can say ${totals.unaided} of ${counted} back without help`
-                  : `You can say ${totals.unaided} of ${counted} back without help`}
+                  ? `Nice work! ${totals.unaided} of ${counted} without help`
+                  : `${totals.unaided} of ${counted} without help, so far`}
           </h1>
           {/* The wins by name, in the caption rather than a coloured line of their own:
               the misses lead the list, so this is where the first viewport says what
               the student CAN do (Knowunity design review; UX critic, 2026-10-13). */}
-          {outcomes.length > 0 && (unaidedNames.length > 0 && unaidedNames.length < counted || resolved > totals.unaided) && (
+          {/* What was learned, as one line (designer, 2026-10-14: fit without
+              scrolling). It was a closing section of definition cards; the definitions
+              are one tap away on each row's eye. The confetti still bursts over it. */}
+          {learnedTerms.length > 0 && (
+            <section ref={learnedRef} className={styles.learned} aria-labelledby="learned-heading">
+              {burst && (
+                <div className={styles.confetti} aria-hidden="true">
+                  {CONFETTI.map((c, i) => (
+                    <span
+                      key={i}
+                      className={styles.piece}
+                      data-tone={c.tone}
+                      style={{ ['--confetti-x' as string]: c.x, ['--confetti-drift' as string]: c.drift, ['--confetti-spin' as string]: c.spin, ['--confetti-delay' as string]: c.delay }}
+                    />
+                  ))}
+                </div>
+              )}
+              <h2 id="learned-heading" className={styles.learnedLine}>
+                {`New today: ${learnedTerms.map((t) => t.name).join(', ')}.`}
+              </h2>
+            </section>
+          )}
+          {/* When something was learned, the green "New today" line below is the
+              caption; this one would repeat its names (2026-10-14). */}
+          {outcomes.length > 0 && learnedTerms.length === 0 && (unaidedNames.length > 0 && unaidedNames.length < counted || resolved > totals.unaided) && (
             <p className="screenTitleCaption">
               {[
                 // On a strong run the wins lead the list below, so the caption looks
@@ -247,7 +273,8 @@ export default function RecapPage() {
           </div>
         )}
         {climb && (
-          <div className={styles.climb}>
+          // Gives way when the Recap would not fit: 04 Pass already showed this climb.
+          <div className={styles.climb} data-gives-way>
             <p className={styles.climbLabel}>{`Your climb · ${climb.name}`}</p>
             <p className={styles.climbBefore}>
               <span className={styles.climbTag}>First try </span>
@@ -265,7 +292,9 @@ export default function RecapPage() {
           behind it on a tap (senior review, 2026-10-12). The sum still has to be on
           the screen and add up, so it is one tap away rather than gone. */}
       {outcomes.length > 0 && (
-        <details className={styles.summaryGroup}>
+        // Gives way only when the Recap would not fit (a short phone): the working
+        // behind the chips, secondary to the rows.
+        <details className={styles.summaryGroup} data-gives-way="last">
           <summary className={styles.summary}>
             <span className={styles.summaryCue}>How it adds up</span>
           </summary>
@@ -273,6 +302,9 @@ export default function RecapPage() {
               headline area carried a green line and an amber line on top of the strip,
               and the first bucket fell half under the fold at 390x668 (craft critic,
               2026-10-13). The rows still mark each sure-and-missed term. */}
+          {outcomes.some((o) => (o.bucket === 'Revealed' || o.bucket === 'Worth revisiting') && !o.micTrouble) && (
+            <p className={styles.working}>The ones you saw the answer to or skipped come back tomorrow.</p>
+          )}
           {sureMissed > 0 && (
             <p className={styles.working}>
               {sureMissed === 1 ? 'You were sure about 1 you missed.' : `You were sure about ${sureMissed} you missed.`}
@@ -296,97 +328,45 @@ export default function RecapPage() {
         </details>
       )}
 
-      <div className={styles.buckets}>
+      {/* One line per term, all on screen (designer, 2026-10-14: fit without
+          scrolling): the term, what happened in the student's words, and the eye that
+          opens the full take. The per-row XP and notes live in "How it adds up"; the
+          coloured rule still marks the outcome. */}
+      <div className={styles.rows}>
         {outcomes.length === 0 && state && (
           <p className={styles.empty}>Nothing recorded yet — this session hasn&rsquo;t been run.</p>
         )}
-        {(() => { let built = 0; return order.map((bucket) => {
-          const rows = outcomes
+        {(() => { let built = 0; return order.flatMap((bucket) =>
+          outcomes
             .filter((o) => o.bucket === bucket)
             // Confidently-wrong sorts first. The signal drives the list, it doesn't decorate it.
             .sort((a, b) => Number(b.wasSure ?? false) - Number(a.wasSure ?? false))
-          if (!rows.length) return null
-          return (
-            <section key={bucket} className={styles.bucket}>
-              <h2 className={styles.bucketLabel}>{`${BUCKET_HEADING[bucket]} · ${rows.length}`}</h2>
-              {rows.map((row) => {
-                const phrase = bucket === 'Unaided' || bucket === 'Hinted' ? keyPhrase(row.index, state) : ''
-                return (
-                // One by one, in reading order (reach 2); still under reduced motion.
-                <div key={row.index} className={styles.row} data-bucket={bucket} style={{ ['--i' as string]: built++ }}>
-                  <span className={styles.rowTerm}>
-                    {getTerm(row.index)?.name}
-                    {/* The student's own words that carried it, as the study note (reach 2). */}
-                    {phrase && <span className={styles.rowQuote}>{`“${phrase}”`}</span>}
-                    {/* Any term the student was sure about and did not get first time, not only the skipped ones. History: docs/code-history.md#h-067 */}
-                    {row.micTrouble ? (
-                      <span className={styles.rowNote}>The mic missed it. Not counted.</span>
-                    ) : (
-                      row.wasSure && bucket !== 'Unaided' && (
-                        <span className={styles.rowNote}>You felt sure about this one.</span>
-                      )
-                    )}
-                    {/* Typed, said so: "Unaided" on its own read as said aloud
-                        (usability review, 2026-10-12). */}
-                    {row.typed && !row.micTrouble && <span className={styles.rowReturn}>Typed.</span>}
-                    {/* The return, said where the miss is (2a): the term goes on the
-                        review list, and home offers it tomorrow. */}
-                    {(bucket === 'Revealed' || bucket === 'Worth revisiting') && (
-                      <span className={styles.rowReturn}>Comes back tomorrow.</span>
-                    )}
-                    {state.drilled?.includes(row.index) && <span className={styles.rowReturn}>{`Drilled. +${XP.drill} XP`}</span>}
-                  </span>
-                  {/* "Not yet", not "+0 XP", on a term still to learn (senior review). */}
-                  <span className={styles.rowXp}>
-                    {row.xp === 0 && (bucket === 'Revealed' || bucket === 'Worth revisiting') ? 'Not yet' : `+${row.xp} XP`}
-                  </span>
-                  {/* Every row opens its transcript. The sheet adapts by bucket, so a
-                      skipped term shows the answer alone rather than a take that
-                      never happened. */}
-                  <ButtonIcon
-                    variant="Overlay"
-                    size="S"
-                    icon={<EyeIcon />}
-                    // A skipped term has no take: the sheet shows the answer (UX critic).
-                    label={
-                      bucket === 'Worth revisiting' || bucket === 'Revealed'
-                        ? `See the answer for ${getTerm(row.index)?.name}`
-                        : `See what you ${row.typed ? 'wrote' : 'said'} for ${getTerm(row.index)?.name}`
-                    }
-                    onClick={() => openSheet(router, `/session/transcript/${TRANSCRIPT_BUCKET[bucket]}?term=${row.index}${row.micTrouble ? '&mic=1' : ''}${row.typed ? '&typed=1' : ''}`)}
-                  />
-                </div>
-                )
-              })}
-            </section>
-          )
-        }) })()}
-      </div>
-
-      {/* THE RECAP ENDS ON WHAT WAS LEARNED — designer, 2026-10-09. The numbers and the
-          term list are the working; this is the takeaway, so it is the last thing the
-          student reads before "Practice what I missed" or home. It sat at the top as the
-          headline on 2026-10-08. */}
-      {learnedTerms.length > 0 && (
-        <section ref={learnedRef} className={styles.learned} aria-labelledby="learned-heading">
-          {burst && (
-            <div className={styles.confetti} aria-hidden="true">
-              {CONFETTI.map((c, i) => (
-                <span
-                  key={i}
-                  className={styles.piece}
-                  data-tone={c.tone}
-                  style={{ ['--confetti-x' as string]: c.x, ['--confetti-drift' as string]: c.drift, ['--confetti-spin' as string]: c.spin, ['--confetti-delay' as string]: c.delay }}
+            .map((row) => (
+              // One by one, in reading order (reach 2); still under reduced motion.
+              <div key={row.index} className={styles.row} data-bucket={bucket} style={{ ['--i' as string]: built++ }}>
+                <span className={styles.rowTerm}>{getTerm(row.index)?.name}</span>
+                <span className={styles.rowStatus}>
+                  {row.micTrouble ? 'Mic missed it' : ROW_STATUS[bucket]}
+                </span>
+                {/* Every row opens its transcript. The sheet adapts by bucket, so a
+                    skipped term shows the answer alone rather than a take that never
+                    happened. */}
+                <ButtonIcon
+                  variant="Overlay"
+                  size="S"
+                  icon={<EyeIcon />}
+                  // A skipped term has no take: the sheet shows the answer (UX critic).
+                  label={
+                    bucket === 'Worth revisiting' || bucket === 'Revealed'
+                      ? `See the answer for ${getTerm(row.index)?.name}`
+                      : `See what you ${row.typed ? 'wrote' : 'said'} for ${getTerm(row.index)?.name}`
+                  }
+                  onClick={() => openSheet(router, `/session/transcript/${TRANSCRIPT_BUCKET[bucket]}?term=${row.index}${row.micTrouble ? '&mic=1' : ''}${row.typed ? '&typed=1' : ''}`)}
                 />
-              ))}
-            </div>
-          )}
-          <h2 id="learned-heading" className="screenTitleHeading">You learned something new!</h2>
-          {learnedTerms.map((t) => (
-            <HintCard key={t.index} className={styles.learnedCard} label={`New today · ${t.name}`} body={t.answer} />
-          ))}
-        </section>
-      )}
+              </div>
+            )),
+        ) })()}
+      </div>
     </ScreenShell>
   )
 }

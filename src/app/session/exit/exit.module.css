@@ -10,8 +10,10 @@
 }
 
 .reasons {
+  /* Chips that wrap, centred: eight reasons in a few lines, not eight rows. */
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 

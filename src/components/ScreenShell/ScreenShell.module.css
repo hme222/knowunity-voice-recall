@@ -32,7 +32,9 @@
   display: flex;
   flex-direction: column;
   gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
-  padding-block: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+  /* No padding on top: Knowie's own 12 inset is the room under the bar (designer,
+     2026-10-14: "slightly reduce the space above Knowie so there's no scrolling"). */
+  padding-block: 0 calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
   padding-inline: calc(var(--spacing-semantic-screen-margin) * var(--size-primitive-unit));
 }
 
@@ -95,7 +97,8 @@
 .middle[data-mascot-stage='2'] [data-mascot],
 .middle[data-mascot-stage='3'] [data-mascot],
 .middle[data-mascot-stage='3'] [data-gives-way],
-.middle[data-mascot-stage='y'] [data-gives-way],
+.middle[data-mascot-stage='y'] [data-gives-way]:not([data-gives-way='last']),
+.middle[data-mascot-stage='y2'] [data-gives-way],
 .middle[data-mascot-stage='3'] :has(> [data-mascot]:only-child),
 /* A wrapper that exists only to hold Knowie goes with it. The doors' `.content` block
    kept its 32/16 padding and both flex gaps — 80 of nothing between the chat door's XP
@@ -155,10 +158,6 @@
 
 .root[data-short] .bottom {
   height: calc(var(--component-scaffold-action-zone-height-short) * var(--size-primitive-unit));
-}
-
-.root[data-short] .middle {
-  padding-top: 0;
 }
 
 /* The control itself never shrinks — only the room around it. */

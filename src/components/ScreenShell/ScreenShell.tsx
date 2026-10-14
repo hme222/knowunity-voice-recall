@@ -132,7 +132,9 @@ export function ScreenShell({
   // 'y' = Knowie stays as drawn and only `data-gives-way` content goes: for a screen
   // that says Knowie never yields (`mascotGivesWay={false}`) but still has something
   // optional to drop (designer, 2026-10-14: Knowie back on "I didn't catch that").
-  const [mascotStage, setMascotStage] = useState<0 | 'm' | 1 | 2 | 3 | 'y'>(0)
+  // 'y2' = as 'y', and then `data-gives-way="last"` content too: a second, later step,
+  // so the Recap drops its climb before its "How it adds up" (2026-10-14).
+  const [mascotStage, setMascotStage] = useState<0 | 'm' | 1 | 2 | 3 | 'y' | 'y2'>(0)
   const measure = useCallback(() => {
     const el = middleRef.current
     if (!el) return
@@ -156,7 +158,9 @@ export function ScreenShell({
       overAt(null) <= 1
         ? 0
         : !mascot
-          ? 'y'
+          ? overAt('y') <= 1 || !el.querySelector('[data-gives-way="last"]')
+            ? 'y'
+            : 'y2'
           : mascotGivesWay === 'shrink'
           ? overAt('m') <= 1
             ? 'm'

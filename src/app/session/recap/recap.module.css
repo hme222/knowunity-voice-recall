@@ -2,28 +2,10 @@
 
 
 
-.buckets {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit));
-}
-
-.bucket {
+.rows {
   display: flex;
   flex-direction: column;
   gap: calc(var(--size-primitive-space-150) * var(--size-primitive-unit));
-}
-
-/* Pinned. The region's overflow fade used to land on a bucket header — the label faded to nothing and the row under it… History: docs/code-history.md#h-070 */
-.bucketLabel {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: var(--color-semantic-background-page);
-  color: var(--color-semantic-text-secondary);
-  font-weight: var(--typography-style-body-s-bold-font-weight);
-  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
 }
 
 .row {
@@ -31,7 +13,10 @@
   align-items: center;
   justify-content: space-between;
   gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
-  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
+  /* One line per term (2026-10-14): a list row, not a card, so four rows fit with the
+     headline. */
+  /* No block padding: the eye's 44 tap area sets the row's height. */
+  padding: 0 calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
   border-radius: calc(var(--size-primitive-radius-400) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
   /* A leading rule, coloured by bucket. History: docs/code-history.md#h-071 */
@@ -64,16 +49,8 @@
   line-height: calc(var(--typography-style-body-m-regular-line-height) * var(--size-primitive-unit));
 }
 
-.rowNote {
-  display: block;
-  color: var(--color-semantic-text-warning);
-  /* Body S, not a caption: these notes carry the confidence signal (senior review). */
-  font-weight: var(--typography-style-body-s-regular-font-weight);
-  font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
-}
-
-.rowXp {
+/* What happened, in the student's words, in a fixed column before the eye. */
+.rowStatus {
   text-align: right;
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-s-bold-font-weight);
@@ -134,10 +111,6 @@
   text-align: center;
 }
 
-.learnedCard {
-  width: 100%;
-  text-align: left;
-}
 
 
 
@@ -182,25 +155,7 @@
 }
 
 
-/* "Comes back tomorrow." / "Drilled.": what happens next, in the quiet secondary tone
-   so it does not compete with the warning notes above it. */
-.rowReturn {
-  display: block;
-  color: var(--color-semantic-text-secondary);
-  font-weight: var(--typography-style-body-s-regular-font-weight);
-  font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
-}
 
-/* The student's key phrase under a got term: their words as the study note (reach 2). */
-.rowQuote {
-  display: block;
-  color: var(--color-semantic-text-secondary);
-  font-style: italic;
-  font-weight: var(--typography-style-body-s-regular-font-weight);
-  font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
-}
 
 /* Rows build in one by one, a standard beat apart, after the headline (reach 2).
    Transform and opacity only; nothing moves under reduced motion. */
@@ -322,4 +277,16 @@
   .confetti {
     display: none;
   }
+}
+
+/* "New today: …" — the heading's caption when something was learned, where the confetti
+   bursts (2026-10-14). Body S bold in the success colour, one line: the takeaway, not
+   a heading block. */
+.learnedLine {
+  margin: 0;
+  text-align: center;
+  color: var(--color-semantic-feedback-success-on-subtle);
+  font-weight: var(--typography-style-body-s-bold-font-weight);
+  font-size: calc(var(--typography-style-body-s-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-body-s-bold-line-height) * var(--size-primitive-unit));
 }

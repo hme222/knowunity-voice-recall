@@ -23,11 +23,11 @@ Recap → "Practice what I missed" → practice list → drill or say-again → 
 
 Other entries: `/home/unlocked` chip → `/picker` ("Start Chemistry: bonding" or a drill); `/home/due` due chips; `/session/resume`; guided one-definition runs from `/door/quiz`, `/door/chat`, `/door/exam-plan` (reached from `/home`), which end on the door's result (pass) or `/door/missed` (no pass), then the unlock popup. `/start` is the reviewer brief and the first screen: `/` redirects to it (designer, 2026-10-13), and its Start goes to the unlock popup. `/session/intro` is retired: it starts a run and redirects to Q1.
 
-## Routes (43)
+## Routes (44)
 
 | Area | Routes |
 |---|---|
-| Home | `/` (redirect to `/start`), `/home`, `/home/unlock`, `/home/unlocked`, `/home/due`, `/picker`, `/start` |
+| Home | `/` (redirect to `/start`), `/home`, `/home/unlock`, `/home/unlocked`, `/home/due`, `/picker`, `/picker/drills` (sheet), `/start` |
 | Session | `/session/{idle,recording,captured,processing,pass,miss,unclear,reveal,repeat,blank}/[term]`, `/session/recap`, `/session/recap/practice`, `/session/transcript/[bucket]`, `/session/exit`, `/session/resume`, `/session/intro` (redirect) |
 | Typed | `/text/turn`, `/text/checking` |
 | Permission | `/permission/primer` (sheet), `/permission/prompt` (drawn OS sheet), `/permission/denied` |

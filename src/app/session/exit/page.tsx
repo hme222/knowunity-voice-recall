@@ -3,21 +3,24 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { rememberedTerm, returnBack } from '@/lib/navigation'
-import { Button, MascotSlot, OptionRow, ScreenShell } from '@/components'
+import { Button, Chips, MascotSlot, ScreenShell } from '@/components'
 import { setSticky, useSession, XP, setPractising } from '@/lib/session'
 import styles from './exit.module.css'
 
 // 01b Exit confirmation. History: docs/code-history.md#h-052
 
+// Short, in the student's own words, as chips that wrap (designer, 2026-10-14: fit
+// without scrolling; microcopy review P3). Order and meaning unchanged: [0] and [1]
+// still turn the primary into "Type instead".
 const REASONS = [
-  "I can\u2019t speak out loud right now (I\u2019m around people / in public)",
-  'I\u2019d rather type than talk',
-  'I was just checking how it looks',
-  'I don\u2019t understand how this works',
-  'Something didn\u2019t work right (mic / it couldn\u2019t hear me)',
-  'I feel awkward talking to the app',
-  'The question was bad',
-  'Other',
+  'Can\u2019t talk out loud right now',
+  'I\u2019d rather type',
+  'Just looking around',
+  'Not sure how it works',
+  'The mic or app didn\u2019t work',
+  'Talking to an app feels awkward',
+  'The question didn\u2019t make sense',
+  'Something else',
 ]
 
 /** The two reasons the app can actually do something about. */
@@ -99,11 +102,17 @@ export default function ExitPage() {
             sprint-context.md, 2026-09-22. */}
         <div className={styles.reasons} role="radiogroup" aria-label="What made you stop?">
           {REASONS.map((reason) => (
-            <OptionRow
+            <Chips
               key={reason}
-              label={reason}
-              inGroup
-              state={picked === reason ? 'Selected' : 'Default'}
+              Text={reason}
+              size="M"
+              color="Primary"
+              active={picked === reason}
+              showLeftIcon={false}
+              showRightIcon={false}
+              // One answer, so radios, not toggles: the group above is a radiogroup.
+              role="radio"
+              aria-checked={picked === reason}
               onClick={() => setPicked(reason)}
             />
           ))}

@@ -439,6 +439,22 @@ above.
           names what is left ("One to win back: Electronegativity."). Under half: the
           misses lead as before, under an `approving` Knowie; `confused` is gone from
           the Recap.
+        - *No screen scrolls* (designer: "slightly reduce the space above Knowie so
+          there's no scrolling"; "all of them"). No padding above Knowie on any screen
+          (the doors' extra 32 too). The three lists, each as chosen:
+          - Picker: no search box (three topics); a one-line caption; the drills
+            behind an "Or drill a definition (3)" link to a new sheet route,
+            `/picker/drills`. On a short screen the caption and "Your topics" give way.
+          - Exit sheet: the eight reasons, shortened (P3 copy), as wrapping chips in
+            the same radiogroup.
+          - Recap: one line per term (name, what happened, the eye), no group
+            headings; a one-line headline ("Nice work! 3 of 4 without help", "1 of 4
+            without help, so far", "All 4, no help needed!"); "New today: …" in green
+            as the caption, with the confetti, replacing the closing definition cards
+            (each row's eye still opens the answer); per-row XP and notes moved into
+            "How it adds up". The climb card gives way first, "How it adds up" only if
+            that is not enough (ScreenShell's new `data-gives-way="last"` step).
+          Every screen fits at 390x844 and 390x668, all 46 checked.
     - **02a Captured asks a question** (option 3b, same day): "Here's what I heard.
       Did I get it?" over the frame's "Looks right" / "Say it again". The frame's
       "Send it, or say it again." disagreed with its own button. Same in the drill.
