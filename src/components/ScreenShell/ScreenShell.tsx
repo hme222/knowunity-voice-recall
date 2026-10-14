@@ -108,7 +108,7 @@ export function ScreenShell({
   useLayoutEffect(() => {
     const el = rootRef.current
     if (!el || typeof ResizeObserver === 'undefined') return
-    const limit = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--component-scaffold-short-height')) || 720
+    const limit = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--component-scaffold-short-height')) || 844
     const check = () => setShort(el.getBoundingClientRect().height < limit() * (parseFloat(getComputedStyle(document.documentElement).fontSize) / 16))
     check()
     const ro = new ResizeObserver(check)

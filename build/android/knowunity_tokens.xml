@@ -130,7 +130,7 @@
   <integer name="component_scaffold_mic_region_height">208</integer>
   <integer name="component_scaffold_scroll_fade_height">40</integer>
   <integer name="component_scaffold_action_zone_height">120</integer>
-  <integer name="component_scaffold_short_height">720</integer>
+  <integer name="component_scaffold_short_height">844</integer>
   <integer name="component_scaffold_mic_region_height_short">192</integer>
   <integer name="component_scaffold_action_zone_height_short">112</integer>
   <integer name="component_scaffold_mic_slot_offset">8</integer>

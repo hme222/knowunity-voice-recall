@@ -461,6 +461,10 @@ above.
         - *The mic sits 8 lower* (`component.scaffold.micSlotOffset`), taken from the
           region (208 / 192 short), so nothing else moves and it never crowds the card
           above; the ring fade follows LISTENING (76 / 60 below the mic's centre).
+        - *Compact below 844, not 720.* Windows 720-843 tall got the full iPhone 13
+          metrics without the room for them, and the question screens scrolled 12-62
+          (designer: "/session/idle/2 still requires a scroll"). `shortHeight` is 844:
+          any frame shorter than the design frame compacts.
     - **02a Captured asks a question** (option 3b, same day): "Here's what I heard.
       Did I get it?" over the frame's "Looks right" / "Say it again". The frame's
       "Send it, or say it again." disagreed with its own button. Same in the drill.
