@@ -414,6 +414,21 @@ above.
           suggested way (Primary) and the other (Secondary) as equal halves. Swipe,
           arrow keys or the dots move through it (the home due deck's SwipeDeck and
           SwipeDots). "Play all N" in the action zone. Empty: "Nothing to win back".
+        - *Everything fits without scrolling (designer: "move mic lower… fit everything
+          without scrolling").* A short frame is the iPhone SE class, so under
+          `shortHeight` the status bar is 20 (was 48) and there is no home indicator
+          (was 34); the action zone is 112 (the most any screen uses); the mic region
+          token is rebound so Recording follows. Drill bodies and door wrappers tighten
+          a step; the drill letter rung's chip gives way (its caption says the same);
+          the doors' cards are shorter ("Still on formal charge?"). Every screen fits
+          at 390x668 and 390x844 except the picker, exit and Recap, which are lists.
+        - *LISTENING has room.* RecordingStatus gaps 8 (were 4); the mic region grew to
+          216 / 200 short so LISTENING keeps its distance from the mic.
+        - *Knowie's face changes with the moment* (one meaning per face, no two screens
+          in a row alike on the main path): Recording `amazed`, picker and primer and a
+          half-right miss `questioning`, drill rungs `standby`, the typed turn
+          `approving`, Reveal `excited`, the drill's first stumble `confused`. Table in
+          design-system.md § Mascot poses.
     - **02a Captured asks a question** (option 3b, same day): "Here's what I heard.
       Did I get it?" over the frame's "Looks right" / "Say it again". The frame's
       "Send it, or say it again." disagreed with its own button. Same in the drill.

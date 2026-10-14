@@ -103,7 +103,7 @@ function DrillRecording() {
     >
       <div className={styles.body}>
         {/* Knowie on every screen, the drill rung's face (designer, 2026-10-14). */}
-        <MascotSlot size="2XL" expression="thinking" className={styles.mascotCentred} />
+        <MascotSlot size="2XL" expression="amazed" className={styles.mascotCentred} />
         <p className={styles.cue}>{rung.cue}</p>
       </div>
     </ScreenShell>

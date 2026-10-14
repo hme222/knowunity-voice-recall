@@ -126,12 +126,11 @@
    fade follows the region, whose status line now sits 68 below the mic's centre. */
 .root[data-short] {
   --spacing-semantic-between-sections: var(--size-primitive-space-400);
+  /* Rebound, not set on .micRegion alone: 02 Recording sizes its own mic wrapper from
+     the same token and ran 16 over at 390x668 when only the region shrank. */
+  --component-scaffold-mic-region-height: var(--component-scaffold-mic-region-height-short);
   --component-mic-button-pulse-ring-fade-from: var(--component-mic-button-pulse-ring-fade-from-short);
   --component-mic-button-pulse-ring-fade-to: var(--component-mic-button-pulse-ring-fade-to-short);
-}
-
-.root[data-short] .micRegion {
-  height: calc(var(--component-scaffold-mic-region-height-short) * var(--size-primitive-unit));
 }
 
 .root[data-short] .micSlot {
@@ -140,6 +139,26 @@
 
 .root[data-short] .middle[data-has-mic] {
   padding-bottom: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+}
+
+/* A short frame is the iPhone SE class: a 20 status bar and a home button, so no home
+   indicator. Both given back, and the action zone trimmed to the most any screen uses,
+   so the mic and actions sit lower and a voice screen fits without scrolling (designer,
+   2026-10-14: "move mic lower… fit everything without scrolling"). */
+.root[data-short] .panelHeader {
+  height: calc(var(--component-scaffold-panel-header-height-short) * var(--size-primitive-unit));
+}
+
+.root[data-short] .sheetOnly {
+  height: calc(var(--component-scaffold-bottom-sheet-only-height-short) * var(--size-primitive-unit));
+}
+
+.root[data-short] .bottom {
+  height: calc(var(--component-scaffold-action-zone-height-short) * var(--size-primitive-unit));
+}
+
+.root[data-short] .middle {
+  padding-top: 0;
 }
 
 /* The control itself never shrinks — only the room around it. */

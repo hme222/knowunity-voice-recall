@@ -172,7 +172,8 @@ function RecordingScreen({ index }: { index: number }) {
       <div className={styles.body}>
         {/* Knowie over the question, as on 01 Idle, so nothing moves on the tap that
             starts recording (designer, 2026-10-14: Knowie on every screen). */}
-        <MascotSlot size="2XL" expression="standby" className={styles.mascot} />
+        {/* `amazed`, all ears, while it listens: the question a tap ago was `standby` (designer, 2026-10-14: the face changes with the moment, so no two screens in a row look the same). */}
+        <MascotSlot size="2XL" expression="amazed" className={styles.mascot} />
         {current && <ChatBubble className={styles.bubble} showTitle title={questionTitle(current.index, isPractising(sessionState))} titleAccent={current.name} body={current.prompt} />}
       </div>
     </ScreenShell>

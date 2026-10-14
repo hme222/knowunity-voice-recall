@@ -5,7 +5,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
+  /* 8, not 4 (designer, 2026-10-14: "LISTENING needs better spacing… feels
+     cramped"). The mic region grew by the 16 this takes, so LISTENING keeps its
+     distance from the mic. */
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
 .label {

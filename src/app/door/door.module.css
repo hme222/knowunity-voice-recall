@@ -59,3 +59,10 @@
   padding-top: calc(var(--size-primitive-space-800) * var(--size-primitive-unit));
   padding-bottom: calc(var(--size-primitive-space-400) * var(--size-primitive-unit));
 }
+
+/* A short frame (ScreenShell's data-short): no extra room around Knowie, so the door's
+   question fits at 390x668 with Knowie at its one size (designer, 2026-10-14). */
+[data-short] .content {
+  padding-top: 0;
+  padding-bottom: 0;
+}

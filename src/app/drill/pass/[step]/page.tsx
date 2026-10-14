@@ -39,7 +39,8 @@ export default function DrillPassPage({ params }: { params: Promise<{ step: stri
       }
     >
       <div className={styles.frameBody}>
-        <MascotSlot size="2XL" expression="thinking" />
+        {/* `standby`: the rung is the ask; the judging beat before it is `thinking` (designer, 2026-10-14: the face changes with the moment, so no two screens in a row look the same). */}
+        <MascotSlot size="2XL" expression="standby" />
         <p className={styles.termPill}>
           Define: <span className={styles.termPillName}>{drillTerm.name}</span>
         </p>

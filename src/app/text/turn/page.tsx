@@ -119,7 +119,7 @@ function TextTurnScreen() {
     >
       <div className={styles.body}>
         {/* Knowie and the accented term, as on every voice screen. History: docs/code-history.md#h-096 */}
-        <MascotSlot size="2XL" expression={rung ? 'thinking' : 'standby'} className={styles.mascotCentred} />
+        <MascotSlot size="2XL" expression={rung ? 'standby' : hinted ? 'thinking' : 'approving'} className={styles.mascotCentred} />
         {rung ? (
           <>
             <p className={`${drillStyles.termPill} ${styles.pill}`}>

@@ -61,9 +61,9 @@ export default function ChatDoor() {
         </div>
         <ChatBubble
           showTitle
-          title="You were just asking about formal charge"
+          title="Still on formal charge?"
           // One line shorter: at 390x668 the second sentence was cut mid-line.
-          body="Say it back in your own words. It’s the quickest way to know it stuck."
+          body="Say it back in your own words to check it stuck."
         />
         {/* A mic, in the shared region, like the exam-plan door. It was a Secondary
             Button — two doors offering the same thing two ways, and the one that opens

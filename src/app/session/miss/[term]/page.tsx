@@ -109,7 +109,7 @@ function MissScreen({ index }: { index: number }) {
       }
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression={lastRung ? 'sad' : partialCredit ? 'thinking' : 'confused'} className={styles.mascotCentred} />
+        <MascotSlot size="2XL" expression={lastRung ? 'sad' : partialCredit ? 'questioning' : 'confused'} className={styles.mascotCentred} />
         {/* No PROVISIONAL XP here. History: docs/code-history.md#h-060 */}
         {/* No "Partially right" on the last rung: it sat over "That's three tries" and
             read as a contradiction (Duolingo design review, 2026-10-13). */}

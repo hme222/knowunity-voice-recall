@@ -11,6 +11,13 @@
   gap: calc(var(--size-primitive-space-400) * var(--size-primitive-unit));
 }
 
+/* A short frame (ScreenShell's data-short): one step tighter, so a drill rung fits at
+   390x668 with Knowie at its one size (designer, 2026-10-14). */
+[data-short] .body,
+[data-short] .frameBody {
+  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+}
+
 .centred {
   display: flex;
   flex-direction: column;

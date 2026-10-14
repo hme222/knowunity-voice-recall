@@ -33,7 +33,9 @@ export default function DrillLetterPage() {
     >
       <div className={styles.frameBody}>
         <MascotSlot size="2XL" expression="questioning" />
-        <div className={[styles.fullWidth, styles.verdictRow].join(' ')}>
+        {/* Steps aside on a short screen: the caption under the mic says the same thing
+            ("Still tricky? Here's a nudge."), and the letter is what the student needs. */}
+        <div className={[styles.fullWidth, styles.verdictRow].join(' ')} data-gives-way>
           <Chips
             Text={STUMBLES.second.verdict}
             size="S"

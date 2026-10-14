@@ -31,7 +31,8 @@ function Primer() {
           {/* Knowie in the sheet, as the live app's own mic sheets carry their mascot art
               (screenshots 49, 52; Knowunity design review). From public/knowie, no new art. */}
           <div className={styles.sheetMascot}>
-            <MascotSlot size="2XL" expression="excited" />
+            {/* `questioning`: Knowie is asking for the mic (designer, 2026-10-14: the face changes with the moment, so no two screens in a row look the same). */}
+            <MascotSlot size="2XL" expression="questioning" />
           </div>
           <div className={styles.actions}>
             <Button CTA="Turn on the mic" variant="Primary" size="M" fullWidth onClick={() => router.push(`/permission/prompt?${forward}`)} />

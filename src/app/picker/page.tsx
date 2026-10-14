@@ -36,7 +36,8 @@ export default function PickerPage() {
     >
       <div className={styles.body}>
         {/* Knowie, inviting (designer, 2026-10-13: "add Knowie"). */}
-        <MascotSlot size="2XL" expression="excited" className={styles.mascot} />
+        {/* `questioning`: Knowie asks which one; home, just before, is `excited` (designer, 2026-10-14: the face changes with the moment, so no two screens in a row look the same). */}
+        <MascotSlot size="2XL" expression="questioning" className={styles.mascot} />
         <div className="screenTitle">
           <h1 className="screenTitleHeading">Say It Back</h1>
           {/* The guide (designer, 2026-10-13): name the quiz to pick, here and on the row. */}

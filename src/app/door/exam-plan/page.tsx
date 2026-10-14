@@ -54,7 +54,7 @@ export default function ExamPlanDoor() {
         {/* The session's own question card (senior review, 2026-10-12): a long formal
             paragraph here read as a different product from the "Explain: X" cards the
             student meets one tap later. */}
-        <ChatBubble showTitle title={`${SUBJECT} · Explain: `} titleAccent={getTerm(1)?.name ?? ''} body={`${(getTerm(1)?.prompt ?? '').split('. ')[0]}.`} />
+        <ChatBubble showTitle title={`${SUBJECT} · Explain: `} titleAccent={getTerm(1)?.name ?? ''} body="Say what it means, in your own words." />
       </div>
     </ScreenShell>
   )

@@ -1136,17 +1136,19 @@ four-face history below is kept for its reasoning; this table is the rule.
 
 **Size (2026-10-14):** one size, 2XL (120), on every screen, never hidden or shrunk. The Figma set's four sizes (XL 64, 2XL 120, 3XL 200, 4XL 320, art inset 12) all exist in `MascotSlot`; screens use 2XL, as the Figma screen frames do.
 
+**Rule (2026-10-14, designer: "Knowie's face needs to change from screen to screen"):** one meaning per face, and no two screens in a row on the main path share a face — home `excited` → picker `questioning` → question `standby` → Recording `amazed` → Captured `excited` → judging `thinking` → Pass `laughing` / `approving`, or a miss `questioning` / `confused` / `sad`.
+
 | `expression` | The moment | Screens |
 | --- | --- | --- |
-| `standby` | Ready, listening — the student's turn | 01 Idle (first try), the typed turn, 05a Reveal, resume with nothing to pick up, the question behind the primer |
-| `thinking` | Working it out | 03 Processing and every judging beat, 01 Idle on a retry with the hint, 05 Miss on a half-right answer, the drill's rungs and first stumble, a typed drill turn |
-| `questioning` | Prompting a guess | The drill's first-letter rung. Not on Captured: next to the student's own words its squint read as suspicion (2026-10-13), so Captured keeps `excited` |
-| `confused` | A wrong idea, or a run that needs another look | 05 Miss on a wrong idea / typed / too-short answer, 07 Recap with anything to revisit (designer: "confused or dazed", not the half-lidded face, which read as mad) |
+| `standby` | The ask — the student's turn | 01 Idle (first try), the drill's rungs and a typed drill turn, resume with nothing to pick up, the question behind the primer, the transcript sheet |
+| `thinking` | Working it out | 03 Processing and every judging beat, 01 Idle and the typed turn on a retry with the hint |
+| `questioning` | Knowie asks the student something | The picker ("which one?"), the mic primer, 05 Miss on a half-right answer (its title ends on a question), the drill's first-letter rung, the exit sheet. Not on Captured: next to the student's own words its squint read as suspicion (2026-10-13) |
+| `confused` | A wrong idea, or a run that needs another look | 05 Miss on a wrong idea / typed / too-short answer, DD 07 the drill's first stumble (2026-10-14), 07 Recap with anything to revisit (designer: "confused or dazed", not the half-lidded face, which read as mad) |
 | `sad` | Gently, it did not land | 05 Miss on the third try, the door run that ended without a pass |
 | `dazed` | The app failed, not the student | 04a Couldn't hear, DD mishear, mic denied, a door run lost to the mic, 01 Idle after Captured's "Not quite right" ("My mistake. Say it again.", 2026-10-14) |
-| `excited` | An invitation with energy, or "I caught that" | 02a Captured, DD 02a and the typed check (the 2026-09-23 decision, kept), the start brief, home, the mic primer, resume partway, practice, drill intro, the chat and exam-plan doors, 01 Idle on the run's last question ("Last one:", 2026-10-14) |
-| `amazed` | Something new appeared | Not on a screen: over the unlock popup its stare pulled focus from the card (2026-10-13); the popup peeks `giggling` |
-| `approving` | Got it, with help, or a good step | 04 Pass with a hint / typed / in practice, the say-it-back repeat, the quiz door's result, a drill round's review |
+| `excited` | An invitation with energy, or "I caught that" | 02a Captured, DD 02a and the typed check (the 2026-09-23 decision, kept), the start brief, home, the mic primer, resume partway, drill intro, the chat and exam-plan doors, 01 Idle on the run's last question ("Last one:", 2026-10-14), 05a Reveal ("now say it back", 2026-10-14) |
+| `amazed` | All ears | 02 Recording and DD 02 Recording, while it listens (2026-10-14). Not over the unlock popup, where its stare pulled focus from the card (2026-10-13) |
+| `approving` | Fine, go ahead; got it, with help | The typed turn (2026-10-14), 04 Pass with a hint / typed / in practice, the say-it-back repeat, the quiz door's result, a drill round's review |
 | `laughing` | The big win | 04 Pass clean and unaided, 07 Recap on a clean run, DD 08 drill complete, the quiz-complete door |
 | `giggling` | Light, playful warmth | The unlock popup's peek, `session/blank` ("I don't know this one"), the returning drill intro, DD 07c "say this with me" |
 | `determined`, `over-it`, `angry` | Exported, not used | Kept for completeness; `determined` read as mad on every screen it held |
