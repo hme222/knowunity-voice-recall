@@ -389,6 +389,8 @@ answer box). Any typed input is a `TextInput`. Since 2026-10-14:
 `ConfidenceAsk`'s optional toggle mode (`value` / `onChange`), which replaced the
 small "How sure?" chips on Captured and the typed check.
 
+**One card recipe (2026-10-14, designer: "not all the cards and text sizes are consistent"):** every content card — ChatBubble, RecallResult (all states), RecallResultCaptured, HintCard, TrainingLog, the drill cue cards, the transcript quote, the start brief's cards, the rematch card — is `spacing.semantic.cardPadding` (16) on `radius.400` (16), titled in Headline XS (18 bold), with Body M (18) for its body and Caption M bold (12) for its eyebrow. Screen titles stay Headline S (21). This departs from the Figma sets where they differed (HintCard radius 8, ChatBubble and the couldn't-hear title at Headline S, Captured at Headline XXS, TrainingLog 12/16).
+
 **StatChip departs from its Figma set on purpose (2026-10-14):** one row, value
 then label, the label at Caption M (12px) instead of Caption S (9px). Stacked, three
 chips pushed the Recap's term rows below the fold at 390x668.
@@ -1136,7 +1138,7 @@ four-face history below is kept for its reasoning; this table is the rule.
 
 **Size (2026-10-14):** one size, 2XL (120), on every screen, never hidden or shrunk. The Figma set's four sizes (XL 64, 2XL 120, 3XL 200, 4XL 320, art inset 12) all exist in `MascotSlot`; screens use 2XL, as the Figma screen frames do.
 
-**Rule (2026-10-14, designer: "Knowie's face needs to change from screen to screen"):** one meaning per face, and no two screens in a row on the main path share a face — home `excited` → picker `questioning` → question `standby` → Recording `amazed` → Captured `excited` → judging `thinking` → Pass `laughing` / `approving`, or a miss `questioning` / `confused` / `sad`.
+**Rule (2026-10-14, designer: "Knowie's face needs to change from screen to screen"):** one meaning per face, and no two screens in a row on the main path share a face — home `excited` → picker `questioning` → question `standby` → Recording `giggling`, then `approving` once the take counts → Captured `excited` → judging `thinking` → Pass `laughing` / `approving`, or a miss `questioning` / `confused` / `sad`.
 
 | `expression` | The moment | Screens |
 | --- | --- | --- |
@@ -1147,10 +1149,10 @@ four-face history below is kept for its reasoning; this table is the rule.
 | `sad` | Gently, it did not land | 05 Miss on the third try, the door run that ended without a pass |
 | `dazed` | The app failed, not the student | 04a Couldn't hear, DD mishear, mic denied, a door run lost to the mic, 01 Idle after Captured's "Not quite right" ("My mistake. Say it again.", 2026-10-14) |
 | `excited` | An invitation with energy, or "I caught that" | 02a Captured, DD 02a and the typed check (the 2026-09-23 decision, kept), the start brief, home, the mic primer, resume partway, drill intro, the chat and exam-plan doors, 01 Idle on the run's last question ("Last one:", 2026-10-14), 05a Reveal ("now say it back", 2026-10-14) |
-| `amazed` | All ears | 02 Recording and DD 02 Recording, while it listens (2026-10-14). Not over the unlock popup, where its stare pulled focus from the card (2026-10-13) |
-| `approving` | Fine, go ahead; got it, with help | The typed turn (2026-10-14), 04 Pass with a hint / typed / in practice, the say-it-back repeat, the quiz door's result, a drill round's review |
+| `amazed` | Something new appeared | Not on a screen: over the unlock popup its stare pulled focus from the card (2026-10-13), and on Recording it read wrong (2026-10-14) |
+| `approving` | Fine, go ahead; got it, with help | Recording once the take counts (nodding along), the typed turn (2026-10-14), 04 Pass with a hint / typed / in practice, the say-it-back repeat, the quiz door's result, a drill round's review |
 | `laughing` | The big win | 04 Pass clean and unaided, 07 Recap on a clean run, DD 08 drill complete, the quiz-complete door |
-| `giggling` | Light, playful warmth | The unlock popup's peek, `session/blank` ("I don't know this one"), the returning drill intro, DD 07c "say this with me" |
+| `giggling` | Light, playful warmth | 02 Recording and DD 02 as they start listening, until the take counts (2s, then `approving`, 2026-10-14), The unlock popup's peek, `session/blank` ("I don't know this one"), the returning drill intro, DD 07c "say this with me" |
 | `determined`, `over-it`, `angry` | Exported, not used | Kept for completeness; `determined` read as mad on every screen it held |
 
 ### Before 2026-10-13: the four-face mapping (resolved 2026-09-20)

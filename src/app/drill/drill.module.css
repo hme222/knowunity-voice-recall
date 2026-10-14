@@ -161,7 +161,7 @@
 .quote {
   margin: 0;
   padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
-  border-radius: calc(var(--size-primitive-radius-200) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-400) * var(--size-primitive-unit));
   background: var(--color-semantic-background-raised);
   color: var(--color-semantic-text-primary);
   font-weight: var(--typography-style-body-m-regular-font-weight);

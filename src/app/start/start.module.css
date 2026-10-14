@@ -32,10 +32,11 @@
   flex-direction: column;
   gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
   margin: 0;
-  /* space.300, not cardPadding: the room Knowie needs at 390x668. */
-  padding: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
+  /* cardPadding, like every card (2026-10-14); the short-frame status bar gave back
+     the room this once saved. */
+  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
   list-style: none;
-  border-radius: calc(var(--size-primitive-radius-200) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-400) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
 }
 

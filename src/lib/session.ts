@@ -141,7 +141,7 @@ export const TERMS: Term[] = [
     passTitle: "Nailed it — that’s the whole definition.",
     // from the frame — 05 Miss + Hint
     missTitle:
-      'You\u2019ve got the \u201ccharge on an atom\u201d part right. The \u201cevenly split\u201d piece is what\u2019s missing.',
+      'You\u2019ve got the \u201ccharge on an atom\u201d part. How are each bond\u2019s electrons split?',
     hint: 'Think about how the electrons\nin each bond get divided up.',
     // from the frame — 05a Reveal answer
     answer:
@@ -316,6 +316,8 @@ export function progressFor(index: number): '0' | '25' | '50' | '75' | '100' {
 const COULDNT_HEAR_UNDER_MS = 2000
 /** The drill's floor: the same, so a mishear never spends a drill rung either. */
 export const DRILL_COULDNT_HEAR_UNDER_MS = COULDNT_HEAR_UNDER_MS
+/** The same floor, for Recording's Knowie: past it the take counts, and Knowie nods along. */
+export const TAKE_COUNTS_AFTER_MS = COULDNT_HEAR_UNDER_MS
 /** Under this, a partial answer. At or above, a clean pass. */
 const PASS_AT_MS = 5000
 

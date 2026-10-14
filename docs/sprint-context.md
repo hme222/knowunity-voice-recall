@@ -425,10 +425,14 @@ above.
         - *LISTENING has room.* RecordingStatus gaps 8 (were 4); the mic region grew to
           216 / 200 short so LISTENING keeps its distance from the mic.
         - *Knowie's face changes with the moment* (one meaning per face, no two screens
-          in a row alike on the main path): Recording `amazed`, picker and primer and a
+          in a row alike on the main path): Recording `giggling`, then `approving` once the take passes the 2s couldn't-hear floor (`amazed` was tried and read wrong), picker and primer and a
           half-right miss `questioning`, drill rungs `standby`, the typed turn
           `approving`, Reveal `excited`, the drill's first stumble `confused`. Table in
           design-system.md § Mascot poses.
+        - *One card recipe.* Every card is 16 padding on radius 16, its title Headline
+          XS, its body Body M, its eyebrow Caption M bold (design-system.md). The Pass
+          card's compact padding and Body S are undone; question cards and "I didn't
+          catch that" drop from Headline S, "Here's what I heard." rises from XXS.
     - **02a Captured asks a question** (option 3b, same day): "Here's what I heard.
       Did I get it?" over the frame's "Looks right" / "Say it again". The frame's
       "Send it, or say it again." disagreed with its own button. Same in the drill.

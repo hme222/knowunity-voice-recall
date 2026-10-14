@@ -8,7 +8,8 @@
   box-sizing: border-box;
   gap: calc(var(--spacing-semantic-card-label-gap) * var(--size-primitive-unit));
   padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
-  border-radius: calc(var(--size-primitive-radius-200) * var(--size-primitive-unit));
+  /* radius.400 like every card (2026-10-14); was 200, the one card with tighter corners. */
+  border-radius: calc(var(--size-primitive-radius-400) * var(--size-primitive-unit));
   background: var(--color-semantic-background-surface);
 }
 .label,

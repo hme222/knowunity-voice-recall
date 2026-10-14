@@ -12,7 +12,7 @@ import {
   RecordingStatus,
   ScreenShell,
 } from '@/components'
-import { getTerm, isPractising, markEarned, verdictFor, nextAfter, recordOutcome, questionTitle, useSession } from '@/lib/session'
+import { getTerm, isPractising, markEarned, verdictFor, nextAfter, recordOutcome, questionTitle, useSession, TAKE_COUNTS_AFTER_MS } from '@/lib/session'
 import styles from './recording.module.css'
 
 // 02 Recording — Figma frame "02 Recording" (15672:20100). History: docs/code-history.md#h-072
@@ -172,8 +172,10 @@ function RecordingScreen({ index }: { index: number }) {
       <div className={styles.body}>
         {/* Knowie over the question, as on 01 Idle, so nothing moves on the tap that
             starts recording (designer, 2026-10-14: Knowie on every screen). */}
-        {/* `amazed`, all ears, while it listens: the question a tap ago was `standby` (designer, 2026-10-14: the face changes with the moment, so no two screens in a row look the same). */}
-        <MascotSlot size="2XL" expression="amazed" className={styles.mascot} />
+        {/* `giggling` as it starts listening, then `approving` once the take is long
+            enough to count (TAKE_COUNTS_AFTER_MS): Knowie nods along (designer,
+            2026-10-14: "giggling then approving"; `amazed` read wrong here). */}
+        <MascotSlot size="2XL" expression={seconds * 1000 >= TAKE_COUNTS_AFTER_MS ? 'approving' : 'giggling'} className={styles.mascot} />
         {current && <ChatBubble className={styles.bubble} showTitle title={questionTitle(current.index, isPractising(sessionState))} titleAccent={current.name} body={current.prompt} />}
       </div>
     </ScreenShell>

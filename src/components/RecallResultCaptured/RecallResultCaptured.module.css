@@ -14,11 +14,12 @@
   align-self: flex-start;
 }
 
+/* One card title size across the app: Headline XS (designer, 2026-10-14: "not all the cards and text sizes are consistent"). */
 .title {
   color: var(--color-semantic-text-primary);
-  font-weight: var(--typography-style-headline-xxs-bold-font-weight);
-  font-size: calc(var(--typography-style-headline-xxs-bold-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-headline-xxs-bold-line-height) * var(--size-primitive-unit));
+  font-weight: var(--typography-style-headline-xs-bold-font-weight);
+  font-size: calc(var(--typography-style-headline-xs-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-headline-xs-bold-line-height) * var(--size-primitive-unit));
 }
 
 .label {

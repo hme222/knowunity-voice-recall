@@ -4,8 +4,8 @@
   display: flex;
   flex-direction: column;
   gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
-  padding-block: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
-  padding-inline: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
+  /* cardPadding all round, like every card (2026-10-14); was 12/16. */
+  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
   border-radius: calc(var(--size-primitive-radius-400) * var(--size-primitive-unit));
   background: var(--color-semantic-background-input);
 }

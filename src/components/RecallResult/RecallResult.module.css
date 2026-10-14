@@ -33,12 +33,13 @@
   margin: 0;
   align-self: stretch;
 }
+/* One card title size across the app: Headline XS (designer, 2026-10-14: "not all the cards and text sizes are consistent"). */
 .title {
   color: var(--result-title);
-  font-weight: var(--typography-style-headline-s-font-weight);
-  font-size: calc(var(--typography-style-headline-s-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-headline-s-line-height) * var(--size-primitive-unit));
-  letter-spacing: calc(var(--typography-style-headline-s-letter-spacing) * 0.01em);
+  font-weight: var(--typography-style-headline-xs-bold-font-weight);
+  font-size: calc(var(--typography-style-headline-xs-bold-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-headline-xs-bold-line-height) * var(--size-primitive-unit));
+  letter-spacing: calc(var(--typography-style-headline-xs-bold-letter-spacing) * 0.01em);
 }
 /* One eyebrow style for every state. History: docs/code-history.md#h-108 */
 .label {
@@ -90,35 +91,6 @@
   .root[data-stagger] .footer {
     animation: none;
   }
-}
-
-/* A miss's title is a sentence of feedback, often three lines, not a verdict word: at
-   Headline S it outweighed the student's own words under it (designer, 2026-10-13:
-   "the sizing of text is off"). Headline XS for Neutral; Pass keeps its short line big. */
-.root[data-state='Neutral'] .title {
-  font-weight: var(--typography-style-headline-xs-bold-font-weight);
-  font-size: calc(var(--typography-style-headline-xs-bold-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-headline-xs-bold-line-height) * var(--size-primitive-unit));
-  letter-spacing: calc(var(--typography-style-headline-xs-bold-letter-spacing) * 0.01em);
-}
-
-/* Pass, compact (designer, 2026-10-14: "make the correct card smaller"): Headline XS
-   over Body S, tighter padding, so Knowie keeps its normal size on 04 Pass at 390x668.
-   The verdict is in the chip above; the card is the proof, not a second headline. */
-.root[data-state='Pass'] {
-  padding: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
-}
-.root[data-state='Pass'] .title {
-  font-weight: var(--typography-style-headline-xs-bold-font-weight);
-  font-size: calc(var(--typography-style-headline-xs-bold-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-headline-xs-bold-line-height) * var(--size-primitive-unit));
-  letter-spacing: calc(var(--typography-style-headline-xs-bold-letter-spacing) * 0.01em);
-}
-.root[data-state='Pass'] .body {
-  font-weight: var(--typography-style-body-s-regular-font-weight);
-  font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
-  letter-spacing: calc(var(--typography-style-body-s-regular-letter-spacing) * 0.01em);
 }
 
 /* The footer row (PassNotches on 04 Pass): the card's full width, a step below the
