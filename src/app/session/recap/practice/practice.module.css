@@ -1,5 +1,5 @@
-/* 07a Practice what I missed, redesigned 2026-10-09. Knowie and the title centred as
-   on every screen-title screen; the rows full width, like every card in the column. */
+/* 07a Practice what you missed, as a rematch deck (designer, 2026-10-14, option A).
+   Title, then the deck with Knowie peeking over it, then the dots. */
 
 .body {
   display: flex;
@@ -8,83 +8,102 @@
   gap: calc(var(--spacing-semantic-between-sections) * var(--size-primitive-unit));
 }
 
-.rows {
-  display: flex;
-  flex-direction: column;
-  gap: calc(var(--size-primitive-space-100) * var(--size-primitive-unit));
+/* The hand. Room above for Knowie's face; the cards behind sit under the top one. */
+.deck {
+  position: relative;
   align-self: stretch;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  margin-top: calc(var(--component-rematch-deck-peek-overlap) * var(--size-primitive-unit));
+  /* Room for the fanned cards below the top one, so the dots clear them. */
+  margin-bottom: calc(var(--component-rematch-deck-back-offset) * 2 * var(--size-primitive-unit));
 }
 
-/* One term: what it is and why it is here on the left, the recommended action on the
-   right. Built inline — see component-gaps.md. */
-.row {
+/* Knowie over the top card's edge, right of centre, feet tucked behind the card. */
+.peek {
+  position: absolute;
+  right: calc(var(--size-primitive-space-600) * var(--size-primitive-unit));
+  top: calc(var(--component-rematch-deck-peek-overlap) * -1 * var(--size-primitive-unit));
+  z-index: 1;
+}
+
+/* The cards behind: the top card's shape, dropped and narrowed, turned a little each
+   way. Decoration only. */
+.back {
+  position: absolute;
+  inset: 0;
+  border-radius: calc(var(--size-primitive-radius-600) * var(--size-primitive-unit));
+  background: var(--color-semantic-background-surface);
+}
+
+.backNear {
+  opacity: var(--component-picker-receded-card-opacity);
+  transform: translateY(calc(var(--component-rematch-deck-back-offset) * var(--size-primitive-unit)))
+    scale(var(--component-rematch-deck-back-scale-near))
+    rotate(calc(var(--component-rematch-deck-back-tilt) * 1deg));
+}
+
+.backFar {
+  opacity: calc(var(--component-picker-receded-card-opacity) / 2);
+  transform: translateY(calc(var(--component-rematch-deck-back-offset) * 2 * var(--size-primitive-unit)))
+    scale(var(--component-rematch-deck-back-scale-far))
+    rotate(calc(var(--component-rematch-deck-back-tilt) * -1deg));
+}
+
+/* Above Knowie, so the card covers its feet. */
+.swipe {
+  position: relative;
+  z-index: 2;
+}
+
+/* The top card: straight, as tall as its words, the way to play it at the foot. */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+  padding: calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
+  border-radius: calc(var(--size-primitive-radius-600) * var(--size-primitive-unit));
+  background: var(--color-semantic-background-surface);
+}
+
+.cardHead {
   display: flex;
   align-items: center;
-  gap: calc(var(--size-primitive-space-300) * var(--size-primitive-unit));
-  padding: calc(var(--size-primitive-space-200) * var(--size-primitive-unit)) calc(var(--spacing-semantic-card-padding) * var(--size-primitive-unit));
-  border-radius: calc(var(--size-primitive-radius-200) * var(--size-primitive-unit));
-  /* Outlined on the page, not filled with surface: a Secondary button's fill IS the
-     surface colour, so on a filled card the recommended action read as plain text. */
-  border: calc(var(--size-primitive-stroke-border) * var(--size-primitive-unit)) solid var(--color-semantic-border-default);
+  justify-content: space-between;
+  gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
 }
 
-.rowText {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  flex: 1;
-  min-width: 0;
+.tag {
+  display: inline-flex;
 }
 
-.rowTerm,
-.rowReason {
+.term {
   margin: 0;
-}
-
-.rowMeta {
-  /* Reason, then the other method on its own line, on EVERY row. Wrapping by width
-     put the link inline on one row and below on the next (senior review). */
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.rowTerm {
   color: var(--color-semantic-text-primary);
-  font-weight: var(--typography-style-body-m-bold-font-weight);
-  font-size: calc(var(--typography-style-body-m-bold-font-size) * var(--size-primitive-unit));
-  line-height: calc(var(--typography-style-body-m-bold-line-height) * var(--size-primitive-unit));
+  font-weight: var(--typography-style-headline-m-font-weight);
+  font-size: calc(var(--typography-style-headline-m-font-size) * var(--size-primitive-unit));
+  line-height: calc(var(--typography-style-headline-m-line-height) * var(--size-primitive-unit));
+  letter-spacing: calc(var(--typography-style-headline-m-letter-spacing) * 0.01em);
 }
 
-.rowReason {
+.says {
+  margin: 0;
   color: var(--color-semantic-text-secondary);
   font-weight: var(--typography-style-body-s-regular-font-weight);
   font-size: calc(var(--typography-style-body-s-regular-font-size) * var(--size-primitive-unit));
   line-height: calc(var(--typography-style-body-s-regular-line-height) * var(--size-primitive-unit));
 }
 
-/* The other method: a quiet link under the reason, flush left with the text. Two
-   classes so it outranks the catalog Button's own padding. */
-.rowText .rowAlt {
-  padding-inline: 0;
-  /* Underlined, so the quiet alternative reads as a control, not a bold word. */
-  text-decoration: underline;
-  text-underline-offset: calc(var(--size-primitive-space-050) * var(--size-primitive-unit));
-}
-
-.empty {
-  margin: 0;
-  color: var(--color-semantic-text-secondary);
-  text-align: center;
-}
-
-/* The row's methods: the Say It Back mic (when saying is the alternative) beside the
-   suggested one. */
-.rowActions {
+/* The two ways, equal halves, a step below the words. */
+.pair {
   display: flex;
-  align-items: center;
   gap: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+  margin-top: calc(var(--size-primitive-space-200) * var(--size-primitive-unit));
+}
+
+.pair > * {
+  flex: 1;
+}
+
+/* On the surface card a Secondary's own fill would vanish: one step up. */
+.pair .alt[data-variant] > span {
+  background: var(--color-semantic-background-raised);
 }

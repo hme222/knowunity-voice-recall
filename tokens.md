@@ -387,7 +387,7 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 
 ## Component tokens
 
-`component.*` — 55 tokens
+`component.*` — 60 tokens
 
 > Component tokens exist only when a component's bindings actually branch by state or variant in a way that benefits from its own indirection layer between it and the semantic tokens, not as documentation-only aliases for a value that never changes. The group holds button, scaffold, micButton, strengthMeter and bottomSheet (corrected 2026-10-13, system critic: this said micButton was the only entry). micButton is here because its four states each pair with a different semantic token, and these tokens are the real thing its Figma variables are bound to, not a restatement of them; scaffold, button and bottomSheet carry component dimensions with no semantic equivalent; strengthMeter carries a colour ramp the semantic layer does not have (the recorded exception in docs/design-system.md). chatBubble and hintCard never branch, they bind straight to semantic tokens with nothing in between, so a component.chatBubble.* or component.hintCard.* entry here would just be a second name for a value already named once. optionRow does branch by state the same way micButton does, four variants, four different fills, but its Figma variants bind straight to the semantic tokens directly rather than through a component-specific layer. That's an inconsistency with micButton's pattern, not a mistake exactly, treat micButton's indirection layer as the older, legacy approach rather than the template: an indirection layer that never diverges from what it aliases is upkeep with no payoff. Don't add one to a new component by default. Add one only when there's a concrete reason a component's own token might need to move independently of the semantic token it currently matches.
 
@@ -448,7 +448,12 @@ Breakpoint values. See the description on deviceWidth.mobile before consuming th
 | `component.passNotches.empty` | `{color.primitive.neutral.600}` | `#615E63` | An unearned notch. The same opaque mid grey as the drill meter's track, so an empty notch is still visibly there. |
 | `component.passNotches.filled` | `{color.primitive.moss.400}` | `#97C459` | An earned notch from before today. The drill meter's 'high' green, the app's colour for unaided recall. |
 | `component.passNotches.fresh` | `{color.primitive.moss.200}` | `#C0DD97` | Today's notch: the brightest green, and ringed, so the new one is not carried by colour alone. |
+| `component.rematchDeck.backOffset` | `{size.primitive.space.400}` | `16` | How far each card behind drops below the one in front, 16, so the hand shows as two clear edges. |
+| `component.rematchDeck.backScaleNear` | `0.95` |  | Scale of the first card behind the top one. |
+| `component.rematchDeck.backScaleFar` | `0.9` |  | Scale of the second card behind. |
+| `component.rematchDeck.backTilt` | `3` |  | Degrees the cards behind turn, alternating sides, so the stack reads as a hand of cards. The top card never tilts. |
+| `component.rematchDeck.peekOverlap` | `96` |  | How far Knowie (2XL, 120) rises above the top card's edge, 96: the whole face shows and only the feet (the box's bottom 24) tuck behind the card. 64 hid the eyes (2026-10-14: "sizing looks off"). |
 
 ---
 
-351 tokens across 10 groups.
+356 tokens across 10 groups.

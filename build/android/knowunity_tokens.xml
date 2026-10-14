@@ -154,6 +154,11 @@
   <integer name="component_pass_notches_notch_width">28</integer>
   <integer name="component_pass_notches_notch_height">8</integer>
   <integer name="component_pass_notches_gap">6</integer>
+  <integer name="component_rematch_deck_back_offset">16</integer>
+  <integer name="component_rematch_deck_back_scale_near">0.95</integer>
+  <integer name="component_rematch_deck_back_scale_far">0.9</integer>
+  <integer name="component_rematch_deck_back_tilt">3</integer>
+  <integer name="component_rematch_deck_peek_overlap">96</integer>
   <string name="typography_style_display_l_font_weight">Heavy</string>
   <dimen name="typography_style_display_l_font_size">103</dimen>
   <integer name="typography_style_display_l_line_height">104</integer>

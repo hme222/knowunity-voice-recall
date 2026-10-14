@@ -65,3 +65,4 @@ detail.
 | Run strip: one segment per term, coloured by bucket | 07 Recap (2026-10-12, senior review) | Inline in recap.module.css. First consumer. Promote when a second screen shows a run's shape |
 | Confetti burst | 07 Recap, "You learned something new!" | Inline (2026-10-13): 24 CSS pieces, fixed table, motion.semantic.duration.confetti, off under reduced motion. Promote if a second screen celebrates the same way (drill complete is the likely one). |
 | Strength notches (PassNotches) | 04 Pass (2026-10-14, designer, option B) | Built as a real component from the start, not inline: it extends RecallResult (new `footer` slot) and has its own tokens. Code-only; needs a Figma counterpart. |
+| Rematch card (deck card with a peeking Knowie and fanned cards behind) | 07a Practice (2026-10-14, option A) | Inline in practice.module.css with `component.rematchDeck` tokens. First consumer. Promote if a second screen deals cards the same way. |

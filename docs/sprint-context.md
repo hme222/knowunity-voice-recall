@@ -406,6 +406,14 @@ above.
           checking line ("Checking that against the definition…", slow: "Still
           checking. This one's taking a moment."), one mishear line, "Sure, and
           right. Bonus XP added.", "You felt sure about this one. Worth a second look."
+        - *Practice is a rematch deck (option A of three mocked: "it feels like a
+          checklist, can we make it fun").* "Rematch time / Three got away. Let's win
+          them back." One card at a time from a fanned hand, Knowie (2XL, `giggling`)
+          peeking over its top edge. The card: why it is there (amber chip) and the
+          dots on its first row, the term at Headline M, Knowie's one line, then the
+          suggested way (Primary) and the other (Secondary) as equal halves. Swipe,
+          arrow keys or the dots move through it (the home due deck's SwipeDeck and
+          SwipeDots). "Play all N" in the action zone. Empty: "Nothing to win back".
     - **02a Captured asks a question** (option 3b, same day): "Here's what I heard.
       Did I get it?" over the frame's "Looks right" / "Say it again". The frame's
       "Send it, or say it again." disagreed with its own button. Same in the drill.

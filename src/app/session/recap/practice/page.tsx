@@ -1,18 +1,22 @@
 'use client'
 
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { AppBar, Button, MascotSlot, ScreenShell } from '@/components'
+import { AppBar, Button, Chips, MascotSlot, ScreenShell, SwipeDeck, SwipeDots } from '@/components'
 import { CloseIcon, MicGlyphIcon } from '@/components/icons'
 import { type Bucket, getTerm, type PracticeItem, recommendedMode, startPractice, type TermOutcome, useSession } from '@/lib/session'
 import styles from './practice.module.css'
 
-// 07a Practice what I missed. History: docs/code-history.md#h-068
+// 07a Practice what you missed, as a rematch deck (designer, 2026-10-14, option A of
+// three mocked: "it feels like a checklist, can we make it fun"). One card at a time
+// from a fanned hand, Knowie peeking over the top, the way to play it on the card.
+// Was a bordered row per term (2026-10-09). History: docs/code-history.md#h-068
 
-/** Why the term is on this list, in the student's terms. */
+/** Why the term is in the deck, in the student's words. */
 const REASON: Record<Exclude<Bucket, 'Unaided'>, string> = {
-  Revealed: 'Needed the answer',
-  'Worth revisiting': 'Skipped',
-  Hinted: 'Needed a hint',
+  Revealed: 'You saw the answer',
+  'Worth revisiting': 'You skipped this one',
+  Hinted: 'You needed a hint',
 }
 
 /** Same order the Recap uses when there are misses: the least-known first. */
@@ -21,11 +25,22 @@ const ORDER: Bucket[] = ['Worth revisiting', 'Revealed', 'Hinted']
 // "Try again", not "Say it again": that one means the mic missed you (retry names by
 // what is redone, designer, 2026-10-14).
 const CTA: Record<PracticeItem['mode'], string> = { drill: 'Drill it', say: 'Try again' }
-const ALT: Record<PracticeItem['mode'], string> = { drill: 'Say it', say: 'or drill it' }
+const ALT: Record<PracticeItem['mode'], string> = { drill: 'Say it', say: 'Drill it' }
+
+const COUNT = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six']
+
+/** Knowie's one line on the card: what the suggested way is, and why it suits. */
+function knowieSays(o: TermOutcome, mode: PracticeItem['mode']): string {
+  if (mode === 'drill') return 'Knowie says: drill it. Four quick rounds, nothing graded.'
+  if (o.micTrouble) return 'Knowie says: say it again. The mic missed it last time.'
+  if (o.typed) return 'Knowie says: say it back this time instead of typing.'
+  return 'Knowie says: have another go. You were close.'
+}
 
 export default function PracticePage() {
   const router = useRouter()
   const state = useSession()
+  const [active, setActive] = useState(0)
   const missed: TermOutcome[] = state.outcomes
     .filter((o) => o.bucket !== 'Unaided')
     .sort(
@@ -37,91 +52,95 @@ export default function PracticePage() {
   const plan: PracticeItem[] = missed.map((o) => ({ index: o.index, mode: recommendedMode(o.bucket, o.micTrouble, { wasSure: o.wasSure, typed: o.typed }) }))
 
   const go = (items: PracticeItem[]) => router.push(startPractice(items))
+  const n = plan.length
+  const at = Math.min(active, Math.max(0, n - 1))
+  const o = missed[at]
+  const mode = plan[at]?.mode
+  const other: PracticeItem['mode'] = mode === 'drill' ? 'say' : 'drill'
+  const term = o ? getTerm(o.index) : undefined
 
   return (
     <ScreenShell
       topNavigation={
         <AppBar variant="leftIconButtonOnly" leftIcon={<CloseIcon />} leftLabel="Back" onLeft={() => router.push('/session/recap')} />
       }
-      // "Practice all" only when there is more than one; with one, its row is the action.
-      // No "Not now": the X already does that.
-      bottomContent={
-        plan.length > 1 ? (
-          <Button CTA={`Practice all ${plan.length}`} variant="Primary" size="M" fullWidth onClick={() => go(plan)} />
-        ) : undefined
-      }
+      // "Play all" only with more than one card; with one, its card is the action.
+      bottomContent={n > 1 ? <Button CTA={`Play all ${n}`} variant="Primary" size="M" fullWidth onClick={() => go(plan)} /> : undefined}
     >
       <div className={styles.body}>
-        <MascotSlot size="2XL" expression="excited" />
-        <div className="screenTitle">
-          <h1 className="screenTitleHeading">Practice what you missed</h1>
-          {plan.length > 0 && (
-            <p className="screenTitleCaption">
-              {/* True whatever was picked: "Knowie picked a way for each" over rows that all
-                  said the same thing read as nothing having been picked (senior review). */}
-              {plan.every((i) => i.mode === plan[0].mode)
-                ? `Knowie suggests ${plan[0].mode === 'drill' ? 'drilling' : 'saying'} ${plan.length > 1 ? 'them' : 'it'}${plan[0].mode === 'say' ? ' again' : ''}. Tap the other if you’d rather.`
-                : 'Knowie suggests a way for each. Tap the other if you’d rather.'}
-            </p>
-          )}
-        </div>
-
         {/* Two different empties. With no outcomes the session never ran, and "you got
             everything unaided" was a claim about a run that did not happen
             (click-through, 2026-10-12). Same line the Recap uses for it. */}
-        {state.outcomes.length === 0 ? (
-          <p className={styles.empty}>Nothing recorded yet — this session hasn&rsquo;t been run.</p>
+        {n === 0 ? (
+          <>
+            <MascotSlot size="2XL" expression={state.outcomes.length ? 'laughing' : 'standby'} />
+            <div className="screenTitle">
+              <h1 className="screenTitleHeading">{state.outcomes.length ? 'Nothing to win back' : 'Practice what you missed'}</h1>
+              <p className="screenTitleCaption">
+                {state.outcomes.length ? 'You knew every one without help.' : 'Nothing recorded yet — this session hasn’t been run.'}
+              </p>
+            </div>
+          </>
         ) : (
-          plan.length === 0 && <p className={styles.empty}>You knew every one without help. Nothing to practice.</p>
-        )}
+          <>
+            <div className="screenTitle">
+              <h1 className="screenTitleHeading">Rematch time</h1>
+              <p className="screenTitleCaption">{`${COUNT[n] ?? n} got away. Let’s win ${n === 1 ? 'it' : 'them'} back.`}</p>
+            </div>
 
-        <ul className={styles.rows}>
-          {missed.map((o, i) => {
-            const mode = plan[i].mode
-            const other = mode === 'drill' ? 'say' : 'drill'
-            const term = getTerm(o.index)
-            return (
-              <li key={o.index} className={styles.row}>
-                <div className={styles.rowText}>
-                  <p className={styles.rowTerm}>{term?.name}</p>
-                  {/* No definition here: shown before the drill it gave the answer away
-                      and cut the drill's retrieval value (Duolingo design review,
-                      2026-10-13, over the senior review's earlier ask). */}
-                  {/* The reason, then the other method as a quiet link on the same line:
-                      one line instead of two keeps three rows and Knowie on a phone. */}
-                  <div className={styles.rowMeta}>
-                    <p className={styles.rowReason}>
-                      {o.micTrouble ? 'The mic missed it' : REASON[o.bucket as Exclude<Bucket, 'Unaided'>]}
-                      {o.wasSure ? ' · you were sure' : ''}
-                      {/* Says why the method differs: rule C. */}
-                      {o.typed && !o.micTrouble ? ' · typed' : ''}
+            <div className={styles.deck}>
+              {/* The hand behind the top card: decoration that says "more to come". */}
+              {n > 2 && <span className={`${styles.back} ${styles.backFar}`} aria-hidden="true" />}
+              {n > 1 && <span className={`${styles.back} ${styles.backNear}`} aria-hidden="true" />}
+              {/* Knowie peeks over the top card, feet tucked behind it. One size, as on
+                  every screen (designer, 2026-10-14). */}
+              <MascotSlot size="2XL" expression="giggling" className={styles.peek} />
+              <SwipeDeck active={at} total={n} onChange={setActive} label="Rematch cards" className={styles.swipe}>
+                {o && term && mode && (
+                  <article className={styles.card} aria-label={term.name}>
+                    {/* The tag left and the dots right, on the card's first row: under the
+                        deck the dots fell below the fold at 390x668, and they are the tap
+                        way through it. The chip is visual; its words are in the card's
+                        text for a screen reader. */}
+                    <div className={styles.cardHead}>
+                      <span aria-hidden="true" className={styles.tag}>
+                        <Chips
+                          Text={o.micTrouble ? 'The mic missed it' : REASON[o.bucket as Exclude<Bucket, 'Unaided'>]}
+                          size="S"
+                          color="Partial"
+                          active
+                          showLeftIcon={false}
+                          showRightIcon={false}
+                        />
+                      </span>
+                      {n > 1 && <SwipeDots active={at + 1} total={n} onSelect={(k) => setActive(k - 1)} label="Rematch card" />}
+                    </div>
+                    <h2 className={styles.term}>{term.name}</h2>
+                    <p className={styles.says}>
+                      <span className="srOnly">{`${o.micTrouble ? 'The mic missed it' : REASON[o.bucket as Exclude<Bucket, 'Unaided'>]}. `}</span>
+                      {o.wasSure ? 'You felt sure about this one. ' : ''}
+                      {knowieSays(o, mode)}
                     </p>
-                    {/* The other method, under the reason, on every row. Saying it keeps
-                        the Say It Back mic the designer asked for (2026-10-13), now with
-                        its word beside it (2026-10-14): an icon alone had no visible name
-                        to match the one a screen reader heard. */}
-                    <Button
-                      CTA={ALT[mode]}
-                      variant="Tertiary"
-                      size="S"
-                      className={styles.rowAlt}
-                      showLeftIcon={other === 'say'}
-                      leftIcon={other === 'say' ? <MicGlyphIcon /> : undefined}
-                      // Named per term: three identical links read the same out of
-                      // context (UX critic, 2026-10-13). The visible words come first, so
-                      // the spoken name contains what is on screen.
-                      aria-label={`${ALT[mode]}: ${term?.name}`}
-                      onClick={() => go([{ index: o.index, mode: other }])}
-                    />
-                  </div>
-                </div>
-                <div className={styles.rowActions}>
-                  <Button CTA={CTA[mode]} aria-label={`${CTA[mode]}: ${term?.name}`} variant="Secondary" size="S" onClick={() => go([{ index: o.index, mode }])} />
-                </div>
-              </li>
-            )
-          })}
-        </ul>
+                    <div className={styles.pair}>
+                      <Button CTA={CTA[mode]} variant="Primary" size="M" fullWidth aria-label={`${CTA[mode]}: ${term.name}`} onClick={() => go([{ index: o.index, mode }])} />
+                      <Button
+                        CTA={ALT[mode]}
+                        variant="Secondary"
+                        size="M"
+                        fullWidth
+                        showLeftIcon={other === 'say'}
+                        leftIcon={other === 'say' ? <MicGlyphIcon /> : undefined}
+                        aria-label={`${ALT[mode]}: ${term.name}`}
+                        className={styles.alt}
+                        onClick={() => go([{ index: o.index, mode: other }])}
+                      />
+                    </div>
+                  </article>
+                )}
+              </SwipeDeck>
+            </div>
+          </>
+        )}
       </div>
     </ScreenShell>
   )
