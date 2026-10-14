@@ -1,0 +1,95 @@
+{
+  "recordedAt": "2026-10-14T22:00:03.415Z",
+  "screen": {
+    "width": 390,
+    "height": 844,
+    "deviceScaleFactor": 3
+  },
+  "fps": 30,
+  "takes": {
+    "A": {
+      "file": "clips/take-A.mp4",
+      "durationSec": 22.039,
+      "clicks": [
+        {
+          "t": 2.359,
+          "x": 195,
+          "y": 400,
+          "label": "Start here"
+        },
+        {
+          "t": 5.057,
+          "x": 195,
+          "y": 534,
+          "label": "mic"
+        },
+        {
+          "t": 11.824,
+          "x": 195,
+          "y": 728,
+          "label": "Send"
+        },
+        {
+          "t": 14.289,
+          "x": 44,
+          "y": 470,
+          "label": "Sure"
+        },
+        {
+          "t": 16.257,
+          "x": 195,
+          "y": 728,
+          "label": "Looks good"
+        }
+      ]
+    },
+    "B": {
+      "file": "clips/take-B.mp4",
+      "durationSec": 12.053,
+      "clicks": [
+        {
+          "t": 1.086,
+          "x": 195,
+          "y": 728,
+          "label": "Continue"
+        },
+        {
+          "t": 3.57,
+          "x": 195,
+          "y": 534,
+          "label": "mic"
+        },
+        {
+          "t": 7.936,
+          "x": 195,
+          "y": 728,
+          "label": "Send"
+        }
+      ]
+    },
+    "C": {
+      "file": "clips/take-C.mp4",
+      "durationSec": 6.575,
+      "clicks": [
+        {
+          "t": 3.454,
+          "x": 195,
+          "y": 780,
+          "label": "Show the answer"
+        }
+      ]
+    },
+    "D": {
+      "file": "clips/take-D.mp4",
+      "durationSec": 8.377,
+      "clicks": [
+        {
+          "t": 4.636,
+          "x": 195,
+          "y": 728,
+          "label": "Practice what I missed"
+        }
+      ]
+    }
+  }
+}

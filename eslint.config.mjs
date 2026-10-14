@@ -19,6 +19,9 @@ const eslintConfig = defineConfig([
     // node_modules resolve. Not project source; never committed.
     ".*-tmp/**",
     "eval/shots/**",
+    // The sizzle reel: a separate Remotion project with its own package.json and
+    // dependencies, not the app.
+    "sizzle/**",
   ]),
   ...storybook.configs["flat/recommended"]
 ]);

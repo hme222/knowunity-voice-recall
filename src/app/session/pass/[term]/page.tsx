@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { SessionBar } from '../../SessionBar'
 import { Button, Chips, MascotSlot, PassNotches, RecallResult, ScreenShell } from '@/components'
 import { CheckIcon } from '@/components/icons'
-import { answerFor, getTerm, nextAfter, outcomeFor, readSession, recordOutcome, spendEarned, termHref, useSession, XP, isPractising } from '@/lib/session'
+import { answerFor, getTerm, nextAfter, outcomeFor, readSession, recordOutcome, spendEarned, termHref, useSession, XP, xpFor, isPractising } from '@/lib/session'
 import styles from '../../result.module.css'
 
 // 04 Pass — Figma frame "04 Pass" (15672:24247). Knowie's in-character reaction, not a
@@ -22,7 +22,11 @@ function PassScreen({ index }: { index: number }) {
   const state = useSession()
   const outcome = outcomeFor(state, index)
   const practising = isPractising(state)
-  const calibration = outcome?.calibration ?? 0
+  // Before this pass is recorded (the first frames), the bonus is worked out from the
+  // tap the URL carries, the same way recordOutcome will: the total read "+10" then
+  // "+11" a moment later (found filming the sizzle reel, 2026-10-14).
+  const sureParam = searchParams.get('sure')
+  const calibration = outcome?.calibration ?? Math.max(0, xpFor(hinted ? 'Hinted' : 'Unaided', sureParam === null ? undefined : sureParam === '1').calibration)
   // The chip says how it was got, not only that it was (usability review, 2026-10-12): a hinted or typed pass and a clean spoken one read identically but for the XP. History: docs/code-history.md#h-061
   const withHint = hinted || (!practising && outcome?.bucket === 'Hinted')
   const typed = Boolean(state.sentTyped?.[index])
