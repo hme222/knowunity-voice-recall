@@ -111,13 +111,20 @@ export default function RecapPage() {
   const needsRevisiting = outcomes.some(
     (o) => o.bucket === 'Worth revisiting' || o.bucket === 'Revealed' || (o.calibration ?? 0) < 0,
   )
-  const order = needsRevisiting ? ORDER_WITH_MISSES : ORDER_SETTLED
   /** Terms the student got to in the end, with or without a hint. */
   const resolved = outcomes.filter((o) => o.bucket === 'Unaided' || o.bucket === 'Hinted').length
   // Terms the mic failed on and the student skipped are not counted against them
   // (designer, 2026-10-12): they leave the "of N" as well as the misses.
   const micTrouble = outcomes.filter((o) => o.micTrouble).length
   const counted = (complete ? TOTAL_TERMS : outcomes.length) - micTrouble
+  // A strong run — half or more said back with no help — reads as a win, not a
+  // shortfall (designer, 2026-10-14: "the recap for 3 of 4 looks too sad"): wins
+  // first, an excited Knowie, and the caption names what is left to win back.
+  const strong = counted > 0 && totals.unaided * 2 >= counted
+  const order = needsRevisiting && !strong ? ORDER_WITH_MISSES : ORDER_SETTLED
+  const toWinBack = outcomes
+    .filter((o) => (o.bucket === 'Revealed' || o.bucket === 'Worth revisiting') && !o.micTrouble)
+    .map((o) => getTerm(o.index)?.name ?? '')
 
   // Something the student did not have cold and has now: got with a hint, or shown the answer. History: docs/code-history.md#h-066
   const learnedTerms = [...outcomes.filter((o) => o.bucket === 'Revealed'), ...outcomes.filter((o) => o.bucket === 'Hinted')]
@@ -184,7 +191,10 @@ export default function RecapPage() {
             something does. It laughed over a 2-of-4 recap whose job is not to flatter. */}
         {/* 2XL: at XL Knowie read as too small for the screen's face (designer,
             2026-10-13). */}
-        <MascotSlot size="2XL" expression={needsRevisiting ? 'confused' : 'laughing'} className={styles.mascotCentred} />
+        {/* laughing on a clean run, excited on a strong one, approving otherwise:
+            never confused here, which read as disappointed in the student (designer,
+            2026-10-14). */}
+        <MascotSlot size="2XL" expression={!needsRevisiting ? 'laughing' : strong ? 'excited' : 'approving'} className={styles.mascotCentred} />
         {/* Headline S over Body M Regular, as the frames set a screen title — not
             TextBlock's L, which renders 44px. See door.module.css for the same note;
             the evidence there is a direct read of the Quiz complete frame. */}
@@ -201,7 +211,9 @@ export default function RecapPage() {
                 ? 'The mic didn’t catch these'
                 : totals.unaided === counted
                 ? `You said all ${counted} back without help`
-                : `You can say ${totals.unaided} of ${counted} back without help`}
+                : strong
+                  ? `Nice work! You can say ${totals.unaided} of ${counted} back without help`
+                  : `You can say ${totals.unaided} of ${counted} back without help`}
           </h1>
           {/* The wins by name, in the caption rather than a coloured line of their own:
               the misses lead the list, so this is where the first viewport says what
@@ -209,7 +221,13 @@ export default function RecapPage() {
           {outcomes.length > 0 && (unaidedNames.length > 0 && unaidedNames.length < counted || resolved > totals.unaided) && (
             <p className="screenTitleCaption">
               {[
-                unaidedNames.length > 0 && unaidedNames.length < counted ? `Without help: ${unaidedNames.join(', ')}.` : null,
+                // On a strong run the wins lead the list below, so the caption looks
+                // ahead instead: what is left to win back.
+                strong && toWinBack.length
+                  ? `${toWinBack.length === 1 ? 'One' : toWinBack.length} to win back: ${toWinBack.join(', ')}.`
+                  : unaidedNames.length > 0 && unaidedNames.length < counted
+                    ? `Without help: ${unaidedNames.join(', ')}.`
+                    : null,
                 resolved > totals.unaided ? `${resolved - totals.unaided} more with a hint.` : null,
               ]
                 .filter(Boolean)

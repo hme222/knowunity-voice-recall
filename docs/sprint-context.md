@@ -433,6 +433,12 @@ above.
           XS, its body Body M, its eyebrow Caption M bold (design-system.md). The Pass
           card's compact padding and Body S are undone; question cards and "I didn't
           catch that" drop from Headline S, "Here's what I heard." rises from XXS.
+        - *A strong Recap celebrates* (designer: "the recap for 3 of 4 looks too sad").
+          Half or more said back without help: "Nice work! You can say 3 of 4 back
+          without help", `excited` Knowie, the wins first in the list, and the caption
+          names what is left ("One to win back: Electronegativity."). Under half: the
+          misses lead as before, under an `approving` Knowie; `confused` is gone from
+          the Recap.
     - **02a Captured asks a question** (option 3b, same day): "Here's what I heard.
       Did I get it?" over the frame's "Looks right" / "Say it again". The frame's
       "Send it, or say it again." disagreed with its own button. Same in the drill.
