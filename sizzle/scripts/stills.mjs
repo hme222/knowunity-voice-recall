@@ -19,10 +19,11 @@ const args = process.argv.slice(2).map(Number).filter((n) => !Number.isNaN(n));
 const s = (sec) => Math.round(sec * fps);
 // Times match the shot list in src/config.ts; update them if you retime shots.
 const frames = args.length ? args.map((f) => [`f${f}`, f]) : [
-  ['01-intro', s(1.5)], ['02-wipe', s(2.4)], ['03-picker', s(4.2)], ['04-question', s(6.0)],
-  ['05-recording', s(8.6)], ['06-recording-approve', s(10.8)], ['07-captured', s(12.4)], ['08-sure', s(14.4)],
-  ['09-hero', s(16.6)], ['10-hero-notches', s(19.2)], ['11-mishear', s(21.3)], ['12-miss-hint', s(23.6)],
-  ['13-recap', s(28.0)], ['14-rematch', s(32.6)], ['15-endcard', s(37.5)],
+  ['01-intro', s(1.4)], ['02-wipe', s(2.3)], ['03-stack', s(3.4)], ['04-stack-end', s(5.4)],
+  ['05-zoom-in', s(5.9)], ['06-picker-ripple', s(7.85)], ['07-question', s(9.6)], ['08-recording', s(12.0)],
+  ['09-recording-face', s(14.3)], ['10-sure-ripple', s(16.85)], ['11-whip', s(19.25)], ['12-hero', s(20.4)],
+  ['13-hero-notches', s(22.7)], ['14-faces', s(24.1)], ['15-faces-late', s(25.7)], ['16-split', s(27.4)],
+  ['17-recap', s(30.2)], ['18-deck', s(34.8)], ['19-endcard', s(39.5)],
 ];
 for (const [name, frame] of frames) {
   const f = Math.min(frame, composition.durationInFrames - 1);

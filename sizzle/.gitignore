@@ -3,3 +3,11 @@ out/stills/
 public/clips/.frames-*/
 # The 2026-10-12 footage, kept locally only.
 public/clips-2026-10-12/
+# Music: the licensed track stays local (Pixabay Content License; not redistributed as a file).
+public/music/
+# Render intermediates; only out/sizzle.mp4 is kept.
+out/sizzle-silent.mp4
+out/music-bed.wav
+out/faces-preview.mp4
+out/chunks/
+out/.track.wav

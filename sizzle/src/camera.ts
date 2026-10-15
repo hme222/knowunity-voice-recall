@@ -21,14 +21,16 @@ export function takeDuration(take: string) {
 }
 
 /** Turns config keys (some pinned to clicks) into absolute, fully-filled keyframes. */
-export function resolveKeys(keys: CamKey[], take: string, shotFrom: number): Resolved[] {
+/** `rate`: the shot's playback speed, so a tap N seconds into the footage lands N/rate
+ *  seconds into the shot. */
+export function resolveKeys(keys: CamKey[], take: string, shotFrom: number, rate = 1): Resolved[] {
   let prev: Resolved = { ...DEFAULT, t: 0, feel: 'glide' };
   return keys.map((k, i) => {
     let t = k.t ?? 0;
     let x = k.x, y = k.y;
     if (k.click) {
       const c = clickInTake(take, k.click);
-      t = c.t - shotFrom + (k.lead ?? 0);
+      t = (c.t - shotFrom) / rate + (k.lead ?? 0);
       x = x ?? c.x;
       y = y ?? c.y;
     }

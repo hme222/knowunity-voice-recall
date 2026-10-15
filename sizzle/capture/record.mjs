@@ -42,7 +42,9 @@ const FFMPEG = process.env.FFMPEG || (() => {
 const GREETING_NAME = process.env.GREETING_NAME || 'Alex';
 
 const VIEW = { width: 390, height: 844 };
-const DSF = 3;
+// Capture scale (DSF env, default 3). 4 looked sharper but Chrome only kept up at ~17fps;
+// 3 holds 30fps+, and real 3x frames are far sharper than the old 1x frames stretched.
+const DSF = Number(process.env.DSF || 3);
 const FPS = 30;
 
 // ---------------------------------------------------------------------------
@@ -164,7 +166,10 @@ async function main() {
   fs.mkdirSync(OUT, { recursive: true });
   const server = await startServer();
   console.log('server up at', BASE);
-  const browser = await chromium.launch({ executablePath: CHROME });
+  // Chrome's screencast sends 1x frames (390x844) whatever deviceScaleFactor says; the
+  // old takes were 1x frames stretched to 3x, which is why close-ups looked soft. This
+  // flag makes it render, and so send, real device pixels.
+  const browser = await chromium.launch({ executablePath: CHROME, args: [`--force-device-scale-factor=${DSF}`] });
   const ctx = await browser.newContext({ viewport: VIEW, deviceScaleFactor: DSF, colorScheme: 'dark' });
   await ctx.addInitScript({ content: `window.__SIZZLE__ = ${JSON.stringify({
     textSwaps: GREETING_NAME ? [['Harry', GREETING_NAME]] : [], cursorStart: [300, 760] })};` });
@@ -253,6 +258,11 @@ async function main() {
       await r.click('Practice what I missed');
       await r.wait(2800);
     });
+  } catch (e) {
+    // Where it stuck, for debugging a failed run.
+    await page.screenshot({ path: path.join(OUT, 'failed.png') }).catch(() => {});
+    console.error('stuck at', page.url());
+    throw e;
   } finally {
     await browser.close();
     server?.kill();

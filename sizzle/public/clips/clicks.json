@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-14T22:00:03.415Z",
+  "recordedAt": "2026-10-15T14:26:12.671Z",
   "screen": {
     "width": 390,
     "height": 844,
@@ -9,34 +9,34 @@
   "takes": {
     "A": {
       "file": "clips/take-A.mp4",
-      "durationSec": 22.039,
+      "durationSec": 22.537,
       "clicks": [
         {
-          "t": 2.359,
+          "t": 2.589,
           "x": 195,
           "y": 400,
           "label": "Start here"
         },
         {
-          "t": 5.057,
+          "t": 5.4,
           "x": 195,
           "y": 534,
           "label": "mic"
         },
         {
-          "t": 11.824,
+          "t": 12.219,
           "x": 195,
           "y": 728,
           "label": "Send"
         },
         {
-          "t": 14.289,
+          "t": 14.751,
           "x": 44,
           "y": 470,
           "label": "Sure"
         },
         {
-          "t": 16.257,
+          "t": 16.731,
           "x": 195,
           "y": 728,
           "label": "Looks good"
@@ -45,22 +45,22 @@
     },
     "B": {
       "file": "clips/take-B.mp4",
-      "durationSec": 12.053,
+      "durationSec": 12.141,
       "clicks": [
         {
-          "t": 1.086,
+          "t": 1.039,
           "x": 195,
           "y": 728,
           "label": "Continue"
         },
         {
-          "t": 3.57,
+          "t": 3.538,
           "x": 195,
           "y": 534,
           "label": "mic"
         },
         {
-          "t": 7.936,
+          "t": 7.939,
           "x": 195,
           "y": 728,
           "label": "Send"
@@ -69,10 +69,10 @@
     },
     "C": {
       "file": "clips/take-C.mp4",
-      "durationSec": 6.575,
+      "durationSec": 6.599,
       "clicks": [
         {
-          "t": 3.454,
+          "t": 3.424,
           "x": 195,
           "y": 780,
           "label": "Show the answer"
@@ -81,10 +81,10 @@
     },
     "D": {
       "file": "clips/take-D.mp4",
-      "durationSec": 8.377,
+      "durationSec": 8.412,
       "clicks": [
         {
-          "t": 4.636,
+          "t": 4.576,
           "x": 195,
           "y": 728,
           "label": "Practice what I missed"
